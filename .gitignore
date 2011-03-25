@@ -1,0 +1,7 @@
+Makefile
+meego-app-contacts.pro.user
+meego-app-contacts.qmlproject.user
+.gen
+.moc
+.obj
+*~
