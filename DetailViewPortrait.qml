@@ -557,7 +557,7 @@ Flickable {
                         onTriggered: {
                             if(index == 0) {
                                 viewMenu.visible = false;
-                                var cmd = "/usr/bin/meego-qml-launcher --app meego-app-browser " + data_web.text + " --fullscreen"
+				var cmd = "meego-app-browser " + data_web.text;
                                 appModel.launch(cmd);
                             }
                         }
