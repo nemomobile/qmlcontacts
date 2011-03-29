@@ -42,6 +42,7 @@ Flickable{
     property string unfavoriteValue: "Unfavorite"
     property string unfavoriteTranslated: qsTr("Unfavorite")
     property string favoriteTranslated: qsTr("Favorite")
+    property bool   validInput: false
 
     function contactSave(){
         var addresses = addys.getNewAddresses();
@@ -347,6 +348,14 @@ Flickable{
                 height: 300
                 anchors {top: parent.top; left: parent.left; topMargin: 30; leftMargin: 30}
             }
+        }
+    }
+    Binding{ target: newContactPage; property: "validInput"; value: true; when: {
+            ((data_first.text != "")||(data_last.text != "")||(data_company.text != "")||(phones.validInput)||(ims.validInput)||(emails.validInput)||(urls.validInput)||(addys.validInput)||(data_birthday.text != "")||(data_notes.text != ""))
+        }
+    }
+    Binding{ target: newContactPage; property: "validInput"; value: false; when: {
+            ((data_first.text == "")&&(data_last.text == "")&&(data_company.text == "")&&(!phones.validInput)&&(!ims.validInput)&&(!emails.validInput)&&(!urls.validInput)&&(!addys.validInput)&&(data_birthday.text == "")&&(data_notes.text == ""))
         }
     }
 }

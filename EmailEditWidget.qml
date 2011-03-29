@@ -18,6 +18,7 @@ Item {
 
     property variant emailModel: contactModel
     property variant contextModel: typeModel
+    property bool    validInput   : false
 
     property string contextHome : qsTr("Home")
     property string contextWork : qsTr("Work")
@@ -131,6 +132,9 @@ Item {
                                 emails.setProperty(index, "email", data_email.text);
                         }
                     }
+                    Binding{ target: emailRect; property: "validInput"; value: true; when: data_email.text != "";}
+                    Binding{ target: emailRect; property: "validInput"; value: false; when: data_email.text == "";}
+
 
                     Image {
                         id: delete_button

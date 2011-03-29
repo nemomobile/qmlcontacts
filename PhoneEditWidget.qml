@@ -18,6 +18,7 @@ Item{
 
     property variant phoneModel: contactModel
     property variant contextModel : typeModel
+    property bool    validInput   : false
 
     property string addressLabel: qsTr("Address")
     property string homeContext: qsTr("Home")
@@ -128,6 +129,8 @@ Item{
                             phones.setProperty(index, "phone", data_phone.text);
                         }
                     }
+                    Binding{ target: phonesRect; property: "validInput"; value: true; when: data_phone.text != "";}
+                    Binding{ target: phonesRect; property: "validInput"; value: false; when: data_phone.text == "";}
 
                     Image {
                         id: delete_button

@@ -18,6 +18,7 @@ Item {
 
     property variant addressModel: contactModel
     property variant contextModel: typeModel
+    property bool    validInput   : false
 
     property string addressLabel: qsTr("Address")
     property string homeContext: qsTr("Home")
@@ -192,6 +193,8 @@ Item {
                                 addresss.setProperty(index, "country", data_country.text);
                             }
                         }
+                        Binding{ target: addressRect; property: "validInput"; value: true; when: ((data_street.text != "")||(data_locale.text != "")||(data_region.text != "")||(data_zip.text != "")||(data_country.text != ""))}
+                        Binding{ target: addressRect; property: "validInput"; value: false; when: ((data_street.text == "")&&(data_locale.text == "")&&(data_region.text == "")&&(data_zip.text == "")&&(data_country.text == ""))}
 
                         Image {
                             id: delete_button

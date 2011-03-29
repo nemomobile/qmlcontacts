@@ -18,6 +18,7 @@ Item {
 
     property variant webModel: contactModel
     property variant contextModel: typeModel
+    property bool    validInput   : false
 
     property string addWeb : qsTr("Add web page")
     property string defaultWeb : qsTr("Site")
@@ -125,6 +126,8 @@ Item {
                             webs.setProperty(index, "web", data_web.text);
                         }
                     }
+                    Binding{ target: webRect; property: "validInput"; value: true; when: data_web.text != "";}
+                    Binding{ target: webRect; property: "validInput"; value: false; when: data_web.text == "";}
 
                     Image {
                         id: delete_button

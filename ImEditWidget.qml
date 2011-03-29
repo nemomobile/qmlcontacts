@@ -18,6 +18,7 @@ Item {
 
     property variant imModel: contactModel
     property variant contextModel: typeModel
+    property bool    validInput   : false
 
     property int initialHeight: childrenRect.height
 
@@ -163,6 +164,7 @@ Item {
                             }
                         }
                         onSelectionChanged: {
+                            validInput = true;
                             if (ims.get(repeaterIndex).im == "")
                                 ims.set(repeaterIndex, {"im": imComboBox2.dataList[imComboBox2.selectedIndex], 
                                         "type": data.accountType,
