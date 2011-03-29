@@ -128,7 +128,7 @@ Window {
                     id: shareButton;
                     title: contextShare
                     width: 146
-                    anchors {top: parent.top; topMargin: 3; bottom: parent.bottom; bottomMargin: 3; verticalCenter: footer_bar.verticalCenter; left: footer_bar.left; leftMargin: 3;}
+                    anchors {top: parent.top; topMargin: 3; bottom: parent.bottom; bottomMargin: 3; left: footer_bar.left; leftMargin: 3;}
                     onClicked: {
                         peopleModel.exportContact(scene.currentContactId,  "/tmp/vcard.vcf");
                         var cmd = "/usr/bin/meego-qml-launcher --app meego-app-email --fullscreen --cmd openComposer --cdata \"file:///tmp/vcard.vcf\"";
@@ -139,7 +139,7 @@ Window {
                     id: editButton;
                     title: contextEdit
                     width: 146
-                    anchors {top: parent.top; topMargin: 3; bottom: parent.bottom; bottomMargin: 3; verticalCenter: footer_bar.verticalCenter; right: footer_bar.right; rightMargin: 3;}
+                    anchors {top: parent.top; topMargin: 3; bottom: parent.bottom; bottomMargin: 3;  right: footer_bar.right; rightMargin: 3;}
                     onClicked: {
                        scene.addApplicationPage(myAppEdit);
                     }
@@ -193,7 +193,7 @@ Window {
                     title: contextSave
                     width: 146
                     active: editContact.validInput
-                    anchors {top: parent.top; topMargin: 3; bottom: parent.bottom; bottomMargin: 3; verticalCenter: footer_bar.verticalCenter; left: footer_bar.left; leftMargin: 3;}
+                    anchors {top: parent.top; topMargin: 3; bottom: parent.bottom; bottomMargin: 3;  left: footer_bar.left; leftMargin: 3;}
                     onClicked: {
                         editContact.contactSave(scene.currentContactId);
                         applicationPage = myAppAllContacts;
@@ -203,7 +203,7 @@ Window {
                     id: cancelButton;
                     title: contextCancel
                     width: 146
-                    anchors {top: parent.top; topMargin: 3; bottom: parent.bottom; bottomMargin: 3; verticalCenter: footer_bar.verticalCenter; right: footer_bar.right; rightMargin: 3;}
+                    anchors {top: parent.top; topMargin: 3; bottom: parent.bottom; bottomMargin: 3; right: footer_bar.right; rightMargin: 3;}
                     onClicked: {
                         applicationPage = myAppAllContacts;
                     }
@@ -257,7 +257,7 @@ Window {
                     title: contextSave
                     width: 146
                     active: newContact.validInput
-                    anchors {top: parent.top; topMargin: 3; bottom: parent.bottom; bottomMargin: 3; verticalCenter: footer_bar.verticalCenter; left: footer_bar.left; leftMargin: 3;}
+                    anchors {top: parent.top; topMargin: 3; bottom: parent.bottom; bottomMargin: 3;  left: footer_bar.left; leftMargin: 3;}
                     onClicked: {
                         newContact.contactSave();
                         applicationPage = myAppAllContacts;
@@ -267,7 +267,7 @@ Window {
                     id: cancelButton;
                     title: contextCancel
                     width: 146
-                    anchors {top: parent.top; topMargin: 3; bottom: parent.bottom; bottomMargin: 3; verticalCenter: footer_bar.verticalCenter; right: footer_bar.right; rightMargin: 3;}
+                    anchors {top: parent.top; topMargin: 3; bottom: parent.bottom; bottomMargin: 3; right: footer_bar.right; rightMargin: 3;}
                     onClicked: {
                         applicationPage = myAppAllContacts;
                     }
@@ -350,7 +350,6 @@ Window {
                 text: promptStr
                 color: theme_fontColorNormal
                 font.pointSize: theme_fontPixelSizeMedium
-                styleColor: theme_fontColorHighlight
                 smooth: true
                 opacity: 1
             }
