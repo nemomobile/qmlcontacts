@@ -157,6 +157,31 @@ Window {
                 index: proxyModel.getSourceRow(scene.currentContactIndex)
                 anchors.fill: parent
             }
+            Image {
+                id: footer_bar
+                source: "image://theme/contacts/contact_btmbar_landscape"
+                anchors {bottom: parent.bottom; left: parent.left; right: parent.right;}
+                opacity: 1
+                Button{
+                    id: saveButton;
+                    title: contextSave
+                    width: 146
+                    anchors {top: parent.top; topMargin: 3; bottom: parent.bottom; bottomMargin: 3; verticalCenter: footer_bar.verticalCenter; left: footer_bar.left; leftMargin: 3;}
+                    onClicked: {
+                        editContact.contactSave(scene.currentContactId);
+                        applicationPage = myAppAllContacts;
+                    }
+                }
+                Button{
+                    id: cancelButton;
+                    title: contextCancel
+                    width: 146
+                    anchors {top: parent.top; topMargin: 3; bottom: parent.bottom; bottomMargin: 3; verticalCenter: footer_bar.verticalCenter; right: footer_bar.right; rightMargin: 3;}
+                    onClicked: {
+                        applicationPage = myAppAllContacts;
+                    }
+                }
+            }
             menuContent: ActionMenu {
                 id: actions
                 model: [contextSave, contextCancel, contextDelete]
