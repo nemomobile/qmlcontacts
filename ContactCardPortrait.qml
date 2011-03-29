@@ -23,6 +23,18 @@ Image {
     property PeopleModel dataPeople : theModel
     property ProxyModel sortPeople : sortModel
     property int sourceIndex: sortPeople.getSourceRow(index)
+    property string stringTruncater: qsTr("...")
+
+    function getTruncatedString(valueStr, stringLen) {
+        var MAX_STR_LEN = stringLen;
+            //Make sure string is no longer than MAX_STR_LEN characters
+            //Use MAX_STR_LEN - stringTruncater.length to make room for ellipses
+            if (valueStr.length > MAX_STR_LEN) {
+                valueStr = valueStr.substring(0, MAX_STR_LEN - stringTruncater.length);
+                valueStr = valueStr + stringTruncater;
+            }
+        return valueStr;
+    }
 
     function getOnlineStatus() {
         if ((dataPeople.data(sourceIndex, PeopleModel.OnlineAccountUriRole).length < 1)
@@ -87,18 +99,18 @@ Image {
     Text {
         id: nameFirst
         text: {
-            if((dataFirst != "") || (dataLast != ""))
-                return qsTr("%1  %2").arg(dataFirst).arg(dataLast);
-            else if(dataPeople.data(sourceIndex, PeopleModel.CompanyNameRole) != "")
-                return dataPeople.data(sourceIndex, PeopleModel.CompanyNameRole)
+            if((dataFirst != "") || (dataLast != "")){
+                return qsTr("%1  %2").arg(getTruncatedString(dataFirst, 25)).arg(getTruncatedString(dataLast, 25));
+            }else if(dataPeople.data(sourceIndex, PeopleModel.CompanyNameRole) != "")
+                return getTruncatedString(dataPeople.data(sourceIndex, PeopleModel.CompanyNameRole), 25);
             else if(dataPeople.data(sourceIndex, PeopleModel.PhoneNumberRole) != "")
-                return dataPeople.data(sourceIndex, PeopleModel.PhoneNumberRole);
+                return getTruncatedString(dataPeople.data(sourceIndex, PeopleModel.PhoneNumberRole), 25);
             else if(dataPeople.data(sourceIndex, PeopleModel.OnlineAccountUriRole)!= "")
-                return dataPeople.data(sourceIndex, PeopleModel.OnlineAccountUriRole);
+                return getTruncatedString(dataPeople.data(sourceIndex, PeopleModel.OnlineAccountUriRole), 25);
             else if (dataPeople.data(sourceIndex, PeopleModel.EmailAddressRole) != "")
-                return dataPeople.data(sourceIndex, PeopleModel.EmailAddressRole);
+                return getTruncatedString(dataPeople.data(sourceIndex, PeopleModel.EmailAddressRole), 25);
             else if (dataPeople.data(sourceIndex, PeopleModel.WebUrlRole) != "")
-                return dataPeople.data(sourceIndex, PeopleModel.WebUrlRole);
+                return getTruncatedString(dataPeople.data(sourceIndex, PeopleModel.WebUrlRole), 25);
             else
                 return "(...)";
         }
