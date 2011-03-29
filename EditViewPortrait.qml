@@ -279,8 +279,7 @@ Flickable {
                 id: data_birthday
                 text: dataModel.data(index, PeopleModel.BirthdayRole)
                 defaultText: defaultBirthday
-                width:540
-                anchors {verticalCenter: birthday.verticalCenter; left: parent.left; topMargin: 30; leftMargin: 30}
+                anchors {verticalCenter: birthday.verticalCenter; left: parent.left; topMargin: 30; leftMargin: 30; right: parent.right; rightMargin: 30;}
                 MouseArea{
                     id: mouse_birthday
                     anchors.fill: parent
@@ -345,9 +344,8 @@ Flickable {
                 id: data_notes
                 text: dataModel.data(index, PeopleModel.NotesRole)
                 defaultText: defaultNote
-                width:540
                 height: 300
-                anchors {top: parent.top; left: parent.left; topMargin: 30; leftMargin: 30}
+                anchors {top: parent.top; left: parent.left; right: parent.right; rightMargin: 30; topMargin: 20; leftMargin: 30}
             }
         }
     }
