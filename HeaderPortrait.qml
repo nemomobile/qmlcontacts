@@ -23,7 +23,7 @@ Image{
         anchors.left: sectionBackground.left
         anchors.leftMargin: 30
         font.pixelSize: theme_fontPixelSizeLargest
-        color: theme_fontColorNormal; styleColor: theme_fontColorHighlight; smooth: true
+        color: theme_fontColorNormal; smooth: true
     }
 }
 
