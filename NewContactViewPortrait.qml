@@ -347,7 +347,7 @@ Flickable{
                 defaultText: defaultNote
                 width:540
                 height: 300
-                anchors {top: parent.top; left: parent.left; topMargin: 30; leftMargin: 30}
+                anchors {top: parent.top; left: parent.left; topMargin: 20; leftMargin: 30}
             }
         }
     }
