@@ -28,6 +28,7 @@ Flickable {
 
     property PeopleModel dataModel: contactModel
     property int index: personRow
+    property bool validInput: false
 
     property string contextHome: qsTr("Home")
     property string contextWork: qsTr("Work")
@@ -347,6 +348,14 @@ Flickable {
                 height: 300
                 anchors {top: parent.top; left: parent.left; topMargin: 30; leftMargin: 30}
             }
+        }
+    }
+    Binding{ target: editViewPortrait; property: "validInput"; value: true; when: {
+            ((data_first.text != "")||(data_last.text != "")||(data_company.text != "")||(phones.validInput)||(ims.validInput)||(emails.validInput)||(urls.validInput)||(addys.validInput)||(data_birthday.text != "")||(data_notes.text != ""))
+        }
+    }
+    Binding{ target: editViewPortrait; property: "validInput"; value: false; when: {
+            ((data_first.text == "")&&(data_last.text == "")&&(data_company.text == "")&&(!phones.validInput)&&(!ims.validInput)&&(!emails.validInput)&&(!urls.validInput)&&(!addys.validInput)&&(data_birthday.text == "")&&(data_notes.text == ""))
         }
     }
 }

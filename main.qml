@@ -192,7 +192,7 @@ Window {
                     id: saveButton;
                     title: contextSave
                     width: 146
-                    active: false
+                    active: editContact.validInput
                     anchors {top: parent.top; topMargin: 3; bottom: parent.bottom; bottomMargin: 3; verticalCenter: footer_bar.verticalCenter; left: footer_bar.left; leftMargin: 3;}
                     onClicked: {
                         editContact.contactSave(scene.currentContactId);
