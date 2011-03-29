@@ -86,7 +86,9 @@ Flickable {
 
     function getTruncatedString(valueStr, stringLen) {
         var MAX_STR_LEN = stringLen;
+        var multiline = (valueStr.indexOf("\n") == -1 ? false : true);
         var valueStr = valueStr.split("\n");
+        var MAX_NEWLINE = valueStr.length-1;
         var newStr = "";
         for(var i = 0; i < valueStr.length; i++){
             //Make sure string is no longer than MAX_STR_LEN characters
@@ -95,7 +97,10 @@ Flickable {
                 valueStr[i] = valueStr[i].substring(0, MAX_STR_LEN - stringTruncater.length);
                 valueStr[i] = valueStr[i] + stringTruncater;
             }
-            newStr = newStr + valueStr[i] + "\n";
+            if(multiline && (i<MAX_NEWLINE))
+                newStr = newStr + valueStr[i] + "\n";
+            else
+                newStr = newStr + valueStr[i];
         }
         return newStr;
     }
@@ -726,7 +731,7 @@ Flickable {
                     font.pixelSize: theme_fontPixelSizeLarger
                     smooth: true
                     font.bold: true
-                    anchors {top: noteBar.top; left: noteBar.left; leftMargin: 20; topMargin: 10}
+                    anchors {top: noteBar.top; left: noteBar.left; leftMargin: 30; topMargin: 30}
                     opacity: 1
                 }
             }
