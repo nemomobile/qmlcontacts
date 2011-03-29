@@ -119,6 +119,32 @@ Window {
                 detailModel: peopleModel
                 index: proxyModel.getSourceRow(scene.currentContactIndex)
             }
+            Image {
+                id: footer_bar
+                source: "image://theme/contacts/contact_btmbar_landscape"
+                anchors {bottom: parent.bottom; left: parent.left; right: parent.right;}
+                opacity: 1
+                Button{
+                    id: shareButton;
+                    title: contextShare
+                    width: 146
+                    anchors {top: parent.top; topMargin: 3; bottom: parent.bottom; bottomMargin: 3; verticalCenter: footer_bar.verticalCenter; left: footer_bar.left; leftMargin: 3;}
+                    onClicked: {
+                        peopleModel.exportContact(scene.currentContactId,  "/tmp/vcard.vcf");
+                        var cmd = "/usr/bin/meego-qml-launcher --app meego-app-email --fullscreen --cmd openComposer --cdata \"file:///tmp/vcard.vcf\"";
+                        appModel.launch(cmd);
+                    }
+                }
+                Button{
+                    id: editButton;
+                    title: contextEdit
+                    width: 146
+                    anchors {top: parent.top; topMargin: 3; bottom: parent.bottom; bottomMargin: 3; verticalCenter: footer_bar.verticalCenter; right: footer_bar.right; rightMargin: 3;}
+                    onClicked: {
+                       scene.addApplicationPage(myAppEdit);
+                    }
+                }
+            }
             menuContent: ActionMenu {
                 id: actions
                 model: [contextShare, contextEdit]
