@@ -81,7 +81,6 @@ Item{
             opacity: (phoneModel.length > 0 ? 1  : 0)
             delegate: Item {
                 id: itemDelegate
-                width: parent.width;
                 height: 80;
                 signal clicked()
 
