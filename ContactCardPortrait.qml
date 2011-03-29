@@ -99,24 +99,24 @@ Image {
     Text {
         id: nameFirst
         text: {
-            if((dataFirst != "") || (dataLast != "")){
+            if((dataFirst != "") || (dataLast != ""))
                 return qsTr("%1  %2").arg(getTruncatedString(dataFirst, 25)).arg(getTruncatedString(dataLast, 25));
-            }else if(dataPeople.data(sourceIndex, PeopleModel.CompanyNameRole) != "")
+            else if(dataPeople.data(sourceIndex, PeopleModel.CompanyNameRole) != "")
                 return getTruncatedString(dataPeople.data(sourceIndex, PeopleModel.CompanyNameRole), 25);
             else if(dataPeople.data(sourceIndex, PeopleModel.PhoneNumberRole) != "")
-                return getTruncatedString(dataPeople.data(sourceIndex, PeopleModel.PhoneNumberRole), 25);
+                return getTruncatedString(dataPeople.data(sourceIndex, PeopleModel.PhoneNumberRole), 25)[0];
             else if(dataPeople.data(sourceIndex, PeopleModel.OnlineAccountUriRole)!= "")
-                return getTruncatedString(dataPeople.data(sourceIndex, PeopleModel.OnlineAccountUriRole), 25);
+                return getTruncatedString(dataPeople.data(sourceIndex, PeopleModel.OnlineAccountUriRole), 25)[0];
             else if (dataPeople.data(sourceIndex, PeopleModel.EmailAddressRole) != "")
-                return getTruncatedString(dataPeople.data(sourceIndex, PeopleModel.EmailAddressRole), 25);
+                return getTruncatedString(dataPeople.data(sourceIndex, PeopleModel.EmailAddressRole), 25)[0];
             else if (dataPeople.data(sourceIndex, PeopleModel.WebUrlRole) != "")
-                return getTruncatedString(dataPeople.data(sourceIndex, PeopleModel.WebUrlRole), 25);
+                return getTruncatedString(dataPeople.data(sourceIndex, PeopleModel.WebUrlRole), 25)[0];
             else
                 return "(...)";
         }
         anchors { left: photo.right; top: photo.top; topMargin: photo.height/8-contactDivider.height; leftMargin: photo.height/8;}
         font.pixelSize: theme_fontPixelSizeLargest
-        color: theme_fontColorNormal; styleColor: theme_fontColorHighlight; smooth: true
+        color: theme_fontColorNormal; smooth: true
     }
 
     //    Text {
@@ -124,7 +124,7 @@ Image {
     //        text: dataLast
     //        anchors { left: nameFirst.right; top: nameFirst.top; leftMargin: photo.height/8;}
     //        font.pixelSize: theme_fontPixelSizeLargest
-    //        color: theme_fontColorNormal; styleColor: theme_fontColorHighlight; smooth: true
+    //        color: theme_fontColorNormal; smooth: true
     //    }
 
     Image {
@@ -165,7 +165,7 @@ Image {
     Text {
         id: statusText
         color: theme_fontColorNormal
-        font.pixelSize: theme_fontPixelSizeLarger
+        font.pixelSize: theme_fontPixelSizeLarge
         smooth: true
         anchors { left: nameFirst.left; bottom: photo.bottom; bottomMargin: photo.height/8}
         text: {
