@@ -84,8 +84,8 @@ Flickable {
     property string viewUrl: qsTr("View")
     property string stringTruncater: qsTr("...")
 
-    function getTruncatedAddressString(valueStr) {
-        var MAX_STR_LEN = 25;
+    function getTruncatedString(valueStr, stringLen) {
+        var MAX_STR_LEN = stringLen;
         var valueStr = valueStr.split("\n");
         var newStr = "";
         for(var i = 0; i < valueStr.length; i++){
@@ -160,7 +160,7 @@ Flickable {
                         height: childrenRect.height
                         Text{
                             id: firstname
-                            text: (detailModel.data(index, PeopleModel.FirstNameRole)? detailModel.data(index, PeopleModel.FirstNameRole) : "")
+                            text: (detailModel.data(index, PeopleModel.FirstNameRole)? getTruncatedString(detailModel.data(index, PeopleModel.FirstNameRole), 25) : "")
                             color: theme_fontColorNormal
                             font.pixelSize: theme_fontPixelSizeLarger
                             styleColor: theme_iconFontBackgroundcolor
@@ -168,7 +168,7 @@ Flickable {
                         }
                         Text{
                             id: lastname
-                            text: (detailModel.data(index, PeopleModel.LastNameRole) ? detailModel.data(index, PeopleModel.LastNameRole) : "")
+                            text: (detailModel.data(index, PeopleModel.LastNameRole) ? getTruncatedString(detailModel.data(index, PeopleModel.LastNameRole), 25) : "")
                             color: theme_fontColorNormal
                             font.pixelSize: theme_fontPixelSizeLarger
                             styleColor: theme_iconFontBackgroundcolor
@@ -255,7 +255,7 @@ Flickable {
                     height: headerGrid.height/2
                     Text{
                         id: company
-                        text: (detailModel.data(index, PeopleModel.CompanyNameRole) ? detailModel.data(index, PeopleModel.CompanyNameRole) : "")
+                        text: (detailModel.data(index, PeopleModel.CompanyNameRole) ? getTruncatedString(detailModel.data(index, PeopleModel.CompanyNameRole), 25) : "")
                         color: theme_fontColorNormal
                         font.pixelSize: theme_fontPixelSizeLarge
                         styleColor: theme_fontColorInactive
@@ -338,7 +338,7 @@ Flickable {
                     }
                     Text{
                         id: data_phone
-                        text: modelData
+                        text: getTruncatedString(modelData, 25)
                         color: theme_fontColorNormal
                         font.pixelSize: theme_fontPixelSizeLarger
                         smooth: true
@@ -400,7 +400,7 @@ Flickable {
 
                     Text{
                         id: data_im
-                        text: modelData
+                        text: getTruncatedString(modelData, 25)
                         color: theme_fontColorNormal
                         font.pixelSize: theme_fontPixelSizeLarger
                         smooth: true
@@ -466,7 +466,7 @@ Flickable {
                     }
                     Text{
                         id: data_email
-                        text: modelData
+                        text: getTruncatedString(modelData, 25)
                         color: theme_fontColorNormal
                         font.pixelSize: theme_fontPixelSizeLarger
                         smooth: true
@@ -529,7 +529,7 @@ Flickable {
                     }
                     Text{
                         id: data_web
-                        text: modelData
+                        text: getTruncatedString(modelData, 25)
                         color: theme_fontColorNormal
                         font.pixelSize: theme_fontPixelSizeLarger
                         smooth: true
@@ -630,7 +630,7 @@ Flickable {
                             Text{
                                 id: data_street
                                 anchors.verticalCenter: address_rect.verticalCenter
-                                text: getTruncatedAddressString(modelData)
+                                text: getTruncatedString(modelData, 25)
                                 color: theme_fontColorNormal
                                 font.pixelSize: theme_fontPixelSizeLarger
                                 smooth: true
@@ -721,7 +721,7 @@ Flickable {
 
                 Text{
                     id: data_notes
-                    text: detailModel.data(index, PeopleModel.NotesRole)
+                    text: getTruncatedString(detailModel.data(index, PeopleModel.NotesRole), 50)
                     color: theme_fontColorNormal
                     font.pixelSize: theme_fontPixelSizeLarger
                     smooth: true
