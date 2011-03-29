@@ -116,6 +116,7 @@ Flickable {
                 albumSelectionMode: false
                 onPhotoSelected: {
                     selectedPhoto = uri.split("file://")[1];
+                    editViewPortrait.validInput = true;
                 }
 
                 onClosed: {

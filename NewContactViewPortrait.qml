@@ -116,6 +116,7 @@ Flickable{
                 onPhotoSelected: {
                     selectedPhoto = uri
                     selectedPhotoThumb = (thumburi ? thumburi : uri);
+                    newContactPage.validInput = true;
                 }
 
                 onClosed: {
