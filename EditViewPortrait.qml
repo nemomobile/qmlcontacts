@@ -73,7 +73,6 @@ Flickable {
             width: parent.width
             height: 150
             source: "image://theme/contacts/active_row"
-            anchors.bottomMargin: 1
             Item{
                 id: avatar
                 width: 150
@@ -214,7 +213,7 @@ Flickable {
             height: childrenRect.height
             phoneModel: dataModel.data(index, PeopleModel.PhoneNumberRole)
             contextModel: dataModel.data(index, PeopleModel.PhoneContextRole)
-            anchors {top: editHeader.bottom; left: parent.left; topMargin: 0; leftMargin: 0}
+            anchors { left: parent.left; }
         }
 
         ImEditWidget{
@@ -223,7 +222,7 @@ Flickable {
             height: childrenRect.height
             imModel: dataModel.data(index, PeopleModel.OnlineAccountUriRole)
             contextModel: dataModel.data(index, PeopleModel.OnlineServiceProviderRole)
-            anchors {top: phones.bottom; left: parent.left; topMargin: 0; leftMargin: 0}
+            anchors { left: parent.left; }
         }
 
         EmailEditWidget{
@@ -232,7 +231,7 @@ Flickable {
             height: childrenRect.height
             emailModel: dataModel.data(index, PeopleModel.EmailAddressRole)
             contextModel: dataModel.data(index, PeopleModel.EmailContextRole)
-            anchors {top: ims.bottom; left: parent.left; topMargin: 0; leftMargin: 0}
+            anchors {left: parent.left;}
         }
 
         WebPageEditWidget{
@@ -241,7 +240,7 @@ Flickable {
             height: childrenRect.height
             webModel: dataModel.data(index, PeopleModel.WebUrlRole)
             contextModel: dataModel.data(index, PeopleModel.WebContextRole)
-            anchors {top: emails.bottom; left: parent.left; topMargin: 0; leftMargin: 0}
+            anchors {left: parent.left; }
         }
 
         AddressEditWidget{
@@ -250,31 +249,30 @@ Flickable {
             height: childrenRect.height
             addressModel: dataModel.data(index, PeopleModel.AddressRole)
             contextModel: dataModel.data(index, PeopleModel.AddressContextRole)
-            anchors {top: urls.bottom; left: parent.left; topMargin: 0; leftMargin: 0}
+            anchors { left: parent.left; }
         }
 
         Item{
             id: birthdayHeader
             width: parent.width
             height: 70
-            opacity: (detailModel.data(index, PeopleModel.BirthdayRole).length > 0 ? 1: 0)
+            opacity:  1
 
             Text{
                 id: label_birthday
                 text: defaultBirthday
                 color: theme_fontColorNormal
                 font.pixelSize: theme_fontPixelSizeLarge
-                styleColor: theme_iconfontBackgroundcolor
                 smooth: true
                 anchors {bottom: birthdayHeader.bottom; bottomMargin: 10; left: parent.left; topMargin: 0; leftMargin: 30}
             }
         }
+
         Image{
             id: birthday
             width: parent.width
             height: 80
             source: "image://theme/contacts/active_row"
-            anchors.bottomMargin: 1
             TextEntry{
                 id: data_birthday
                 text: dataModel.data(index, PeopleModel.BirthdayRole)
@@ -288,21 +286,12 @@ Flickable {
                         datePicker.show(map.x, map.y)
                     }
                 }
-                states: [
-                    State{ name: "default"
-                        PropertyChanges{target: data_birthday; text: defaultBirthday}
-                        PropertyChanges{target: data_birthday; color: theme_fontColorInactive}
-                    },
-                    State{ name: "edit"
-                        PropertyChanges{target: data_birthday; text: datePicker.selectedBirthday}
-                        PropertyChanges{target: data_birthday; color: theme_iconfontBackgroundcolor}
-                    }
-                ]
             }
         }
+
         DatePickerDialog {
             id:datePicker
-            parent: newContactPage
+            parent: editViewPortrait
 
             property date selectedDate
             property string selectedBirthday
@@ -322,18 +311,18 @@ Flickable {
             id: notesHeader
             width: parent.width
             height: 70
-            opacity: (detailModel.data(index, PeopleModel.NotesRole).length > 0 ? 1: 0)
+            opacity: 1
 
             Text{
                 id: label_notes
-                text: notesLabel
+                text: headerNote
                 color: theme_fontColorNormal
                 font.pixelSize: theme_fontPixelSizeLarge
-                styleColor: theme_iconfontBackgroundcolor
                 smooth: true
                 anchors {bottom: notesHeader.bottom; bottomMargin: 10; left: parent.left; topMargin: 0; leftMargin: 30}
             }
         }
+
         Image{
             id: notesBar
             width: parent.width
