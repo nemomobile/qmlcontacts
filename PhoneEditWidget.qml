@@ -82,6 +82,7 @@ Item{
             delegate: Item {
                 id: itemDelegate
                 height: 80;
+                width: parent.width
                 signal clicked()
 
                 //Need to store the repeater index, as the drop down overwrites index with its own value
