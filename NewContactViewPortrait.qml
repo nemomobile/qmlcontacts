@@ -72,7 +72,6 @@ Flickable{
             width: parent.width
             height: 150
             source: "image://theme/contacts/active_row"
-            anchors.bottomMargin: 1
 
             Item{
                 id: avatar
@@ -212,7 +211,7 @@ Flickable{
             height: childrenRect.height
             phoneModel: ""
             contextModel: ""
-            anchors {top: detailHeader.bottom; left: parent.left; topMargin: 0; leftMargin: 0}
+            anchors {left: parent.left; }
         }
 
         ImEditWidget{
@@ -221,7 +220,7 @@ Flickable{
             height: childrenRect.height
             imModel: ""
             contextModel: ""
-            anchors {top: phones.bottom; left: parent.left; topMargin: 0; leftMargin: 0}
+            anchors { left: parent.left; }
         }
 
         EmailEditWidget{
@@ -230,7 +229,7 @@ Flickable{
             height: childrenRect.height
             emailModel: ""
             contextModel: ""
-            anchors {top: ims.bottom; left: parent.left; topMargin: 0; leftMargin: 0}
+            anchors { left: parent.left; }
         }
 
         WebPageEditWidget{
@@ -239,7 +238,7 @@ Flickable{
             height: childrenRect.height
             webModel: ""
             contextModel: ""
-            anchors {top: emails.bottom; left: parent.left; topMargin: 0; leftMargin: 0}
+            anchors { left: parent.left; }
         }
 
         AddressEditWidget{
@@ -248,7 +247,7 @@ Flickable{
             height: childrenRect.height
             addressModel: ""
             contextModel: ""
-            anchors {top: urls.bottom; left: parent.left; topMargin: 0; leftMargin: 0}
+            anchors { left: parent.left; }
         }
 
         Item{
@@ -273,7 +272,6 @@ Flickable{
             width: parent.width
             height: 80
             source: "image://theme/contacts/active_row"
-            anchors.bottomMargin: 1
             TextEntry{
                 id: data_birthday
                 text: datePicker.selectedBirthday
@@ -340,7 +338,6 @@ Flickable{
             width: parent.width
             height: 340
             source: "image://theme/contacts/active_row"
-            anchors.bottomMargin: 1
             TextEntry{
                 id: data_notes
                 text: ""
