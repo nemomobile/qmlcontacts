@@ -99,8 +99,12 @@ Image {
     Text {
         id: nameFirst
         text: {
-            if((dataFirst != "") || (dataLast != ""))
-                return qsTr("%1  %2").arg(getTruncatedString(dataFirst, 25)).arg(getTruncatedString(dataLast, 25));
+            if((dataFirst != "") || (dataLast != "")) {
+                if (dataPeople.getSortingRole() == dataPeople.LastNameRole)
+                    return qsTr("%1  %2").arg(getTruncatedString(dataLast, 25)).arg(getTruncatedString(dataFirst, 25));
+                else
+                    return qsTr("%1  %2").arg(getTruncatedString(dataFirst, 25)).arg(getTruncatedString(dataLast, 25));
+            }
             else if(dataPeople.data(sourceIndex, PeopleModel.CompanyNameRole) != "")
                 return getTruncatedString(dataPeople.data(sourceIndex, PeopleModel.CompanyNameRole), 25);
             else if(dataPeople.data(sourceIndex, PeopleModel.PhoneNumberRole) != "")

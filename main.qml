@@ -239,16 +239,24 @@ Window {
 
     PeopleModel{
         id: peopleModel
-        Component.onCompleted:{
-            peopleModel.setSorting(PeopleModel.FirstNameRole);
-        }
     }
 
     ProxyModel{
         id: proxyModel
         Component.onCompleted:{
+            //setSortType() will in turn call setSorting() on the PeopleModel
             proxyModel.setModel(peopleModel);
             proxyModel.setSortType(ProxyModel.SortName);
+            proxyModel.setSortType(settingsDataStore.getSortOrder());
+        }
+    }
+
+    //REVISIT: We're not catching/emitting this signal correctly
+    Connections {
+        target: settingsDataStore
+        onSortOrderChanged: {
+            console.debug("[contacts] - Got sortOrderChanged signal");
+            //REVISIT: Read and set sort order here
         }
     }
 

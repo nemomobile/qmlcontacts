@@ -63,6 +63,7 @@ PeopleModel::PeopleModel(QObject *parent)
     roles.insert(AvatarRole, "avatarurl");
     roles.insert(FirstNameRole, "firstname");
     roles.insert(FirstCharacterRole, "firstcharacter");
+    roles.insert(LastNameRole, "lastname");
     setRoleNames(roles);
 
     priv = new PeopleModelPriv;
@@ -487,9 +488,19 @@ QVariant PeopleModel::data(int row, int role) const
     case FirstCharacterRole:
     {
         QContactName name = contact->detail<QContactName>();
-        if(!name.firstName().isNull()){
-            return QString(name.firstName().at(0).toUpper());
+        if ((sortOrder.isEmpty()) ||
+           (sortOrder.at(0).detailFieldName() == QContactName::FieldFirstName)) {
+            if(!name.firstName().isNull()){
+                return QString(name.firstName().at(0).toUpper());
+            }
         }
+
+        if (sortOrder.at(0).detailFieldName() == QContactName::FieldLastName) {
+            if(!name.lastName().isNull()){
+                return QString(name.lastName().at(0).toUpper());
+            }
+        }
+
         return QString(tr("#"));
     }
 
@@ -1239,15 +1250,32 @@ void PeopleModel::vCardFinished(QVersitWriter::State state){
 
 void PeopleModel::setSorting(int role){
     QContactSortOrder sort;
+
     switch(role){
+    case LastNameRole:
+        sort.setDetailDefinitionName(QContactName::DefinitionName, 
+                                     QContactName::FieldLastName);
+        break;
     case FirstNameRole:
     default:
-        sort.setDetailDefinitionName(QContactName::DefinitionName, QContactName::FieldFirstName);
-        sort.setDirection(Qt::AscendingOrder);
-        sortOrder.clear();
-        sortOrder.append(sort);
+        sort.setDetailDefinitionName(QContactName::DefinitionName, 
+                                     QContactName::FieldFirstName);
         break;
     }
+
+    sort.setDirection(Qt::AscendingOrder);
+    sortOrder.clear();
+    sortOrder.append(sort);
+}
+
+int PeopleModel::getSortingRole(){
+    if ((sortOrder.isEmpty()) ||
+       (sortOrder.at(0).detailFieldName() == QContactName::FieldFirstName))
+        return PeopleModel::FirstNameRole;
+    else if (sortOrder.at(0).detailFieldName() == QContactName::FieldLastName)
+        return PeopleModel::LastNameRole;
+
+    return PeopleModel::FirstNameRole;
 }
 
 void PeopleModel::setFilter(int role){

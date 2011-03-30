@@ -24,7 +24,7 @@ ProxyModel::ProxyModel(QObject *parent)
     Q_UNUSED(parent);
     priv = new ProxyModelPriv;
     priv->filterType = FilterAll;
-    priv->sortType = SortName;
+    priv->sortType = SortFirstName;
     setDynamicSortFilter(true);
     setFilterKeyColumn(-1);
     setSortRole(PeopleModel::FirstNameRole);
@@ -45,6 +45,19 @@ void ProxyModel::setFilter(FilterType filter)
 void ProxyModel::setSortType(SortType sortType)
 {
     priv->sortType = sortType;
+    PeopleModel *model = dynamic_cast<PeopleModel *>(sourceModel());
+
+    switch(sortType){
+    case SortLastName:
+       setSortRole(PeopleModel::LastNameRole);
+        model->setSorting(PeopleModel::LastNameRole);
+        break;
+    case SortFirstName:
+    default:
+        setSortRole(PeopleModel::FirstNameRole);
+        model->setSorting(PeopleModel::FirstNameRole);
+        break;
+    }
 
     //REVISIT: Only support sorting by first name for now
     sort(0, Qt::AscendingOrder);
@@ -92,10 +105,20 @@ bool ProxyModel::lessThan(const QModelIndex& left,
     if (!model)
         return true;
 
-    const QString& lStr = model->data(left.row(), PeopleModel::FirstNameRole).toString();
+    if ((priv->sortType != SortFirstName) && (priv->sortType != SortLastName))
+        return false;
+
+    int searchRole = PeopleModel::FirstNameRole;
+    int secondaryRole = PeopleModel::LastNameRole;
+    if (priv->sortType == SortLastName) {
+        searchRole = PeopleModel::LastNameRole;
+        secondaryRole = PeopleModel::FirstNameRole;
+    }
+
+    const QString& lStr = model->data(left.row(), searchRole).toString();
     const bool isleftSelf = model->data(left.row(), PeopleModel::IsSelfRole).toBool();
 
-    const QString& rStr = model->data(right.row(), PeopleModel::FirstNameRole).toString();
+    const QString& rStr = model->data(right.row(), searchRole).toString();
     const bool isrightSelf = model->data(right.row(), PeopleModel::IsSelfRole).toBool();
 
     //qWarning() << "[ProxyModel] lessThan isSelf left" << isleftSelf << " right" << isrightSelf;
@@ -106,24 +129,28 @@ bool ProxyModel::lessThan(const QModelIndex& left,
     if(isrightSelf)
         return false;
 
-    if (priv->sortType == SortName) {
-        //qWarning() << "[ProxyModel] lessThan " << lStr << "VS" << rStr << "compare returns:" << QString::localeAwareCompare(lStr, rStr);
+    const QString& lStr2 = model->data(left.row(), secondaryRole).toString();
+    const QString& rStr2 = model->data(right.row(), secondaryRole).toString();
 
-        //If the first name is empty, the contacts belong at the end of the list
-        //REVISIT: Should contacts without a firstname then be sorted by last name? What happens if there's no last name?
-        if (lStr.isEmpty() && rStr.isEmpty()) {
-            const QString& lStrLast = model->data(left.row(), PeopleModel::LastNameRole).toString();
-            const QString& rStrLast = model->data(right.row(), PeopleModel::LastNameRole).toString();
-            return QString::localeAwareCompare(lStrLast, rStrLast) < 0;
+    //qWarning() << "[ProxyModel] lessThan " << lStr << "VS" << rStr << "compare returns:" << QString::localeAwareCompare(lStr, rStr);
+
+    //If searchRole field is empty, contact belongs at the end of the list
+    //Sort contacts with empty searchRoles by secondardyRole
+    //REVISIT: What if the secondary role is also empty?
+    if (lStr.isEmpty() && rStr.isEmpty()) {
+        if (priv->sortType == SortFirstName) {
+            return QString::localeAwareCompare(lStr2, rStr2) < 0;
+        } else if (priv->sortType == SortLastName) {
+            if (lStr2.isEmpty())
+                 return QString::localeAwareCompare(lStr2, rStr2) > 0;
+            return QString::localeAwareCompare(lStr2, rStr2) < 0;
         }
-
-        else if (lStr.isEmpty())
-            return false;
-
-        else if (rStr.isEmpty())
-            return true;
-
-        return QString::localeAwareCompare(lStr, rStr) < 0;
     }
-    return false;
+
+    if (lStr.isEmpty())
+        return false;
+    else if (rStr.isEmpty())
+        return true;
+
+    return QString::localeAwareCompare(lStr, rStr) < 0;
 }

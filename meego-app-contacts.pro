@@ -24,12 +24,14 @@ MOBILITY = contacts versit
 HEADERS += \
     contacts.h \
     peoplemodel.h \
-    proxymodel.h
+    proxymodel.h \
+    settingsdatastore.h
 
 SOURCES += \
     contacts.cpp \
     peoplemodel.cpp \
-    proxymodel.cpp
+    proxymodel.cpp \
+    settingsdatastore.cpp
 
 QML_FILES = *.qml
 
@@ -39,7 +41,11 @@ qmlfiles.files += $${QML_FILES}
 qmlfiles.path += $$INSTALL_ROOT/usr/share/$${PROJECT_NAME}
 qmldir.files += $$TARGET
 qmldir.path += $$[QT_INSTALL_IMPORTS]/MeeGo/App
-INSTALLS += qmldir qmlfiles
+
+desktop.files += contacts-settings.desktop
+desktop.path += $$INSTALL_ROOT/usr/share/meego-ux-settings/apps/
+
+INSTALLS += qmldir qmlfiles desktop
 
 DEFINES += QMLJSDEBUGGER
 

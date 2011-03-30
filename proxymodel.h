@@ -30,7 +30,8 @@ public:
     };
 
     enum SortType {
-        SortName,
+        SortFirstName,
+        SortLastName
     };
 
     Q_INVOKABLE virtual void setFilter(FilterType filter);

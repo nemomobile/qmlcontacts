@@ -11,6 +11,8 @@
 
 #include <QtDeclarative/qdeclarative.h>
 #include <QtDeclarative/QDeclarativeExtensionPlugin>
+#include <QtDeclarative/QDeclarativeContext>
+#include "settingsdatastore.h"
 
 class contacts : public QDeclarativeExtensionPlugin
 {
@@ -18,6 +20,11 @@ class contacts : public QDeclarativeExtensionPlugin
 
 public:
     void registerTypes(const char *uri);
+    void initializeEngine(QDeclarativeEngine *engine, const char *uri);
+
+private:
+    QDeclarativeContext *mRootContext;
+    SettingsDataStore *mSettingsDataStore;
 };
 
 #endif // CONTACTS_H

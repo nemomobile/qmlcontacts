@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=ControlPanelApplet
+Name=Contacts
+Icon=contacts
+
+[MTS]
+Part=/usr/share/meego-app-contacts/ContactsSettings.qml
