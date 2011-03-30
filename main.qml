@@ -91,6 +91,12 @@ Window {
                     groupedViewPage.addApplicationPage(myAppNewContact);
                 }
             }
+            FooterBar { 
+                id: groupedViewFooter 
+                type: ""
+                currentView: gvp
+                pageToLoad: myAppAllContacts
+            }
             menuContent: ActionMenu {
                 id: actions
                 model: [labelNewContactView]
@@ -114,36 +120,17 @@ Window {
                 disableSearch = true;
             }
             DetailViewPortrait{
+                id: detailViewContact
                 anchors.fill:  parent
                 parent: detailViewPage.content
                 detailModel: peopleModel
                 index: proxyModel.getSourceRow(scene.currentContactIndex)
             }
-            Image {
-                id: footer_bar
-                source: "image://theme/contacts/contact_btmbar_landscape"
-                anchors {bottom: parent.bottom; left: parent.left; right: parent.right;}
-                opacity: 1
-                Button{
-                    id: shareButton
-                    title: contextShare
-                    width: 146
-                    anchors {top: parent.top; topMargin: 3; bottom: parent.bottom; bottomMargin: 3; left: footer_bar.left; leftMargin: 3;}
-                    onClicked: {
-                        peopleModel.exportContact(scene.currentContactId,  "/tmp/vcard.vcf");
-                        var cmd = "/usr/bin/meego-qml-launcher --app meego-app-email --fullscreen --cmd openComposer --cdata \"file:///tmp/vcard.vcf\"";
-                        appModel.launch(cmd);
-                    }
-                }
-                Button{
-                    id: editButton
-                    title: contextEdit
-                    width: 146
-                    anchors {top: parent.top; topMargin: 3; bottom: parent.bottom; bottomMargin: 3;  right: footer_bar.right; rightMargin: 3;}
-                    onClicked: {
-                       scene.addApplicationPage(myAppEdit);
-                    }
-                }
+            FooterBar { 
+                id: detailsFooter 
+                type: "details"
+                currentView: detailViewContact
+                pageToLoad: myAppEdit
             }
             menuContent: ActionMenu {
                 id: actions
@@ -183,31 +170,11 @@ Window {
                 index: proxyModel.getSourceRow(scene.currentContactIndex)
                 anchors.fill: parent
             }
-            Image {
-                id: footer_bar
-                source: "image://theme/contacts/contact_btmbar_landscape"
-                anchors {bottom: parent.bottom; left: parent.left; right: parent.right;}
-                opacity: 1
-                Button{
-                    id: saveButton
-                    title: contextSave
-                    width: 146
-                    active: editContact.validInput
-                    anchors {top: parent.top; topMargin: 3; bottom: parent.bottom; bottomMargin: 3;  left: footer_bar.left; leftMargin: 3;}
-                    onClicked: {
-                        editContact.contactSave(scene.currentContactId);
-                        applicationPage = myAppAllContacts;
-                    }
-                }
-                Button{
-                    id: cancelButton
-                    title: contextCancel
-                    width: 146
-                    anchors {top: parent.top; topMargin: 3; bottom: parent.bottom; bottomMargin: 3; right: footer_bar.right; rightMargin: 3;}
-                    onClicked: {
-                        applicationPage = myAppAllContacts;
-                    }
-                }
+            FooterBar { 
+                id: editFooter 
+                type: "edit"
+                currentView: editContact
+                pageToLoad: myAppAllContacts
             }
             menuContent: ActionMenu {
                 id: actions
@@ -247,31 +214,11 @@ Window {
                 parent: newContactViewPage.content
                 dataModel: peopleModel
             }
-            Image {
-                id: footer_bar
-                source: "image://theme/contacts/contact_btmbar_landscape"
-                anchors {bottom: parent.bottom; left: parent.left; right: parent.right;}
-                opacity: 1
-                Button{
-                    id: saveButton
-                    title: contextSave
-                    width: 146
-                    active: newContact.validInput
-                    anchors {top: parent.top; topMargin: 3; bottom: parent.bottom; bottomMargin: 3;  left: footer_bar.left; leftMargin: 3;}
-                    onClicked: {
-                        newContact.contactSave();
-                        applicationPage = myAppAllContacts;
-                    }
-                }
-                Button{
-                    id: cancelButton
-                    title: contextCancel
-                    width: 146
-                    anchors {top: parent.top; topMargin: 3; bottom: parent.bottom; bottomMargin: 3; right: footer_bar.right; rightMargin: 3;}
-                    onClicked: {
-                        applicationPage = myAppAllContacts;
-                    }
-                }
+            FooterBar { 
+                id: newFooter 
+                type: "new"
+                currentView: newContact
+                pageToLoad: myAppAllContacts
             }
             menuContent:
                 ActionMenu{
