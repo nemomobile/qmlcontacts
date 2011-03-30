@@ -96,8 +96,8 @@ Item {
             opacity:  (addressModel.length > 0 ? 1  : 0)
             delegate: Item {
                 id: itemDelegate
-                width: parent.width;
-                height: 370;
+                height: 370
+                width: parent.width
                 signal clicked()
 
                 //Need to store the repeater index, as the drop down overwrites index with its own value
@@ -136,15 +136,19 @@ Item {
 
                     Column{
                         spacing: 10
-                        anchors.left:  parent.left;
-                        anchors.right:  parent.right;
+                        anchors.left:  parent.left
+                        anchors.right:  parent.right
+                        anchors.topMargin: 20
+                        anchors.top:  parent.top
+                        width: parent.width
 
                         TextEntry{
                             id: data_street
                             text: street
                             defaultText: streetAddress
                             width: 400
-                            anchors {top: parent.top; topMargin: 20; left:parent.left; leftMargin: 170; right: delete_button.left; rightMargin: 10}
+                            anchors {left:parent.left; leftMargin: 170; right: delete_button.left; rightMargin: 10}
+
                             onTextChanged: {
                                 addresss.setProperty(index, "street", data_street.text);
                             }
@@ -155,7 +159,7 @@ Item {
                             text: locale
                             defaultText: localeAddress
                             width: 400
-                            anchors {top: data_street.bottom; topMargin: 20; left:parent.left; leftMargin: 170; right: delete_button.left; rightMargin: 10}
+                            anchors {left:parent.left; leftMargin: 170; right: delete_button.left; rightMargin: 10}
                             onTextChanged: {
                                 addresss.setProperty(index, "locale", data_locale.text);
                             }
@@ -166,7 +170,7 @@ Item {
                             text: region
                             defaultText: regionAddress
                             width: 400
-                            anchors {top: data_locale.bottom; topMargin: 20; left:parent.left; leftMargin: 170; right: delete_button.left; rightMargin: 10}
+                            anchors { left:parent.left; leftMargin: 170; right: delete_button.left; rightMargin: 10}
                             onTextChanged: {
                                 addresss.setProperty(index, "region", data_region.text);
                             }
@@ -177,7 +181,7 @@ Item {
                             text: zip
                             defaultText: postcodeAddress
                             width: 400
-                            anchors {top: data_region.bottom; topMargin: 20; left:parent.left; leftMargin: 170; right: delete_button.left; rightMargin: 10}
+                            anchors {left:parent.left; leftMargin: 170; right: delete_button.left; rightMargin: 10}
                             onTextChanged: {
                                 addresss.setProperty(index, "zip", data_zip.text);
                             }
@@ -188,7 +192,7 @@ Item {
                             text: country
                             defaultText: countryAddress
                             width: 400
-                            anchors {top: data_zip.bottom; topMargin: 20; left:parent.left; leftMargin: 170; right: delete_button.left; rightMargin: 10}
+                            anchors { left:parent.left; leftMargin: 170; right: delete_button.left; rightMargin: 10}
                             onTextChanged: {
                                 addresss.setProperty(index, "country", data_country.text);
                             }
@@ -201,7 +205,7 @@ Item {
                             source: "image://theme/contacts/icn_trash"
                             width: 36
                             height: 36
-                            anchors {verticalCenter: data_street.verticalCenter; right:parent.right; rightMargin: 20}
+                            anchors {right: parent.right;}
                             opacity: 1
                             MouseArea{
                                 id: mouse_delete_address
@@ -278,6 +282,7 @@ Item {
                         Item {
                             id: addressBar2
                             height: 380
+                            width: parent.width
 
                             DropDown { //REVISIT: Maybe max a component that all widgets can use?
                                 id: addressComboBox2
@@ -356,7 +361,7 @@ Item {
                                     data_region2.text = "";
                                     data_zip2.text = "";
                                     data_country2.text = "";
-                                    addressComboBox.selectedValue = contextHome;
+                                    addressComboBox2.selectedValue = contextHome;
                                 }
                             }
 
