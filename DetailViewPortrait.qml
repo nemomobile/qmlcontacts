@@ -248,7 +248,7 @@ Flickable {
                             font.pixelSize: theme_fontPixelSizeLarge
                             styleColor: theme_fontColorInactive
                             smooth: true
-                            anchors{  left: parent.left; }
+                            anchors{  left: parent.left}
                         }
                     }
                 }
@@ -582,7 +582,7 @@ Flickable {
                 font.pixelSize: theme_fontPixelSizeLarge
                 styleColor: theme_fontColorInactive
                 smooth: true
-                anchors {bottom: addressHeader.bottom; bottomMargin: 10; left: parent.left; topMargin: 0; leftMargin: 30;}
+                anchors {bottom: addressHeader.bottom; bottomMargin: 10; left: parent.left; topMargin: 0; leftMargin: 30}
             }
         }
         Repeater{

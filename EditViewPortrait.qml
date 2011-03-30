@@ -121,7 +121,7 @@ Flickable {
                 onClosed: {
                     if (selectedPhoto)
                     {
-                        avatar_img.source = selectedPhoto
+                        avatar_img.source = selectedPhoto;
                         avatar.opacity = 1;
                     }
                 }
@@ -222,7 +222,7 @@ Flickable {
             height: childrenRect.height
             imModel: dataModel.data(index, PeopleModel.OnlineAccountUriRole)
             contextModel: dataModel.data(index, PeopleModel.OnlineServiceProviderRole)
-            anchors { left: parent.left; }
+            anchors { left: parent.left }
         }
 
         EmailEditWidget{
@@ -231,7 +231,7 @@ Flickable {
             height: childrenRect.height
             emailModel: dataModel.data(index, PeopleModel.EmailAddressRole)
             contextModel: dataModel.data(index, PeopleModel.EmailContextRole)
-            anchors {left: parent.left;}
+            anchors {left: parent.left}
         }
 
         WebPageEditWidget{
@@ -240,7 +240,7 @@ Flickable {
             height: childrenRect.height
             webModel: dataModel.data(index, PeopleModel.WebUrlRole)
             contextModel: dataModel.data(index, PeopleModel.WebContextRole)
-            anchors {left: parent.left; }
+            anchors {left: parent.left }
         }
 
         AddressEditWidget{
@@ -249,7 +249,7 @@ Flickable {
             height: childrenRect.height
             addressModel: dataModel.data(index, PeopleModel.AddressRole)
             contextModel: dataModel.data(index, PeopleModel.AddressContextRole)
-            anchors { left: parent.left; }
+            anchors { left: parent.left }
         }
 
         Item{
@@ -277,7 +277,7 @@ Flickable {
                 id: data_birthday
                 text: dataModel.data(index, PeopleModel.BirthdayRole)
                 defaultText: defaultBirthday
-                anchors {verticalCenter: birthday.verticalCenter; left: parent.left; topMargin: 30; leftMargin: 30; right: parent.right; rightMargin: 30;}
+                anchors {verticalCenter: birthday.verticalCenter; left: parent.left; topMargin: 30; leftMargin: 30; right: parent.right; rightMargin: 30}
                 MouseArea{
                     id: mouse_birthday
                     anchors.fill: parent

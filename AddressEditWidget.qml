@@ -205,7 +205,7 @@ Item {
                             source: "image://theme/contacts/icn_trash"
                             width: 36
                             height: 36
-                            anchors {right: parent.right;}
+                            anchors {right: parent.right}
                             opacity: 1
                             MouseArea{
                                 id: mouse_delete_address

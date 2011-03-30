@@ -125,7 +125,7 @@ Window {
                 anchors {bottom: parent.bottom; left: parent.left; right: parent.right;}
                 opacity: 1
                 Button{
-                    id: shareButton;
+                    id: shareButton
                     title: contextShare
                     width: 146
                     anchors {top: parent.top; topMargin: 3; bottom: parent.bottom; bottomMargin: 3; left: footer_bar.left; leftMargin: 3;}
@@ -136,7 +136,7 @@ Window {
                     }
                 }
                 Button{
-                    id: editButton;
+                    id: editButton
                     title: contextEdit
                     width: 146
                     anchors {top: parent.top; topMargin: 3; bottom: parent.bottom; bottomMargin: 3;  right: footer_bar.right; rightMargin: 3;}
@@ -189,7 +189,7 @@ Window {
                 anchors {bottom: parent.bottom; left: parent.left; right: parent.right;}
                 opacity: 1
                 Button{
-                    id: saveButton;
+                    id: saveButton
                     title: contextSave
                     width: 146
                     active: editContact.validInput
@@ -200,7 +200,7 @@ Window {
                     }
                 }
                 Button{
-                    id: cancelButton;
+                    id: cancelButton
                     title: contextCancel
                     width: 146
                     anchors {top: parent.top; topMargin: 3; bottom: parent.bottom; bottomMargin: 3; right: footer_bar.right; rightMargin: 3;}
@@ -253,7 +253,7 @@ Window {
                 anchors {bottom: parent.bottom; left: parent.left; right: parent.right;}
                 opacity: 1
                 Button{
-                    id: saveButton;
+                    id: saveButton
                     title: contextSave
                     width: 146
                     active: newContact.validInput
@@ -264,7 +264,7 @@ Window {
                     }
                 }
                 Button{
-                    id: cancelButton;
+                    id: cancelButton
                     title: contextCancel
                     width: 146
                     anchors {top: parent.top; topMargin: 3; bottom: parent.bottom; bottomMargin: 3; right: footer_bar.right; rightMargin: 3;}

@@ -88,7 +88,7 @@ Image {
         width: 100
         height: 100
         source: (dataAvatar ? dataAvatar :"image://theme/contacts/blank_avatar")
-        anchors {left: contactCardPortrait.left;}
+        anchors {left: contactCardPortrait.left}
         onStatusChanged: {
             if(photo.status == Image.Error || photo.status == Image.Null){
                 photo.source = "image://theme/contacts/blank_avatar";
@@ -114,12 +114,12 @@ Image {
             else
                 return "(...)";
         }
-        anchors { left: photo.right; top: photo.top; topMargin: photo.height/8-contactDivider.height; leftMargin: photo.height/8;}
+        anchors { left: photo.right; top: photo.top; topMargin: photo.height/8-contactDivider.height; leftMargin: photo.height/8}
         font.pixelSize: theme_fontPixelSizeLargest
         color: theme_fontColorNormal; smooth: true
     }
 
-    //    Text {
+    //    REVISIT:Text {
     //        id: nameLast
     //        text: dataLast
     //        anchors { left: nameFirst.right; top: nameFirst.top; leftMargin: photo.height/8;}
@@ -196,7 +196,7 @@ Image {
     Image{
         id: contactDivider
         source: "image://theme/contacts/contact_divider"
-        anchors {right: contactCardPortrait.right; bottom: contactCardPortrait.bottom; left: contactCardPortrait.left; }
+        anchors {right: contactCardPortrait.right; bottom: contactCardPortrait.bottom; left: contactCardPortrait.left}
     }
 
     MouseArea {
@@ -213,7 +213,7 @@ Image {
 
     states: State {
         name: "pressed"; when: mouseArea.pressed == true
-        PropertyChanges { target: contactCardPortrait; opacity: .7;}
+        PropertyChanges { target: contactCardPortrait; opacity: .7}
     }
 
 }

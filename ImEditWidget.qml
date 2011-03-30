@@ -131,8 +131,8 @@ Item {
             opacity: (imModel.length > 0 ? 1  : 0)
             delegate: Item {
                 id: itemDelegate
-                width: parent.width;
-                height: 80;
+                width: parent.width
+                height: 80
                 signal clicked()
 
                 //Need to store the repeater index, as the drop down overwrites index with its own value
