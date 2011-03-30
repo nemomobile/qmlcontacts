@@ -39,8 +39,6 @@ Item {
     Button {
         id: button
         title: addContact
-        font.pixelSize: theme_fontPixelSizeLargest
-        color: theme_buttonFontColor
         bgSourceUp: "image://theme/btn_blue_up"
         bgSourceDn: "image://theme/btn_blue_dn"
         active: true
