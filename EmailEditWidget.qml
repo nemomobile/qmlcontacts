@@ -55,6 +55,7 @@ Item {
     Column{
         spacing: 1
         anchors {left:parent.left; right: parent.right; }
+        width:parent.width
 
         Item {
             id: emailHeader
