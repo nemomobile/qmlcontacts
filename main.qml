@@ -18,6 +18,7 @@ Window {
     property string currentContactId: ""
     property int currentContactIndex: 0
     property string currentContactName: ""
+    property bool callFromRemote: false
 
     property string filterNew: qsTr("New contact")
     property string filterAll: qsTr("All")
@@ -45,6 +46,28 @@ Window {
     property int animationDuration: 250
 
     applicationPage: myAppAllContacts
+
+    Connections {
+        target: mainWindow
+        onCall: {
+            var cmd = parameters[0];
+            //var data = parameters[1]; //data: one of 234-2342 or joe@gmail.com
+            //var type = parameters[2]; //type: one of email or phone
+
+            //callFromRemote = true;
+            if (cmd == "launchNewContact") {
+                //REVISIT: need to pass data and type to NewContactPage
+                scene.addApplicationPage(myAppNewContact);
+            }
+            else if (cmd == "launchDetailView")
+            {
+                var contactId = parameters[1];
+                if(contactId)
+                    scene.currentContactIndex = contactId;
+                scene.addApplicationPage(myAppDetails);
+            }
+        }
+    }
 
     Loader{
         id: dialogLoader

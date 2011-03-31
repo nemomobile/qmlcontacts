@@ -207,7 +207,7 @@ Image {
         id: mouseArea
         anchors.fill: contactCardPortrait
         onClicked: {
-            contactCardPortrait.clicked()
+            contactCardPortrait.clicked();
         }
         onPressAndHold: {
             var map = mapToItem(scene, mouseX, mouseY);

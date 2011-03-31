@@ -545,25 +545,13 @@ Flickable {
                         id: mouseArea_url
                         anchors.fill: parent
                         onPressed: {
-                            var map = mapToItem (scene.content, mouseX, mouseY);
-                            viewMenu.displayContextMenu (map.x, map.y);
+                            var cmd = "meego-app-browser " + data_web.text;
+                            appModel.launch(cmd);
                         }
                     }
 
                     ApplicationsModel{
                         id: appModel
-                    }
-
-                    ContextMenu {
-                        id: viewMenu
-                        model: [viewUrl]
-                        onTriggered: {
-                            if(index == 0) {
-                                viewMenu.visible = false;
-				var cmd = "meego-app-browser " + data_web.text;
-                                appModel.launch(cmd);
-                            }
-                        }
                     }
                 }
             }
