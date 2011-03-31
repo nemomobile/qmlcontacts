@@ -58,6 +58,7 @@ Item {
         Image {
             id: settingsIcon
             anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
             source: "image://meegotheme/icons/actionbar/show-settings"
             NumberAnimation on rotation {
                 id: imageRotation

@@ -15,16 +15,60 @@ ApplicationPage {
     id: settingsPage
     property string titleStr: qsTr("Contacts Settings")
     property string sortPreferenceStr: qsTr("Sort Order:")
-    property string byFirstNameStr: qsTr("Sort by first name")
-    property string byLastNameStr: qsTr("Sort by last name")
+    property string displayPreferenceStr: qsTr("Display Order:")
+    property string sortByFirst: qsTr("Sort by first name")
+    property string sortByLast: qsTr("Sort by last name")
+    property string displayByFirst: qsTr("Display by first name")
+    property string displayByLast: qsTr("Display by last name")
 
     title: titleStr
 
-    function getSelectedValStr() {
-        if (settingsDataStore.getSortOrder() == ProxyModel.SortLastName)
-            return byLastNameStr;
+    function getSettingText(type) {
+        if (type == "sort")
+            return sortPreferenceStr;
+
+        return displayPreferenceStr;
+    }
+
+    function getCurrentVal(type) {
+        if (type == "sort") {
+            if (settingsDataStore.getSortOrder() == ProxyModel.SortLastName)
+                return sortByLast;
+            else
+                return sortByFirst;
+        }
+
+        if (settingsDataStore.getDisplayOrder() == ProxyModel.SortLastName)
+            return displayByLast;
         else
-            return byFirstNameStr;
+            return displayByFirst;
+    }
+
+    function getDataList(type) {
+        if (type == "sort")
+            return [sortByFirst, sortByLast];
+
+        return [displayByFirst, displayByLast];
+    }
+
+    function handleSelectionChanged(type, data) {
+        if (data == "sort") {
+            if (data == sortByFirst)
+                settingsDataStore.setSortOrder(ProxyModel.SortFirstName);
+            else if (data == sortByLast)
+                settingsDataStore.setSortOrder(ProxyModel.SortLastName);
+        }
+
+        if (data == displayByFirst)
+            settingsDataStore.setDisplayOrder(ProxyModel.SortFirstName);
+        else if (data == displayByLast)
+            settingsDataStore.setDisplayOrder(ProxyModel.SortLastName);
+    }
+
+    ListModel {
+        id: settingsList
+        ListElement { type: "sort" }
+        ListElement { type: "display" }
     }
 
     Item {
@@ -39,42 +83,50 @@ ApplicationPage {
                 id: contents
                 width: parent.width
 
-                Image {
-                    id: sortSettingItem
-                    source: "image://theme/pulldown_box"
+                Repeater {
+                    model: settingsList
                     width: parent.width
-
-                    Text {
-                        anchors.top: parent.top
-                        anchors.left: parent.left
-                        anchors.leftMargin: 10
-                        text: sortPreferenceStr
-                        width: 100
-                        height: parent.height
-                        verticalAlignment: Text.AlignVCenter
-                    }
-
-                    DropDown {
-                        delegateComponent: Text {
-                            property string data
-                            text: data
-                        }
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.right: parent.right
-                        anchors.rightMargin: 10
-                        selectedValue: getSelectedValStr()
-                        dataList: [byFirstNameStr, byLastNameStr]
-                        width: 300
-
-                        onSelectionChanged: {
-                            if (data == byFirstNameStr)
-                                settingsDataStore.setSortOrder(ProxyModel.SortFirstName);
-                            else if (data == byLastNameStr)
-                                settingsDataStore.setSortOrder(ProxyModel.SortLastName);
-                        }
-                    } //DropDown
-                }  //Image
+                    height: childrenRect.height
+                    delegate: settingsComponent
+                }
             } //Column
         } //Flickable
     } //Item
+
+    Component {
+        id: settingsComponent
+
+        Image {
+            id: sortSettingItem
+            source: "image://theme/pulldown_box"
+            width: parent.width
+
+            Text {
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.leftMargin: 10
+                text: getSettingText(modelData)
+                width: 100
+                height: parent.height
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            DropDown {
+                delegateComponent: Text {
+                    property string data
+                    text: data
+                }
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.right: parent.right
+                anchors.rightMargin: 10
+                selectedValue: getCurrentVal(modelData)
+                dataList: getDataList(modelData)
+                width: 300
+
+                onSelectionChanged: {
+                    handleSelectionChanged(modelData, data);
+                }
+            } //DropDown
+        }  //Image
+    }  //Component
 }

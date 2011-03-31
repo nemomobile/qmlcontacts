@@ -23,9 +23,12 @@ public:
 
     Q_INVOKABLE int getSortOrder() const;
     Q_INVOKABLE void setSortOrder(int orderType);
+    Q_INVOKABLE int getDisplayOrder() const;
+    Q_INVOKABLE void setDisplayOrder(int orderType);
 
 Q_SIGNALS:
     void sortOrderChanged(int orderType);
+    void displayOrderChanged(int orderType);
 
 private:
     QSettings mSettings;

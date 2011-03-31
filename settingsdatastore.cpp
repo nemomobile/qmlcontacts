@@ -36,3 +36,14 @@ void SettingsDataStore::setSortOrder(int orderType)
     emit sortOrderChanged(orderType);
 }
 
+int SettingsDataStore::getDisplayOrder() const
+{
+    return mSettings.value("DisplayOrder", ProxyModel::SortFirstName).toInt();
+}
+
+void SettingsDataStore::setDisplayOrder(int orderType)
+{
+    mSettings.setValue("DisplayOrder", orderType);
+    emit displayOrderChanged(orderType);
+}
+
