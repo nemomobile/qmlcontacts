@@ -211,7 +211,15 @@ Image {
         }
         onPressAndHold: {
             var map = mapToItem(scene, mouseX, mouseY);
-            contactCardPortrait.pressAndHold(map.x, map.y, dataUuid, getTruncatedString(dataFirst +" " + dataLast, 25))
+            if(dataFirst != "" && dataLast != ""){
+                contactCardPortrait.pressAndHold(map.x, map.y, dataUuid, getTruncatedString(dataFirst +" " + dataLast, 25));
+            }else if(dataFirst == ""){
+                contactCardPortrait.pressAndHold(map.x, map.y, dataUuid, getTruncatedString(dataLast, 25));
+            }else if(dataLast == ""){
+                contactCardPortrait.pressAndHold(map.x, map.y, dataUuid, getTruncatedString(dataFirst, 25))
+            }else{
+                contactCardPortrait.pressAndHold(map.x, map.y, dataUuid, "");
+            }
         }
     }
 
