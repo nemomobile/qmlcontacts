@@ -44,8 +44,6 @@ Window {
 
     property int animationDuration: 250
 
-    filterModel: [filterAll, filterFavorites, filterWhosOnline]
-
     applicationPage: myAppAllContacts
 
     Loader{
@@ -55,6 +53,7 @@ Window {
 
     onFilterTriggered: {
         if(index == 0){
+            scene.filterModel = [filterAll, filterFavorites, filterWhosOnline];
             peopleModel.setFilter(PeopleModel.AllFilter);
             scene.applicationPage = myAppAllContact;
         }else if(index == 1){
@@ -73,6 +72,7 @@ Window {
             title: labelGroupedView
             Component.onCompleted : {
                 scene.title = labelGroupedView;
+                scene.filterModel = [filterAll, filterFavorites, filterWhosOnline];
                 disableSearch = false;
                 showsearch = true;
             }
@@ -117,6 +117,7 @@ Window {
             title: labelDetailView
             Component.onCompleted : {
                 scene.title = labelDetailView;
+                scene.filterModel = [];
                 disableSearch = true;
             }
             DetailViewPortrait{
@@ -149,6 +150,7 @@ Window {
             }
             Component.onDestruction: {
                 peopleModel.setFilter(PeopleModel.AllFilter);
+                scene.filterModel = [filterAll, filterFavorites, filterWhosOnline];
                 //REVISIT: change filter earlier to avoid glitch
             }
         }
@@ -161,6 +163,7 @@ Window {
             title: labelEditView
             Component.onCompleted : {
                 scene.title = labelEditView;
+                scene.filterModel = [];
                 disableSearch = true;
             }
             EditViewPortrait{
@@ -196,6 +199,7 @@ Window {
             }
             Component.onDestruction: {
                 peopleModel.setFilter(PeopleModel.AllFilter);
+                scene.filterModel = [filterAll, filterFavorites, filterWhosOnline];
             }
         }
     }
@@ -207,6 +211,7 @@ Window {
             title: labelNewContactView
             Component.onCompleted : {
                 scene.title = labelNewContactView;
+                scene.filterModel = [];
                 disableSearch = true;
             }
             NewContactViewPortrait{
@@ -233,6 +238,10 @@ Window {
                     }
                     newContactViewPage.closeMenu();
                 }
+            }
+            Component.onDestruction: {
+                peopleModel.setFilter(PeopleModel.AllFilter);
+                scene.filterModel = [filterAll, filterFavorites, filterWhosOnline];
             }
         }
     }

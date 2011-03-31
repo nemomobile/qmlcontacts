@@ -14,7 +14,6 @@ import MeeGo.App.IM 0.1
 import TelepathyQML 0.1
 
 Flickable {
-
     id: editViewPortrait
     contentWidth: parent.width
     contentHeight: editList.height
