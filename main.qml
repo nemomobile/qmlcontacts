@@ -76,15 +76,14 @@ Window {
 
     onFilterTriggered: {
         if(index == 0){
-            scene.filterModel = [filterAll, filterFavorites, filterWhosOnline];
             peopleModel.setFilter(PeopleModel.AllFilter);
-            scene.applicationPage = myAppAllContact;
+            scene.applicationPage = myAppAllContacts;
         }else if(index == 1){
             peopleModel.setFilter(PeopleModel.FavoritesFilter);
-            scene.applicationPage = myAppAllContact;
+            scene.applicationPage = myAppAllContacts;
         }else if(index == 2){
-            peopleModel.setFilter(PeopleModel.OnlineFilter); //REVISIT: TEST THIS
-            scene.applicationPage = myAppAllContact;
+            peopleModel.setFilter(PeopleModel.OnlineFilter);
+            scene.applicationPage = myAppAllContacts;
         }
     }
 
@@ -95,7 +94,6 @@ Window {
             title: labelGroupedView
             Component.onCompleted : {
                 scene.title = labelGroupedView;
-                scene.filterModel = [filterAll, filterFavorites, filterWhosOnline];
                 disableSearch = false;
                 showsearch = true;
             }
@@ -130,6 +128,12 @@ Window {
                     groupedViewPage.closeMenu();
                 }
             }
+            onTypeChanged: {
+                if(groupedViewPage.type < 2){
+                    peopleModel.setFilter(PeopleModel.AllFilter);
+                    scene.filterModel =  [filterAll, filterFavorites, filterWhosOnline];
+                }
+            }
         }
     }
 
@@ -140,7 +144,6 @@ Window {
             title: labelDetailView
             Component.onCompleted : {
                 scene.title = labelDetailView;
-                scene.filterModel = [];
                 disableSearch = true;
             }
             DetailViewPortrait{
@@ -171,10 +174,10 @@ Window {
                     detailViewPage.closeMenu();
                 }
             }
-            Component.onDestruction: {
-                peopleModel.setFilter(PeopleModel.AllFilter);
-                scene.filterModel = [filterAll, filterFavorites, filterWhosOnline];
-                //REVISIT: change filter earlier to avoid glitch
+            onTypeChanged: {
+                if(detailViewPage.type == 0){
+                    scene.filterModel = [];
+                }
             }
         }
     }
@@ -186,7 +189,6 @@ Window {
             title: labelEditView
             Component.onCompleted : {
                 scene.title = labelEditView;
-                scene.filterModel = [];
                 disableSearch = true;
             }
             EditViewPortrait{
@@ -207,8 +209,8 @@ Window {
                 model: [contextSave, contextCancel, contextDelete]
                 onTriggered: {
                     if(index == 0) {
-                        editContact.contactSave(scene.currentContactId);
                         applicationPage = myAppAllContacts;
+                        editContact.contactSave(scene.currentContactId);
                     }
                     else if(index == 1) {
                         applicationPage = myAppAllContacts;
@@ -220,9 +222,10 @@ Window {
                     editViewPage.closeMenu();
                 }
             }
-            Component.onDestruction: {
-                peopleModel.setFilter(PeopleModel.AllFilter);
-                scene.filterModel = [filterAll, filterFavorites, filterWhosOnline];
+            onTypeChanged: {
+                if( editViewPage.type == 0){
+                    scene.filterModel = [];
+                }
             }
         }
     }
@@ -234,7 +237,6 @@ Window {
             title: labelNewContactView
             Component.onCompleted : {
                 scene.title = labelNewContactView;
-                scene.filterModel = [];
                 disableSearch = true;
             }
             NewContactViewPortrait{
@@ -254,17 +256,18 @@ Window {
                 model: [contextSave, contextCancel]
                 onTriggered: {
                     if(index == 0) {
-                        newContact.contactSave();
                         scene.applicationPage = myAppAllContacts;
+                        newContact.contactSave();
                     }else if(index == 1) {
                         scene.applicationPage = myAppAllContacts;
                     }
                     newContactViewPage.closeMenu();
                 }
             }
-            Component.onDestruction: {
-                peopleModel.setFilter(PeopleModel.AllFilter);
-                scene.filterModel = [filterAll, filterFavorites, filterWhosOnline];
+            onTypeChanged: {
+                if(newContactViewPage.type == 0){
+                    scene.filterModel = [];
+                }
             }
         }
     }
@@ -300,11 +303,11 @@ Window {
         id: objectMenu
         model: [contextView, contextFavorite, contextShare, contextEdit, contextDelete]
         onTriggered: {
-            if(index == 0) { scene.addApplicationPage(myAppDetails); objectMenu.visible = false;}
-            if(index == 1) { peopleModel.toggleFavorite(scene.currentContactId); objectMenu.visible = false;}
-            if(index == 2) { shareMenu.menuY = (objectMenu.menuY+30); shareMenu.menuX = objectMenu.menuX; shareMenu.visible = true;  objectMenu.visible = false;}
-            if(index == 3) { scene.addApplicationPage(myAppEdit); objectMenu.visible = false;}
-            if(index == 4) { showModalDialog(confirmDialog); objectMenu.visible = false;}
+            if(index == 0) { objectMenu.visible = false; scene.addApplicationPage(myAppDetails);}
+            if(index == 1) { objectMenu.visible = false; peopleModel.toggleFavorite(scene.currentContactId); }
+            if(index == 2) { objectMenu.visible = false; shareMenu.menuY = (objectMenu.menuY+30); shareMenu.menuX = objectMenu.menuX; shareMenu.visible = true;  }
+            if(index == 3) { objectMenu.visible = false; scene.addApplicationPage(myAppEdit);}
+            if(index == 4) { objectMenu.visible = false; showModalDialog(confirmDialog);}
         }
     }
 
