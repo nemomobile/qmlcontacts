@@ -52,7 +52,7 @@ ApplicationPage {
     }
 
     function handleSelectionChanged(type, data) {
-        if (data == "sort") {
+        if (type == "sort") {
             if (data == sortByFirst)
                 settingsDataStore.setSortOrder(ProxyModel.SortFirstName);
             else if (data == sortByLast)

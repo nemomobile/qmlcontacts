@@ -78,8 +78,7 @@ Item {
                 }
                 onClicked: {
                     //REVISIT: Load contacts page when available
-                    //var cmd = "/usr/bin/meego-qml-launcher --app meego-ux-settings --opengl --fullscreen --cmd showPage --cdata \"Contacts\"";  //i18n ok
-                    var cmd = "/usr/bin/meego-qml-launcher --app meego-ux-settings --fullscreen --cmd showPage --cdata \"Contacts\"";  //i18n ok
+                    var cmd = "/usr/bin/meego-qml-launcher --app meego-ux-settings --opengl --fullscreen --cmd showPage --cdata \"Contacts\"";  //i18n ok
                     appModel.launch(cmd);
                 }
             }
