@@ -15,7 +15,7 @@ import TelepathyQML 0.1
 Flickable {
     id: detailViewPortrait
     contentWidth: parent.width
-    contentHeight: parent.height*3
+    contentHeight: detailsList.height
     flickableDirection: Flickable.VerticalFlick
     height: parent.height
     width: parent.width
@@ -129,7 +129,7 @@ Flickable {
     Column{
         id: detailsList
         spacing: 1
-        anchors {left:parent.left; right: parent.right; top: parent.top; bottom: parent.bottom; leftMargin:10; rightMargin:10; topMargin:10; bottomMargin: 10}
+        anchors {left:parent.left; right: parent.right; leftMargin:10; rightMargin:10;}
         Image{
             id: detailHeader
             width: parent.width
