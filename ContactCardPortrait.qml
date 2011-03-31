@@ -211,7 +211,7 @@ Image {
         }
         onPressAndHold: {
             var map = mapToItem(scene, mouseX, mouseY);
-            contactCardPortrait.pressAndHold(map.x, map.y, dataUuid, dataFirst +" " + dataLast)
+            contactCardPortrait.pressAndHold(map.x, map.y, dataUuid, getTruncatedString(dataFirst +" " + dataLast, 25))
         }
     }
 
