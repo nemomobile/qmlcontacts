@@ -346,7 +346,7 @@ Flickable {
                         font.pixelSize: theme_fontPixelSizeLarge
                         smooth: true
                         font.bold: true
-                        anchors {verticalCenter: phoneBar.verticalCenter; left: phoneBar.left; leftMargin: 115}
+                        anchors {verticalCenter: phoneBar.verticalCenter; left: phoneBar.left; leftMargin: 145}
                         opacity: 1
                     }
                 }
@@ -537,7 +537,7 @@ Flickable {
                         font.pixelSize: theme_fontPixelSizeLarge
                         smooth: true
                         font.bold: true
-                        anchors {verticalCenter: webBar.verticalCenter; left: webBar.left; leftMargin: 115 }
+                        anchors {verticalCenter: webBar.verticalCenter; left: webBar.left; leftMargin: 145 }
                         opacity: 1
                     }
 
@@ -622,7 +622,7 @@ Flickable {
                     Column{
                         width: parent.width-100
                         height: 300
-                        anchors {verticalCenter: addyBar.verticalCenter; left: addyBar.left; leftMargin: 115 }
+                        anchors {verticalCenter: addyBar.verticalCenter; left: addyBar.left; leftMargin: 145 }
                         spacing: 10
 
                         Item{
@@ -690,7 +690,7 @@ Flickable {
                     font.pixelSize: theme_fontPixelSizeLarge
                     smooth: true
                     font.bold: true
-                    anchors {verticalCenter: bdayBar.verticalCenter; left: bdayBar.left; leftMargin: 115 }
+                    anchors {verticalCenter: bdayBar.verticalCenter; left: bdayBar.left; leftMargin: 145 }
                     opacity: 1
                 }
             }
