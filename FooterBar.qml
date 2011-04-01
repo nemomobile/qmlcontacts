@@ -32,14 +32,21 @@ Item {
             return ["", ""];
     }
 
-    function handleButtonClick(buttonTitle) {
-        if (buttonTitle == scene.contextShare) {
+    function getActiveState(action) {
+        if (action == scene.contextSave)
+            return currentView.validInput
+
+        return true;
+    }
+
+    function handleButtonClick(action) {
+        if (action == scene.contextShare) {
             peopleModel.exportContact(scene.currentContactId,  "/tmp/vcard.vcf");
             var cmd = "/usr/bin/meego-qml-launcher --app meego-app-email --fullscreen --cmd openComposer --cdata \"file:///tmp/vcard.vcf\"";
             appModel.launch(cmd);
-        } else if (buttonTitle == scene.contextEdit) {
+        } else if (action == scene.contextEdit) {
             scene.addApplicationPage(pageToLoad);
-        } else if (buttonTitle == scene.contextSave) {
+        } else if (action == scene.contextSave) {
             if (type == "edit")
                 currentView.contactSave(scene.currentContactId);
             else if (type == "new")
@@ -97,6 +104,7 @@ Item {
             title: getButtonTitleText()[0]
             width: 146
             visible: (buttonLeft.title == "" ? 0 : 1)
+            active: getActiveState(buttonLeft.title)
             anchors {top: parent.top; topMargin: 3; 
                      bottom: parent.bottom; bottomMargin: 3; 
                      left: divIcon.left; leftMargin: 3;}
@@ -109,6 +117,7 @@ Item {
             title: getButtonTitleText()[1]
             width: 146
             visible: (buttonRight.title == "" ? 0 : 1)
+            active: getActiveState(buttonRight.title)
             anchors {top: parent.top; topMargin: 3;
                      bottom: parent.bottom; bottomMargin: 3;
                      right: footer_bar.right; rightMargin: 3;}

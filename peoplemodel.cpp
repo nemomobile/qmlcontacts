@@ -853,13 +853,6 @@ bool PeopleModel::createPersonModel(QString avatarUrl, QString thumbUrl, QString
                                     QStringList zip, QStringList country, QStringList addresscontexts,
                                     QStringList urllinks,  QStringList urlcontexts, QDate birthday, QString notetext)
 {
-    if (firstName.isEmpty() && lastName.isEmpty() && companyname.isEmpty() && phonenumbers.isEmpty() &&
-        serviceproviders.isEmpty() && emailaddys.isEmpty() && street.isEmpty() && city.isEmpty() && state.isEmpty() &&
-        zip.isEmpty() && country.isEmpty() && urllinks.isEmpty() && notetext.isEmpty() && avatarUrl.isEmpty()) {
-        qDebug() << "[PeopleModel] Not enough info was entered to be a valid contact";
-        return false;
-    }
-
     QContact contact;
 
     QContactGuid guid;
