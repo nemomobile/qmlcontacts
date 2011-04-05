@@ -116,7 +116,7 @@ Image {
             else if (dataPeople.data(sourceIndex, PeopleModel.WebUrlRole) != "")
                 return getTruncatedString(dataPeople.data(sourceIndex, PeopleModel.WebUrlRole), 25)[0];
             else
-                return "(...)";
+                return stringTruncater;
         }
         anchors { left: photo.right; top: photo.top; topMargin: photo.height/8-contactDivider.height; leftMargin: photo.height/8}
         font.pixelSize: theme_fontPixelSizeLargest

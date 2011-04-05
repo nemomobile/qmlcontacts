@@ -308,7 +308,7 @@ Flickable{
 
             onTriggered: {
                 selectedDate = date;
-                selectedBirthday = Qt.formatDate(date, Qt.SystemLocaleDate);
+                selectedBirthday = Qt.formatDate(date, scene.dateFormat);
             }
 
             onClosed: {
