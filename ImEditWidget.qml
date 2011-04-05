@@ -342,9 +342,8 @@ Item {
                                 bgSourceDn: "image://theme/btn_blue_dn"
                                 anchors {right:cancelButton.left; top: imComboBox3.bottom; topMargin: 15; rightMargin: 5;}
                                 visible: (imContexts.count > 0 ? 1  : 0)
+                                active: (imComboBox4.dataList[imComboBox4.selectedIndex] == defaultIm ? false : true)
                                 onClicked: {
-                                    if (imComboBox4.dataList[imComboBox4.selectedIndex] == defaultIm)
-                                        return;
                                     ims.append({"im": imComboBox4.dataList[imComboBox4.selectedIndex], 
                                                "type": imContexts.get(imComboBox3.selectedIndex).accountType,
                                                "account": imContexts.get(imComboBox3.selectedIndex).account});
