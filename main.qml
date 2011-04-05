@@ -279,10 +279,7 @@ Window {
     ProxyModel{
         id: proxyModel
         Component.onCompleted:{
-            //setSortType() will in turn call setSorting() on the PeopleModel
-            proxyModel.setModel(peopleModel);
-            proxyModel.setSortType(ProxyModel.SortName);
-            proxyModel.setSortType(settingsDataStore.getSortOrder());
+            proxyModel.setModel(peopleModel); //Calls setSorting() on model
         }
     }
 

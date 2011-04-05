@@ -9,14 +9,19 @@
 #include <QDebug>
 
 #include <QStringList>
+#include <QFileSystemWatcher>
 
 #include "proxymodel.h"
+#include "settingsdatastore.h"
 
 class ProxyModelPriv
 {
 public:
     ProxyModel::FilterType filterType;
     ProxyModel::SortType sortType;
+    ProxyModel::SortType displayType;
+    SettingsDataStore *settings;
+    QFileSystemWatcher *settingsFileWatcher;
 };
 
 ProxyModel::ProxyModel(QObject *parent)
@@ -25,15 +30,30 @@ ProxyModel::ProxyModel(QObject *parent)
     priv = new ProxyModelPriv;
     priv->filterType = FilterAll;
     priv->sortType = SortFirstName;
+    priv->settings = SettingsDataStore::self();
     setDynamicSortFilter(true);
     setFilterKeyColumn(-1);
-    setSortRole(PeopleModel::FirstNameRole);
-    sort(0, Qt::AscendingOrder);
+
+    priv->settingsFileWatcher = new QFileSystemWatcher(this);
+    priv->settingsFileWatcher->addPath(priv->settings->getSettingsStoreFileName());
+    connect(priv->settingsFileWatcher, SIGNAL(fileChanged(QString)),
+            this, SLOT(readSettings()));
+
+    readSettings();
 }
 
 ProxyModel::~ProxyModel()
 {
     delete priv;
+}
+
+void ProxyModel::readSettings() 
+{
+    priv->settings->syncDataStore();
+    setSortType((SortType) priv->settings->getSortOrder());
+
+    priv->settings->getDisplayOrder();
+    setDisplayType((SortType) priv->settings->getDisplayOrder());
 }
 
 void ProxyModel::setFilter(FilterType filter)
@@ -49,23 +69,31 @@ void ProxyModel::setSortType(SortType sortType)
 
     switch(sortType){
     case SortLastName:
-       setSortRole(PeopleModel::LastNameRole);
-        model->setSorting(PeopleModel::LastNameRole);
+        setSortRole(PeopleModel::LastNameRole);
+        if (model)
+            model->setSorting(PeopleModel::LastNameRole);
         break;
     case SortFirstName:
     default:
         setSortRole(PeopleModel::FirstNameRole);
-        model->setSorting(PeopleModel::FirstNameRole);
+        if (model)
+            model->setSorting(PeopleModel::FirstNameRole);
         break;
     }
 
-    //REVISIT: Only support sorting by first name for now
+    reset(); //Clear the current sort method and then re-sort
     sort(0, Qt::AscendingOrder);
+}
+
+void ProxyModel::setDisplayType(SortType displayType)
+{
+    priv->displayType = displayType;
 }
 
 void ProxyModel::setModel(PeopleModel *model)
 {
     setSourceModel(model);
+    readSettings();
 }
 
 int ProxyModel::getSourceRow(int row)

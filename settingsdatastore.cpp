@@ -25,6 +25,16 @@ SettingsDataStore *SettingsDataStore::self()
     return mSelf;
 }
 
+QString SettingsDataStore::getSettingsStoreFileName()
+{
+    return mSettings.fileName();
+}
+
+void SettingsDataStore::syncDataStore()
+{
+    mSettings.sync();
+}
+
 int SettingsDataStore::getSortOrder() const
 {
     return mSettings.value("SortOrder", ProxyModel::SortFirstName).toInt();

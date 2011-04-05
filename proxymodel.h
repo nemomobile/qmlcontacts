@@ -36,12 +36,16 @@ public:
 
     Q_INVOKABLE virtual void setFilter(FilterType filter);
     Q_INVOKABLE virtual void setSortType(SortType sortType);
+    Q_INVOKABLE virtual void setDisplayType(SortType displayType);
     Q_INVOKABLE void setModel(PeopleModel *model);
     Q_INVOKABLE int getSourceRow(int row);
 
 protected:
     virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
     virtual bool lessThan(const QModelIndex& left, const QModelIndex& right) const;
+
+private slots:
+    void readSettings();
 
 private:
     ProxyModelPriv *priv;
