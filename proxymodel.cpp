@@ -18,8 +18,8 @@ class ProxyModelPriv
 {
 public:
     ProxyModel::FilterType filterType;
-    ProxyModel::SortType sortType;
-    ProxyModel::SortType displayType;
+    PeopleModel::PeopleRoles sortType;
+    PeopleModel::PeopleRoles displayType;
     SettingsDataStore *settings;
     QFileSystemWatcher *settingsFileWatcher;
 };
@@ -29,7 +29,6 @@ ProxyModel::ProxyModel(QObject *parent)
     Q_UNUSED(parent);
     priv = new ProxyModelPriv;
     priv->filterType = FilterAll;
-    priv->sortType = SortFirstName;
     priv->settings = SettingsDataStore::self();
     setDynamicSortFilter(true);
     setFilterKeyColumn(-1);
@@ -50,10 +49,10 @@ ProxyModel::~ProxyModel()
 void ProxyModel::readSettings() 
 {
     priv->settings->syncDataStore();
-    setSortType((SortType) priv->settings->getSortOrder());
+    setSortType((PeopleModel::PeopleRoles) priv->settings->getSortOrder());
 
     priv->settings->getDisplayOrder();
-    setDisplayType((SortType) priv->settings->getDisplayOrder());
+    setDisplayType((PeopleModel::PeopleRoles) priv->settings->getDisplayOrder());
 }
 
 void ProxyModel::setFilter(FilterType filter)
@@ -62,30 +61,20 @@ void ProxyModel::setFilter(FilterType filter)
     invalidateFilter();
 }
 
-void ProxyModel::setSortType(SortType sortType)
+void ProxyModel::setSortType(PeopleModel::PeopleRoles sortType)
 {
     priv->sortType = sortType;
-    PeopleModel *model = dynamic_cast<PeopleModel *>(sourceModel());
+    setSortRole(sortType);
 
-    switch(sortType){
-    case SortLastName:
-        setSortRole(PeopleModel::LastNameRole);
-        if (model)
-            model->setSorting(PeopleModel::LastNameRole);
-        break;
-    case SortFirstName:
-    default:
-        setSortRole(PeopleModel::FirstNameRole);
-        if (model)
-            model->setSorting(PeopleModel::FirstNameRole);
-        break;
-    }
+    PeopleModel *model = dynamic_cast<PeopleModel *>(sourceModel());
+    if (model)
+        model->setSorting(sortType);
 
     reset(); //Clear the current sort method and then re-sort
     sort(0, Qt::AscendingOrder);
 }
 
-void ProxyModel::setDisplayType(SortType displayType)
+void ProxyModel::setDisplayType(PeopleModel::PeopleRoles displayType)
 {
     priv->displayType = displayType;
 }
@@ -133,12 +122,14 @@ bool ProxyModel::lessThan(const QModelIndex& left,
     if (!model)
         return true;
 
-    if ((priv->sortType != SortFirstName) && (priv->sortType != SortLastName))
+    if ((priv->sortType != PeopleModel::FirstNameRole) 
+        && (priv->sortType != PeopleModel::LastNameRole))
         return false;
 
     int searchRole = PeopleModel::FirstNameRole;
     int secondaryRole = PeopleModel::LastNameRole;
-    if (priv->sortType == SortLastName) {
+
+    if (priv->sortType == PeopleModel::LastNameRole) {
         searchRole = PeopleModel::LastNameRole;
         secondaryRole = PeopleModel::FirstNameRole;
     }
@@ -166,9 +157,9 @@ bool ProxyModel::lessThan(const QModelIndex& left,
     //Sort contacts with empty searchRoles by secondardyRole
     //REVISIT: What if the secondary role is also empty?
     if (lStr.isEmpty() && rStr.isEmpty()) {
-        if (priv->sortType == SortFirstName) {
+        if (priv->sortType == PeopleModel::FirstNameRole) {
             return QString::localeAwareCompare(lStr2, rStr2) < 0;
-        } else if (priv->sortType == SortLastName) {
+        } else if (priv->sortType == PeopleModel::LastNameRole) {
             if (lStr2.isEmpty())
                  return QString::localeAwareCompare(lStr2, rStr2) > 0;
             return QString::localeAwareCompare(lStr2, rStr2) < 0;

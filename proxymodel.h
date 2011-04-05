@@ -18,7 +18,6 @@ class ProxyModel: public QSortFilterProxyModel
 {
     Q_OBJECT
     Q_ENUMS(FilterType)
-    Q_ENUMS(SortType)
 
 public:
     ProxyModel(QObject *parent = 0);
@@ -29,14 +28,9 @@ public:
         FilterFavorites,
     };
 
-    enum SortType {
-        SortFirstName,
-        SortLastName
-    };
-
     Q_INVOKABLE virtual void setFilter(FilterType filter);
-    Q_INVOKABLE virtual void setSortType(SortType sortType);
-    Q_INVOKABLE virtual void setDisplayType(SortType displayType);
+    Q_INVOKABLE virtual void setSortType(PeopleModel::PeopleRoles sortType);
+    Q_INVOKABLE virtual void setDisplayType(PeopleModel::PeopleRoles displayType);
     Q_INVOKABLE void setModel(PeopleModel *model);
     Q_INVOKABLE int getSourceRow(int row);
 

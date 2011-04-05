@@ -37,7 +37,7 @@ void SettingsDataStore::syncDataStore()
 
 int SettingsDataStore::getSortOrder() const
 {
-    return mSettings.value("SortOrder", ProxyModel::SortFirstName).toInt();
+    return mSettings.value("SortOrder", PeopleModel::FirstNameRole).toInt();
 }
 
 void SettingsDataStore::setSortOrder(int orderType)
@@ -48,7 +48,7 @@ void SettingsDataStore::setSortOrder(int orderType)
 
 int SettingsDataStore::getDisplayOrder() const
 {
-    return mSettings.value("DisplayOrder", ProxyModel::SortFirstName).toInt();
+    return mSettings.value("DisplayOrder", PeopleModel::FirstNameRole).toInt();
 }
 
 void SettingsDataStore::setDisplayOrder(int orderType)

@@ -32,13 +32,13 @@ ApplicationPage {
 
     function getCurrentVal(type) {
         if (type == "sort") {
-            if (settingsDataStore.getSortOrder() == ProxyModel.SortLastName)
+            if (settingsDataStore.getSortOrder() == PeopleModel.LastNameRole)
                 return sortByLast;
             else
                 return sortByFirst;
         }
 
-        if (settingsDataStore.getDisplayOrder() == ProxyModel.SortLastName)
+        if (settingsDataStore.getDisplayOrder() == PeopleModel.LastNameRole)
             return displayByLast;
         else
             return displayByFirst;
@@ -54,15 +54,15 @@ ApplicationPage {
     function handleSelectionChanged(type, data) {
         if (type == "sort") {
             if (data == sortByFirst)
-                settingsDataStore.setSortOrder(ProxyModel.SortFirstName);
+                settingsDataStore.setSortOrder(PeopleModel.FirstNameRole);
             else if (data == sortByLast)
-                settingsDataStore.setSortOrder(ProxyModel.SortLastName);
+                settingsDataStore.setSortOrder(PeopleModel.LastNameRole);
         }
 
         if (data == displayByFirst)
-            settingsDataStore.setDisplayOrder(ProxyModel.SortFirstName);
+            settingsDataStore.setDisplayOrder(PeopleModel.FirstNameRole);
         else if (data == displayByLast)
-            settingsDataStore.setDisplayOrder(ProxyModel.SortLastName);
+            settingsDataStore.setDisplayOrder(PeopleModel.LastNameRole);
     }
 
     ListModel {

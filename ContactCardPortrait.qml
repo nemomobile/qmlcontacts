@@ -100,7 +100,7 @@ Image {
         id: nameFirst
         text: {
             if((dataFirst != "") || (dataLast != "")) {
-                if (settingsDataStore.getDisplayOrder() == ProxyModel.SortLastName)
+                if (settingsDataStore.getDisplayOrder() == PeopleModel.LastNameRole)
                     return qsTr("%1  %2").arg(getTruncatedString(dataLast, 25)).arg(getTruncatedString(dataFirst, 25));
                 else
                     return qsTr("%1  %2").arg(getTruncatedString(dataFirst, 25)).arg(getTruncatedString(dataLast, 25));
