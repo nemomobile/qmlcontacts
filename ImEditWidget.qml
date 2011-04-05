@@ -18,7 +18,7 @@ Item {
 
     property variant imModel: contactModel
     property variant contextModel: typeModel
-    property bool    validInput   : false
+    property bool validInput: false
 
     property int initialHeight: childrenRect.height
 
@@ -70,15 +70,6 @@ Item {
         }
     }
 
-    /* REVISIT: Need to add a connection, as telepathyManager isn't always available
-    Connections {
-        target: accountsModel
-        onComponentsLoaded: {
-            console.log("-------------READY!");
-        }
-    }
-    */
-
     function getAvailableAccountTypes() {
         var accountTypes = new Array();
 
@@ -93,11 +84,14 @@ Item {
         for (var i = 0; i < imContexts.count; i++) {
             if (imContexts.get(i).accountType == imContexts.get(selectedIndex).accountType) {
                 var list = telepathyManager.availableContacts(imContexts.get(i).account);
-                for (var i = 0; i < list.length; i++) {
-                    buddyList[i] = list[i];
-                }
-                if (buddyList.length > 0)
+                if (list.length > 0) {
+                    buddyList[0] = defaultIm;
+                    for (var i = 1; i < list.length + 1; i++) {
+                        buddyList[i] = list[i - 1];
+                    }
+
                     return buddyList;
+                }
             }
         }
         return [noBuddies];
@@ -349,6 +343,8 @@ Item {
                                 anchors {right:cancelButton.left; top: imComboBox3.bottom; topMargin: 15; rightMargin: 5;}
                                 visible: (imContexts.count > 0 ? 1  : 0)
                                 onClicked: {
+                                    if (imComboBox4.dataList[imComboBox4.selectedIndex] == defaultIm)
+                                        return;
                                     ims.append({"im": imComboBox4.dataList[imComboBox4.selectedIndex], 
                                                "type": imContexts.get(imComboBox3.selectedIndex).accountType,
                                                "account": imContexts.get(imComboBox3.selectedIndex).account});

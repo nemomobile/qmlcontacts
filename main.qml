@@ -33,8 +33,8 @@ Window {
     property string contextSave: qsTr("Save")
     property string contextCancel: qsTr("Cancel")
     property string contextDelete: qsTr("Delete")
-    property string deleteConfirmation : qsTr("Delete Confirmation")
-    property string dateFormat qsTr("d MMMM yyyy") //REVISIT: Qt.SystemLocaleDate?
+    property string deleteConfirmation: qsTr("Delete Confirmation")
+    property int dateFormat: Qt.DefaultLocaleLongDate
 
     property string labelGroupedView: qsTr("Contacts")
     property string labelDetailView: qsTr("Contact details")
