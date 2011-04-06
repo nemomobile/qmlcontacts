@@ -157,13 +157,10 @@ bool ProxyModel::lessThan(const QModelIndex& left,
     //Sort contacts with empty searchRoles by secondardyRole
     //REVISIT: What if the secondary role is also empty?
     if (lStr.isEmpty() && rStr.isEmpty()) {
-        if (priv->sortType == PeopleModel::FirstNameRole) {
-            return QString::localeAwareCompare(lStr2, rStr2) < 0;
-        } else if (priv->sortType == PeopleModel::LastNameRole) {
-            if (lStr2.isEmpty())
-                 return QString::localeAwareCompare(lStr2, rStr2) > 0;
-            return QString::localeAwareCompare(lStr2, rStr2) < 0;
-        }
+        if (lStr2.isEmpty())
+            return false;
+        else if (rStr2.isEmpty())
+            return true;
     }
 
     if (lStr.isEmpty())
