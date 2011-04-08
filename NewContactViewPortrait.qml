@@ -7,7 +7,7 @@
  */
 
 import Qt 4.7
-import MeeGo.Labs.Components 0.1
+import MeeGo.Components 0.1
 import MeeGo.App.Contacts 0.1
 import MeeGo.Media 0.1
 
@@ -56,7 +56,7 @@ Flickable{
         var ret = peopleModel.createPersonModel(avatar, thumburi, data_first.text, data_last.text, data_company.text, newPhones["numbers"], newPhones["types"],
                                                 icn_faves.favoriteText, newIms["ims"], newIms["types"],
                                                 newEmails["emails"], newEmails["types"], addresses["streets"], addresses["locales"], addresses["regions"],
-                                                addresses["zips"], addresses["countries"], addresses["types"], newWebs["urls"], newWebs["types"], datePicker.selectedDate, data_notes.text);
+                                                addresses["zips"], addresses["countries"], addresses["types"], newWebs["urls"], newWebs["types"], datePicker.datePicked, data_notes.text);
 
         if (!ret) //REVISIT
             console.log("[contactSave] Unable to create new contact due to missing info");
@@ -96,7 +96,7 @@ Flickable{
                         id: mouseArea_avatar_img
                         anchors.fill: parent
                         onClicked:{
-                            photoPicker.visible = true;
+                            photoPicker.show();
                         }
                         onPressed: {
                             avatar.opacity = .5;
@@ -107,18 +107,14 @@ Flickable{
             }
             PhotoPicker {
                 id: photoPicker
-                parent: scene
                 property string selectedPhoto
                 property string selectedPhotoThumb
 
                 albumSelectionMode: false
                 onPhotoSelected: {
                     selectedPhoto = uri
-                    selectedPhotoThumb = (thumburi ? thumburi : uri);
+                    selectedPhotoThumb = (thumbUri ? thumbUri : uri);
                     newContactPage.validInput = true;
-                }
-
-                onClosed: {
                     if (selectedPhoto)
                     {
                         avatar_img.source = selectedPhotoThumb;
@@ -299,19 +295,16 @@ Flickable{
             }
         }
 
-        DatePickerDialog {
+        DatePicker {
             id:datePicker
             parent: newContactPage
 
-            property date selectedDate
+            property date datePicked 
             property string selectedBirthday
 
-            onTriggered: {
-                selectedDate = date;
-                selectedBirthday = Qt.formatDate(date, scene.dateFormat);
-            }
-
-            onClosed: {
+            onDateSelected: {
+                datePicked = selectedDate;
+                selectedBirthday = Qt.formatDate(selectedDate, scene.dateFormat);
                 data_birthday.state = (data_birthday.state == "default" ? "edit" : data_birthday.state)
             }
         }

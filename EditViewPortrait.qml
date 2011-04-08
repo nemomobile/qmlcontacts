@@ -7,7 +7,7 @@
  */
 
 import Qt 4.7
-import MeeGo.Labs.Components 0.1
+import MeeGo.Components 0.1
 import MeeGo.App.Contacts 0.1
 import MeeGo.Media 0.1
 import MeeGo.App.IM 0.1
@@ -60,7 +60,7 @@ Flickable {
                                               icn_faves.favoriteText, newIms["ims"], newIms["types"],
                                               newEmails["emails"], newEmails["types"], addresses["streets"], addresses["locales"], addresses["regions"],
                                               addresses["zips"], addresses["countries"], addresses["types"],
-                                              newWebs["urls"], newWebs["types"], datePicker.selectedDate, data_notes.text);
+                                              newWebs["urls"], newWebs["types"], datePicker.datePicked, data_notes.text);
     }
 
     Column{
@@ -96,7 +96,7 @@ Flickable {
                         id: mouseArea_avatar_img
                         anchors.fill: parent
                         onClicked:{
-                            photoPicker.visible = true;
+                            photoPicker.show();
                         }
                         onPressed: {
                             avatar.opacity = .5;
@@ -108,16 +108,13 @@ Flickable {
 
             PhotoPicker {
                 id: photoPicker
-                parent: scene
                 property string selectedPhoto
 
                 albumSelectionMode: false
                 onPhotoSelected: {
                     selectedPhoto = uri.split("file://")[1];
                     editViewPortrait.validInput = true;
-                }
 
-                onClosed: {
                     if (selectedPhoto)
                     {
                         avatar_img.source = selectedPhoto;
@@ -288,20 +285,15 @@ Flickable {
             }
         }
 
-        DatePickerDialog {
+        DatePicker {
             id:datePicker
             parent: editViewPortrait
 
-            property date selectedDate
-            property string selectedBirthday
+            property date datePicked 
 
-            onTriggered: {
-                selectedDate = date;
-                selectedBirthday = Qt.formatDate(date, scene.dateFormat);
-            }
-
-            onClosed: {
-                data_birthday.text = datePicker.selectedBirthday;
+            onDateSelected: {
+                datePicked = selectedDate;
+                data_birthday.text = Qt.formatDate(selectedDate, scene.dateFormat);
                 data_birthday.state = (data_birthday.state == "default" ? "edit" : data_birthday.state)
             }
         }
