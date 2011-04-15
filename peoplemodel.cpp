@@ -1271,7 +1271,7 @@ int PeopleModel::getSortingRole(){
     return PeopleModel::FirstNameRole;
 }
 
-void PeopleModel::setFilter(int role){
+void PeopleModel::setFilter(int role, bool dataResetNeeded){
     switch(role){
     case FavoritesFilter:
     {
@@ -1308,7 +1308,9 @@ void PeopleModel::setFilter(int role){
         break;
     }
     }
-    dataReset();
+
+    if (dataResetNeeded)
+        dataReset();
 }
 
 void PeopleModel::searchContacts(const QString text){

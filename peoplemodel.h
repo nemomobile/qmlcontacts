@@ -119,7 +119,7 @@ public:
     void setCompany(const QUuid& uuid, QString company);
     void setisSelf(const QUuid& uuid, bool self);
     Q_INVOKABLE void setSorting(int role);
-    Q_INVOKABLE void setFilter(int role);
+    Q_INVOKABLE void setFilter(int role, bool dataResetNeeded = true);
     Q_INVOKABLE int getSortingRole();
     Q_INVOKABLE void searchContacts(const QString text);
     Q_INVOKABLE void clearSearch();

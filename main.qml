@@ -131,7 +131,7 @@ Window {
             }
             onTypeChanged: {
                 if(groupedViewPage.type < 2){
-                    peopleModel.setFilter(PeopleModel.AllFilter);
+                    peopleModel.setFilter(PeopleModel.AllFilter, false);
                     scene.filterModel =  [filterAll, filterFavorites, filterWhosOnline];
                 }
             }
