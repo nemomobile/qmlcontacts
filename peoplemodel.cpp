@@ -10,7 +10,6 @@
 
 #include <QVector>
 #include <QContactAddress>
-#include <QContactAnniversary>
 #include <QContactAvatar>
 #include <QContactThumbnail>
 #include <QContactBirthday>
