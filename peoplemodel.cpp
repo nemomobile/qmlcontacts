@@ -26,7 +26,6 @@
 #include <QContactUrl>
 #include <QContactNote>
 #include <QContactPresence>
-#include <QContactTag>
 #include <QSettings>
 #include <QContactDetailFilter>
 #include <QVersitContactExporter>
@@ -191,12 +190,10 @@ void PeopleModel::createMeCard(QContact &card)
     if (!contact->saveDetail(&name))
         qWarning() << "[PeopleModel] failed to save mecard name";
 
-    bool favorite = false;
-    if (priv->settings) {
-        QString key = guid.guid();
-        key += "/favorite";
-        priv->settings->setValue(key, favorite);
-    }
+    QContactFavorite fav;
+	fav.setFavorite(false);
+    if (!contact->saveDetail(&fav))
+        qWarning() << "[PeopleModel] failed to save mecard favorite to " << fav;
 
     updateMeCard.setContact(*contact);
     updateMeCard.start();
@@ -288,10 +285,10 @@ QVariant PeopleModel::data(int row, int role) const
     }
     case FavoriteRole:
     {
-        QContactTag tag = contact->detail<QContactTag>();
-        if(!tag.isEmpty())
-            return QString(tag.tag());
-        return QString();
+        QContactFavorite fav = contact->detail<QContactFavorite>();
+         if(!fav.isEmpty())
+            return QVariant(fav.isFavorite());
+        return false;
     }
     case OnlineAccountUriRole:
     {
@@ -847,7 +844,7 @@ void PeopleModel::dataReset()
 }
 
 bool PeopleModel::createPersonModel(QString avatarUrl, QString thumbUrl, QString firstName, QString lastName, QString companyname,
-                                    QStringList phonenumbers, QStringList phonecontexts, QString favorite,
+                                    QStringList phonenumbers, QStringList phonecontexts, bool favorite,
                                     QStringList accounturis, QStringList serviceproviders, QStringList emailaddys,
                                     QStringList emailcontexts, QStringList street, QStringList city, QStringList state,
                                     QStringList zip, QStringList country, QStringList addresscontexts,
@@ -886,9 +883,9 @@ bool PeopleModel::createPersonModel(QString avatarUrl, QString thumbUrl, QString
         contact.saveDetail(&phone);
     }
 
-    QContactTag tag;
-    tag.setTag(favorite);
-    contact.saveDetail(&tag);
+    QContactFavorite fav;
+    fav.setFavorite(favorite);
+    contact.saveDetail(&fav);
 
     for(int i =0; i < accounturis.size(); i++){
         QContactOnlineAccount account;
@@ -959,7 +956,7 @@ void PeopleModel::deletePerson(QString uuid)
 }
 
 void PeopleModel::editPersonModel(QString uuid, QString avatarUrl, QString firstName, QString lastName, QString companyname,
-                                  QStringList phonenumbers, QStringList phonecontexts, QString favorite,
+                                  QStringList phonenumbers, QStringList phonecontexts, bool favorite,
                                   QStringList accounturis, QStringList serviceproviders, QStringList emailaddys,
                                   QStringList emailcontexts, QStringList street, QStringList city, QStringList state,
                                   QStringList zip, QStringList country, QStringList addresscontexts,
@@ -1023,11 +1020,9 @@ void PeopleModel::editPersonModel(QString uuid, QString avatarUrl, QString first
         contact->saveDetail(&phone);
     }
 
-    QContactTag tag = contact->detail<QContactTag>();
-    if (tag.tag() != favorite) {
-        tag.setTag(favorite);
-        contact->saveDetail(&tag);
-    }
+    QContactFavorite fav = contact->detail<QContactFavorite>();
+    fav.setFavorite(favorite);
+    contact->saveDetail(&fav);
 
     //Remove all existing IM accounts; then add all IM accounts from edit page
     foreach (QContactDetail detail, contact->details<QContactOnlineAccount>()) {
@@ -1139,14 +1134,13 @@ void PeopleModel::setFavorite(const QString& uuid, bool favorite)
     if (!contact)
         return;
 
-    QContactTag tag;
-    if(favorite){
-        tag.setTag("Favorite");
-    }else{
-        tag.setTag("UnFavorite");
+    QContactFavorite fav = contact->detail<QContactFavorite>();
+    fav.setFavorite(favorite);
+
+    if (!contact->saveDetail(&fav)) {
+        qWarning() << Q_FUNC_INFO << "failed to save favorite to " << fav;
+		return;
     }
-    if (!contact->saveDetail(&tag))
-        qWarning() << "[PeopleModel] failed to set favorite " + tag.tag();
 
     updateFavorite.setContact(*contact);
     updateFavorite.start();
@@ -1165,14 +1159,11 @@ void PeopleModel::toggleFavorite(const QString& uuid)
     if (!contact)
         return;
 
-    QContactTag tag = contact->detail<QContactTag>();
-    if(tag.tag() == "Favorite"){
-        tag.setTag("Unfavorite");
-    }else{
-        tag.setTag("Favorite");
-    }
-    if (!contact->saveDetail(&tag))
-        qWarning() << "[PeopleModel] failed to set favorite " + tag.tag();
+    QContactFavorite fav = contact->detail<QContactFavorite>();
+    fav.setFavorite(!fav.isFavorite());
+
+    if (!contact->saveDetail(&fav))
+        qWarning() << "[PeopleModel] failed to set favorite to " << fav;
 
     updateFavorite.setContact(*contact);
     updateFavorite.start();
@@ -1276,8 +1267,8 @@ void PeopleModel::setFilter(int role, bool dataResetNeeded){
     case FavoritesFilter:
     {
         QContactDetailFilter favFilter;
-        favFilter.setDetailDefinitionName(QContactTag::DefinitionName, QContactTag::FieldTag);
-        favFilter.setValue("Favorite");
+        favFilter.setDetailDefinitionName(QContactFavorite::DefinitionName, QContactFavorite::FieldFavorite);
+        favFilter.setValue("true");
         priv->currentFilter = favFilter;
         break;
     }

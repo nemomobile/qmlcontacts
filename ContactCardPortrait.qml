@@ -60,14 +60,10 @@ Image {
     property string dataFirst: dataPeople.data(sourceIndex, PeopleModel.FirstNameRole)
     property string dataUuid: dataPeople.data(sourceIndex, PeopleModel.UuidRole);
     property string dataLast:  dataPeople.data(sourceIndex, PeopleModel.LastNameRole)
-    property string dataFavorite: dataPeople.data(sourceIndex, PeopleModel.FavoriteRole)
+    property bool dataFavorite: dataPeople.data(sourceIndex, PeopleModel.FavoriteRole)
     property int dataStatus: dataPeople.data(sourceIndex, PeopleModel.PresenceRole)
     //REVISIT: Instead of using the URI from AvatarRole, need to use thumbnail URI
     property string dataAvatar: dataPeople.data(sourceIndex, PeopleModel.AvatarRole)
-
-    //don't internationalize
-    property string favoriteValue: "Favorite"
-    property string unfavoriteValue: "Unfavorite"
 
     property string unfavoriteTranslated: qsTr("Unfavorite")
     property string favoriteTranslated: qsTr("Favorite")
@@ -133,7 +129,7 @@ Image {
 
     Image {
         id: favorite
-        source: (dataFavorite == favoriteValue ? "image://theme/contacts/icn_fav_star_dn" : "image://theme/contacts/icn_fav_star" )
+        source: (dataPeople.data(sourceIndex, PeopleModel.FavoriteRole) ? "image://theme/contacts/icn_fav_star_dn" : "image://theme/contacts/icn_fav_star" )
         opacity: 1
         anchors {right: contactCardPortrait.right; top: nameFirst.top; rightMargin: photo.height/8;}
     }

@@ -54,7 +54,7 @@ Flickable{
         var thumburi = photoPicker.selectedPhotoThumb
 
         var ret = peopleModel.createPersonModel(avatar, thumburi, data_first.text, data_last.text, data_company.text, newPhones["numbers"], newPhones["types"],
-                                                icn_faves.favoriteText, newIms["ims"], newIms["types"],
+                                                (icn_faves.state == favoriteValue), newIms["ims"], newIms["types"],
                                                 newEmails["emails"], newEmails["types"], addresses["streets"], addresses["locales"], addresses["regions"],
                                                 addresses["zips"], addresses["countries"], addresses["types"], newWebs["urls"], newWebs["types"], datePicker.datePicked, data_notes.text);
 

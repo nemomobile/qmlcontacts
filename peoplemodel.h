@@ -80,7 +80,7 @@ public:
 
     Q_INVOKABLE bool createPersonModel(QString avatarUrl, QString thumbUrl, QString firstName, QString lastName,
                                        QString companyname, QStringList phonenumbers, QStringList phonecontexts,
-                                       QString favorite, QStringList accounturis, QStringList serviceproviders,
+                                       bool favorite, QStringList accounturis, QStringList serviceproviders,
                                        QStringList emailaddys, QStringList emailcontexts, QStringList street,
                                        QStringList city, QStringList state, QStringList zip, QStringList country,
                                        QStringList addresscontexts, QStringList urllinks, QStringList urlcontexts,
@@ -89,7 +89,7 @@ public:
     Q_INVOKABLE void deletePerson(QString uuid);
 
     Q_INVOKABLE void editPersonModel(QString contactId, QString avatarUrl, QString firstName, QString lastName, QString companyname,
-                                     QStringList phonenumbers, QStringList phonecontexts, QString favorite,
+                                     QStringList phonenumbers, QStringList phonecontexts, bool favorite,
                                      QStringList accounturis, QStringList serviceproviders, QStringList emailaddys,
                                      QStringList emailcontexts, QStringList street, QStringList city, QStringList state,
                                      QStringList zip, QStringList country, QStringList addresscontexts,

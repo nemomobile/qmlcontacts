@@ -66,8 +66,7 @@ Flickable {
     property string unfavoriteTranslated: qsTr("Unfavorite")
 
     //do not internationalize
-    property string unfavoriteValue: "Unfavorite"
-    property string favoriteValue: "Favorite"
+    property string favoriteWeb: "Favorite"
     property string homeValue: "Home"
     property string workValue: "Work"
     property string otherValue: "Other"
@@ -279,7 +278,7 @@ Flickable {
                         Image {
                             id: icon_favorite
                             anchors{right: parent.left;  rightMargin: 10}
-                            source: (detailModel.data(index, PeopleModel.FavoriteRole) == favoriteValue ? "image://theme/contacts/icn_fav_star_dn" : "image://theme/contacts/icn_fav_star" )
+                            source: (detailModel.data(index, PeopleModel.FavoriteRole) ? "image://theme/contacts/icn_fav_star_dn" : "image://theme/contacts/icn_fav_star" )
                             opacity: 1
                         }
                     }
@@ -517,7 +516,7 @@ Flickable {
                     Text{
                         id: button_web_txt
                         text:  {
-                            if(detailsWeb.webContexts[index] == favoriteValue)
+                            if(detailsWeb.webContexts[index] == favoriteWeb)
                                 return contextFavorite;
                             else if(detailsWeb.webContexts[index] == bookmarkValue)
                                 return contextBookmark;

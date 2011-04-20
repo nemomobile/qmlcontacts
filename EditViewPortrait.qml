@@ -57,7 +57,7 @@ Flickable {
             avatar_img.source = "";
 
                 peopleModel.editPersonModel(contactId, avatar_img.source, data_first.text, data_last.text, data_company.text, newPhones["numbers"], newPhones["types"],
-                                              icn_faves.favoriteText, newIms["ims"], newIms["types"],
+                                              (icn_faves.state == favoriteValue), newIms["ims"], newIms["types"],
                                               newEmails["emails"], newEmails["types"], addresses["streets"], addresses["locales"], addresses["regions"],
                                               addresses["zips"], addresses["countries"], addresses["types"],
                                               newWebs["urls"], newWebs["types"], datePicker.datePicked, data_notes.text);
@@ -174,10 +174,10 @@ Flickable {
                         height: childrenRect.height
                         Image {
                             id: icn_faves
-                            source: (dataModel.data(index, PeopleModel.FavoriteRole) == favoriteValue ? "image://theme/contacts/icn_fav_star_dn" : "image://theme/contacts/icn_fav_star" )
+                            source: (dataModel.data(index, PeopleModel.FavoriteRole) ? "image://theme/contacts/icn_fav_star_dn" : "image://theme/contacts/icn_fav_star" )
                             opacity: 1
 
-                            state: (dataModel.data(index, PeopleModel.FavoriteRole) == favoriteValue ? favoriteValue: unfavoriteValue)
+                            state: (dataModel.data(index, PeopleModel.FavoriteRole) ? favoriteValue : unfavoriteValue)
                             property string favoriteText: unfavoriteTranslated
 
                             states: [
