@@ -84,14 +84,11 @@ Item {
         for (var i = 0; i < imContexts.count; i++) {
             if (imContexts.get(i).accountType == imContexts.get(selectedIndex).accountType) {
                 var list = telepathyManager.availableContacts(imContexts.get(i).account);
-                if (list.length > 0) {
-                    buddyList[0] = defaultIm;
-                    for (var i = 1; i < list.length + 1; i++) {
-                        buddyList[i] = list[i - 1];
-                    }
-
-                    return buddyList;
+                for (var i = 0; i < list.length; i++) {
+                    buddyList[i] = list[i];
                 }
+                if (buddyList.length > 0)
+                    return buddyList;
             }
         }
         return [noBuddies];

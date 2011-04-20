@@ -71,6 +71,7 @@ Image {
     property string statusBusy: qsTr("Busy")
     property string statusOnline: qsTr("Online")
     property string statusOffline: qsTr("Offline")
+    property string ellipse: qsTr("(...)")
 
     signal clicked
     signal pressAndHold(int mouseX, int mouseY, string uuid, string name)
@@ -112,7 +113,7 @@ Image {
             else if (dataPeople.data(sourceIndex, PeopleModel.WebUrlRole) != "")
                 return getTruncatedString(dataPeople.data(sourceIndex, PeopleModel.WebUrlRole), 25)[0];
             else
-                return stringTruncater;
+                return ellipse;
         }
         anchors { left: photo.right; top: photo.top; topMargin: photo.height/8-contactDivider.height; leftMargin: photo.height/8}
         font.pixelSize: theme_fontPixelSizeLargest

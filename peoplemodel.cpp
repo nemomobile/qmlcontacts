@@ -263,13 +263,6 @@ QVariant PeopleModel::data(int row, int role) const
             return day.date().toString(Qt::SystemLocaleDate);
         return QString();
     }
-    case AnniversaryRole:
-    {
-        QContactAnniversary day = contact->detail<QContactAnniversary>();
-        if(!day.originalDate().isNull())
-            return QDate(day.originalDate()).toString();
-        return QString();
-    }
     case AvatarRole:
     {
         QContactAvatar avatar = contact->detail<QContactAvatar>();
@@ -348,7 +341,7 @@ QVariant PeopleModel::data(int row, int role) const
             if(!phone.number().isNull())
                 list << phone.number();
         }
-        return QStringList(list);
+        return list;
     }
     case PhoneContextRole:
     {
@@ -1305,8 +1298,6 @@ void PeopleModel::setFilter(int role, bool dataResetNeeded){
 }
 
 void PeopleModel::searchContacts(const QString text){
-        //priv->currentFilter = QContactFilter();
-        //dataReset();
 
         qWarning() << "#################[PeopleModel] searchContact " + text;
         QList<QContactFilter> filterList;
@@ -1323,13 +1314,6 @@ void PeopleModel::searchContacts(const QString text){
         labelFilter.setValue(text);
         labelFilter.setMatchFlags(QContactFilter::MatchContains);
         filterList.append(labelFilter);
-
-        //REVISIT: Does telepathy set this field?
-        /*QContactDetailFilter nicknameFilter;
-        nicknameFilter.setDetailDefinitionName(QContactNickname::DefinitionName);
-        nicknameFilter.setValue(text);
-        nicknameFilter.setMatchFlags(QContactFilter::MatchContains);
-        filterList.append(nicknameFilter);*/
 
         QContactDetailFilter companyFilter;
         companyFilter.setDetailDefinitionName(QContactOrganization::DefinitionName);
@@ -1371,12 +1355,5 @@ void PeopleModel::clearSearch(){
 }
 
 
-/*
-QMap<QString, QString> PeopleModel::availableAccounts() {
-    return m_tpManager->availableAccounts();
-}
 
-QStringList PeopleModel::availableContacts(QString accountId){
-    return m_tpManager->availableContacts(accountId);
-}*/
 

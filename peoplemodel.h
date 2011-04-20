@@ -15,9 +15,7 @@
 #include <QAbstractListModel>
 
 #include <QUuid>
-//#include <QContactManager>
 #include <QContactManagerEngine>
-//#include "telepathymanager.h"
 
 using namespace QtMobility;
 
@@ -26,7 +24,6 @@ class PeopleModelPriv;
 class PeopleModel: public QAbstractListModel
 {
     Q_OBJECT
-    // Q_PROPERTY(QString uuid READ currentUuid WRITE setCurrentUuid)
     Q_ENUMS(PeopleRoles)
     Q_ENUMS(FilterRoles)
 
@@ -53,7 +50,6 @@ public:
         ThumbnailRole,
         IsSelfRole,
         BirthdayRole,
-        AnniversaryRole,
         OnlineAccountUriRole,
         OnlineServiceProviderRole,
         EmailAddressRole,
@@ -111,9 +107,6 @@ public:
     void setAvatar(const QString& path);
     QString avatar();
 
-    QString firstname();
-    QString lastname();
-
     Q_INVOKABLE void setFavorite(const QString& uuid, bool favorite);
     Q_INVOKABLE void toggleFavorite(const QString& uuid);
     void setCompany(const QUuid& uuid, QString company);
@@ -162,7 +155,6 @@ private:
 
     QContactRemoveRequest removeContact;
     QList<QContactSortOrder> sortOrder;
-   // TelepathyManager tpManager;
 };
 
 #endif // PEOPLEMODEL_H
