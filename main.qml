@@ -207,7 +207,7 @@ Window {
             }
             menuContent: ActionMenu {
                 id: actions
-                model: [contextSave, contextCancel, contextDelete]
+                model: (editContact.validInput) ? [contextSave, contextCancel, contextDelete] : [contextCancel, contextDelete]
                 onTriggered: {
                     if(index == 0) {
                         applicationPage = myAppAllContacts;
@@ -254,7 +254,7 @@ Window {
             menuContent:
                 ActionMenu{
                 id: menu
-                model: [contextSave, contextCancel]
+                model: (newContact.validInput) ? [contextSave, contextCancel] : [contextCancel]
                 onTriggered: {
                     if(index == 0) {
                         scene.applicationPage = myAppAllContacts;
