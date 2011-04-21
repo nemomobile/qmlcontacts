@@ -510,7 +510,7 @@ Flickable {
 
                 Image{
                     id: webBar
-                    source: "image://theme/contacts/active_row"
+                    source: "image://meegotheme/widgets/common/list/list-single-selected"
                     anchors.fill: parent
 
                     Text{
