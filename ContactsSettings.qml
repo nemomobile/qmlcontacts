@@ -21,6 +21,8 @@ ApplicationPage {
     property string displayByFirst: qsTr("Display by first name")
     property string displayByLast: qsTr("Display by last name")
 
+    Translator { catalog: "meego-app-contacts" }
+
     title: titleStr
 
     function getSettingText(type) {
