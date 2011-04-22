@@ -284,15 +284,6 @@ Window {
         }
     }
 
-    //REVISIT: We're not catching/emitting this signal correctly
-    Connections {
-        target: settingsDataStore
-        onSortOrderChanged: {
-            console.debug("[contacts] - Got sortOrderChanged signal");
-            //REVISIT: Read and set sort order here
-        }
-    }
-
     ApplicationsModel{
         id: appModel
     }
