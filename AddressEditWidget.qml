@@ -7,7 +7,7 @@
  */
 
 import Qt 4.7
-import MeeGo.Labs.Components 0.1
+import MeeGo.Components 0.1
 
 Item {
     id: addressRect
@@ -19,6 +19,8 @@ Item {
     property variant addressModel: contactModel
     property variant contextModel: typeModel
     property bool    validInput   : false
+
+    property alias detailsBoxExpanded: addressDetailsItem.expanded
 
     property string addressLabel: qsTr("Address")
     property string homeContext: qsTr("Home")
@@ -68,324 +70,261 @@ Item {
         }
     }
 
-    Column{
-        spacing: 1
-        anchors {left:parent.left; right: parent.right; }
+    ContactsExpandableDetails {
+        id: addressDetailsItem
+
+        headerLabel: addressLabel
+        expandingBoxTitle: addAddress
+        repeaterComponent: addressExistingComponent
+
+        detailsModel: addresss
+        fieldDetailComponent: addressNewComponent
+
+        onDetailsBoxExpandingChanged: {
+            addressRect.height = expanded ? (initialHeight + newHeight) : initialHeight;
+        }
+    }
+
+    Component {
+        id: addressExistingComponent
 
         Item {
-            id: addressHeader
+            id: itemDelegate
+            height: 370
             width: parent.width
-            height: 70
-            opacity:1
+            signal clicked()
 
-            Text{
-                id: label_address
-                text: addressLabel
-                color: theme_fontColorNormal
-                font.pixelSize: theme_fontPixelSizeLarge
-                styleColor: theme_fontColorNormal
-                smooth: true
-                anchors {bottom: addressHeader.bottom; bottomMargin: 10; left: addressHeader.left; leftMargin: 30}
-            }
-        }
-
-        Repeater{
-            model: addresss
-            width: parent.width
-            height: childrenRect.height
-            opacity:  (addressModel.length > 0 ? 1  : 0)
-            delegate: Item {
-                id: itemDelegate
-                height: 370
-                width: parent.width
-                signal clicked()
-
-                //Need to store the repeater index, as the drop down overwrites index with its own value
-                property int repeaterIndex: index
-                Image{
-                    id: addressBar
-                    source: "image://theme/contacts/active_row"
-                    anchors.fill:  parent
-
-                    DropDown {
-                        id: addressComboBox
-                        height: 60
-                        delegateComponent: stringDelegate
-                        selectedIndex: 0
-
-                        anchors {top: parent.top; topMargin: 20; left: addressBar.left; leftMargin: 10}
-                        width: 150
-
-                        selectedValue: type
-
-                        dataList: [contextHome, contextWork, contextOther]
-
-                        Component {
-                            id: stringDelegate
-                            Text {
-                                id: listVal
-                                property variant data
-                                x: 15
-                                text: "<b>" + data + "</b>"
-                            }
-                        }
-                        onSelectionChanged: {
-                            addresss.setProperty(repeaterIndex, "type", data);
-                        }
-                    }
-
-                    Column{
-                        spacing: 10
-                        anchors.left:  parent.left
-                        anchors.right:  parent.right
-                        anchors.topMargin: 20
-                        anchors.top:  parent.top
-                        width: parent.width
-
-                        TextEntry{
-                            id: data_street
-                            text: street
-                            defaultText: streetAddress
-                            width: 400
-                            anchors {left:parent.left; leftMargin: 170; right: delete_button.left; rightMargin: 10}
-
-                            onTextChanged: {
-                                addresss.setProperty(index, "street", data_street.text);
-                            }
-                        }
-
-                        TextEntry{
-                            id: data_locale
-                            text: locale
-                            defaultText: localeAddress
-                            width: 400
-                            anchors {left:parent.left; leftMargin: 170; right: delete_button.left; rightMargin: 10}
-                            onTextChanged: {
-                                addresss.setProperty(index, "locale", data_locale.text);
-                            }
-                        }//textentry
-
-                        TextEntry{
-                            id: data_region
-                            text: region
-                            defaultText: regionAddress
-                            width: 400
-                            anchors { left:parent.left; leftMargin: 170; right: delete_button.left; rightMargin: 10}
-                            onTextChanged: {
-                                addresss.setProperty(index, "region", data_region.text);
-                            }
-                        }
-
-                        TextEntry{
-                            id: data_zip
-                            text: zip
-                            defaultText: postcodeAddress
-                            width: 400
-                            anchors {left:parent.left; leftMargin: 170; right: delete_button.left; rightMargin: 10}
-                            onTextChanged: {
-                                addresss.setProperty(index, "zip", data_zip.text);
-                            }
-                        }
-
-                        TextEntry{
-                            id: data_country
-                            text: country
-                            defaultText: countryAddress
-                            width: 400
-                            anchors { left:parent.left; leftMargin: 170; right: delete_button.left; rightMargin: 10}
-                            onTextChanged: {
-                                addresss.setProperty(index, "country", data_country.text);
-                            }
-                        }
-                        Binding{ target: addressRect; property: "validInput"; value: true; when: ((data_street.text != "")||(data_locale.text != "")||(data_region.text != "")||(data_zip.text != "")||(data_country.text != ""))}
-                        Binding{ target: addressRect; property: "validInput"; value: false; when: ((data_street.text == "")&&(data_locale.text == "")&&(data_region.text == "")&&(data_zip.text == "")&&(data_country.text == ""))}
-
-                        Image {
-                            id: delete_button
-                            source: "image://theme/contacts/icn_trash"
-                            width: 36
-                            height: 36
-                            anchors {right: parent.right}
-                            opacity: 1
-                            MouseArea{
-                                id: mouse_delete_address
-                                anchors.fill: parent
-                                onPressed: {
-                                    delete_button.source = "image://theme/contacts/icn_trash_dn";
-                                }
-                                onClicked: {
-                                    if(addresss.count != 1 ){
-                                        addresss.remove(index);
-                                        addressRect.height = addressRect.height-itemDelegate.height;
-                                    }else{
-                                        data_street.text = "";
-                                        data_locale.text = "";
-                                        data_region.text = "";
-                                        data_zip.text = "";
-                                        data_country.text = "";
-                                        addressComboBox.selectedValue = contextHome;
-                                    }
-                                    delete_button.source = "image://theme/contacts/icn_trash";
-                                }
-                            }
-                            Binding{target: delete_button; property: "visible"; value: false; when: addresss.count < 2}
-                            Binding{target: delete_button; property: "visible"; value: true; when: addresss.count > 1}
-                        }
-                    }
-                }
-            }
-        }
-
-        Item {
-            id: addFooter
-            width: parent.width
-            height: 80
+            //Need to store the repeater index, as the drop down overwrites index with its own value
+            property int repeaterIndex: index
             Image{
-                id: addBar
+                id: addressBar
                 source: "image://theme/contacts/active_row"
                 anchors.fill:  parent
-                anchors.bottomMargin: 1
 
-                ExpandingBox {
-                    Image {
-                        id: add_button
-                        source: "image://theme/contacts/icn_add"
-                        anchors{ verticalCenter: addressBox.verticalCenter; left: addressBox.left; leftMargin: 20}
-                        width: 36
-                        height: 36
-                        opacity: 1
-                    }//button add
+                DropDown {
+                    id: addressComboBox
 
-                    id: addressBox
-                    detailsComponent: addressComponent
+                    anchors {top: parent.top; topMargin: 20; left: addressBar.left; leftMargin: 10}
+                    title: addresss.get(repeaterIndex).type
+                    titleColor: theme_fontColorNormal
+                    replaceDropDownTitle: true
 
-                    expanded: false
+                    width: 250
+                    minWidth: width
+                    maxWidth: width + 50
+
+                    model: [contextHome, contextWork, contextOther]
+
+                    onTriggered: {
+                        addresss.setProperty(repeaterIndex, "type", data);
+                    }
+                }
+
+                Column {
+                    spacing: 10
+                    anchors.left:  parent.left
+                    anchors.right:  parent.right
+                    anchors.topMargin: 20
+                    anchors.top:  parent.top
                     width: parent.width
-                    anchors{ verticalCenter: addBar.verticalCenter; top: addBar.top; leftMargin: 15;}
-                    titleTextItem.text: addAddress
-                    titleTextItem.color: theme_fontColorNormal
-                    titleTextItem.anchors.leftMargin: add_button.width + add_button.anchors.leftMargin + addressBox.anchors.leftMargin
-                    titleTextItem.font.bold: true
-                    titleTextItem.font.pixelSize: theme_fontPixelSizeLarge
-                    pulldownImageSource: "image://theme/contacts/active_row"
 
-                    expandedHeight: detailsItem.height + expandButton.height
+                    TextEntry {
+                        id: data_street
+                        text: street
+                        defaultText: streetAddress
+                        width: 400
+                        anchors {left:parent.left; leftMargin: 170; right: delete_button.left; rightMargin: 10}
 
-                    onExpandedChanged: {
-                        addressRect.height = expanded ? (initialHeight + expandedHeight) : initialHeight;
-                        add_button.source = expanded ? "image://theme/contacts/icn_add_dn" : "image://theme/contacts/icn_add";
-                        pulldownImageSource = expanded ? "image://theme/contacts/active_row_dn" : "image://theme/contacts/active_row"
+                        onTextChanged: {
+                            addresss.setProperty(index, "street", data_street.text);
+                        }
                     }
 
-                    Component {
-                        id: addressComponent
-                        Item {
-                            id: addressBar2
-                            height: 380
-                            width: parent.width
+                    TextEntry{
+                        id: data_locale
+                        text: locale
+                        defaultText: localeAddress
+                        width: 400
+                        anchors {left:parent.left; leftMargin: 170; right: delete_button.left; rightMargin: 10}
+                        onTextChanged: {
+                            addresss.setProperty(index, "locale", data_locale.text);
+                        }
+                    }//textentry
 
-                            DropDown { //REVISIT: Maybe max a component that all widgets can use?
-                                id: addressComboBox2
-                                height: 60
-                                delegateComponent: stringDelegate2
+                    TextEntry {
+                        id: data_region
+                        text: region
+                        defaultText: regionAddress
+                        width: 400
+                        anchors { left:parent.left; leftMargin: 170; right: delete_button.left; rightMargin: 10}
+                        onTextChanged: {
+                            addresss.setProperty(index, "region", data_region.text);
+                        }
+                    }
 
-                                anchors {left: addressBar2.left; leftMargin: addressBox.titleTextItem.anchors.leftMargin - addressBox.anchors.leftMargin;}
-                                width: 150
+                    TextEntry {
+                        id: data_zip
+                        text: zip
+                        defaultText: postcodeAddress
+                        width: 400
+                        anchors {left:parent.left; leftMargin: 170; right: delete_button.left; rightMargin: 10}
+                        onTextChanged: {
+                            addresss.setProperty(index, "zip", data_zip.text);
+                        }
+                    }
 
-                                selectedValue: type
+                    TextEntry {
+                        id: data_country
+                        text: country
+                        defaultText: countryAddress
+                        width: 400
+                        anchors { left:parent.left; leftMargin: 170; right: delete_button.left; rightMargin: 10}
+                        onTextChanged: {
+                            addresss.setProperty(index, "country", data_country.text);
+                        }
+                    }
+                    Binding{ target: addressRect; property: "validInput"; value: true; when: ((data_street.text != "")||(data_locale.text != "")||(data_region.text != "")||(data_zip.text != "")||(data_country.text != ""))}
+                    Binding{ target: addressRect; property: "validInput"; value: false; when: ((data_street.text == "")&&(data_locale.text == "")&&(data_region.text == "")&&(data_zip.text == "")&&(data_country.text == ""))}
 
-                                dataList: [contextHome, contextWork, contextOther]
-
-                                Component {
-                                    id: stringDelegate2
-                                    Text {
-                                        id: listVal
-                                        property variant data
-                                        x: 15
-                                        text: "<b>" + data + "</b>"
-                                    }
-                                }
+                    Image {
+                        id: delete_button
+                        source: "image://theme/contacts/icn_trash"
+                        width: 36
+                        height: 36
+                        anchors {right: parent.right}
+                        opacity: 1
+                        MouseArea {
+                            id: mouse_delete_address
+                            anchors.fill: parent
+                            onPressed: {
+                                delete_button.source = "image://theme/contacts/icn_trash_dn";
                             }
-
-                            TextEntry{
-                                id: data_street2
-                                text: ""
-                                defaultText: streetAddress
-                                width: 400
-                                anchors {left:addressComboBox2.right; leftMargin: 10;}
-                            }
-                            TextEntry{
-                                id: data_locale2
-                                text: ""
-                                defaultText: localeAddress
-                                width: 400
-                                anchors {top: data_street2.bottom; topMargin: 20; left:addressComboBox2.right; leftMargin: 10;}
-                            }
-                            TextEntry{
-                                id: data_region2
-                                text: ""
-                                defaultText: regionAddress
-                                width: 400
-                                anchors {top: data_locale2.bottom; topMargin: 20; left:addressComboBox2.right; leftMargin: 10;}
-                            }
-                            TextEntry{
-                                id: data_zip2
-                                text: ""
-                                defaultText: postcodeAddress
-                                width: 400
-                                anchors {top: data_region2.bottom; topMargin: 20; left:addressComboBox2.right; leftMargin: 10;}
-                            }
-                            TextEntry{
-                                id: data_country2
-                                text: ""
-                                defaultText: countryAddress
-                                width: 400
-                                anchors {top: data_zip2.bottom; topMargin: 20; left:addressComboBox2.right; leftMargin: 10;}
-                            }//textentry
-
-                            Button {
-                                id: addButton
-                                width: 100
-                                height: 36
-                                title: addLabel
-                                font.pixelSize: theme_fontPixelSizeMediumLarge
-                                bgSourceUp: "image://theme/btn_blue_up"
-                                bgSourceDn: "image://theme/btn_blue_dn"
-                                anchors {right:cancelButton.left; top: data_country2.bottom; topMargin: 15; rightMargin: 5;}
-                                onClicked: {
-                                    addresss.append({"street": data_street2.text, "locale": data_locale2.text, "region": data_region2.text,
-                                                    "zip": data_zip2.text, "country": data_country2.text, "type": addressComboBox2.dataList[addressComboBox2.selectedIndex]});
-                                    addressBox.expanded = false;
+                            onClicked: {
+                                if (addresss.count != 1) {
+                                    addresss.remove(index);
+                                    if (addressRect.height > initialHeight)
+                                        addressRect.height = addressRect.height-itemDelegate.height;
+                                } else {
                                     data_street2.text = "";
                                     data_locale2.text = "";
                                     data_region2.text = "";
                                     data_zip2.text = "";
                                     data_country2.text = "";
-                                    addressComboBox2.selectedValue = contextHome;
+                                    addressComboBox.selectedTitle = contextHome;
                                 }
-                            }
-
-                            Button {
-                                id: cancelButton
-                                width: 100
-                                height: 36
-                                title: cancelLabel
-                                font.pixelSize: theme_fontPixelSizeMediumLarge
-                                anchors {right:data_country2.right; top: data_country2.bottom; topMargin: 15;}
-                                onClicked: {
-                                    addressBox.expanded = false;
-                                    data_street2.text = "";
-                                    data_locale2.text = "";
-                                    data_region2.text = "";
-                                    data_zip2.text = "";
-                                    data_country2.text = "";
-                                    addressComboBox2.selectedValue = contextHome;
-                                }
+                                delete_button.source = "image://theme/contacts/icn_trash";
                             }
                         }
+                        Binding{target: delete_button; property: "visible"; value: false; when: addresss.count < 2}
+                        Binding{target: delete_button; property: "visible"; value: true; when: addresss.count > 1}
                     }
                 }
             }
         }
+    }
+
+    Component {
+        id: addressNewComponent
+
+        Item {
+            id: addressBar2
+            height: 380
+            width: parent.width
+
+            DropDown { //REVISIT: Maybe max a component that all widgets can use?
+                id: addressComboBox2
+
+                anchors {left: addressBar2.left; leftMargin: 10;}
+                title: contextHome
+                titleColor: theme_fontColorNormal
+                replaceDropDownTitle: true
+
+                width: 250
+                minWidth: width
+                maxWidth: width + 50
+
+                model: [contextHome, contextWork, contextOther]
+            }
+
+            TextEntry {
+                id: data_street2
+                text: ""
+                defaultText: streetAddress
+                width: 400
+                anchors {left:addressComboBox2.right; leftMargin: 10;}
+            }
+            TextEntry {
+                id: data_locale2
+                text: ""
+                defaultText: localeAddress
+                width: 400
+                anchors {top: data_street2.bottom; topMargin: 20; left:addressComboBox2.right; leftMargin: 10;}
+            }
+            TextEntry {
+                id: data_region2
+                text: ""
+                defaultText: regionAddress
+                width: 400
+                anchors {top: data_locale2.bottom; topMargin: 20; left:addressComboBox2.right; leftMargin: 10;}
+            }
+            TextEntry {
+                id: data_zip2
+                text: ""
+                defaultText: postcodeAddress
+                width: 400
+                anchors {top: data_region2.bottom; topMargin: 20; left:addressComboBox2.right; leftMargin: 10;}
+            }
+            TextEntry {
+                id: data_country2
+                text: ""
+                defaultText: countryAddress
+                width: 400
+                anchors {top: data_zip2.bottom; topMargin: 20; left:addressComboBox2.right; leftMargin: 10;}
+            }//textentry
+
+            Button {
+                id: addButton
+                width: 100
+                height: 36
+                text: addLabel
+                font.pixelSize: theme_fontPixelSizeMediumLarge
+                bgSourceUp: "image://theme/btn_blue_up"
+                bgSourceDn: "image://theme/btn_blue_dn"
+                anchors {right:cancelButton.left; top: data_country2.bottom; topMargin: 15; rightMargin: 5;}
+                onClicked: {
+                    addresss.append({"street": data_street2.text, 
+                                     "locale": data_locale2.text, 
+                                     "region": data_region2.text,
+                                     "zip": data_zip2.text, 
+                                     "country": data_country2.text, 
+                                     "type": addressComboBox2.selectedTitle});
+                   detailsBoxExpanded = false;
+                   data_street2.text = "";
+                   data_locale2.text = "";
+                   data_region2.text = "";
+                   data_zip2.text = "";
+                   data_country2.text = "";
+                   addressComboBox2.selectedTitle = contextHome;
+               }
+           }
+
+           Button {
+               id: cancelButton
+               width: 100
+               height: 36
+               text: cancelLabel
+               font.pixelSize: theme_fontPixelSizeMediumLarge
+               anchors {right:data_country2.right; top: data_country2.bottom; topMargin: 15;}
+               onClicked: {
+                   addressBox.expanded = false;
+                   data_street2.text = "";
+                   data_locale2.text = "";
+                   data_region2.text = "";
+                   data_zip2.text = "";
+                   data_country2.text = "";
+                   addressComboBox2.selectedtitle = contextHome;
+               }
+           }
+       }
     }
 }
