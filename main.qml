@@ -7,10 +7,11 @@
  */
 
 import Qt 4.7
-import MeeGo.Labs.Components 0.1
+import MeeGo.Components 0.1
+import MeeGo.Labs.Components 0.1 as Labs
 import MeeGo.App.Contacts 0.1
 
-Window {
+Labs.Window {
     id: scene
     title: qsTr("Contacts")
     showsearch: false;
@@ -90,7 +91,7 @@ Window {
 
     Component {
         id: myAppAllContacts
-        ApplicationPage{
+        Labs.ApplicationPage {
             id: groupedViewPage
             title: labelGroupedView
             Component.onCompleted : {
@@ -140,7 +141,7 @@ Window {
 
     Component {
         id: myAppDetails
-        ApplicationPage {
+        Labs.ApplicationPage {
             id: detailViewPage
             title: labelDetailView
             Component.onCompleted : {
@@ -185,7 +186,7 @@ Window {
 
     Component {
         id: myAppEdit
-        ApplicationPage {
+	Labs.ApplicationPage {
             id: editViewPage
             title: labelEditView
             Component.onCompleted : {
@@ -209,15 +210,15 @@ Window {
                 id: actions
                 model: (editContact.validInput) ? [contextSave, contextCancel, contextDelete] : [contextCancel, contextDelete]
                 onTriggered: {
-                    if(index == 0) {
+                    if(model[index] == contextSave) {
                         applicationPage = myAppAllContacts;
                         editContact.contactSave(scene.currentContactId);
                     }
-                    else if(index == 1) {
+                    else if(model[index] == contextCancel) {
                         applicationPage = myAppAllContacts;
                     }
-                    else if(index == 2) {
-                        showModalDialog(confirmDialog);
+                    else if(model[index] == contextDelete) {
+                        confirmDelete.show();
                         actions.visible = false;
                     }
                     editViewPage.closeMenu();
@@ -233,7 +234,7 @@ Window {
 
     Component {
         id: myAppNewContact
-        ApplicationPage {
+        Labs.ApplicationPage {
             id: newContactViewPage
             title: labelNewContactView
             Component.onCompleted : {
@@ -284,62 +285,32 @@ Window {
         }
     }
 
-    ApplicationsModel{
+    Labs.ApplicationsModel{
         id: appModel
     }
 
-    ContextMenu {
-        id: objectMenu
-        model: [contextView, contextFavorite, contextShare, contextEdit, contextDelete]
-        onTriggered: {
-            if(index == 0) { objectMenu.visible = false; scene.addApplicationPage(myAppDetails);}
-            if(index == 1) { objectMenu.visible = false; peopleModel.toggleFavorite(scene.currentContactId); }
-            if(index == 2) { objectMenu.visible = false; shareMenu.menuY = (objectMenu.menuY+30); shareMenu.menuX = objectMenu.menuX; shareMenu.visible = true;  }
-            if(index == 3) { objectMenu.visible = false; scene.addApplicationPage(myAppEdit);}
-            if(index == 4) { objectMenu.visible = false; showModalDialog(confirmDialog);}
+    ModalDialog {
+        id:confirmDelete
+        cancelButtonText: contextCancel
+        acceptButtonText: contextDelete
+        title:  deleteConfirmation
+        acceptButtonImage: "image://theme/btn_red_up"
+        acceptButtonImagePressed: "image://theme/btn_red_dn"
+        anchors {verticalCenter: parent.verticalCenter; horizontalCenter: parent.horizontalCenter}
+        content: Text {
+            id: text
+            wrapMode: Text.WordWrap
+            text: promptStr
+            color: theme_fontColorNormal
+            font.pointSize: theme_fontPixelSizeMedium
+            anchors {horizontalCenter: parent.horizontalCenter}
+            smooth: true
+            opacity: 1
         }
-    }
-
-    ContextMenu {
-        id: shareMenu
-        model: [contextEmail]
-        onTriggered: {
-            if(index == 0) {
-                var filename = currentContactName.replace(" ", "_");
-                peopleModel.exportContact(scene.currentContactId,  "/tmp/vcard_"+filename+".vcf");
-                shareMenu.visible = false;
-                var cmd = "/usr/bin/meego-qml-launcher --app meego-app-email --fullscreen --cmd openComposer --cdata \"file:///tmp/vcard_"+filename+".vcf\"";
-                appModel.launch(cmd);
-            }
-        }
-    }
-
-    Component{
-        id: confirmDialog
-        ModalDialog{
-            id:confirmDelete
-            leftButtonText: contextCancel
-            rightButtonText:  contextDelete
-            dialogTitle:  deleteConfirmation
-            bgSourceUpRight: "image://theme/btn_red_up"
-            bgSourceDnRight: "image://theme/btn_red_dn"
-            contentLoader.sourceComponent: Text {
-                id: text
-                wrapMode: Text.WordWrap
-                text: promptStr
-                color: theme_fontColorNormal
-                font.pointSize: theme_fontPixelSizeMedium
-                smooth: true
-                opacity: 1
-            }
-            onDialogClicked: {
-                dialogLoader.sourceComponent = undefined;
-                if(button == 2){
-                    peopleModel.deletePerson(scene.currentContactId);
-                    if (applicationPage != myAppAllContacts)
-                        applicationPage = myAppAllContacts;
-                }
-            }
+        onAccepted: {
+            peopleModel.deletePerson(scene.currentContactId);
+            if (applicationPage != myAppAllContacts)
+                applicationPage = myAppAllContacts;
         }
     }
 }

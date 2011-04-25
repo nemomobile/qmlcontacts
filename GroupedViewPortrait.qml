@@ -7,7 +7,7 @@
  */
 
 import Qt 4.7
-import MeeGo.Labs.Components 0.1
+import MeeGo.Components 0.1
 import MeeGo.App.Contacts 0.1
 
 Item {
@@ -74,9 +74,54 @@ Item {
 Binding{target: emptyListView; property: "opacity"; value: ((cardListView.count == 0) ? 1 : 0);}
 Binding{target: cardListView; property: "opacity"; value: ((cardListView.count > 0) ? 1 : 0);}
 
-onPressAndHold:{
+    onPressAndHold:{
+        objectMenu.setPosition(x, y)
         objectMenu.menuX = x
         objectMenu.menuY = y
-        objectMenu.visible = true
+        objectMenu.show()
+    }
+
+    ModalContextMenu {
+        id: objectMenu
+
+        property int menuX
+        property int menuY
+
+        content: ActionMenu {
+            id: actionObjectMenu
+
+            model: [contextView, contextFavorite, contextShare,
+                    contextEdit, contextDelete]
+
+            onTriggered: {
+                if(index == 0) { scene.addApplicationPage(myAppDetails);}
+                if(index == 1) { peopleModel.toggleFavorite(scene.currentContactId); }
+                if(index == 2) { shareMenu.setPosition(objectMenu.menuX, objectMenu.menuY + 30);
+                                 shareMenu.show();  }
+                if(index == 3) { scene.addApplicationPage(myAppEdit);}
+                if(index == 4) { confirmDelete.show(); }
+                objectMenu.hide();
+            }
         }
+    }
+
+    ModalContextMenu {
+        id: shareMenu
+
+        content: ActionMenu {
+            id: actionShareMenu
+
+            model: [contextEmail]
+
+            onTriggered: {
+                if(index == 0) {
+                    var filename = currentContactName.replace(" ", "_");
+                    peopleModel.exportContact(scene.currentContactId,  "/tmp/vcard_"+filename+".vcf");
+                    shareMenu.visible = false;
+                    var cmd = "/usr/bin/meego-qml-launcher --app meego-app-email --fullscreen --cmd openComposer --cdata \"file:///tmp/vcard_"+filename+".vcf\"";
+                    appModel.launch(cmd);
+                }
+            }
+        }
+    }
 }

@@ -7,7 +7,8 @@
  */
 
 import Qt 4.7
-import MeeGo.Labs.Components 0.1
+import MeeGo.Labs.Components 0.1 as Labs
+import MeeGo.Components 0.1
 import MeeGo.App.Contacts 0.1
 
 Item {
@@ -19,7 +20,7 @@ Item {
     height: footer_bar.height
     anchors {bottom: parent.bottom; left: parent.left; right: parent.right;}
 
-    ApplicationsModel {
+    Labs.ApplicationsModel {
         id: appModel
     }
 
@@ -84,7 +85,6 @@ Item {
                     settingsIcon.source = "image://meegotheme/icons/actionbar/show-settings-active"
                 }
                 onClicked: {
-                    //REVISIT: Load contacts page when available
                     var cmd = "/usr/bin/meego-qml-launcher --app meego-ux-settings --opengl --fullscreen --cmd showPage --cdata \"Contacts\"";  //i18n ok
                     appModel.launch(cmd);
                 }
@@ -101,28 +101,34 @@ Item {
 
         Button{
             id: buttonLeft
-            title: getButtonTitleText()[0]
             width: 146
-            visible: (buttonLeft.title == "" ? 0 : 1)
-            active: getActiveState(buttonLeft.title)
+            text: getButtonTitleText()[0]
+            bgSourceUp: "image://theme/btn_grey_up"
+            bgSourceActive: "image://theme/btn_grey_up"
+            bgSourceDn: "image://theme/btn_grey_dn"
+            visible: (buttonLeft.text == "" ? 0 : 1)
+            active: getActiveState(buttonLeft.text)
             anchors {top: parent.top; topMargin: 3; 
                      bottom: parent.bottom; bottomMargin: 3; 
                      left: divIcon.left; leftMargin: 3;}
 
-            onClicked: { handleButtonClick(buttonLeft.title); }
+            onClicked: { handleButtonClick(buttonLeft.text); }
         }
 
         Button{
             id: buttonRight
-            title: getButtonTitleText()[1]
             width: 146
-            visible: (buttonRight.title == "" ? 0 : 1)
-            active: getActiveState(buttonRight.title)
+            text: getButtonTitleText()[1]
+            bgSourceUp: "image://theme/btn_grey_up"
+            bgSourceActive: "image://theme/btn_grey_up"
+            bgSourceDn: "image://theme/btn_grey_dn"
+            visible: (buttonRight.text == "" ? 0 : 1)
+            active: getActiveState(buttonRight.text)
             anchors {top: parent.top; topMargin: 3;
                      bottom: parent.bottom; bottomMargin: 3;
                      right: footer_bar.right; rightMargin: 3;}
 
-            onClicked: { handleButtonClick(buttonRight.title); }
+            onClicked: { handleButtonClick(buttonRight.text); }
         }
     }
 }

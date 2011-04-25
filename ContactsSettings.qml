@@ -7,11 +7,12 @@
  */
 
 import Qt 4.7
-import MeeGo.Labs.Components 0.1
+import MeeGo.Components 0.1
+import MeeGo.Labs.Components 0.1 as Labs
 import MeeGo.Settings 0.1
 import MeeGo.App.Contacts 0.1
 
-ApplicationPage {
+Labs.ApplicationPage {
     id: settingsPage
     property string titleStr: qsTr("Contacts Settings")
     property string sortPreferenceStr: qsTr("Sort Order:")
@@ -114,19 +115,21 @@ ApplicationPage {
             }
 
             DropDown {
-                delegateComponent: Text {
-                    property string data
-                    text: data
-                }
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.right: parent.right
-                anchors.rightMargin: 10
-                selectedValue: getCurrentVal(modelData)
-                dataList: getDataList(modelData)
-                width: 300
+                anchors {verticalCenter: parent.verticalCenter;
+                         right: parent.right
+                         rightMargin: 10 }
+                title: getCurrentVal(modelData)
+                titleColor: theme_fontColorNormal
+                replaceDropDownTitle: true
 
-                onSelectionChanged: {
-                    handleSelectionChanged(modelData, data);
+                model: getDataList(modelData)
+
+                width: 300
+                minWidth: width
+                maxWidth: width + 50
+
+                onTriggered: {
+                    handleSelectionChanged(modelData, selectedTitle);
                 }
             } //DropDown
         }  //Image
