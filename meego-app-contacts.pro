@@ -1,4 +1,4 @@
-VERSION = 0.2.4
+VERSION = 0.2.5
 PROJECT_NAME = meego-app-contacts
 
 TEMPLATE = lib
