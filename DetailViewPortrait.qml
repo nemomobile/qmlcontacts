@@ -279,7 +279,7 @@ Flickable {
                             id: icon_favorite
                             anchors{right: parent.left;  rightMargin: 10}
                             source: (detailModel.data(index, PeopleModel.FavoriteRole) ? "image://theme/contacts/icn_fav_star_dn" : "image://theme/contacts/icn_fav_star" )
-                            opacity: 1
+                            opacity: (detailModel.data(index, PeopleModel.IsSelfRole) ? 0 : 1)
                         }
                     }
                 }

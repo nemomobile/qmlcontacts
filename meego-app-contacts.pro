@@ -24,6 +24,7 @@ MOBILITY = contacts versit
 HEADERS += \
     contacts.h \
     peoplemodel.h \
+    peoplemodel_p.h \
     proxymodel.h \
     settingsdatastore.h
 

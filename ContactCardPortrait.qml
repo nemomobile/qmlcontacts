@@ -61,6 +61,7 @@ Image {
     property string dataLast:  dataPeople.data(sourceIndex, PeopleModel.LastNameRole)
     property bool dataFavorite: dataPeople.data(sourceIndex, PeopleModel.FavoriteRole)
     property int dataStatus: dataPeople.data(sourceIndex, PeopleModel.PresenceRole)
+    property bool dataMeCard: dataPeople.data(sourceIndex, PeopleModel.IsSelfRole)
     //REVISIT: Instead of using the URI from AvatarRole, need to use thumbnail URI
     property string dataAvatar: dataPeople.data(sourceIndex, PeopleModel.AvatarRole)
 
@@ -130,7 +131,7 @@ Image {
     Image {
         id: favorite
         source: (dataPeople.data(sourceIndex, PeopleModel.FavoriteRole) ? "image://theme/contacts/icn_fav_star_dn" : "image://theme/contacts/icn_fav_star" )
-        opacity: 1
+        opacity: (dataMeCard ? 0 : 1)
         anchors {right: contactCardPortrait.right; top: nameFirst.top; rightMargin: photo.height/8;}
     }
 

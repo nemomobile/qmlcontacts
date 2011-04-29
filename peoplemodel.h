@@ -17,8 +17,7 @@
 #include <QUuid>
 #include <QContactManagerEngine>
 
-using namespace QtMobility;
-
+QTM_USE_NAMESPACE
 class PeopleModelPriv;
 
 class PeopleModel: public QAbstractListModel
@@ -29,7 +28,7 @@ class PeopleModel: public QAbstractListModel
 
 public:
     PeopleModel(QObject *parent = 0);
-    ~PeopleModel();
+    virtual ~PeopleModel();
 
     enum FilterRoles{
         AllFilter = 0,
@@ -69,9 +68,16 @@ public:
         FirstCharacterRole
     };
 
-    virtual int rowCount(const QModelIndex & parent = QModelIndex()) const;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const;
-    Q_INVOKABLE virtual QVariant data(const QModelIndex & index, int role) const;
+    //From QAbstractListModel
+    virtual int rowCount(const QModelIndex&) const;
+    virtual int columnCount(const QModelIndex& parent) const;
+    virtual QVariant data(const QModelIndex&, int) const;
+
+    void queueContactSave(QContact contact);
+    void removeContact(QContactLocalId contactId);
+    void vCardFinished(QVersitWriter::State state);
+
+    //QML API
     Q_INVOKABLE QVariant data(const int row, int role) const;
 
     Q_INVOKABLE bool createPersonModel(QString avatarUrl, QString thumbUrl, QString firstName, QString lastName,
@@ -82,7 +88,7 @@ public:
                                        QStringList addresscontexts, QStringList urllinks, QStringList urlcontexts,
                                        QDate birthday, QString notetext);
 
-    Q_INVOKABLE void deletePerson(QString uuid);
+    Q_INVOKABLE void deletePerson(const QString& uuid);
 
     Q_INVOKABLE void editPersonModel(QString contactId, QString avatarUrl, QString firstName, QString lastName, QString companyname,
                                      QStringList phonenumbers, QStringList phonecontexts, bool favorite,
@@ -104,57 +110,37 @@ public:
     Q_INVOKABLE void setCurrentUuid(const QString& uuid);
     QString currentUuid();
 
-    void setAvatar(const QString& path);
-    QString avatar();
-
-    Q_INVOKABLE void setFavorite(const QString& uuid, bool favorite);
     Q_INVOKABLE void toggleFavorite(const QString& uuid);
-    void setCompany(const QUuid& uuid, QString company);
-    void setisSelf(const QUuid& uuid, bool self);
+    bool isSelfContact(const QContactLocalId id);
+    bool isSelfContact(const QUuid id);
     Q_INVOKABLE void setSorting(int role);
     Q_INVOKABLE void setFilter(int role, bool dataResetNeeded = true);
     Q_INVOKABLE int getSortingRole();
     Q_INVOKABLE void searchContacts(const QString text);
     Q_INVOKABLE void clearSearch();
 
-public slots:
-    void createMeCard(QContact &contact);
-
-signals:
-    void avatarChanged(const QString url);
-    void resetModel();
-
 protected:
     void fixIndexMap();
     void addContacts(const QList<QContact> contactsList, int size);
 
-protected slots:
+private slots:
+    void onSaveStateChanged(QContactAbstractRequest::State requestState);
+    void onRemoveStateChanged(QContactAbstractRequest::State requestState);
+    void onDataResetFetchChanged(QContactAbstractRequest::State requestState);
+    void onAddedFetchChanged(QContactAbstractRequest::State requestState);
+    void onChangedFetchChanged(QContactAbstractRequest::State requestState);
+    void onMeFetchRequestStateChanged(QContactAbstractRequest::State requestState);
+
     void contactsAdded(const QList<QContactLocalId>& contactIds);
     void contactsChanged(const QList<QContactLocalId>& contactIds);
     void contactsRemoved(const QList<QContactLocalId>& contactIds);
     void dataReset();
-
-    void fetchContactsRequest();
-    void vCardFinished(QVersitWriter::State state);
-    void saveContactsRequest();
-    void removeContactsRequest();
+    void savePendingContacts();
+    void createMeCard();
 
 private:
     PeopleModelPriv *priv;
-
-    QContactFetchRequest fetchAddedContacts;
-    QContactFetchRequest fetchAllContacts;
-    QContactFetchRequest fetchChangedContacts;
-    QContactFetchRequest fetchMeCard;
-
-    QContactSaveRequest addMeCard;
-    QContactSaveRequest updateMeCard;
-    QContactSaveRequest updateContact;
-    QContactSaveRequest updateAvatar;
-    QContactSaveRequest updateFavorite;
-
-    QContactRemoveRequest removeContact;
-    QList<QContactSortOrder> sortOrder;
+    Q_DISABLE_COPY(PeopleModel);
 };
 
 #endif // PEOPLEMODEL_H

@@ -175,7 +175,7 @@ Flickable {
                         Image {
                             id: icn_faves
                             source: (dataModel.data(index, PeopleModel.FavoriteRole) ? "image://theme/contacts/icn_fav_star_dn" : "image://theme/contacts/icn_fav_star" )
-                            opacity: 1
+                            opacity: (dataModel.data(index, PeopleModel.IsSelfRole) ? 0 : 1)
 
                             state: (dataModel.data(index, PeopleModel.FavoriteRole) ? favoriteValue : unfavoriteValue)
                             property string favoriteText: unfavoriteTranslated
