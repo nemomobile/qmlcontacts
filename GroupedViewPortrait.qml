@@ -81,7 +81,7 @@ Binding{target: cardListView; property: "opacity"; value: ((cardListView.count >
         objectMenu.show()
     }
 
-    ModalContextMenu {
+    ContextMenu {
         id: objectMenu
 
         property int menuX
@@ -105,7 +105,7 @@ Binding{target: cardListView; property: "opacity"; value: ((cardListView.count >
         }
     }
 
-    ModalContextMenu {
+    ContextMenu {
         id: shareMenu
 
         content: ActionMenu {
