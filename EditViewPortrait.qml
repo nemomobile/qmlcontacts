@@ -72,6 +72,7 @@ Flickable {
             width: parent.width
             height: 150
             source: "image://theme/contacts/active_row"
+            opacity:  (dataModel.data(index, PeopleModel.IsSelfRole) ? .5 : 1)
             Item{
                 id: avatar
                 width: 150

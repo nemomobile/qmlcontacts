@@ -71,8 +71,8 @@ Item {
     section.delegate: HeaderPortrait{parent: groupedViewPortrait}
 }
 
-Binding{target: emptyListView; property: "opacity"; value: ((cardListView.count == 0) ? 1 : 0);}
-Binding{target: cardListView; property: "opacity"; value: ((cardListView.count > 0) ? 1 : 0);}
+Binding{target: emptyListView; property: "opacity"; value: ((cardListView.count == 1) ? 1 : 0);}
+Binding{target: cardListView; property: "opacity"; value: ((cardListView.count > 1) ? 1 : 0);}
 
     onPressAndHold:{
         objectMenu.setPosition(x, y)
@@ -90,15 +90,16 @@ Binding{target: cardListView; property: "opacity"; value: ((cardListView.count >
         content: ActionMenu {
             id: actionObjectMenu
 
-            model: [contextView, contextFavorite, contextShare,
-                    contextEdit, contextDelete]
+            model: (scene.currentContactIndex != 0 ? [contextView, contextShare, contextEdit,
+                                                      contextFavorite, contextDelete] : [contextView, contextShare,
+                                                                                     contextEdit])
 
             onTriggered: {
                 if(index == 0) { scene.addApplicationPage(myAppDetails);}
-                if(index == 1) { peopleModel.toggleFavorite(scene.currentContactId); }
-                if(index == 2) { shareMenu.setPosition(objectMenu.menuX, objectMenu.menuY + 30);
+                if(index == 3) { peopleModel.toggleFavorite(scene.currentContactId); }
+                if(index == 1) { shareMenu.setPosition(objectMenu.menuX, objectMenu.menuY + 30);
                                  shareMenu.show();  }
-                if(index == 3) { scene.addApplicationPage(myAppEdit);}
+                if(index == 2) { scene.addApplicationPage(myAppEdit);}
                 if(index == 4) { confirmDelete.show(); }
                 objectMenu.hide();
             }

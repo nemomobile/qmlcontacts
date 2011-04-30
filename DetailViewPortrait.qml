@@ -134,6 +134,7 @@ Flickable {
             width: parent.width
             height: 150
             source: "image://theme/contacts/active_row"
+            opacity: (detailModel.data(index, PeopleModel.IsSelfRole) ? .5 : 1)
             Image{
                 id: avatar_image
                 //REVISIT: Instead of using the URI from AvatarRole, need to use thumbnail URI
