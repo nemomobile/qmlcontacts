@@ -17,7 +17,6 @@ Image {
     height: photo.height
     width: parent.width
     anchors.right: parent.right
-    opacity: (dataPeople.data(index, PeopleModel.IsSelfRole) ? 1 : .3)
 
     property PeopleModel dataPeople : theModel
     property ProxyModel sortPeople : sortModel
@@ -77,6 +76,7 @@ Image {
     signal pressAndHold(int mouseX, int mouseY, string uuid, string name)
 
     source: "image://theme/contacts/contact_bg_portrait";
+    opacity: (dataPeople.data(sourceIndex, PeopleModel.IsSelfRole) ? .3 : 1)
 
     Image{
         id: photo

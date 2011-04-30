@@ -208,7 +208,7 @@ Labs.Window {
             }
             menuContent: ActionMenu {
                 id: actions
-                model: (scene.currentContactIndex == 0 ? (editContact.validInput ? [contextSave, contextCancel] : [contextCancel]) : (editContact.validInput ? [contextSave, contextCancel, contextDelete] : [contextCancel, contextDelete]))
+                model: (scene.currentContactId == 2147483647 ? (editContact.validInput ? [contextSave, contextCancel] : [contextCancel]) : (editContact.validInput ? [contextSave, contextCancel, contextDelete] : [contextCancel, contextDelete]))
                 onTriggered: {
                     if(model[index] == contextSave) {
                         applicationPage = myAppAllContacts;

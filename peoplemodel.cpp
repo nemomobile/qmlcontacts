@@ -1078,7 +1078,7 @@ void PeopleModel::setFilter(int role, bool dataResetNeeded){
 
 void PeopleModel::searchContacts(const QString text){
 
-        qWarning() << "#################[PeopleModel] searchContact " + text;
+        qDebug() << "[PeopleModel] searchContact " + text;
         QList<QContactFilter> filterList;
         QContactUnionFilter unionFilter;
 
@@ -1088,41 +1088,41 @@ void PeopleModel::searchContacts(const QString text){
         nameFilter.setMatchFlags(QContactFilter::MatchContains);
         filterList.append(nameFilter);
 
-        QContactDetailFilter labelFilter;
+       /* QContactDetailFilter labelFilter;
         labelFilter.setDetailDefinitionName(QContactDisplayLabel::DefinitionName);
         labelFilter.setValue(text);
         labelFilter.setMatchFlags(QContactFilter::MatchContains);
-        filterList.append(labelFilter);
+        filterList.append(labelFilter);*/
 
         QContactDetailFilter companyFilter;
         companyFilter.setDetailDefinitionName(QContactOrganization::DefinitionName);
         companyFilter.setValue(text);
-        companyFilter.setMatchFlags(QContactFilter::MatchContains);
+        //companyFilter.setMatchFlags(QContactFilter::MatchContains);
         filterList.append(companyFilter);
 
         QContactDetailFilter phoneFilter;
         phoneFilter.setDetailDefinitionName(QContactPhoneNumber::DefinitionName);
         phoneFilter.setValue(text);
-        phoneFilter.setMatchFlags(QContactFilter::MatchContains | QContactFilter::MatchPhoneNumber);
+        phoneFilter.setMatchFlags(QContactFilter::MatchPhoneNumber);
         filterList.append(phoneFilter);
 
-        QContactDetailFilter emailFilter;
+       /* QContactDetailFilter emailFilter;
         emailFilter.setDetailDefinitionName(QContactEmailAddress::DefinitionName);
         emailFilter.setValue(text);
         emailFilter.setMatchFlags(QContactFilter::MatchContains);
-        filterList.append(emailFilter);
+        filterList.append(emailFilter);*/
 
         QContactDetailFilter addressFilter;
         addressFilter.setDetailDefinitionName(QContactAddress::DefinitionName);
         addressFilter.setValue(text);
-        addressFilter.setMatchFlags(QContactFilter::MatchContains);
+        //addressFilter.setMatchFlags(QContactFilter::MatchContains);
         filterList.append(addressFilter);
 
-        QContactDetailFilter urlFilter;
+       /* QContactDetailFilter urlFilter;
         urlFilter.setDetailDefinitionName(QContactUrl::DefinitionName);
         urlFilter.setValue(text);
-        urlFilter.setMatchFlags(QContactFilter::MatchContains);
-        filterList.append(urlFilter);
+        //urlFilter.setMatchFlags(QContactFilter::MatchContains);
+        filterList.append(urlFilter);*/
 
         unionFilter.setFilters(filterList);
         priv->currentFilter = unionFilter;

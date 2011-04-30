@@ -72,7 +72,7 @@ Item {
 }
 
 Binding{target: emptyListView; property: "opacity"; value: ((cardListView.count == 1) ? 1 : 0);}
-Binding{target: cardListView; property: "opacity"; value: ((cardListView.count > 1) ? 1 : 0);}
+Binding{target: cardListView; property: "opacity"; value: ((cardListView.count > 0) ? 1 : 0);}
 
     onPressAndHold:{
         objectMenu.setPosition(x, y)
@@ -81,7 +81,7 @@ Binding{target: cardListView; property: "opacity"; value: ((cardListView.count >
         objectMenu.show()
     }
 
-    ContextMenu {
+    ModalContextMenu {
         id: objectMenu
 
         property int menuX
@@ -90,7 +90,7 @@ Binding{target: cardListView; property: "opacity"; value: ((cardListView.count >
         content: ActionMenu {
             id: actionObjectMenu
 
-            model: (scene.currentContactIndex != 0 ? [contextView, contextShare, contextEdit,
+            model: (scene.currentContactId == 2147483647 ? [contextView, contextShare, contextEdit,
                                                       contextFavorite, contextDelete] : [contextView, contextShare,
                                                                                      contextEdit])
 
@@ -106,7 +106,7 @@ Binding{target: cardListView; property: "opacity"; value: ((cardListView.count >
         }
     }
 
-    ContextMenu {
+    ModalContextMenu {
         id: shareMenu
 
         content: ActionMenu {
