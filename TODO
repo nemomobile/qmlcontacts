@@ -1,0 +1,177 @@
+CONTACTS TODO LIST
+1.Flow
+2.Opens
+3.Blocked
+4.Pending Bugs
+5.Filed Bugs
+6.Fixed 
+7.Released
+8.Future plans
+9.FAQ
+*verified bugs are deleted from this document
+
+1.==Flow==
+Opens (need more info)
+Pending Bugs (can't make a bug for whatever reason)
+Bugs (filed in bugs.meego.com)
+Fixed (Code sr'd into obs, note tag in git)
+Released (Code released in image)
+Verified (Code verified by QA on valid image)
+
+2.==Opens==
+Contact Picker needs index bar, search bar, and add new button
+Voicemail is it in Dialer Settings or is it in Contacts? - Assigned to Dialer for now
+Ringtones flow? - Proceeded on work without wireframes
+Does Contact Picker need index bar, search bar, and/or add new button?
+Which landing screen of the 3 wireframes should we use?
+When do we show the landing screen vs the MCard default?
+Why do wireframes only show one possible vCard on an SD Card? 
+-If there are multiple vCards on the SDCard need to show all .vcf files and let the user select which to import from or import all. 
+What is the flow for importing multiple vCards on one SD card?
+"View By" in Context/Action menu
+"Filter By" in Filter menu
+Recent Communications 
+Link
+Merge
+Need smaller graphic for smaller devices for landscape view landing screen
+
+3.==Blocked==
+Libfolks:
+16979 New packages qt-folks and folks needed by meego-app-contacts to aggregate contact data
+16980 telepathy-glib needs to be configured with --enable-vala-bindings --enable-introspection
+16981 libsocialweb needs to be configured with --enable-vala-bindings
+16982 New package gobject-introspection is needed for folks and qt-folks enablement 
+
+4.==Bugs to be filed==
+Sharing framework:
+	Launch email attach vcard & subject
+	Launch IM attach vcard
+	Launch MMS attach vcard
+Adding subject param to email
+Email Call Contacts application to import contacts files on reception of vCard
+MMS Call Contacts application to import contacts files on reception of vCard
+Contact Contacts should support integration to a Dialer 
+Switch to meego-ux-components
+	Longer text does not wrap in Note field
+IM doesn't refresh after adding contacts
+Add new hangs before adding contact
+Only 1 of each combo box choice per contact allowed
+addressbook support linking contacts
+addressbook support merge of contacts
+Add two addresses lines for street
+Have a way to export contacts to SIM card (Tshah, In progress, May 13th)
+Assign ringtone to contact (Tomasz, In progress, May 6th)
+Fix Call button in Libseaside views
+Add two addresses lines for street
+Email in context menu
+SMS in context menu, launch
+SMS in share 
+Call from details view 
+Social networking supported
+SMS/Call from details view
+i18n Modal dialog for components need to expand based on size
+Bookmark runs into text 
+Delete Confirmation strings need to vary depending
+Added MeCard
+Disabled Delete in context of MeCard
+Disabled Favorite in context of MeCard
+Contact app will hang when tap save button in add a new contact page
+Unable to find SMS, Call options in contextual menu of contact
+Failed to search contacts in home screen
+Allow user random input to add email in contact edit page
+White screen occured while use Contacts URL invoking browser
+Allow user input non number to add phone number
+No unfavorite in context menu
+
+5.==Filed Bugs==
+Bug 	Owner	Type	Priority	Description                                      				DueDate
+Contact Picker: New Contact
+Contact Picker: Select One  
+Dbus call to import vCard 
+16093   Kaitlin TBUG    HIGH            Contact settings: first/last or last/first       			        1.1.3	
+15434	Connie	TBUG	HIGH		Thumbnail for the avatar needs to be used instead of full size image	        1.2.2      
+15436	Connie  TBUG    HIGH    	Failure to show Contacts Directory Letterbar					1.2.2 
+15349	Kaitlin TBUG    HIGH    	Multiple addresses saved under different categories saves inconsistently	1.2	
+15429	Connie  TBUG    MED     	During swype action in contacts view text flow underneath 			1.2
+15427	Kaitlin TBUG    MED     	Name starting with special characters are not getting ordered properly          1.2.5
+15831	Connie  TBUG 	FIXED            "edit" a contact results in 2 seperate contacts, 				1.2
+15433	Connie  TBUG    MED     	Edits to a Contact are not reflected first time in view mode			1.2.5	
+16342	Kaitlin	TBUG	LOW     	Notes left-aligned top-aligned							1.2.3
+15335   Connie  TBUG    MED		Favorites filter goes to default page if non marked as favorite	 	        1.2.5
+16279   Kaitlin TBUG    HIGH            GLS- i18n -Contacts: JPN contacts names need to be binned differently		1.3
+16340   Connie  TBUG    HIGH            Who's online filter does not function                                           1.2.3
+16622   Connie  TBUG    HIGH            Save and cancel button do not respond when adding new contact                   1.2.5
+16654   Connie  TBUG    LOW             Who's online item is missing in action menu					1.2.3
+16790   Connie  TBUG    LOW             Address field in view mode should be resizable					1.3
+16935   Kaitlin TBUG    MED             Notes of contact info not create new line via enter                             1.2.2
+16989   Connie  TBUG    MED             Long name overlaps with online status in Contact Details window			1.2.1
+16276   Kaitlin TBUG    HIGH            GLS -i18n-Contacts: KOR Korean names appear after ASCII names in list		1.3
+16277   Connie 	TBUG    HIGH            GLS -i18n-Contacts: Contact's name in deleting msg not reflect settings	 	1.2.2
+16977   Connie 	TBUG    HIGH            Long last name not getting truncated in portrait mode				1.2.2
+15497   Connie  TBUG    HIGH            GLS - i18n -New contact - long translation overflows from drop-down 		1.2.4
+16168   Connie  TBUG    HIGH            GLS - i18n - Contacts: Text overruns instant messaging drop-down menu           1.2.4
+16177   Connie  TBUG    HIGH            GLS - i18n - Contact Details, "Date" not re-sizable with its content            1.2.2
+16226   Connie  TBUG    HIGH            GLS - i18n - pseudo-build -  buttons are not re-sizable with its content        1.2.2
+16268   Connie  TBUG    HIGH    	GLS - i18n - pseudo-build - button is not re-sizable with its content           1.2.2
+16278   Connie  TBUG    HIGH            Contacts are listed under empty bins with leading space in names                1.2.1
+16096   Kaitlin TBUG    HIGH            GLS - i18n - Contacts: CHT: sorted by the last name, and by the stroke order    1.2.5
+16101   Kaitlin TBUG    HIGH 		GLS - i18n - Contacts: CHS: customization of sorting is required    		1.2
+16271   Kaitlin TBUG    HIGH            GLS - i18n - Contacts: DEU: Umlauts characters are not sorting appropriately    1.2
+15339   Kaitlin TBUG    MED  		Different keyboards are used for adding and editing phone numbers		1.2.3
+15343 	Connie	TBUG	MED		If multiple fields are saved and then deleted, the UI overlaps			1.2.4
+15346 	Connie	TBUG	LOW		Add picture from camera not enabled for Contacts				1.3
+15426   Connie	TBUG	MED		With existing contacts in list, contacts when launched displays no contacts	1.2.4
+15427	Kaitlin TBUG    MED		Name starting with special characters are not getting ordered properly		1.2.4
+15914   Kaitlin TBUG    MED		GLS - i18n  Asian langs -should be default settings				1.2.2
+16289   Connie  TBUG  	HIGH		Search does not yield any results (contacts)					1.2.1
+16661   Kaitlin TBUG	HIGH		Multiple IM chat accounts are not displayed when user edits to add more		1.2.5
+16673	Connie	TBUG	MED		Context menu "favorite" does not have opposite "unfavorite"			1.2.2
+16102	Kaitlin	TBUG	HIGH		GLS - i18n - Contacts: CHS: contacts names need to be binned per pinyin alph	1.2.5
+16165	Connie	TBUG	LOW		GLS - i18n - Contacts: MeeGo contacts.ts - "Yahoo" should be "Yahoo!"		1.2.1
+15998	Kaitlin	TBUG	MED		GLS - i18n - Contacts: JPN: order of address fields needs modification		1.2.1
+16091	Kaitlin	TBUG	HIGH		GLS - i18n - Contacts: CHS: order of address fields needs modification		1.2
+16092	Kaitin	TBUG	MED		New contact is added when editing with more than 10 contacts			1.2
+16093	Kaitlin	TBUG	MED		GLS - i18n - Contacts: JPN: customization of sorting is required		1.3
+16100	Kaitlin	TBUG	MED		GLS - i18n - Contacts: KOR: order of address fields needs modification		1.3
+16107	Kaitlin	TBUG	HIGH		GLS - i18n - Contacts: CHT: contacts names need to be binned per last name	1.2
+
+6.==Fixed==
+15342	Kaitlin TBUG    FIXED   details can be saved in contacts with no details selected				1.2
+				Action Menu does not open under the corrensponding icon
+				Long button to launch other apps in contact/need asset active_row shaded
+				Async Calls
+
+
+
+7.==Released==	
+16328	Kaitlin	TBUG	REL	Disable save until you enter something other than favorite				
+				Show some data if no first/last name entry, make Title last 
+				Bottom toolbar save done cancel
+				Search option (March 14)
+				vCard Profile
+				vCard Support
+				vCard 2.1
+                                Contacts -addressbook to manage contacts
+8.==Future Plans==
+Assign Ring Tones to Contact
+Contacts import from SIM card
+Contacts applica
+Add custom context labels for phone and address fields
+Merge local, synced and social contacts
+Wireless sync with MeeGo devices
+support linking contacts
+Restore function
+Emergency Numbers
+Add/Edit/Delete groups of contacts and attach to email
+Fields in contacts for prefix/suffix/non-alpha languang transcription
+Enable vCard export of all contacts
+Add email to context menu
+Add Call to context meny
+Add SMS to context menu 
+Add 2 address fields
+Share a contact via SMS, Email, or IM
+
+
+9.==FAQ==
+Why is IM not in Context Menu?
+IM will not be launched from context menu as it violates UI guidelines, IM can be launched from details view.
