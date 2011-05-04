@@ -34,6 +34,12 @@ Recent Communications
 Link
 Merge
 Need smaller graphic for smaller devices for landscape view landing screen
+Duplicate in async edit
+Shrink address
+Remove bookmark from url
+order of #'s in widgets
+Fix Contact Picker - new, search, a-z
+Content plugin
 
 3.==Blocked==
 Libfolks:
@@ -82,6 +88,7 @@ Allow user random input to add email in contact edit page
 White screen occured while use Contacts URL invoking browser
 Allow user input non number to add phone number
 No unfavorite in context menu
+Can't set language/region/locale in settings
 
 5.==Filed Bugs==
 Bug 	Owner	Type	Priority	Description                                      				DueDate
@@ -137,11 +144,14 @@ Dbus call to import vCard
 
 6.==Fixed==
 15342	Kaitlin TBUG    FIXED   details can be saved in contacts with no details selected				1.2
+15831   Kaitlin TBUG    FIXED   Contact app lists 2 same contacts when adding new contact
+16928   Connie  TBUG	DUP     Add contact screen displayed when filtering favorites with no results
+16988   Connie  TBUG    DUP     Longer text does not wrap in Note field
+				Detail view page needs visual asset to indicate clickable
+				Need to make all contact calls asynchronous
+				Contact page gets hanging after saving the details
 				Action Menu does not open under the corrensponding icon
-				Long button to launch other apps in contact/need asset active_row shaded
-				Async Calls
-
-
+                                MeCard
 
 7.==Released==	
 16328	Kaitlin	TBUG	REL	Disable save until you enter something other than favorite				
@@ -152,8 +162,11 @@ Dbus call to import vCard
 				vCard Support
 				vCard 2.1
                                 Contacts -addressbook to manage contacts
+				Unable to show favorite contact in dialer which has been added in Contacts
 8.==Future Plans==
 Assign Ring Tones to Contact
+Video RingTones
+Landscape view for contacts
 Contacts import from SIM card
 Contacts applica
 Add custom context labels for phone and address fields
