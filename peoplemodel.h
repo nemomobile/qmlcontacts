@@ -75,7 +75,6 @@ public:
 
     void queueContactSave(QContact contact);
     void removeContact(QContactLocalId contactId);
-    void vCardFinished(QVersitWriter::State state);
 
     //QML API
     Q_INVOKABLE QVariant data(const int row, int role) const;
@@ -137,6 +136,7 @@ private slots:
     void dataReset();
     void savePendingContacts();
     void createMeCard();
+    void vCardFinished(QVersitWriter::State state);
 
 private:
     PeopleModelPriv *priv;
