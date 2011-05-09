@@ -14,201 +14,86 @@ Item {
     height: childrenRect.height
     width:  parent.width
 
-    property int initialHeight: childrenRect.height
+    property variant newDetailsModel: null 
+    property int rIndex: -1
+    property bool updateMode: false 
 
-    property variant webModel: contactModel
-    property variant contextModel: typeModel
-    property bool    validInput   : false
-
-    property alias detailsBoxExpanded: webDetailsItem.expanded
-
-    property string addWeb : qsTr("Add web page")
     property string defaultWeb : qsTr("Site")
-    property string headerWeb : qsTr("Web")
     property string bookmarkWeb : qsTr("Bookmark")
     property string favoriteWeb : qsTr("Favorite")
-    property string cancelLabel: qsTr("Cancel")
-    property string addLabel: qsTr("Add")
 
-    function getNewUrls() {
+    function parseDetailsModel(existingDetailsModel, contextModel) {
+        var arr = new Array(); 
+        for (var i = 0; i < existingDetailsModel.length; i++)
+            arr[i] = {"web": existingDetailsModel[i], "type": contextModel[i]};
+
+        return arr;
+    }
+
+    function getNewDetailValues() {
         var webUrlList = new Array();
         var webTypeList = new Array();
         var count = 0;
 
-        for (var i = 0; i < webs.count; i++) {
-            if (webs.get(i).web != "") {
-                webUrlList[count] = webs.get(i).web;
-                webTypeList[count] = webs.get(i).type;
+        for (var i = 0; i < newDetailsModel.count; i++) {
+            if (newDetailsModel.get(i).web != "") {
+                webUrlList[count] = newDetailsModel.get(i).web;
+                webTypeList[count] = newDetailsModel.get(i).type;
                 count = count + 1;
             }
         }
         return {"urls": webUrlList, "types": webTypeList};
     }
 
-    ListModel{
-        id: webs
-        Component.onCompleted:{
-            for(var i =0; i < webModel.length; i++)
-                webs.append({"web": webModel[i], "type": contextModel[i]});
-        }
+    function getDetails(reset) {
+        var arr = {"web": data_url.text, 
+                   "type": urlComboBox.selectedTitle};
+
+        if (reset)
+            resetFields();
+
+        return arr;
     }
 
-    ContactsExpandableDetails {
-        id: webDetailsItem
-
-        headerLabel: headerWeb
-        expandingBoxTitle: addWeb
-        repeaterComponent: webExistingComponent
-
-        detailsModel: webs 
-        fieldDetailComponent: webNewComponent
-
-        onDetailsBoxExpandingChanged: {
-            webRect.height = expanded ? (initialHeight + newHeight) : initialHeight;
-        }
+    function resetFields() {
+       data_url.text = "";
+       urlComboBox.selectedTitle = bookmarkWeb;
     }
 
-   Component {
-        id: webExistingComponent
+    DropDown {
+        id: urlComboBox
 
-        Item {
-            id: itemDelegate
-            width: parent.width;
-            height: 80;
-            signal clicked()
+        anchors {left: parent.left; leftMargin: 10;}
+        titleColor: theme_fontColorNormal
 
-            //Need to store the repeater index, as the drop down overwrites index with its own value
-            property int repeaterIndex: index
-            Image {
-                id: webBar
-                source: "image://theme/contacts/active_row"
-                anchors.fill:  parent
+        width: 250
+        minWidth: width
+        maxWidth: width + 50
 
-                DropDown {
-                    id:  webComboBox
+        model: [favoriteWeb, bookmarkWeb]
 
-                    anchors {verticalCenter: webBar.verticalCenter; left: webBar.left; leftMargin: 10}
-                    title: webs.get(repeaterIndex).type
-                    titleColor: theme_fontColorNormal
-                    replaceDropDownTitle: true
+        state: "notInUpdateMode"
 
-                    width: 250
-                    minWidth: width
-                    maxWidth: width + 50
-
-                    model: [favoriteWeb, bookmarkWeb]
-
-                    onTriggered: {
-                        webs.setProperty(repeaterIndex, "type", data);
-                    }
-                }
-
-                TextEntry {
-                    id: data_web
-                    text: web
-                    defaultText: defaultWeb
-                    width: 400
-                    anchors {verticalCenter: parent.verticalCenter; left:webComboBox.right; leftMargin: 10; right: delete_button.left; rightMargin: 10}
-                    inputMethodHints: Qt.ImhUrlCharactersOnly
-                    onTextChanged: {
-                        webs.setProperty(index, "web", data_web.text);
-                    }
-                }
-                Binding{ target: webRect; property: "validInput"; value: true; when: data_web.text != "";}
-                Binding{ target: webRect; property: "validInput"; value: false; when: data_web.text == "";}
-
-                Image {
-                    id: delete_button
-                    source: "image://theme/contacts/icn_trash"
-                    width: 36
-                    height: 36
-                    anchors {verticalCenter: data_web.verticalCenter; right:parent.right; rightMargin: 20}
-                    opacity: 1
-                    MouseArea {
-                        id: mouse_delete_web
-                        anchors.fill: parent
-                        onPressed: {
-                            delete_button.source = "image://theme/contacts/icn_trash_dn";
-                        }
-                        onClicked: {
-                            if (webs.count != 1) {
-                                webs.remove(index);
-                                if (webRect.height > initialHeight) 
-                                    webRect.height = webRect.height-itemDelegate.height;
-                            } else {
-                                data_web.text = "";
-                                webComboBox.selectedTitle = bookmarkWeb;
-                            }
-                            delete_button.source = "image://theme/contacts/icn_trash";
-                        }
-                    }
-                    Binding{target: delete_button; property: "visible"; value: false; when: webs.count < 2}
-                    Binding{target: delete_button; property: "visible"; value: true; when: webs.count > 1}
-                }
+        states: [
+            State {
+                name: "inUpdateMode"; when: (webRect.updateMode == true)
+                PropertyChanges{target: urlComboBox; title: newDetailsModel.get(rIndex).type}
+                PropertyChanges{target: urlComboBox; selectedTitle: newDetailsModel.get(rIndex).type}
+            },
+            State {
+                name: "notInUpdateMode"; when: (webRect.updateMode == false)
+                PropertyChanges{target: urlComboBox; title: bookmarkWeb}
+                PropertyChanges{target: urlComboBox; selectedTitle: bookmarkWeb}
             }
-        }
+        ]
     }
 
-    Component {
-        id: webNewComponent
-
-        Item {
-            id: urlBar2
-            height: 100
-
-            DropDown { //REVISIT: Maybe max a component that all widgets can use?
-                id: urlComboBox2
-
-                anchors {left: urlBar2.left; leftMargin: 10;}
-                title: bookmarkWeb
-                titleColor: theme_fontColorNormal
-                replaceDropDownTitle: true
-
-                width: 250
-                minWidth: width
-                maxWidth: width + 50
-
-                model: [favoriteWeb, bookmarkWeb]
-             }
-
-            TextEntry {
-                id: data_url2
-                text: ""
-                defaultText: defaultWeb
-                width: 400
-                anchors {left:urlComboBox2.right; leftMargin: 10;}
-            }
-
-            Button {
-                id: addButton
-                width: 100
-                height: 36
-                text: addLabel
-                font.pixelSize: theme_fontPixelSizeMediumLarge
-                bgSourceUp: "image://theme/btn_blue_up"
-                bgSourceDn: "image://theme/btn_blue_dn"
-                anchors {right:cancelButton.left; top: data_url2.bottom; topMargin: 15; rightMargin: 5;}
-                onClicked: {
-                    webs.append({"web": data_url2.text, "type": urlComboBox2.selectedTitle});
-                    detailsBoxExpanded = false;
-                    data_url2.text = "";
-                    urlComboBox2.selectedTitle = bookmarkWeb;
-                }
-            }
-
-            Button {
-                id: cancelButton
-                width: 100
-                height: 36
-                text: cancelLabel
-                font.pixelSize: theme_fontPixelSizeMediumLarge
-                anchors {right:data_url2.right; top: data_url2.bottom; topMargin: 15;}
-                onClicked: {
-                    detailsBoxExpanded = false;
-                    data_url2.text = "";
-                    urlComboBox2.selectedTitle = bookmarkWeb;
-                }
-            }
-        }
+    TextEntry {
+        id: data_url
+        text: (updateMode) ? newDetailsModel.get(rIndex).web : ""
+        defaultText: defaultWeb
+        width: 400
+        anchors {left:urlComboBox.right; leftMargin: 10;}
     }
 }
+

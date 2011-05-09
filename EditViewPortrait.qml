@@ -46,12 +46,23 @@ Flickable {
     property string unfavoriteValue: "Unfavorite"
     property string unfavoriteTranslated: qsTr("Unfavorite")
 
+    property string phoneLabel: qsTr("Phone numbers")
+    property string addPhones: qsTr("Add number")
+    property string imLabel: qsTr("Instant messaging")
+    property string addIms: qsTr("Add account")
+    property string emailLabel: qsTr("Email")
+    property string addEmails: qsTr("Add email address")
+    property string urlLabel: qsTr("Web")
+    property string addUrls: qsTr("Add web page")
+    property string addressLabel: qsTr("Address")
+    property string addAddress: qsTr("Add address")
+
     function contactSave(contactId){
-        var addresses = addys.getNewAddresses();
-        var newPhones = phones.getNewPhones();
-        var newIms = ims.getNewIms();
-        var newWebs = urls.getNewUrls();
-        var newEmails = emails.getNewEmails();
+        var newPhones = phones.getNewDetails();
+        var newIms = ims.getNewDetails();
+        var newEmails = emails.getNewDetails();
+        var newWebs = urls.getNewDetails();
+        var addresses = addys.getNewDetails();
 
         if (avatar_img.source == "image://theme/contacts/img_blankavatar")
             avatar_img.source = "";
@@ -204,49 +215,59 @@ Flickable {
             }
         }
 
-        PhoneEditWidget{
-            id:phones
-            width: parent.width
-            height: childrenRect.height
-            phoneModel: dataModel.data(index, PeopleModel.PhoneNumberRole)
+        ContactsExpandableDetails {
+            id: phones 
+
+            headerLabel: phoneLabel
+            expandingBoxTitle: addPhones
+            newDetailsComponent: PhoneEditWidget{}
+            existingDetailsComponent: PhoneEditWidget{}
+            existingDetailsModel: dataModel.data(index, PeopleModel.PhoneNumberRole)
             contextModel: dataModel.data(index, PeopleModel.PhoneContextRole)
-            anchors { left: parent.left; }
         }
 
-        ImEditWidget{
-            id:ims
-            width: parent.width
-            height: childrenRect.height
-            imModel: dataModel.data(index, PeopleModel.OnlineAccountUriRole)
+        ContactsExpandableDetails {
+            id: ims 
+
+            headerLabel: imLabel
+            expandingBoxTitle: addIms
+            newDetailsComponent: ImEditWidget{}
+            existingDetailsComponent: ImEditWidget{}
+            existingDetailsModel: dataModel.data(index, PeopleModel.OnlineAccountUriRole)
             contextModel: dataModel.data(index, PeopleModel.OnlineServiceProviderRole)
-            anchors { left: parent.left }
         }
 
-        EmailEditWidget{
-            id:emails
-            width: parent.width
-            height: childrenRect.height
-            emailModel: dataModel.data(index, PeopleModel.EmailAddressRole)
+        ContactsExpandableDetails {
+            id: emails 
+
+            headerLabel: emailLabel
+            expandingBoxTitle: addEmails
+            newDetailsComponent: EmailEditWidget{}
+            existingDetailsComponent: EmailEditWidget{}
+            existingDetailsModel: dataModel.data(index, PeopleModel.EmailAddressRole)
             contextModel: dataModel.data(index, PeopleModel.EmailContextRole)
-            anchors {left: parent.left}
         }
 
-        WebPageEditWidget{
-            id:urls
-            width: parent.width
-            height: childrenRect.height
-            webModel: dataModel.data(index, PeopleModel.WebUrlRole)
+        ContactsExpandableDetails {
+            id: urls 
+
+            headerLabel: urlLabel
+            expandingBoxTitle: addUrls
+            newDetailsComponent: WebPageEditWidget{}
+            existingDetailsComponent: WebPageEditWidget{}
+            existingDetailsModel: dataModel.data(index, PeopleModel.WebUrlRole)
             contextModel: dataModel.data(index, PeopleModel.WebContextRole)
-            anchors {left: parent.left }
         }
 
-        AddressEditWidget{
-            id:addys
-            width: parent.width
-            height: childrenRect.height
-            addressModel: dataModel.data(index, PeopleModel.AddressRole)
+        ContactsExpandableDetails {
+            id: addys
+
+            headerLabel: addressLabel
+            expandingBoxTitle: addAddress
+            newDetailsComponent: AddressEditWidget{}
+            existingDetailsComponent: AddressEditWidget{}
+            existingDetailsModel: dataModel.data(index, PeopleModel.AddressRole)
             contextModel: dataModel.data(index, PeopleModel.AddressContextRole)
-            anchors { left: parent.left }
         }
 
         Item{
