@@ -26,35 +26,35 @@ Item {
 
     function getButtonTitleText() {
         if (type == "details")
-            return [scene.contextShare, scene.contextEdit];
+            return [window.contextShare, window.contextEdit];
         else if ((type == "edit") || (type == "new"))
-            return [scene.contextSave, scene.contextCancel];
+            return [window.contextSave, window.contextCancel];
         else
             return ["", ""];
     }
 
     function getActiveState(action) {
-        if (action == scene.contextSave)
+        if (action == window.contextSave)
             return currentView.validInput
 
         return true;
     }
 
     function handleButtonClick(action) {
-        if (action == scene.contextShare) {
-            peopleModel.exportContact(scene.currentContactId,  "/tmp/vcard.vcf");
+        if (action == window.contextShare) {
+            peopleModel.exportContact(window.currentContactId,  "/tmp/vcard.vcf");
             var cmd = "/usr/bin/meego-qml-launcher --app meego-app-email --fullscreen --cmd openComposer --cdata \"file:///tmp/vcard.vcf\"";
             appModel.launch(cmd);
-        } else if (action == scene.contextEdit) {
-            scene.addApplicationPage(pageToLoad);
-        } else if (action == scene.contextSave) {
+        } else if (action == window.contextEdit) {
+            window.addPage(pageToLoad);
+        } else if (action == window.contextSave) {
             if (type == "edit")
-                currentView.contactSave(scene.currentContactId);
+                currentView.contactSave(window.currentContactId);
             else if (type == "new")
                 currentView.contactSave();
-            scene.applicationPage = myAppAllContacts;
-        } else
-            scene.applicationPage = myAppAllContacts;
+            window.switchBook(myAppAllContacts);
+        } else 
+            window.switchBook(myAppAllContacts);
     }
 
     Image {

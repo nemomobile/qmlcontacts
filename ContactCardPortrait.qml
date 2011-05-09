@@ -207,7 +207,7 @@ Image {
             contactCardPortrait.clicked();
         }
         onPressAndHold: {
-            var map = mapToItem(scene, mouseX, mouseY);
+            var map = mapToItem(window, mouseX, mouseY);
             if(dataFirst != "" && dataLast != ""){
                 contactCardPortrait.pressAndHold(map.x, map.y, dataUuid, getTruncatedString(dataFirst +" " + dataLast, 25));
             }else if(dataFirst == ""){

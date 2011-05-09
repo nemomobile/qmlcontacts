@@ -18,8 +18,6 @@ Item {
 
     property PeopleModel dataModel: contactModel
     property ProxyModel sortModel: proxyModel
-    property Component newPage : myAppNewContact
-    property Component detailsPage : myAppDetails
 
     EmptyContacts{
         id: emptyListView
@@ -53,15 +51,15 @@ Item {
         onClicked:
         {
             cardListView.currentIndex = index;
-            scene.currentContactIndex = index;
-            scene.currentContactId = dataPeople.data(index, PeopleModel.UuidRole);
-            groupedViewPage.addApplicationPage(myAppDetails);
+            window.currentContactIndex = index;
+            window.currentContactId = dataPeople.data(index, PeopleModel.UuidRole);
+            window.addPage(myAppDetails);
         }
         onPressAndHold: {
             cardListView.currentIndex = index;
-            scene.currentContactIndex = index;
-            scene.currentContactId = uuid;
-            scene.currentContactName = name;
+            window.currentContactIndex = index;
+            window.currentContactId = uuid;
+            window.currentContactName = name;
             groupedViewPortrait.pressAndHold(mouseX, mouseY);
         }
     }
@@ -90,16 +88,14 @@ Binding{target: cardListView; property: "opacity"; value: ((cardListView.count >
         content: ActionMenu {
             id: actionObjectMenu
 
-            model: (scene.currentContactId == 2147483647 ? [contextView, contextShare, contextEdit,
-                                                      contextFavorite, contextDelete] : [contextView, contextShare,
-                                                                                     contextEdit])
+            model: (window.currentContactId == 2147483647) ? [contextView, contextShare, contextEdit] : [contextView, contextShare, contextEdit, contextFavorite, contextDelete]
 
             onTriggered: {
-                if(index == 0) { scene.addApplicationPage(myAppDetails);}
-                if(index == 3) { peopleModel.toggleFavorite(scene.currentContactId); }
+                if(index == 0) { window.addPage(myAppDetails);}
+                if(index == 3) { peopleModel.toggleFavorite(window.currentContactId); }
                 if(index == 1) { shareMenu.setPosition(objectMenu.menuX, objectMenu.menuY + 30);
                                  shareMenu.show();  }
-                if(index == 2) { scene.addApplicationPage(myAppEdit);}
+                if(index == 2) { window.addPage(myAppEdit);}
                 if(index == 4) { confirmDelete.show(); }
                 objectMenu.hide();
             }
@@ -117,7 +113,7 @@ Binding{target: cardListView; property: "opacity"; value: ((cardListView.count >
             onTriggered: {
                 if(index == 0) {
                     var filename = currentContactName.replace(" ", "_");
-                    peopleModel.exportContact(scene.currentContactId,  "/tmp/vcard_"+filename+".vcf");
+                    peopleModel.exportContact(window.currentContactId,  "/tmp/vcard_"+filename+".vcf");
                     shareMenu.visible = false;
                     var cmd = "/usr/bin/meego-qml-launcher --app meego-app-email --fullscreen --cmd openComposer --cdata \"file:///tmp/vcard_"+filename+".vcf\"";
                     appModel.launch(cmd);

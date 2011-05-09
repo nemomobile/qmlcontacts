@@ -11,10 +11,11 @@ import MeeGo.Components 0.1
 import MeeGo.Labs.Components 0.1 as Labs
 import MeeGo.App.Contacts 0.1
 
-Labs.Window {
-    id: scene
-    title: qsTr("Contacts")
-    showsearch: false;
+Window {
+    id: window 
+    toolBarTitle: qsTr("Contacts")
+    showToolBarSearch: false;
+    automaticBookSwitching: false 
 
     property string currentContactId: ""
     property int currentContactIndex: 0
@@ -42,12 +43,17 @@ Labs.Window {
     property string labelNewContactView: qsTr("New contact")
     property string labelEditView: qsTr("Edit contacts")
 
-    property string contactname : (scene.currentContactName ? scene.currentContactName : qsTr("this contact"))
+    property string contactname : (window.currentContactName ? window.currentContactName : qsTr("this contact"))
     property string promptStr: qsTr("Are you sure you want to remove %1 from your contacts?").arg(contactname)
 
     property int animationDuration: 250
 
-    applicationPage: myAppAllContacts
+    bookMenuModel: [filterAll, filterFavorites, filterWhosOnline];
+    bookMenuPayload: [myAppAllContacts, myAppFavContacts, myAppOnlineContacts];
+
+    Component.onCompleted: {
+        addPage(myAppAllContacts)
+    }
 
     Connections {
         target: mainWindow
@@ -59,14 +65,14 @@ Labs.Window {
             //callFromRemote = true;
             if (cmd == "launchNewContact") {
                 //REVISIT: need to pass data and type to NewContactPage
-                scene.addApplicationPage(myAppNewContact);
+                window.addPage(myAppNewContact);
             }
             else if (cmd == "launchDetailView")
             {
                 var contactId = parameters[1];
                 if(contactId)
-                    scene.currentContactIndex = contactId;
-                scene.addApplicationPage(myAppDetails);
+                    window.currentContactIndex = contactId;
+                window.addPage(myAppDetails);
             }
         }
     }
@@ -76,42 +82,54 @@ Labs.Window {
         anchors.fill: parent
     }
 
-    onFilterTriggered: {
-        if(index == 0){
+    onBookMenuTriggered: {
+        if (selectedItem == myAppAllContacts) {
             peopleModel.setFilter(PeopleModel.AllFilter);
-            scene.applicationPage = myAppAllContacts;
-        }else if(index == 1){
+        } else if (selectedItem == myAppFavContacts) {
             peopleModel.setFilter(PeopleModel.FavoritesFilter);
-            scene.applicationPage = myAppAllContacts;
-        }else if(index == 2){
+        } else if (selectedItem == myAppOnlineContacts) {
             peopleModel.setFilter(PeopleModel.OnlineFilter);
-            scene.applicationPage = myAppAllContacts;
+        }
+    }
+
+    //Need empty page place holder for filtering
+    Component {
+        id: myAppFavContacts
+        AppPage {
+            id: favContactsPage
+            pageTitle: filterFavorites 
+        }
+    }
+
+    //Need empty page place holder for filtering
+    Component {
+        id: myAppOnlineContacts
+        AppPage {
+            id: onlineContactsPage
+            pageTitle: filterWhosOnline
         }
     }
 
     Component {
         id: myAppAllContacts
-        Labs.ApplicationPage {
+        AppPage {
             id: groupedViewPage
-            title: labelGroupedView
+            pageTitle: labelGroupedView
             Component.onCompleted : {
-                scene.title = labelGroupedView;
-                disableSearch = false;
-                showsearch = true;
+                window.toolBarTitle = labelGroupedView;
+                groupedViewPage.disableSearch = false;
+		groupedViewPage.showSearch = false;
             }
             onSearch: {
                 peopleModel.searchContacts(needle);
             }
             GroupedViewPortrait{
                 id: gvp
-                parent: groupedViewPage.content
                 anchors.fill: parent
                 dataModel: peopleModel
                 sortModel: proxyModel
-                newPage: myAppNewContact //REVISIT: Need to do this?
-                detailsPage: myAppDetails //REVISIT: Need to do this?
                 onAddNewContact:{
-                    groupedViewPage.addApplicationPage(myAppNewContact);
+                    window.addPage(myAppNewContact);
                 }
             }
             FooterBar { 
@@ -120,40 +138,35 @@ Labs.Window {
                 currentView: gvp
                 pageToLoad: myAppAllContacts
             }
-            menuContent: ActionMenu {
-                id: actions
-                model: [labelNewContactView]
-                onTriggered: {
-                    if(index == 0) {
-                        groupedViewPage.addApplicationPage(myAppNewContact);
-                    }
-                    groupedViewPage.closeMenu();
+            actionMenuModel: [labelNewContactView]
+            actionMenuPayload: [0]
+
+            onActionMenuTriggered: {
+                if (selectedItem == 0) {
+                    if (window.pageStack.currentPage == groupedViewPage)
+                        window.addPage(myAppNewContact);
                 }
             }
-            onTypeChanged: {
-                if(groupedViewPage.type < 2){
-                    peopleModel.setFilter(PeopleModel.AllFilter, false);
-                    scene.filterModel =  [filterAll, filterFavorites, filterWhosOnline];
-                }
+            onActivating: {
+                peopleModel.setFilter(PeopleModel.AllFilter, false);
             }
         }
     }
 
     Component {
         id: myAppDetails
-        Labs.ApplicationPage {
+        AppPage {
             id: detailViewPage
-            title: labelDetailView
+            pageTitle: labelDetailView
             Component.onCompleted : {
-                scene.title = labelDetailView;
-                disableSearch = true;
+                window.toolBarTitle = labelDetailView;
+                detailViewPage.disableSearch = true;
             }
             DetailViewPortrait{
                 id: detailViewContact
                 anchors.fill:  parent
-                parent: detailViewPage.content
                 detailModel: peopleModel
-                index: proxyModel.getSourceRow(scene.currentContactIndex)
+                index: proxyModel.getSourceRow(window.currentContactIndex)
             }
             FooterBar { 
                 id: detailsFooter 
@@ -161,24 +174,18 @@ Labs.Window {
                 currentView: detailViewContact
                 pageToLoad: myAppEdit
             }
-            menuContent: ActionMenu {
-                id: actions
-                model: [contextShare, contextEdit]
-                onTriggered: {
-                    if(index == 0) {
-                        peopleModel.exportContact(scene.currentContactId,  "/tmp/vcard.vcf");
-                        var cmd = "/usr/bin/meego-qml-launcher --app meego-app-email --fullscreen --cmd openComposer --cdata \"file:///tmp/vcard.vcf\"";
-                        appModel.launch(cmd);
-                    }
-                    else if(index == 1) {
-                        scene.addApplicationPage(myAppEdit);
-                    }
-                    detailViewPage.closeMenu();
+            actionMenuModel: [contextShare, contextEdit]
+            actionMenuPayload: [0, 1]
+
+            onActionMenuTriggered: {
+                if (selectedItem == 0) {
+                    peopleModel.exportContact(window.currentContactId,  "/tmp/vcard.vcf");
+                    var cmd = "/usr/bin/meego-qml-launcher --app meego-app-email --fullscreen --cmd openComposer --cdata \"file:///tmp/vcard.vcf\"";
+                    appModel.launch(cmd);
                 }
-            }
-            onTypeChanged: {
-                if(detailViewPage.type == 0){
-                    scene.filterModel = [];
+                else if (selectedItem == 1) {
+                    if (window.pageStack.currentPage == detailViewPage)
+                        window.addPage(myAppEdit);
                 }
             }
         }
@@ -186,18 +193,17 @@ Labs.Window {
 
     Component {
         id: myAppEdit
-	Labs.ApplicationPage {
+	AppPage {
             id: editViewPage
-            title: labelEditView
+            pageTitle: labelEditView
             Component.onCompleted : {
-                scene.title = labelEditView;
-                disableSearch = true;
+                window.toolBarTitle = labelEditView;
+                editViewPage.disableSearch = true;
             }
             EditViewPortrait{
                 id: editContact
-                parent: editViewPage.content
                 dataModel: peopleModel
-                index: proxyModel.getSourceRow(scene.currentContactIndex)
+                index: proxyModel.getSourceRow(window.currentContactIndex)
                 anchors.fill: parent
             }
             FooterBar { 
@@ -206,27 +212,18 @@ Labs.Window {
                 currentView: editContact
                 pageToLoad: myAppAllContacts
             }
-            menuContent: ActionMenu {
-                id: actions
-                model: (scene.currentContactId == 2147483647 ? (editContact.validInput ? [contextSave, contextCancel] : [contextCancel]) : (editContact.validInput ? [contextSave, contextCancel, contextDelete] : [contextCancel, contextDelete]))
-                onTriggered: {
-                    if(model[index] == contextSave) {
-                        applicationPage = myAppAllContacts;
-                        editContact.contactSave(scene.currentContactId);
-                    }
-                    else if(model[index] == contextCancel) {
-                        applicationPage = myAppAllContacts;
-                    }
-                    else if(model[index] == contextDelete) {
-                        confirmDelete.show();
-                        actions.visible = false;
-                    }
-                    editViewPage.closeMenu();
+            actionMenuModel: (window.currentContactId == 2147483647 ? (editContact.validInput ? [contextSave, contextCancel] : [contextCancel]) : (editContact.validInput ? [contextSave, contextCancel, contextDelete] : [contextCancel, contextDelete]))
+            actionMenuPayload: (window.currentContactId == 2147483647 ? (editContact.validInput ? [0, 1] : [0]) : (editContact.validInput ? [0, 1, 2] : [0, 1]))
+            onActionMenuTriggered: {
+                if(actionMenuModel[selectedItem] == contextSave) {
+                    window.switchBook(myAppAllContacts);
+                    editContact.contactSave(window.currentContactId);
                 }
-            }
-            onTypeChanged: {
-                if( editViewPage.type == 0){
-                    scene.filterModel = [];
+                else if(actionMenuModel[selectedItem] == contextCancel) {
+                    window.switchBook(myAppAllContacts);
+                }
+                else if(actionMenuModel[selectedItem] == contextDelete) {
+                    confirmDelete.show();
                 }
             }
         }
@@ -234,16 +231,15 @@ Labs.Window {
 
     Component {
         id: myAppNewContact
-        Labs.ApplicationPage {
+        AppPage {
             id: newContactViewPage
-            title: labelNewContactView
+            pageTitle: labelNewContactView
             Component.onCompleted : {
-                scene.title = labelNewContactView;
-                disableSearch = true;
+                window.toolBarTitle = labelNewContactView;
+                newContactViewPage.disableSearch = true;
             }
             NewContactViewPortrait{
                 id: newContact
-                parent: newContactViewPage.content
                 dataModel: peopleModel
             }
             FooterBar { 
@@ -252,23 +248,15 @@ Labs.Window {
                 currentView: newContact
                 pageToLoad: myAppAllContacts
             }
-            menuContent:
-                ActionMenu{
-                id: menu
-                model: (newContact.validInput) ? [contextSave, contextCancel] : [contextCancel]
-                onTriggered: {
-                    if(index == 0) {
-                        scene.applicationPage = myAppAllContacts;
-                        newContact.contactSave();
-                    }else if(index == 1) {
-                        scene.applicationPage = myAppAllContacts;
-                    }
-                    newContactViewPage.closeMenu();
-                }
-            }
-            onTypeChanged: {
-                if(newContactViewPage.type == 0){
-                    scene.filterModel = [];
+            actionMenuModel: (newContact.validInput) ? [contextSave, contextCancel] : [contextCancel]
+            actionMenuPayload: (newContact.validInput) ? [0, 1] : [0]
+
+            onActionMenuTriggered: {
+                if(actionMenuModel[selectedItem] == contextSave) {
+                    window.switchBook(myAppAllContacts);
+                    newContact.contactSave();
+                }else if(actionMenuModel[selectedItem] == contextCancel) {
+                    window.switchBook(myAppAllContacts);
                 }
             }
         }
@@ -308,9 +296,8 @@ Labs.Window {
             opacity: 1
         }
         onAccepted: {
-            peopleModel.deletePerson(scene.currentContactId);
-            if (applicationPage != myAppAllContacts)
-                applicationPage = myAppAllContacts;
+            peopleModel.deletePerson(window.currentContactId);
+            window.switchBook(myAppAllContacts);
         }
     }
 }

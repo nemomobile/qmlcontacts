@@ -300,7 +300,7 @@ Flickable {
                     id: mouse_birthday
                     anchors.fill: parent
                     onClicked: {
-                        var map = mapToItem (scene.content, mouseX, mouseY);
+                        var map = mapToItem (window.content, mouseX, mouseY);
                         datePicker.show(map.x, map.y)
                     }
                 }
@@ -315,7 +315,7 @@ Flickable {
 
             onDateSelected: {
                 datePicked = selectedDate;
-                data_birthday.text = Qt.formatDate(selectedDate, scene.dateFormat);
+                data_birthday.text = Qt.formatDate(selectedDate, window.dateFormat);
                 data_birthday.state = (data_birthday.state == "default" ? "edit" : data_birthday.state)
             }
         }
