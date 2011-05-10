@@ -121,7 +121,8 @@ Window {
 		groupedViewPage.showSearch = false;
             }
             onSearch: {
-                peopleModel.searchContacts(needle);
+                if(needle != "")
+                    peopleModel.searchContacts(needle);
             }
             GroupedViewPortrait{
                 id: gvp
