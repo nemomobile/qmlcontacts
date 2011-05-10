@@ -24,7 +24,7 @@ Flickable {
     opacity: 1
 
     property PeopleModel detailModel: contactModel
-    property int index: personRow
+    property int indexOfPerson: personRow
 
     property string statusIdle: qsTr("Idle")
     property string statusBusy: qsTr("Busy")
@@ -105,16 +105,16 @@ Flickable {
     }
 
     function getOnlineStatus() {
-        if ((detailModel.data(index, PeopleModel.OnlineAccountUriRole).length < 1)
-                || (detailModel.data(index, PeopleModel.OnlineServiceProviderRole).length < 1))
+        if ((detailModel.data(indexOfPerson, PeopleModel.OnlineAccountUriRole).length < 1)
+                || (detailModel.data(indexOfPerson, PeopleModel.OnlineServiceProviderRole).length < 1))
             return "";
 
-        var account = detailModel.data(index, PeopleModel.OnlineServiceProviderRole)[0].split("\n");
+        var account = detailModel.data(indexOfPerson, PeopleModel.OnlineServiceProviderRole)[0].split("\n");
         if (account.length != 2)
             return "";
         account = account[1];
 
-        var buddy = detailModel.data(index, PeopleModel.OnlineAccountUriRole)[0].split(") ");
+        var buddy = detailModel.data(indexOfPerson, PeopleModel.OnlineAccountUriRole)[0].split(") ");
         if (buddy.length != 2)
             return "";
         buddy = buddy[1];
@@ -134,11 +134,11 @@ Flickable {
             width: parent.width
             height: 150
             source: "image://theme/contacts/active_row"
-            opacity: (detailModel.data(index, PeopleModel.IsSelfRole) ? .5 : 1)
+            opacity: (detailModel.data(indexOfPerson, PeopleModel.IsSelfRole) ? .5 : 1)
             Image{
                 id: avatar_image
                 //REVISIT: Instead of using the URI from AvatarRole, need to use thumbnail URI
-                source: (detailModel.data(index, PeopleModel.AvatarRole) ? detailModel.data(index, PeopleModel.AvatarRole): "image://theme/contacts/blank_avatar")
+                source: (detailModel.data(indexOfPerson, PeopleModel.AvatarRole) ? detailModel.data(indexOfPerson, PeopleModel.AvatarRole): "image://theme/contacts/blank_avatar")
                 anchors {top: detailHeader.top; left: parent.left; }
                 opacity: 1
                 signal clicked
@@ -165,14 +165,14 @@ Flickable {
                         height: childrenRect.height
                         Text{
                             id: firstname
-                            text: (detailModel.data(index, PeopleModel.FirstNameRole)? getTruncatedString(detailModel.data(index, PeopleModel.FirstNameRole), 25) : "")
+                            text: (detailModel.data(indexOfPerson, PeopleModel.FirstNameRole)? getTruncatedString(detailModel.data(indexOfPerson, PeopleModel.FirstNameRole), 25) : "")
                             color: theme_fontColorNormal
                             font.pixelSize: theme_fontPixelSizeLarge
                             smooth: true
                         }
                         Text{
                             id: lastname
-                            text: (detailModel.data(index, PeopleModel.LastNameRole) ? getTruncatedString(detailModel.data(index, PeopleModel.LastNameRole), 25) : "")
+                            text: (detailModel.data(indexOfPerson, PeopleModel.LastNameRole) ? getTruncatedString(detailModel.data(indexOfPerson, PeopleModel.LastNameRole), 25) : "")
                             color: theme_fontColorNormal
                             font.pixelSize: theme_fontPixelSizeLarge
                             smooth: true
@@ -258,7 +258,7 @@ Flickable {
                     height: headerGrid.height/2
                     Text{
                         id: company
-                        text: (detailModel.data(index, PeopleModel.CompanyNameRole) ? getTruncatedString(detailModel.data(index, PeopleModel.CompanyNameRole), 25) : "")
+                        text: (detailModel.data(indexOfPerson, PeopleModel.CompanyNameRole) ? getTruncatedString(detailModel.data(indexOfPerson, PeopleModel.CompanyNameRole), 25) : "")
                         color: theme_fontColorNormal
                         font.pixelSize: theme_fontPixelSizeLarge
                         styleColor: theme_fontColorInactive
@@ -279,8 +279,8 @@ Flickable {
                         Image {
                             id: icon_favorite
                             anchors{right: parent.left;  rightMargin: 10}
-                            source: (detailModel.data(index, PeopleModel.FavoriteRole) ? "image://theme/contacts/icn_fav_star_dn" : "image://theme/contacts/icn_fav_star" )
-                            opacity: (detailModel.data(index, PeopleModel.IsSelfRole) ? 0 : 1)
+                            source: (detailModel.data(indexOfPerson, PeopleModel.FavoriteRole) ? "image://theme/contacts/icn_fav_star_dn" : "image://theme/contacts/icn_fav_star" )
+                            opacity: (detailModel.data(indexOfPerson, PeopleModel.IsSelfRole) ? 0 : 1)
                         }
                     }
                 }
@@ -291,7 +291,7 @@ Flickable {
             id: phoneHeader
             width: parent.width-20
             height: 70
-            opacity: (detailModel.data(index, PeopleModel.PhoneNumberRole).length > 0 ? 1: 0)
+            opacity: (detailModel.data(indexOfPerson, PeopleModel.PhoneNumberRole).length > 0 ? 1: 0)
 
             Text{
                 id: label_phone
@@ -309,8 +309,8 @@ Flickable {
             width: parent.width-20
             height: childrenRect.height
             opacity: phoneHeader.opacity
-            model: detailModel.data(index, PeopleModel.PhoneNumberRole)
-            property variant phoneContexts: detailModel.data(index, PeopleModel.PhoneContextRole)
+            model: detailModel.data(indexOfPerson, PeopleModel.PhoneNumberRole)
+            property variant phoneContexts: detailModel.data(indexOfPerson, PeopleModel.PhoneContextRole)
             Item{
                 id: delegatePhone
                 width: parent.width
@@ -357,7 +357,7 @@ Flickable {
             id: imHeader
             width: parent.width-20
             height: 70
-            opacity: (detailModel.data(index, PeopleModel.OnlineAccountUriRole).length > 0 ? 1: 0)
+            opacity: (detailModel.data(indexOfPerson, PeopleModel.OnlineAccountUriRole).length > 0 ? 1: 0)
 
             Text{
                 id: label_im
@@ -375,8 +375,8 @@ Flickable {
             opacity: imHeader.opacity
             width: parent.width-20
             height: childrenRect.height
-            model: detailModel.data(index, PeopleModel.OnlineAccountUriRole)
-            property variant imContexts: detailModel.data(index, PeopleModel.OnlineServiceProviderRole)
+            model: detailModel.data(indexOfPerson, PeopleModel.OnlineAccountUriRole)
+            property variant imContexts: detailModel.data(indexOfPerson, PeopleModel.OnlineServiceProviderRole)
             Item{
                 id: delegateim
                 width: parent.width
@@ -419,7 +419,7 @@ Flickable {
             id: emailHeader
             width: parent.width
             height: 70
-            opacity: (detailModel.data(index, PeopleModel.EmailAddressRole).length > 0 ? 1 : 0)
+            opacity: (detailModel.data(indexOfPerson, PeopleModel.EmailAddressRole).length > 0 ? 1 : 0)
 
             Text{
                 id: label_email
@@ -437,8 +437,8 @@ Flickable {
             width: parent.width
             opacity: emailHeader.opacity
             height: childrenRect.height
-            model: detailModel.data(index, PeopleModel.EmailAddressRole)
-            property variant emailContexts: detailModel.data(index, PeopleModel.EmailContextRole)
+            model: detailModel.data(indexOfPerson, PeopleModel.EmailAddressRole)
+            property variant emailContexts: detailModel.data(indexOfPerson, PeopleModel.EmailContextRole)
 
             Item{
                 id: delegateemail
@@ -485,7 +485,7 @@ Flickable {
             id: webHeader
             width: parent.width
             height: 70
-            opacity: (detailModel.data(index, PeopleModel.WebUrlRole).length > 0 ? 1 : 0)
+            opacity: (detailModel.data(indexOfPerson, PeopleModel.WebUrlRole).length > 0 ? 1 : 0)
 
             Text{
                 id: label_web
@@ -501,8 +501,8 @@ Flickable {
             id: detailsWeb
             width: parent.width
             opacity: webHeader.opacity
-            model: detailModel.data(index, PeopleModel.WebUrlRole)
-            property variant webContexts: detailModel.data(index, PeopleModel.WebContextRole)
+            model: detailModel.data(indexOfPerson, PeopleModel.WebUrlRole)
+            property variant webContexts: detailModel.data(indexOfPerson, PeopleModel.WebContextRole)
 
             Item{
                 id: delegateweb
@@ -561,7 +561,7 @@ Flickable {
             id: addressHeader
             width: parent.width
             height: 70
-            opacity: (detailModel.data(index, PeopleModel.AddressRole).length > 0 ? 1: 0)
+            opacity: (detailModel.data(indexOfPerson, PeopleModel.AddressRole).length > 0 ? 1: 0)
 
             Text{
                 id: label_address
@@ -577,8 +577,8 @@ Flickable {
             id: detailsAddress
             width: parent.width
             opacity: addressHeader.opacity
-            model: detailModel.data(index, PeopleModel.AddressRole)
-            property variant addressContexts: detailModel.data(index, PeopleModel.AddressContextRole)
+            model: detailModel.data(indexOfPerson, PeopleModel.AddressRole)
+            property variant addressContexts: detailModel.data(indexOfPerson, PeopleModel.AddressContextRole)
             Item{
                 id: delegateaddy
                 width: parent.width
@@ -639,7 +639,7 @@ Flickable {
             id: birthdayHeader
             width: parent.width
             height: 70
-            opacity: (detailModel.data(index, PeopleModel.BirthdayRole).length > 0 ? 1: 0)
+            opacity: (detailModel.data(indexOfPerson, PeopleModel.BirthdayRole).length > 0 ? 1: 0)
 
             Text{
                 id: label_birthday
@@ -673,7 +673,7 @@ Flickable {
                 }
                 Text{
                     id: data_birthday
-                    text: detailModel.data(index, PeopleModel.BirthdayRole)
+                    text: detailModel.data(indexOfPerson, PeopleModel.BirthdayRole)
                     color: theme_fontColorNormal
                     font.pixelSize: theme_fontPixelSizeLarge
                     smooth: true
@@ -688,7 +688,7 @@ Flickable {
             id: notesHeader
             width: parent.width
             height: 70
-            opacity: (detailModel.data(index, PeopleModel.NotesRole).length > 0 ? 1: 0)
+            opacity: (detailModel.data(indexOfPerson, PeopleModel.NotesRole).length > 0 ? 1: 0)
 
             Text{
                 id: label_notes
@@ -712,7 +712,7 @@ Flickable {
 
                 Text{
                     id: data_notes
-                    text: getTruncatedString(detailModel.data(index, PeopleModel.NotesRole), 50)
+                    text: getTruncatedString(detailModel.data(indexOfPerson, PeopleModel.NotesRole), 50)
                     color: theme_fontColorNormal
                     font.pixelSize: theme_fontPixelSizeLarge
                     smooth: true

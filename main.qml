@@ -167,7 +167,7 @@ Window {
                 id: detailViewContact
                 anchors.fill:  parent
                 detailModel: peopleModel
-                index: proxyModel.getSourceRow(window.currentContactIndex)
+                indexOfPerson: proxyModel.getSourceRow(window.currentContactIndex)
             }
             FooterBar { 
                 id: detailsFooter 

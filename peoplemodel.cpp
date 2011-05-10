@@ -374,11 +374,9 @@ QVariant PeopleModel::data(int row, int role) const
     {
         QStringList list;
         foreach (const QContactAddress& address,
-                 contact.details<QContactAddress>()) {
-            if(!address.contexts().isEmpty())
-                list << address.contexts();
-            return list;
-        }
+                 contact.details<QContactAddress>())
+                list << address.contexts().at(0);
+        return list;
     }
     case PresenceRole:
     {
