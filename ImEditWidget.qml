@@ -24,7 +24,7 @@ Item {
     property string aim_sp : qsTr("AIM")
     property string msn_sp : qsTr("MSN")
     property string jabber_sp : qsTr("Jabber")
-    property string yahoo_sp : qsTr("Yahoo")
+    property string yahoo_sp : qsTr("Yahoo!")
     property string facebook_sp : qsTr("Facebook")
     property string gtalk_sp : qsTr("gTalk")
     property string defaultIm : qsTr("Account Name / ID")
