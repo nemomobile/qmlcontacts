@@ -107,7 +107,7 @@ Item {
             bgSourceActive: "image://theme/btn_grey_up"
             bgSourceDn: "image://theme/btn_grey_dn"
             visible: (buttonLeft.text == "" ? 0 : 1)
-            active: getActiveState(buttonLeft.text)
+            enabled: getActiveState(buttonLeft.text)
             anchors {top: parent.top; topMargin: 3; 
                      bottom: parent.bottom; bottomMargin: 3; 
                      left: divIcon.left; leftMargin: 3;}
