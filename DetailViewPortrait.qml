@@ -211,7 +211,7 @@ Flickable {
                                 case TelepathyTypes.ConnectionPresenceTypeUnknown:
                                 case TelepathyTypes.ConnectionPresenceTypeOffline:
                                 default:
-                                    icon = ""; //REVISIT: Need a real icon for this
+                                    icon = "image://theme/contacts/status_idle_sml";
                                 }
                                 return icon;
                             }
