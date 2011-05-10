@@ -13,9 +13,6 @@ Image{
     property string etcSymbol: qsTr("#")
     id: sectionBackground
     source: "image://theme/contacts/contact_title_bg_p"
-    anchors.right: parent.right
-    anchors.left:  parent.left
-    width: parent.width;
     Text {
         id: headerTitle
         text: (section ? section.toUpperCase() : etcSymbol)

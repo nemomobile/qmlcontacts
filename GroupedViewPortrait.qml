@@ -66,7 +66,7 @@ Item {
 
     section.property: "firstcharacter"
     section.criteria: ViewSection.FirstCharacter
-    section.delegate: HeaderPortrait{parent: groupedViewPortrait}
+    section.delegate: HeaderPortrait{width: cardListView.width;}
 }
 
 Binding{target: emptyListView; property: "opacity"; value: ((cardListView.count == 1) ? 1 : 0);}
