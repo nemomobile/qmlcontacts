@@ -678,7 +678,7 @@ Flickable {
                     font.pixelSize: theme_fontPixelSizeLarge
                     smooth: true
                     font.bold: true
-                    anchors {verticalCenter: bdayBar.verticalCenter; left: bdayBar.left; leftMargin: 145 }
+                    anchors {verticalCenter: bdayBar.verticalCenter; left: button_birthday_txt.right; leftMargin: 20 }
                     opacity: 1
                 }
             }
