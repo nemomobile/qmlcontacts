@@ -88,7 +88,7 @@ Binding{target: cardListView; property: "opacity"; value: ((cardListView.count >
         content: ActionMenu {
             id: actionObjectMenu
 
-            model: (window.currentContactId == 2147483647) ? [contextView, contextShare, contextEdit] : [contextView, contextShare, contextEdit, contextFavorite, contextDelete]
+            model: (dataModel.data(sortModel.getSourceRow(window.currentContactIndex), PeopleModel.IsSelfRole) == true) ? [contextView, contextShare, contextEdit] : ((dataModel.data(sortModel.getSourceRow(window.currentContactIndex), PeopleModel.FavoriteRole)) ? [contextView, contextShare, contextEdit, contextUnFavorite, contextDelete] : [contextView, contextShare, contextEdit, contextFavorite, contextDelete])
 
             onTriggered: {
                 if(index == 0) { window.addPage(myAppDetails);}

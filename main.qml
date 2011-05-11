@@ -31,6 +31,7 @@ Window {
     property string contextShare: qsTr("Share")
     property string contextEmail: qsTr("Email")
     property string contextFavorite: qsTr("Favorite")
+    property string contextUnFavorite: qsTr("UnFavorite")
     property string contextEdit: qsTr("Edit")
     property string contextSave: qsTr("Save")
     property string contextCancel: qsTr("Cancel")
