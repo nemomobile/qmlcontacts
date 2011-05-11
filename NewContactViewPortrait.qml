@@ -343,7 +343,7 @@ Flickable{
             width: parent.width
             height: 340
             source: "image://theme/contacts/active_row"
-            TextEntry{
+            TextField{
                 id: data_notes
                 text: ""
                 defaultText: defaultNote

@@ -342,7 +342,7 @@ Flickable {
             height: 340
             source: "image://theme/contacts/active_row"
             anchors.bottomMargin: 1
-            TextEntry{
+            TextField{
                 id: data_notes
                 text: dataModel.data(index, PeopleModel.NotesRole)
                 defaultText: defaultNote
