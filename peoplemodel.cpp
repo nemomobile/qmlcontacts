@@ -714,8 +714,8 @@ bool PeopleModel::createPersonModel(QString avatarUrl, QString thumbUrl, QString
     }
 
     QContactName name;
-    name.setFirstName(firstName);
-    name.setLastName(lastName);
+    name.setFirstName(firstName.trimmed());
+    name.setLastName(lastName.trimmed());
     contact.saveDetail(&name);
 
     QContactOrganization company;
@@ -829,8 +829,8 @@ void PeopleModel::editPersonModel(QString uuid, QString avatarUrl, QString first
 
     QContactName name = contact.detail<QContactName>();
     if ((name.firstName() != firstName) || (name.lastName() != lastName)) {
-        name.setFirstName(firstName);
-        name.setLastName(lastName);
+        name.setFirstName(firstName.trimmed());
+        name.setLastName(lastName.trimmed());
         name.setMiddleName("");
         name.setPrefix("");
         name.setSuffix("");
