@@ -284,10 +284,8 @@ QVariant PeopleModel::data(int row, int role) const
     {
         QStringList list;
         foreach (const QContactEmailAddress& email,
-                 contact.details<QContactEmailAddress>()){
-            if(!email.contexts().isEmpty())
-                list << email.contexts();
-        }
+                 contact.details<QContactEmailAddress>())
+                list << email.contexts().at(0);
         return list;
     }
     case PhoneNumberRole:
@@ -304,10 +302,8 @@ QVariant PeopleModel::data(int row, int role) const
     {
         QStringList list;
         foreach (const QContactPhoneNumber& phone,
-                 contact.details<QContactPhoneNumber>()){
-            if(!phone.contexts().isEmpty())
-                list << phone.contexts();
-        }
+                 contact.details<QContactPhoneNumber>())
+                list << phone.contexts().at(0);
         return list;
     }
     case AddressRole:
