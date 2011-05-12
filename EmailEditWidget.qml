@@ -17,6 +17,7 @@ Item {
     property variant newDetailsModel: null
     property int rIndex: -1
     property bool updateMode: false 
+    property bool validInput: false 
 
     property string contextHome : qsTr("Home")
     property string contextWork : qsTr("Work")
@@ -96,5 +97,13 @@ Item {
         width: 400
         anchors {left:emailComboBox.right; leftMargin: 10;}
     }
+
+    Binding {target: emailRect; property: "validInput"; value: true;
+             when: (data_email.text != "")
+            }
+
+    Binding {target: emailRect; property: "validInput"; value: false;
+             when: (data_email.text == "")
+            }
 }
 

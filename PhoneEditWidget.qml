@@ -17,6 +17,7 @@ Item{
     property variant newDetailsModel: null
     property int rIndex: -1
     property bool updateMode: false 
+    property bool validInput: false 
 
     property string addressLabel: qsTr("Address")
     property string homeContext: qsTr("Home")
@@ -101,4 +102,12 @@ Item{
         width: 400
         anchors {left:phoneComboBox.right; leftMargin: 10;}
     }
+
+    Binding {target: phonesRect; property: "validInput"; value: true;
+             when: (data_phone.text != "")
+            }
+
+    Binding {target: phonesRect; property: "validInput"; value: false;
+             when: (data_phone.text == "")
+            }
 }

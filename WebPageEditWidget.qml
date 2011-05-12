@@ -17,6 +17,7 @@ Item {
     property variant newDetailsModel: null 
     property int rIndex: -1
     property bool updateMode: false 
+    property bool validInput: false 
 
     property string defaultWeb : qsTr("Site")
     property string bookmarkWeb : qsTr("Bookmark")
@@ -95,5 +96,13 @@ Item {
         width: 400
         anchors {left:urlComboBox.right; leftMargin: 10;}
     }
+
+    Binding {target: webRect; property: "validInput"; value: true;
+             when: (data_url.text != "")
+            }
+
+    Binding {target: webRect; property: "validInput"; value: false;
+             when: (data_url.text == "")
+            }
 }
 

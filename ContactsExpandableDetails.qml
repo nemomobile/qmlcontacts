@@ -248,6 +248,7 @@ Column {
                         bgSourceDn: "image://theme/btn_blue_dn"
                         anchors {right: cancelButton.left; rightMargin: itemMargins;
                                  top: newContentArea.bottom; topMargin: itemMargins;}
+                        enabled: newFieldItem.validInput
                         onClicked: {
                             detailsBox.expanded = false;
                             var arr = newFieldItem.getDetails(true);

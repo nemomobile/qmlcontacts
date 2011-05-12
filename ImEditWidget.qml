@@ -19,6 +19,7 @@ Item {
     property variant newDetailsModel: null 
     property int rIndex: -1
     property bool updateMode: false 
+    property bool validInput: false
 
     property string imLabel : qsTr("Instant messaging")
     property string aim_sp : qsTr("AIM")
@@ -173,5 +174,19 @@ Item {
             }
         ]
     }
+
+    Binding {target: imsRect; property: "validInput"; value: true; 
+             when: ((imComboBox.selectedTitle != defaultAccount) &&
+                    (imComboBox.selectedTitle != noAccount) &&
+                    (imComboBox2.selectedTitle != defaultIm) &&
+                    (imComboBox2.selectedTitle != noBuddies))
+            }
+
+    Binding {target: imsRect; property: "validInput"; value: false; 
+             when: ((imComboBox.selectedTitle == defaultAccount) || 
+                    (imComboBox.selectedTitle == noAccount) || 
+                    (imComboBox2.selectedTitle == defaultIm) || 
+                    (imComboBox2.selectedTitle == noBuddies))
+            }
 }
 

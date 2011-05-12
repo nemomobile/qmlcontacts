@@ -17,6 +17,7 @@ Item {
     property variant newDetailsModel: null 
     property int rIndex: -1
     property bool updateMode: false 
+    property bool validInput: false 
 
     property string homeContext: qsTr("Home")
     property string workContext: qsTr("Work")
@@ -156,5 +157,21 @@ Item {
         width: 400
         anchors {top: data_zip.bottom; topMargin: 20; left:addressComboBox.right; leftMargin: 10;}
     }//textentry
+
+    Binding {target: addressRect; property: "validInput"; value: true;
+             when: ((data_street.text != "") || 
+                    (data_locale.text != "") || 
+                    (data_region.text != "") || 
+                    (data_zip.text != "") || 
+                    (data_country.text != ""))
+            }
+
+    Binding {target: addressRect; property: "validInput"; value: false;
+             when: ((data_street.text == "") && 
+                    (data_locale.text == "") && 
+                    (data_region.text == "") && 
+                    (data_zip.text == "") && 
+                    (data_country.text == ""))
+            }
 }
 
