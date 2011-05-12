@@ -8,11 +8,10 @@
 
 import Qt 4.7
 import MeeGo.Components 0.1
-import MeeGo.Labs.Components 0.1 as Labs
 import MeeGo.Settings 0.1
 import MeeGo.App.Contacts 0.1
 
-Labs.ApplicationPage {
+AppPage {
     id: settingsPage
     property string titleStr: qsTr("Contacts Settings")
     property string sortPreferenceStr: qsTr("Sort Order:")
@@ -23,8 +22,8 @@ Labs.ApplicationPage {
     property string displayByLast: qsTr("Display by last name")
 
     Translator { catalog: "meego-app-contacts" }
-
-    title: titleStr
+    pageTitle: titleStr
+    anchors.fill: parent
 
     function getSettingText(type) {
         if (type == "sort")
@@ -75,7 +74,7 @@ Labs.ApplicationPage {
     }
 
     Item {
-        anchors.fill: settingsPage.content
+        anchors.fill: parent
 
         Flickable {
             contentHeight: contents.height
