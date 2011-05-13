@@ -26,13 +26,15 @@ HEADERS += \
     peoplemodel.h \
     peoplemodel_p.h \
     proxymodel.h \
-    settingsdatastore.h
+    settingsdatastore.h \
+    localeutils.h
 
 SOURCES += \
     contacts.cpp \
     peoplemodel.cpp \
     proxymodel.cpp \
-    settingsdatastore.cpp
+    settingsdatastore.cpp \
+    localeutils.cpp
 
 QML_FILES = *.qml
 

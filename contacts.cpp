@@ -11,7 +11,6 @@
 #include "contacts.h"
 #include "peoplemodel.h"
 #include "proxymodel.h"
-#include "settingsdatastore.h"
 
 void contacts::registerTypes(const char *uri)
 {
@@ -28,7 +27,9 @@ void contacts::initializeEngine(QDeclarativeEngine *engine, const char *uri)
     Q_ASSERT(mRootContext);
 
     mRootContext->setContextProperty(QString::fromLatin1("settingsDataStore"),
-                                      SettingsDataStore::self());
+                                     SettingsDataStore::self());
+    mRootContext->setContextProperty(QString::fromLatin1("localeUtils"),
+                                     LocaleUtils::self());
 }
 
 Q_EXPORT_PLUGIN(contacts);

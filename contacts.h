@@ -13,6 +13,7 @@
 #include <QtDeclarative/QDeclarativeExtensionPlugin>
 #include <QtDeclarative/QDeclarativeContext>
 #include "settingsdatastore.h"
+#include "localeutils.h"
 
 class contacts : public QDeclarativeExtensionPlugin
 {
@@ -25,6 +26,7 @@ public:
 private:
     QDeclarativeContext *mRootContext;
     SettingsDataStore *mSettingsDataStore;
+    LocaleUtils *mLocaleUtils;
 };
 
 #endif // CONTACTS_H
