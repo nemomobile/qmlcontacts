@@ -830,7 +830,8 @@ void PeopleModel::editPersonModel(QString uuid, QString avatarUrl, QString first
     QContact &contact = priv->idToContact[id];
 
     if (contact.isEmpty()) {
-       Q_ASSERT(contact != null);
+       qWarning() << "[PeopleModel] Unable to find contact, cannot complete edit on uuid " << uuid;
+       return;
     }
 
     //REVIST: Don't call createPersonModel to get what is currently in the model.
