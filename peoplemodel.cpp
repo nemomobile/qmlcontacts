@@ -1312,3 +1312,15 @@ bool PeopleModel::isSelfContact(const QContactLocalId id)
 bool PeopleModel::isSelfContact(const QUuid id){
   return isSelfContact(priv->uuidToId[id]);
 }
+
+void PeopleModel::fetchOnlineOnly(const QVariantList &stringids){
+    QList<QContactLocalId> ids;
+    for(int iter = 0; iter < stringids.count(); iter++)
+        ids.append(qvariant_cast<QContactLocalId>(stringids.at(iter)));
+    QContactLocalIdFilter contactFilter;
+    if(ids.count() > 1){
+        contactFilter.setIds(ids);
+        priv->currentFilter = contactFilter;
+        dataReset();
+    }
+}

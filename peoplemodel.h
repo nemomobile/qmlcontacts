@@ -69,7 +69,7 @@ public:
     };
 
     //From QAbstractListModel
-    virtual int rowCount(const QModelIndex&) const;
+    Q_INVOKABLE virtual int rowCount(const QModelIndex& parent= QModelIndex()) const;
     virtual int columnCount(const QModelIndex& parent) const;
     virtual QVariant data(const QModelIndex&, int) const;
 
@@ -117,6 +117,7 @@ public:
     Q_INVOKABLE int getSortingRole();
     Q_INVOKABLE void searchContacts(const QString text);
     Q_INVOKABLE void clearSearch();
+    Q_INVOKABLE void fetchOnlineOnly(const QVariantList &stringids);
 
 protected:
     void fixIndexMap();

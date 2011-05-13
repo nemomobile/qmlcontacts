@@ -56,6 +56,32 @@ Window {
         addPage(myAppAllContacts)
     }
 
+    function getOnlinePeople() {
+        var onlinePeoples = [];
+        for(var sourceIndex = 0; sourceIndex < peopleModel.rowCount(); sourceIndex++){
+            if ((peopleModel.data(sourceIndex, PeopleModel.OnlineAccountUriRole).length >= 1)
+                    || (peopleModel.data(sourceIndex, PeopleModel.OnlineServiceProviderRole).length >= 1)){
+
+            var account = peopleModel.data(sourceIndex, PeopleModel.OnlineServiceProviderRole)[0].split("\n");
+            if (account.length == 2){
+                account = account[1];
+
+                var buddy = peopleModel.data(sourceIndex, PeopleModel.OnlineAccountUriRole)[0].split(") ");
+                if (buddy.length == 2){
+                    buddy = buddy[1];
+
+                    var contactItem = accountsModel.contactItemForId(account, buddy);
+
+                    var presence = contactItem.data(AccountsModel.PresenceTypeRole);
+                    if(presence == TelepathyTypes.ConnectionPresenceTypeAvailable)
+                            onlinePeoples.push(peopleModel.data(sourceIndex, PeopleModel.ContactRole));
+                }
+            }
+            }
+        }
+        return onlinePeoples;
+    }
+
     Connections {
         target: mainWindow
         onCall: {
@@ -89,7 +115,8 @@ Window {
         } else if (selectedItem == myAppFavContacts) {
             peopleModel.setFilter(PeopleModel.FavoritesFilter);
         } else if (selectedItem == myAppOnlineContacts) {
-            peopleModel.setFilter(PeopleModel.OnlineFilter);
+            var onlineIds = getOnlinePeople();
+            peopleModel.fetchOnlineOnly(onlineIds);
         }
     }
 
