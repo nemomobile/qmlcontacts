@@ -828,16 +828,9 @@ void PeopleModel::editPersonModel(QString uuid, QString avatarUrl, QString first
 {
     QContactLocalId id = priv->uuidToId[uuid];
     QContact &contact = priv->idToContact[id];
-    if (!contact.isEmpty()) {
-        QContactGuid guid;
-        guid.setGuid(QUuid::createUuid().toString());
-        if (!contact.saveDetail(&guid))
-            qWarning() << "[PeopleModel] failed to save guid in new contact";
 
-        QContactAvatar avatar;
-        avatar.setImageUrl(QUrl("image://theme/contacts/img_blankavatar"));
-        if (!contact.saveDetail(&avatar))
-            qWarning() << "[PeopleModel] failed to save avatar in new contact";
+    if (contact.isEmpty()) {
+       Q_ASSERT(contact != null);
     }
 
     //REVIST: Don't call createPersonModel to get what is currently in the model.
