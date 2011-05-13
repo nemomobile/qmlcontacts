@@ -40,6 +40,8 @@ QStringList LocaleUtils::getAddressFieldOrder() const
         fieldOrder << "country" << "region" << "locale" << "street" << "zip";
     else if (lang == "ja_JA")
         fieldOrder << "country" << "zip" << "region" << "locale" << "street";
+    else if (lang == "ko_KO")
+        fieldOrder << "country" << "region" << "locale" << "street" << "zip";
     else
         fieldOrder << "street" << "locale" << "region" << "zip" << "country";
 
