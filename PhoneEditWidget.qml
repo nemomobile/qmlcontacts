@@ -101,6 +101,7 @@ Item{
         defaultText: defaultPhone
         width: 400
         anchors {left:phoneComboBox.right; leftMargin: 10;}
+        inputMethodHints: Qt.ImhDialableCharactersOnly
     }
 
     Binding {target: phonesRect; property: "validInput"; value: true;

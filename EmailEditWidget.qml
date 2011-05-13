@@ -96,6 +96,7 @@ Item {
         defaultText: defaultEmail
         width: 400
         anchors {left:emailComboBox.right; leftMargin: 10;}
+        inputMethodHints: Qt.ImhEmailCharactersOnly
     }
 
     Binding {target: emailRect; property: "validInput"; value: true;

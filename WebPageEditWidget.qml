@@ -95,6 +95,7 @@ Item {
         defaultText: defaultWeb
         width: 400
         anchors {left:urlComboBox.right; leftMargin: 10;}
+        inputMethodHints: Qt.ImhUrlCharactersOnly
     }
 
     Binding {target: webRect; property: "validInput"; value: true;
