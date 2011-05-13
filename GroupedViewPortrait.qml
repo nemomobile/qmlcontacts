@@ -37,7 +37,7 @@ Item {
         height: groupedViewPortrait.height
         width: groupedViewPortrait.width
         snapMode: ListView.SnapToItem
-        highlightFollowsCurrentItem: true
+        highlightFollowsCurrentItem: false
         focus: true
         keyNavigationWraps: false
         clip: true

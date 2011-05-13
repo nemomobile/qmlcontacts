@@ -165,17 +165,10 @@ Item {
 
                     onClicked: {
                         for(var i=0; i < dlist.count; i++){
-                            //console.log("############################### highlight at " +  dlist.highlightItem );
-                            console.log("############################### firstchar" + people.data(proxy.getSourceRow(i), PeopleModel.FirstCharacterRole) + " match to " +letter.text);
                             if(people.data(proxy.getSourceRow(i), PeopleModel.FirstCharacterRole) == letter.text){
-                                dlist.currentIndex = i;
-                                console.log("############################### currIndex at " +  dlist.currentIndex );
-                                 //console.log("############################### highlight at " +  dlist.highlightItem );
-                                //dlist.highlightItem = dlist.currentItem;
+                                dlist.positionViewAtIndex(i, ListView.Beginning);
                                 break;
                             }
-                            console.log("############################### posAT " + i );
-                            //dlist.positionViewAtIndex(i, ListView.Beginning);
                         }
                     }
                 }

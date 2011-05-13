@@ -127,7 +127,7 @@ Window {
             }
             GroupedViewPortrait{
                 id: gvp
-                anchors.fill: parent
+                anchors {top: parent.top; bottom: groupedViewFooter.top; left: parent.left; right: parent.right;}
                 dataModel: peopleModel
                 sortModel: proxyModel
                 onAddNewContact:{
