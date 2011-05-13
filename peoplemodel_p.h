@@ -18,6 +18,7 @@
 #include <QContactGuid>
 
 #include "peoplemodel.h"
+#include "localeutils.h"
 
 class PeopleModelPriv : public QObject
 {
@@ -40,6 +41,7 @@ public:
     QVector<QStringList> data;
     QStringList headers;
     QSettings *settings;
+    LocaleUtils *localeHelper;
     QContactGuid currentGuid;
 
     explicit PeopleModelPriv(PeopleModel* /*parent*/){}

@@ -46,12 +46,8 @@ Item {
         width: 250
         height: 60
         opacity: 1
-        MouseArea {
-            id: mouseArea
-            anchors.fill: parent
-            onClicked: {
-                emptyContactsView.clicked()
-            }
+        onClicked: {
+            emptyContactsView.clicked()
         }
     }
 }

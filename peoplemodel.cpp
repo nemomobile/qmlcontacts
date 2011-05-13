@@ -102,6 +102,8 @@ PeopleModel::PeopleModel(QObject *parent)
         qWarning() << Q_FUNC_INFO << "MeCard Not supported";
     }
 
+    priv->localeHelper = LocaleUtils::self();
+
     connect(priv->manager, SIGNAL(contactsAdded(QList<QContactLocalId>)),
             this, SLOT(contactsAdded(QList<QContactLocalId>)));
     connect(priv->manager, SIGNAL(contactsChanged(QList<QContactLocalId>)),
@@ -309,11 +311,32 @@ QVariant PeopleModel::data(int row, int role) const
     case AddressRole:
     {
         QStringList list;
+        QStringList fieldOrder = priv->localeHelper->getAddressFieldOrder();
+
         foreach (const QContactAddress& address,
                  contact.details<QContactAddress>()) {
-            list << address.street() + "\n" + address.locality() + "\n" +
-                    address.region() + "\n" + address.postcode() + "\n" +
-                    address.country();
+            QString aStr;
+
+            for (int i = 0; i < fieldOrder.size(); ++i) {
+                if (fieldOrder.at(i) == "street")
+                    aStr += address.street();
+                else if (fieldOrder.at(i) == "locale")
+                    aStr += address.locality();
+                else if (fieldOrder.at(i) == "region")
+                    aStr += address.region();
+                else if (fieldOrder.at(i) == "zip")
+                    aStr += address.postcode();
+                else if (fieldOrder.at(i) == "country")
+                    aStr += address.country();
+                if (i < fieldOrder.size() - 1)
+                    aStr += "\n";
+            }
+
+            if (aStr == "")
+                aStr = address.street() + "\n" + address.locality() + "\n" +
+                       address.region() + "\n" + address.postcode() + "\n" +
+                       address.country();
+           list << aStr;
         }
         return list;
     }
