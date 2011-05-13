@@ -29,16 +29,17 @@ Item {
     property string postcodeAddress:  qsTr("Postcode / Zip")
 
     function parseDetailsModel(existingDetailsModel, contextModel) {
+        var fieldOrder = localeUtils.getAddressFieldOrder();
         var arr = new Array(); 
         for (var i = 0; i < existingDetailsModel.length; i++) {
             var splitAddy = existingDetailsModel[i].split("\n");
-            if (splitAddy.length == 5) //REVISIT: magic number, 5 elements?
-                arr[i] = {"street": splitAddy[0], 
-                          "locale": splitAddy[1], 
-                          "region": splitAddy[2], 
-                          "zip": splitAddy[3], 
-                          "country": splitAddy[4], 
-                          "type": contextModel[i]};
+            var arr2 = {};
+            for (var k = 0; k < fieldOrder.length; k++) {
+                var field = fieldOrder[k];
+                arr2[field] = splitAddy[k];
+            }
+            arr2["type"] = contextModel[i];
+            arr.push(arr2);
         }
 
         return arr;
@@ -72,13 +73,19 @@ Item {
     }
 
     function getDetails(reset) {
-        var arr = {"street": data_street.text, 
-                   "locale": data_locale.text, 
-                   "region": data_region.text,
-                   "zip": data_zip.text, 
-                   "country": data_country.text, 
+        var data = new Array();
+        for (var i = 0; i < addressColumn.children.length - 1; i++) {
+            var key = addressColumn.children[i].fieldVal;
+            data[key] = addressColumn.children[i].text;
+        }
+ 
+        var arr = {"street": data["street"], 
+                   "locale": data["locale"], 
+                   "region": data["region"],
+                   "zip": data["zip"], 
+                   "country": data["country"], 
                    "type": addressComboBox.selectedTitle};
-       
+
         if (reset)
             resetFields();
 
@@ -86,12 +93,42 @@ Item {
     }
 
     function resetFields() {
-       data_street.text = "";
-       data_locale.text = "";
-       data_region.text = "";
-       data_zip.text = "";
-       data_country.text = "";
+        for (var i = 0; i < addressColumn.children.length - 1; i++)
+            addressColumn.children[i].text = "";
+
        addressComboBox.selectedTitle = contextHome;
+    }
+
+    ListModel {
+        id: addressFields
+        Component.onCompleted: {
+            var pairs = {"street": streetAddress,
+                         "locale": localeAddress,
+                         "region": regionAddress,
+                         "zip": postcodeAddress,
+                         "country": countryAddress};
+
+            var fieldOrder = localeUtils.getAddressFieldOrder();
+            for (var i = 0; i < fieldOrder.length; i++) {
+                var field = fieldOrder[i];
+                addressFields.append({"field": field, "dText": pairs[field]});
+            }
+        }
+    }
+
+    function getTextValue(field) {
+        switch(field) {
+            case "street":
+                return newDetailsModel.get(rIndex).street;
+            case "locale":
+                return newDetailsModel.get(rIndex).locale;
+            case "region":
+                return newDetailsModel.get(rIndex).region;
+            case "zip":
+                return newDetailsModel.get(rIndex).zip;
+            case "country":
+                return newDetailsModel.get(rIndex).country;
+        }
     }
 
     DropDown {
@@ -122,56 +159,47 @@ Item {
         ]
     }
 
-    TextEntry {
-        id: data_street
-        text: (updateMode) ? newDetailsModel.get(rIndex).street : ""
-        defaultText: streetAddress
-        width: 400
-        anchors {left:addressComboBox.right; leftMargin: 10;}
+    Column {
+        id: addressColumn
+        spacing: 10
+        anchors {left: addressComboBox.right; right: parent.right;
+                 leftMargin: 10}
+        width: parent.width - addressComboBox.width
+        height: childrenRect.height
+
+        Repeater {
+            id: addressFieldRepeater
+
+            width: parent.width
+            height: childrenRect.height
+
+            model: addressFields
+
+            property bool validData: false
+
+            delegate: TextEntry {
+                id: addressTextField
+                text: (updateMode) ? getTextValue(field) : ""
+                defaultText: dText
+                width: 400
+                parent: addressFieldRepeater
+
+                property string fieldVal: field
+
+                Binding {target: addressFieldRepeater; property: "validData";
+                         value: true; when: (text != "")}
+                Binding {target: addressFieldRepeater; property: "validData";
+                         value: false; when: (text == "")}
+            }
+        }
     }
-    TextEntry {
-        id: data_locale
-        text: (updateMode) ? newDetailsModel.get(rIndex).locale : ""
-        defaultText: localeAddress
-        width: 400
-        anchors {top: data_street.bottom; topMargin: 20; left:addressComboBox.right; leftMargin: 10;}
-    }
-    TextEntry {
-        id: data_region
-        text: (updateMode) ? newDetailsModel.get(rIndex).region : ""
-        defaultText: regionAddress
-        width: 400
-        anchors {top: data_locale.bottom; topMargin: 20; left:addressComboBox.right; leftMargin: 10;}
-    }
-    TextEntry {
-        id: data_zip
-        text: (updateMode) ? newDetailsModel.get(rIndex).zip : ""
-        defaultText: postcodeAddress
-        width: 400
-        anchors {top: data_region.bottom; topMargin: 20; left:addressComboBox.right; leftMargin: 10;}
-    }
-    TextEntry {
-        id: data_country
-        text: (updateMode) ? newDetailsModel.get(rIndex).country : ""
-        defaultText: countryAddress
-        width: 400
-        anchors {top: data_zip.bottom; topMargin: 20; left:addressComboBox.right; leftMargin: 10;}
-    }//textentry
 
     Binding {target: addressRect; property: "validInput"; value: true;
-             when: ((data_street.text != "") || 
-                    (data_locale.text != "") || 
-                    (data_region.text != "") || 
-                    (data_zip.text != "") || 
-                    (data_country.text != ""))
+             when: (addressFieldRepeater.validData == true)
             }
 
     Binding {target: addressRect; property: "validInput"; value: false;
-             when: ((data_street.text == "") && 
-                    (data_locale.text == "") && 
-                    (data_region.text == "") && 
-                    (data_zip.text == "") && 
-                    (data_country.text == ""))
+             when: (addressFieldRepeater.validData == false)
             }
 }
 
