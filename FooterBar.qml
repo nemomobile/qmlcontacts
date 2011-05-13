@@ -15,6 +15,12 @@ Item {
     property string type 
     property variant currentView
     property variant pageToLoad
+    property ListView dlist: cardlist
+    property bool letterBar : false
+    property ProxyModel proxy: proxyModel
+    property PeopleModel people: peopleModel
+
+    signal clicked
 
     width: parent.width
     height: footer_bar.height
@@ -42,7 +48,7 @@ Item {
 
     function handleButtonClick(action) {
         if (action == window.contextShare) {
-            peopleModel.exportContact(window.currentContactId,  "/tmp/vcard.vcf");
+            people.exportContact(window.currentContactId,  "/tmp/vcard.vcf");
             var cmd = "/usr/bin/meego-qml-launcher --app meego-app-email --fullscreen --cmd openComposer --cdata \"file:///tmp/vcard.vcf\"";
             appModel.launch(cmd);
         } else if (action == window.contextEdit) {
@@ -99,6 +105,98 @@ Item {
             source: "image://theme/email/div"
         }
 
+        ListView {
+            id: indexListView
+            orientation: "Horizontal"
+            anchors {top: parent.top; topMargin: 3;
+                bottom: parent.bottom; bottomMargin: 3;
+            left: divIcon.left; leftMargin:divIcon.width+settingsIcon.width+3; right: parent.right; rightMargin: 3}
+            interactive: false
+            width: parent.width;
+            opacity: (letterBar ? 1 : 0)
+            keyNavigationWraps: true
+
+            model: IndexModel{
+                id: indexModel
+            }
+
+            delegate: Image{
+                id: dIndexBar
+
+                parent: indexListView
+
+                property string dataAlpha: dletter
+
+                signal clicked
+
+                width: (parent.width/45)+letter.width//REVISIT
+                height: letter.height
+
+                anchors.verticalCenter : parent.verticalCenter
+
+                Text {
+                    id: letter
+                    text: dletter
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: theme_fontPixelSizeLargest2
+                    color: theme_fontColorInactive
+
+                }
+                Image{
+                    id: slider
+                    source: "image://theme/contacts/slider_alphabetical"
+                    anchors { horizontalCenter: letter.horizontalCenter}
+                    y: -75
+                    visible: false
+                }
+                Text {
+                    id: letterDownState
+                    text: dletter
+                    anchors.top: slider.top
+                    anchors.topMargin: 5
+                    anchors.horizontalCenter: slider.horizontalCenter
+                    font.pixelSize: theme_fontPixelSizeLargest3
+                    visible: false
+                    color: theme_fontColorSelected
+                }
+                MouseArea {
+                    id: mouseArea
+                    anchors.fill: letter
+
+                    onClicked: {
+                        for(var i=0; i < dlist.count; i++){
+                            //console.log("############################### highlight at " +  dlist.highlightItem );
+                            console.log("############################### firstchar" + people.data(proxy.getSourceRow(i), PeopleModel.FirstCharacterRole) + " match to " +letter.text);
+                            if(people.data(proxy.getSourceRow(i), PeopleModel.FirstCharacterRole) == letter.text){
+                                dlist.currentIndex = i;
+                                console.log("############################### currIndex at " +  dlist.currentIndex );
+                                 //console.log("############################### highlight at " +  dlist.highlightItem );
+                                //dlist.highlightItem = dlist.currentItem;
+                                break;
+                            }
+                            console.log("############################### posAT " + i );
+                            //dlist.positionViewAtIndex(i, ListView.Beginning);
+                        }
+                    }
+                }
+                states: State {
+                    name: "pressed"; when: mouseArea.pressed == true
+                    PropertyChanges {
+                        target: letter
+                        color: theme_fontColorSelected
+                    }
+                    PropertyChanges {
+                        target: slider
+                        visible: true
+                    }
+                    PropertyChanges {
+                        target: letterDownState
+                        visible: true
+                    }
+                }
+            }
+        }
+
         Button{
             id: buttonLeft
             width: 146
@@ -129,6 +227,6 @@ Item {
                      right: footer_bar.right; rightMargin: 3;}
 
             onClicked: { handleButtonClick(buttonRight.text); }
-        }
-    }
-}
+         }
+     }
+ }

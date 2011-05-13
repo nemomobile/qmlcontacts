@@ -139,6 +139,10 @@ Window {
                 type: ""
                 currentView: gvp
                 pageToLoad: myAppAllContacts
+                dlist: gvp.cards
+                letterBar: true
+                proxy:  proxyModel
+                people: peopleModel
             }
             actionMenuModel: [labelNewContactView]
             actionMenuPayload: [0]

@@ -18,6 +18,7 @@ Item {
 
     property PeopleModel dataModel: contactModel
     property ProxyModel sortModel: proxyModel
+    property alias cards: cardListView
 
     EmptyContacts{
         id: emptyListView
