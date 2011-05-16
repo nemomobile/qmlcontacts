@@ -63,6 +63,7 @@ Item {
             groupedViewPortrait.pressAndHold(mouseX, mouseY);
         }
         Binding{target: cardListView; property: "height"; value: ((cardListView.count > 1) ?  groupedViewPortrait.height : cardListView.childrenRect.height)}
+        Binding{target: cardListView; property: "interactive"; value: ((cardListView.count > 1) ? true : false)}
     }
 
     section.property: "firstcharacter"
