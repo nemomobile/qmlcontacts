@@ -31,7 +31,6 @@ Item {
     ListView {
         id: cardListView
         anchors.top: groupedViewPortrait.top
-        anchors.bottom: groupedViewPortrait.bottom
         anchors.right: groupedViewPortrait.right
         anchors.left: groupedViewPortrait.left
         height: groupedViewPortrait.height
@@ -63,6 +62,7 @@ Item {
             window.currentContactName = name;
             groupedViewPortrait.pressAndHold(mouseX, mouseY);
         }
+        Binding{target: cardListView; property: "height"; value: ((cardListView.count > 1) ?  groupedViewPortrait.height : cardListView.childrenRect.height)}
     }
 
     section.property: "firstcharacter"

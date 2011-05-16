@@ -41,7 +41,7 @@ Item {
         text: addContact
         bgSourceUp: "image://theme/btn_blue_up"
         bgSourceDn: "image://theme/btn_blue_dn"
-        active: true
+        enabled: true
         anchors{ top: no_contacts.bottom; topMargin: 30; horizontalCenter: no_contacts.horizontalCenter;}
         width: 250
         height: 60
