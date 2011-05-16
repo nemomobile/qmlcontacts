@@ -6,7 +6,11 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
+#include <QDebug>
 #include <QLocale>
+#include <unicode/unistr.h>
+#include <unicode/locid.h>
+#include <unicode/coll.h>
 
 #include "localeutils.h"
 
@@ -48,3 +52,31 @@ QStringList LocaleUtils::getAddressFieldOrder() const
     return fieldOrder;
 }
 
+bool LocaleUtils::isLessThan(QString lStr, QString rStr)
+{
+    //Convert strings to UnicodeStrings
+    const ushort *lShort = lStr.utf16();
+    UnicodeString lUniStr = UnicodeString(static_cast<const UChar *>(lShort));
+    const ushort *rShort = rStr.utf16();
+    UnicodeString rUniStr = UnicodeString(static_cast<const UChar *>(rShort));
+
+    //Get the locale in a ICU supported format
+    QString nameStr = QLocale::system().name();
+    const char *name = nameStr.toLatin1().constData();
+    Locale localeName = Locale(name);
+
+    UErrorCode status = U_ZERO_ERROR;
+    Collator *coll = Collator::createInstance(localeName, status);
+    if (!U_SUCCESS(status)) {
+        //Unable to get collator, use fall back
+        return QString::localeAwareCompare(lStr, rStr) < 0;
+    }
+
+    Collator::EComparisonResult res = coll->compare(lUniStr, rUniStr);
+    delete coll;
+
+    if (res == Collator::LESS)
+        return true;
+
+    return false;
+}

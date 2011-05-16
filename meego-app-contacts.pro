@@ -12,12 +12,13 @@ CONFIG += qt \
         link_pkconfig
 
 #PKGCONFIG += telepathy-qml-lib
-PKGCONFIG += QtContacts QtVersit
+PKGCONFIG += QtContacts QtVersit icu-uc icu-i18n
 
 TARGET = $$qtLibraryTarget($$TARGET)
 DESTDIR = $$TARGET
 OBJECTS_DIR = .obj
 MOC_DIR = .moc
+LIBS += -licuuc -licui18n
 
 MOBILITY = contacts versit
 

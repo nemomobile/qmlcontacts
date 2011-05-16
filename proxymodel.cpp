@@ -13,6 +13,7 @@
 
 #include "proxymodel.h"
 #include "settingsdatastore.h"
+#include "localeutils.h"
 
 class ProxyModelPriv
 {
@@ -21,6 +22,7 @@ public:
     PeopleModel::PeopleRoles sortType;
     PeopleModel::PeopleRoles displayType;
     SettingsDataStore *settings;
+    LocaleUtils *localeHelper;
     QFileSystemWatcher *settingsFileWatcher;
 };
 
@@ -30,6 +32,7 @@ ProxyModel::ProxyModel(QObject *parent)
     priv = new ProxyModelPriv;
     priv->filterType = FilterAll;
     priv->settings = SettingsDataStore::self();
+    priv->localeHelper = LocaleUtils::self();
     setDynamicSortFilter(true);
     setFilterKeyColumn(-1);
 
@@ -168,5 +171,5 @@ bool ProxyModel::lessThan(const QModelIndex& left,
     else if (rStr.isEmpty())
         return true;
 
-    return QString::localeAwareCompare(lStr, rStr) < 0;
+    return priv->localeHelper->isLessThan(lStr, rStr);
 }
