@@ -157,24 +157,28 @@ Flickable {
                 anchors{ left: avatar_image.right; right: detailHeader.right; top: detailHeader.top; bottom: detailHeader.bottom}
                 Item{
                     id: quad1
-                    width: headerGrid.width/2
+                    width: headerGrid.width*(2/3)
                     height: headerGrid.height/2
                     Item{
                         anchors{verticalCenter: quad1.verticalCenter; left: quad1.left; leftMargin: 50}
-                        width: childrenRect.width
+                        width: parent.width
                         height: childrenRect.height
                         Text{
                             id: firstname
-                            text: (detailModel.data(indexOfPerson, PeopleModel.FirstNameRole)? getTruncatedString(detailModel.data(indexOfPerson, PeopleModel.FirstNameRole), 25) : "")
+                            width: parent.width/2
+                            text: (detailModel.data(indexOfPerson, PeopleModel.FirstNameRole)? detailModel.data(indexOfPerson, PeopleModel.FirstNameRole) : "")
                             color: theme_fontColorNormal
                             font.pixelSize: theme_fontPixelSizeLarge
+                            elide: Text.ElideRight
                             smooth: true
                         }
                         Text{
                             id: lastname
-                            text: (detailModel.data(indexOfPerson, PeopleModel.LastNameRole) ? getTruncatedString(detailModel.data(indexOfPerson, PeopleModel.LastNameRole), 25) : "")
+                            width: parent.width/2
+                            text: (detailModel.data(indexOfPerson, PeopleModel.LastNameRole) ? detailModel.data(indexOfPerson, PeopleModel.LastNameRole) : "")
                             color: theme_fontColorNormal
                             font.pixelSize: theme_fontPixelSizeLarge
+                            elide: Text.ElideRight
                             smooth: true
                             anchors{left: firstname.right; leftMargin: 15;}
                         }
@@ -182,7 +186,7 @@ Flickable {
                 }
                 Item{
                     id: quad2
-                    width: headerGrid.width/2
+                    width: headerGrid.width/3
                     height: headerGrid.height/2
                     Item{
                         anchors.left: parent.left
@@ -254,13 +258,15 @@ Flickable {
                 }
                 Item{
                     id: quad3
-                    width: headerGrid.width/2
+                    width: headerGrid.width*(2/3)
                     height: headerGrid.height/2
                     Text{
                         id: company
-                        text: (detailModel.data(indexOfPerson, PeopleModel.CompanyNameRole) ? getTruncatedString(detailModel.data(indexOfPerson, PeopleModel.CompanyNameRole), 25) : "")
+                        width: parent.width
+                        text: (detailModel.data(indexOfPerson, PeopleModel.CompanyNameRole) ? detailModel.data(indexOfPerson, PeopleModel.CompanyNameRole) : "")
                         color: theme_fontColorNormal
                         font.pixelSize: theme_fontPixelSizeLarge
+                        elide: Text.ElideRight
                         styleColor: theme_fontColorInactive
                         smooth: true
                         anchors{ verticalCenter: quad3.verticalCenter; left: parent.left; leftMargin: 50}
@@ -268,7 +274,7 @@ Flickable {
                 }
                 Item{
                     id: quad4
-                    width: headerGrid.width/2
+                    width: headerGrid.width/3
                     height: headerGrid.height/2
                     Item{
                         anchors.left: parent.left
