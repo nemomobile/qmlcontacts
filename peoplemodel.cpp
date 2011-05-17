@@ -452,20 +452,53 @@ QVariant PeopleModel::data(int row, int role) const
     case FirstCharacterRole:
     {
         QContactName name = contact.detail<QContactName>();
+        QString nameStr1;
+        QString nameStr2;
         if ((priv->sortOrder.isEmpty()) ||
            (priv->sortOrder.at(0).detailFieldName() == QContactName::FieldFirstName)) {
-            if(!name.firstName().isNull()){
-                return QString(name.firstName().at(0).toUpper());
-            }
+            nameStr1 = name.firstName();
+            nameStr2 = name.lastName();
         }
 
         if (priv->sortOrder.at(0).detailFieldName() == QContactName::FieldLastName) {
-            if(!name.lastName().isNull()){
-                return QString(name.lastName().at(0).toUpper());
-            }
+            nameStr1 = name.lastName();
+            nameStr2 = name.firstName();
         }
 
-        return QString(tr("#"));
+        if (!nameStr1.isNull())
+            return priv->localeHelper->getBinForString(nameStr1);
+
+        if (!nameStr2.isNull())
+            return priv->localeHelper->getBinForString(nameStr2);
+
+        QContactOrganization company = contact.detail<QContactOrganization>();
+        if (!company.name().isNull())
+            return priv->localeHelper->getBinForString(company.name());
+
+        foreach (const QContactPhoneNumber& phone,
+                 contact.details<QContactPhoneNumber>()){
+            if(!phone.number().isNull())
+                return priv->localeHelper->getBinForString(phone.number());
+        }
+
+        foreach (const QContactOnlineAccount& account,
+                 contact.details<QContactOnlineAccount>()){
+            if(!account.accountUri().isNull())
+                return priv->localeHelper->getBinForString(account.accountUri());
+        }
+
+        foreach (const QContactEmailAddress& email,
+                 contact.details<QContactEmailAddress>()){
+            if(!email.emailAddress().isNull())
+                return priv->localeHelper->getBinForString(email.emailAddress());
+        }
+
+        foreach (const QContactUrl &url, contact.details<QContactUrl>()){
+            if (!url.isEmpty())
+                return priv->localeHelper->getBinForString(url.url());
+        }
+
+        return priv->localeHelper->getBinForString(QString(""));
     }
 
     default:

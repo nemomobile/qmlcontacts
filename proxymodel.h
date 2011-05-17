@@ -40,6 +40,7 @@ protected:
 
 private slots:
     void readSettings();
+    QString findString(int row, PeopleModel *model) const;
 
 private:
     ProxyModelPriv *priv;

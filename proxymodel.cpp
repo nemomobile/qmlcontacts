@@ -118,16 +118,12 @@ bool ProxyModel::filterAcceptsRow(int source_row,
     }
 }
 
-bool ProxyModel::lessThan(const QModelIndex& left,
-                          const QModelIndex& right) const
-{
-    PeopleModel *model = dynamic_cast<PeopleModel *>(sourceModel());
-    if (!model)
-        return true;
+QString ProxyModel::findString(int row, PeopleModel *model) const {
+    QString lStr = QString("");
 
-    if ((priv->sortType != PeopleModel::FirstNameRole) 
+    if ((priv->sortType != PeopleModel::FirstNameRole)
         && (priv->sortType != PeopleModel::LastNameRole))
-        return false;
+        return lStr;
 
     int searchRole = PeopleModel::FirstNameRole;
     int secondaryRole = PeopleModel::LastNameRole;
@@ -137,11 +133,36 @@ bool ProxyModel::lessThan(const QModelIndex& left,
         secondaryRole = PeopleModel::FirstNameRole;
     }
 
-    const QString& lStr = model->data(left.row(), searchRole).toString();
-    const bool isleftSelf = model->data(left.row(), PeopleModel::IsSelfRole).toBool();
+    QList<int> roleOrder;
+    roleOrder << searchRole << secondaryRole
+              << PeopleModel::CompanyNameRole
+              << PeopleModel::PhoneNumberRole
+              << PeopleModel::OnlineAccountUriRole
+              << PeopleModel::EmailAddressRole
+              << PeopleModel::WebUrlRole;
 
-    const QString& rStr = model->data(right.row(), searchRole).toString();
-    const bool isrightSelf = model->data(right.row(), PeopleModel::IsSelfRole).toBool();
+    for (int i = 0; i < roleOrder.size(); ++i) {
+        lStr = model->data(row, roleOrder.at(i)).toString();
+        if (!lStr.isEmpty())
+            return lStr;
+    }
+
+    lStr = QString("");
+    return lStr;
+}
+
+bool ProxyModel::lessThan(const QModelIndex& left,
+                          const QModelIndex& right) const
+{
+    PeopleModel *model = dynamic_cast<PeopleModel *>(sourceModel());
+    if (!model)
+        return true;
+
+    int leftRow = left.row();
+    int rightRow = right.row();
+
+    const bool isleftSelf = model->data(leftRow, PeopleModel::IsSelfRole).toBool();
+    const bool isrightSelf = model->data(rightRow, PeopleModel::IsSelfRole).toBool();
 
     //qWarning() << "[ProxyModel] lessThan isSelf left" << isleftSelf << " right" << isrightSelf;
 
@@ -151,24 +172,19 @@ bool ProxyModel::lessThan(const QModelIndex& left,
     if(isrightSelf)
         return false;
 
-    const QString& lStr2 = model->data(left.row(), secondaryRole).toString();
-    const QString& rStr2 = model->data(right.row(), secondaryRole).toString();
+    QString lStr = findString(leftRow, model);
+    QString rStr = findString(rightRow, model);
 
-    //qWarning() << "[ProxyModel] lessThan " << lStr << "VS" << rStr << "compare returns:" << QString::localeAwareCompare(lStr, rStr);
-
-    //If searchRole field is empty, contact belongs at the end of the list
-    //Sort contacts with empty searchRoles by secondardyRole
-    //REVISIT: What if the secondary role is also empty?
-    if (lStr.isEmpty() && rStr.isEmpty()) {
-        if (lStr2.isEmpty())
-            return false;
-        else if (rStr2.isEmpty())
-            return true;
-    }
+    //qWarning() << "[ProxyModel] lessThan " << lStr << "VS" << rStr;
 
     if (lStr.isEmpty())
         return false;
     else if (rStr.isEmpty())
+        return true;
+
+    if (!priv->localeHelper->checkForAlphaChar(lStr))
+        return false;
+    if (!priv->localeHelper->checkForAlphaChar(rStr))
         return true;
 
     return priv->localeHelper->isLessThan(lStr, rStr);

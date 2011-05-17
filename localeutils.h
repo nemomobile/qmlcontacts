@@ -22,7 +22,9 @@ public:
     static LocaleUtils *self();
 
     Q_INVOKABLE QStringList getAddressFieldOrder() const;
-    Q_INVOKABLE bool isLessThan(QString lStr, QString rStr);
+    bool isLessThan(QString lStr, QString rStr);
+    bool checkForAlphaChar(QString str);
+    QString getBinForString(QString str);
 
 protected:
     QString getLanguage() const;

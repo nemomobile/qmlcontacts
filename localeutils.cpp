@@ -11,6 +11,7 @@
 #include <unicode/unistr.h>
 #include <unicode/locid.h>
 #include <unicode/coll.h>
+#include <unicode/uchar.h>
 
 #include "localeutils.h"
 
@@ -52,6 +53,15 @@ QStringList LocaleUtils::getAddressFieldOrder() const
     return fieldOrder;
 }
 
+bool LocaleUtils::checkForAlphaChar(QString str)
+{
+    const ushort *strShort = str.utf16();
+    UnicodeString uniStr = UnicodeString(static_cast<const UChar *>(strShort));
+
+    //REVISIT: Might need to use a locale aware version of char32At()
+    return u_hasBinaryProperty(uniStr.char32At(0), UCHAR_ALPHABETIC);
+}
+
 bool LocaleUtils::isLessThan(QString lStr, QString rStr)
 {
     //Convert strings to UnicodeStrings
@@ -80,3 +90,13 @@ bool LocaleUtils::isLessThan(QString lStr, QString rStr)
 
     return false;
 }
+
+QString LocaleUtils::getBinForString(QString str)
+{
+    //REVISIT: Might need to use a locale aware version of toUpper() and at()
+    if (checkForAlphaChar(str))
+        return str.at(0).toUpper();
+
+    return QString(tr("#"));
+}
+
