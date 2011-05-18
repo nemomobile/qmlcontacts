@@ -187,5 +187,9 @@ bool ProxyModel::lessThan(const QModelIndex& left,
     if (!priv->localeHelper->checkForAlphaChar(rStr))
         return true;
 
-    return priv->localeHelper->isLessThan(lStr, rStr);
+    int collType = LocaleUtils::Default;
+    if (priv->localeHelper->getCountry() == QLocale::Germany)     
+        collType = LocaleUtils::PhoneBook;
+
+    return priv->localeHelper->isLessThan(lStr, rStr, collType);
 }

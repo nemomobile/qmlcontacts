@@ -11,6 +11,7 @@
 
 #include <QObject>
 #include <QStringList>
+#include <QLocale>
 
 class LocaleUtils: public QObject
 {
@@ -19,12 +20,23 @@ class LocaleUtils: public QObject
 public:
     explicit LocaleUtils(QObject *parent = 0);
 
+    enum CollationTypes {
+        Default = 0,
+        PhoneBook,
+        Pinyin,
+        Traditional, 
+        Stroke,
+        Direct
+    };
+
     static LocaleUtils *self();
 
     Q_INVOKABLE QStringList getAddressFieldOrder() const;
-    bool isLessThan(QString lStr, QString rStr);
+    bool isLessThan(QString lStr, QString rStr, 
+                    int collType = 0, QString locale = QString());
     bool checkForAlphaChar(QString str);
     QString getBinForString(QString str);
+    QLocale::Country getCountry() const;
 
 protected:
     QString getLanguage() const;
