@@ -1,0 +1,10 @@
+MeeGo App Contacts Tests
+=======================
+
+Avaialble tests:
+
+1) load_vcard: Uses asynchronous APIs to load a vcard
+    -How to Run:
+	./load_vcard.sh <vcard name>
+
+     Ex: ./load_vcard.sh KOR
