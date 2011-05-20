@@ -132,7 +132,7 @@ Flickable {
         Image{
             id: detailHeader
             width: parent.width
-            height: 150
+            height: (firstname_p.visible ? 175 : 150)
             source: "image://theme/contacts/active_row"
             opacity: (detailModel.data(indexOfPerson, PeopleModel.IsSelfRole) ? .5 : 1)
             Image{
@@ -171,6 +171,15 @@ Flickable {
                             font.pixelSize: theme_fontPixelSizeLarge
                             elide: Text.ElideRight
                             smooth: true
+                        }
+                        Text{
+                            id: firstname_p
+                            text: (detailModel.data(indexOfPerson, PeopleModel.FirstNameProRole)? getTruncatedString(detailModel.data(indexOfPerson, PeopleModel.FirstNameProRole), 25) : "")
+                            color: theme_fontColorNormal
+                            font.pixelSize: theme_fontPixelSizeLarge
+                            smooth: true
+                            visible: localeUtils.needPronounciationFields()
+                            anchors {top: firstname.bottom; topMargin: 10;}
                         }
                         Text{
                             id: lastname
@@ -730,6 +739,4 @@ Flickable {
         }
     }
 }
-
-
 

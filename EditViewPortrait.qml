@@ -35,6 +35,7 @@ Flickable {
     property string contextMobile: qsTr("Mobile")
     property string defaultFirstName: qsTr("First name")
     property string defaultLastName: qsTr("Last name")
+    property string defaultPronounciation: qsTr("Pronounciation")
     property string defaultCompany: qsTr("Company")
     property string defaultNote: qsTr("Enter note")
     property string defaultBirthday: qsTr("Enter birthday")
@@ -66,12 +67,20 @@ Flickable {
 
         if (avatar_img.source == "image://theme/contacts/img_blankavatar")
             avatar_img.source = "";
-
-                peopleModel.editPersonModel(contactId, avatar_img.source, data_first.text, data_last.text, data_company.text, newPhones["numbers"], newPhones["types"],
-                                              (icn_faves.state == favoriteValue), newIms["ims"], newIms["types"],
-                                              newEmails["emails"], newEmails["types"], addresses["streets"], addresses["locales"], addresses["regions"],
-                                              addresses["zips"], addresses["countries"], addresses["types"],
-                                              newWebs["urls"], newWebs["types"], datePicker.datePicked, data_notes.text);
+            
+                peopleModel.editPersonModel(contactId, avatar_img.source,
+                                            data_first.text, data_first_p.text,
+                                            data_last.text, data_last_p.text,
+                                            data_company.text,
+                                            newPhones["numbers"], newPhones["types"],
+                                            (icn_faves.state == favoriteValue),
+                                            newIms["ims"], newIms["types"],
+                                            newEmails["emails"], newEmails["types"],
+                                            addresses["streets"], addresses["locales"],
+                                            addresses["regions"], addresses["zips"],
+                                            addresses["countries"], addresses["types"],
+                                            newWebs["urls"], newWebs["types"],
+                                            datePicker.datePicked, data_notes.text);
     }
 
     Column{
@@ -81,7 +90,7 @@ Flickable {
         Image{
             id: editHeader
             width: parent.width
-            height: 150
+            height: (data_first_p.visible ? 175 : 150)
             source: "image://theme/contacts/active_row"
             opacity:  (dataModel.data(index, PeopleModel.IsSelfRole) ? .5 : 1)
             Item{
@@ -139,49 +148,73 @@ Flickable {
                 id: headerGrid
                 columns:  2
                 rows: 2
-                anchors{ left: avatar.right; right: editHeader.right; top: editHeader.top; bottom: editHeader.bottom}
+                anchors{ left: avatar.right; right: editHeader.right; verticalCenter: editHeader.verticalCenter}
                 Item{
                     id: quad1
                     width: headerGrid.width/2
-                    height: headerGrid.height/2
+                    height: (data_first_p.visible ? childrenRect.height : data_first.height)
                     TextEntry{
                         id: data_first
                         text: dataModel.data(index, PeopleModel.FirstNameRole)
                         defaultText: defaultFirstName
                         width: (parent.width-avatar.width)
-                        anchors{verticalCenter: quad1.verticalCenter; right: quad1.right; left: quad1.left; leftMargin: 20; rightMargin: 10}
+                        anchors {top: parent.top;
+                                 left: parent.left; leftMargin: 20;
+                                 right: parent.right; rightMargin: 10}
+                    }
+                    TextEntry{
+                        id: data_first_p
+                        text: dataModel.data(index, PeopleModel.FirstNameProRole)
+                        defaultText: defaultPronounciation
+                        width: (parent.width - avatar.width)
+                        anchors {top: data_first.bottom; topMargin: 10;
+                                 left: parent.left; leftMargin: 20;
+                                 right: parent.right; rightMargin: 10}
+                        visible: localeUtils.needPronounciationFields()
                     }
                 }
                 Item{
                     id: quad2
                     width: headerGrid.width/2
-                    height: headerGrid.height/2
+                    height: (data_last_p.visible ? childrenRect.height : data_last.height)
                     TextEntry{
                         id: data_last
                         text: dataModel.data(index, PeopleModel.LastNameRole)
                         defaultText: defaultLastName
                         width:(parent.width-avatar.width)
-                        anchors{ verticalCenter: quad2.verticalCenter; left: parent.left; leftMargin: 10; right: parent.right; rightMargin: 20}
+                        anchors {top: parent.top;
+                                 left: parent.left; leftMargin: 10;
+                                 right: parent.right; rightMargin: 20}
+                    }
+                    TextEntry{
+                        id: data_last_p
+                        text: dataModel.data(index, PeopleModel.LastNameProRole)
+                        defaultText: defaultPronounciation
+                        width: (parent.width-avatar.width)
+                        anchors {top: data_last.bottom; topMargin: 10;
+                                 left: parent.left; leftMargin: 10;
+                                 right: parent.right; rightMargin: 20}
+                        visible: localeUtils.needPronounciationFields()
                     }
                 }
                 Item{
                     id: quad3
                     width: headerGrid.width/2
-                    height: headerGrid.height/2
+                    height: childrenRect.height
                     TextEntry{
                         id: data_company
                         text: dataModel.data(index, PeopleModel.CompanyNameRole)
                         defaultText: defaultCompany
                         width:(parent.width-avatar.width)
-                        anchors{ verticalCenter: quad3.verticalCenter; left: parent.left; leftMargin: 20; right: parent.right; rightMargin: 10;}
+                        anchors{ top: parent.top; topMargin: 10; left: parent.left; leftMargin: 20; right: parent.right; rightMargin: 10;}
                     }
                 }
                 Item{
                     id: quad4
                     width: headerGrid.width/2
-                    height: headerGrid.height/2
+                    height: childrenRect.height
                     Item{
-                        anchors{  verticalCenter: quad4.verticalCenter; left: parent.left; leftMargin: 10}
+                        anchors{ top: parent.top; topMargin: 10; left: parent.left; leftMargin: 10}
                         width: childrenRect.width
                         height: childrenRect.height
                         Image {
@@ -380,3 +413,4 @@ Flickable {
         }
     }
 }
+

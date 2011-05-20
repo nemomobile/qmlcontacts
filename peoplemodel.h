@@ -40,7 +40,9 @@ public:
     enum PeopleRoles{
         ContactRole = Qt::UserRole + 500,
         FirstNameRole, //533
+        FirstNameProRole,
         LastNameRole,
+        LastNameProRole,
         CompanyNameRole,
         FavoriteRole,
         UuidRole,
@@ -79,7 +81,8 @@ public:
     //QML API
     Q_INVOKABLE QVariant data(const int row, int role) const;
 
-    Q_INVOKABLE bool createPersonModel(QString avatarUrl, QString thumbUrl, QString firstName, QString lastName,
+    Q_INVOKABLE bool createPersonModel(QString avatarUrl, QString thumbUrl, QString firstName, QString firstPro,
+                                       QString lastName, QString lastPro,
                                        QString companyname, QStringList phonenumbers, QStringList phonecontexts,
                                        bool favorite, QStringList accounturis, QStringList serviceproviders,
                                        QStringList emailaddys, QStringList emailcontexts, QStringList street,
@@ -89,7 +92,8 @@ public:
 
     Q_INVOKABLE void deletePerson(const QString& uuid);
 
-    Q_INVOKABLE void editPersonModel(QString contactId, QString avatarUrl, QString firstName, QString lastName, QString companyname,
+    Q_INVOKABLE void editPersonModel(QString contactId, QString avatarUrl, QString firstName, QString firstPro,
+                                     QString lastName, QString lastPro, QString companyname,
                                      QStringList phonenumbers, QStringList phonecontexts, bool favorite,
                                      QStringList accounturis, QStringList serviceproviders, QStringList emailaddys,
                                      QStringList emailcontexts, QStringList street, QStringList city, QStringList state,

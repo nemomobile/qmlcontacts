@@ -16,6 +16,7 @@
 #include <QContactEmailAddress>
 #include <QContactGuid>
 #include <QContactName>
+#include <QContactNickname>
 #include <QContactNote>
 #include <QContactOrganization>
 #include <QContactOnlineAccount>
@@ -203,11 +204,31 @@ QVariant PeopleModel::data(int row, int role) const
         }
         return QString();
     }
+    case FirstNameProRole:
+    {
+        QContactNickname nickname = contact.detail<QContactNickname>();
+        if(!nickname.nickname().isNull()) {
+            QStringList list = nickname.nickname().split("\n"); 
+            if (list.size() > 1)
+                return QString(list.at(1));
+        }
+        return QString();
+    }
     case LastNameRole:
     {
         QContactName name = contact.detail<QContactName>();
         if(!name.lastName().isNull())
             return QString(name.lastName());
+        return QString();
+    }
+    case LastNameProRole:
+    {
+        QContactNickname nickname = contact.detail<QContactNickname>();
+        if(!nickname.nickname().isNull()) {
+            QStringList list = nickname.nickname().split("\n"); 
+            if (list.size() > 0)
+                return QString(list.at(0));
+        }
         return QString();
     }
     case CompanyNameRole:
@@ -752,7 +773,8 @@ void PeopleModel::onDataResetFetchChanged(QContactAbstractRequest::State request
     fetchRequest->deleteLater();
 }
 
-bool PeopleModel::createPersonModel(QString avatarUrl, QString thumbUrl, QString firstName, QString lastName, QString companyname,
+bool PeopleModel::createPersonModel(QString avatarUrl, QString thumbUrl, QString firstName, QString firstPro,
+                                    QString lastName, QString lastPro, QString companyname,
                                     QStringList phonenumbers, QStringList phonecontexts, bool favorite,
                                     QStringList accounturis, QStringList serviceproviders, QStringList emailaddys,
                                     QStringList emailcontexts, QStringList street, QStringList city, QStringList state,
@@ -780,6 +802,17 @@ bool PeopleModel::createPersonModel(QString avatarUrl, QString thumbUrl, QString
     name.setFirstName(firstName.trimmed());
     name.setLastName(lastName.trimmed());
     contact.saveDetail(&name);
+
+    //REVISIT: Should use something other than nickname
+    //here.  When exporting a vCard, the pronounciations
+    //should go into the X-PHONETIC-FIRST-NAME and
+    //X-PHONETIC-LAST-NAME fields, not the nickname field.
+    //******See bug: BMC#13923
+    if (priv->localeHelper->getCountry() == QLocale::Japan) {
+        QContactNickname nickname;
+        nickname.setNickname(lastPro.trimmed() + "\n" + firstPro.trimmed());
+        contact.saveDetail(&nickname);
+    }
 
     QContactOrganization company;
     company.setName(companyname);
@@ -859,7 +892,8 @@ void PeopleModel::deletePerson(const QString& uuid)
     removeContact(priv->uuidToId[uuid]);
 }
 
-void PeopleModel::editPersonModel(QString uuid, QString avatarUrl, QString firstName, QString lastName, QString companyname,
+void PeopleModel::editPersonModel(QString uuid, QString avatarUrl, QString firstName, QString firstPro,
+                                  QString lastName, QString lastPro, QString companyname,
                                   QStringList phonenumbers, QStringList phonecontexts, bool favorite,
                                   QStringList accounturis, QStringList serviceproviders, QStringList emailaddys,
                                   QStringList emailcontexts, QStringList street, QStringList city, QStringList state,
@@ -893,6 +927,28 @@ void PeopleModel::editPersonModel(QString uuid, QString avatarUrl, QString first
         name.setSuffix("");
         if (!contact.saveDetail(&name))
             qWarning() << "[PeopleModel] failed to update name";
+    }
+
+    //REVISIT: Should use something other than nickname
+    //here.  When exporting a vCard, the pronounciations
+    //should go into the X-PHONETIC-FIRST-NAME and
+    //X-PHONETIC-LAST-NAME fields, not the nickname field.
+    //******See bug: BMC#13923
+    if (priv->localeHelper->getCountry() == QLocale::Japan) {
+        QContactNickname nickname = contact.detail<QContactNickname>();
+        QStringList list = nickname.nickname().split("\n"); 
+        bool needsUpdate = false;
+
+        if ((list.size() > 0) && (list.at(0) != lastPro.trimmed()))
+            needsUpdate = true; 
+        if ((list.size() > 1) && (list.at(1) != firstPro.trimmed()))
+            needsUpdate = true; 
+
+        if (needsUpdate == true) {
+            nickname.setNickname(lastPro.trimmed() + "\n" + firstPro.trimmed());
+            if (!contact.saveDetail(&nickname))
+                qDebug() << "[PeopleModel] failed to update nickname";
+        }
     }
 
     QContactOrganization company = contact.detail<QContactOrganization>();

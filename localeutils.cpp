@@ -58,6 +58,15 @@ QStringList LocaleUtils::getAddressFieldOrder() const
     return fieldOrder;
 }
 
+bool LocaleUtils::needPronounciationFields() const {
+    QStringList fieldOrder;
+    QLocale::Country country = getCountry();
+
+    if (country == QLocale::Japan)
+        return true;
+    return false;
+}
+
 bool LocaleUtils::checkForAlphaChar(QString str)
 {
     const ushort *strShort = str.utf16();

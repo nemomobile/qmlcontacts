@@ -31,6 +31,7 @@ Flickable{
     property string contextOther: qsTr("Other")
     property string contextMobile: qsTr("Mobile")
     property string defaultFirstName: qsTr("First name")
+    property string defaultPronounciation: qsTr("Pronounciation")
     property string defaultLastName: qsTr("Last name")
     property string defaultCompany: qsTr("Company")
     property string defaultNote: qsTr("Enter note")
@@ -65,10 +66,19 @@ Flickable{
         var avatar = photoPicker.selectedPhoto
         var thumburi = photoPicker.selectedPhotoThumb
 
-        var ret = peopleModel.createPersonModel(avatar, thumburi, data_first.text, data_last.text, data_company.text, newPhones["numbers"], newPhones["types"],
-                                                (icn_faves.state == favoriteValue), newIms["ims"], newIms["types"],
-                                                newEmails["emails"], newEmails["types"], addresses["streets"], addresses["locales"], addresses["regions"],
-                                                addresses["zips"], addresses["countries"], addresses["types"], newWebs["urls"], newWebs["types"], datePicker.datePicked, data_notes.text);
+        var ret = peopleModel.createPersonModel(avatar, thumburi,
+                                                data_first.text, data_first_p.text,
+                                                data_last.text, data_last_p.text,
+                                                data_company.text,
+                                                newPhones["numbers"], newPhones["types"],
+                                                (icn_faves.state == favoriteValue),
+                                                newIms["ims"], newIms["types"],
+                                                newEmails["emails"], newEmails["types"],
+                                                addresses["streets"], addresses["locales"],
+                                                addresses["regions"], addresses["zips"],
+                                                addresses["countries"], addresses["types"],
+                                                newWebs["urls"], newWebs["types"],
+                                                datePicker.datePicked, data_notes.text);
 
         if (!ret) //REVISIT
             console.log("[contactSave] Unable to create new contact due to missing info");
@@ -82,7 +92,7 @@ Flickable{
         Image{
             id: detailHeader
             width: parent.width
-            height: 150
+            height: (data_first_p.visible ? 175 : 150)
             source: "image://theme/contacts/active_row"
 
             Item{
@@ -136,51 +146,75 @@ Flickable{
             }
             Grid{
                 id: headerGrid
-                columns:  2
+                columns: 2
                 rows: 2
-                anchors{ left: avatar.right; right: detailHeader.right; top: detailHeader.top; bottom: detailHeader.bottom}
+                anchors{ left: avatar.right; right: detailHeader.right; verticalCenter: detailHeader.verticalCenter}
                 Item{
                     id: quad1
                     width: headerGrid.width/2
-                    height: headerGrid.height/2
+                    height: (data_first_p.visible ? childrenRect.height : data_first.height)
                     TextEntry{
                         id: data_first
                         text: ""
                         defaultText: defaultFirstName
                         width: (parent.width-avatar.width)
-                        anchors{verticalCenter: quad1.verticalCenter; right: quad1.right; left: quad1.left; leftMargin: 20; rightMargin: 10}
+                        anchors {top: parent.top;
+                                 left: parent.left; leftMargin: 20;
+                                 right: parent.right; rightMargin: 10}
+                    }
+                    TextEntry{
+                        id: data_first_p
+                        text: ""
+                        defaultText: defaultPronounciation
+                        width: (parent.width - avatar.width)
+                        anchors {top: data_first.bottom; topMargin: 10;
+                                 left: parent.left; leftMargin: 20;
+                                 right: parent.right; rightMargin: 10}
+                        visible: localeUtils.needPronounciationFields()
                     }
                 }
                 Item{
                     id: quad2
                     width: headerGrid.width/2
-                    height: headerGrid.height/2
+                    height: (data_last_p.visible ? childrenRect.height : data_last.height)
                     TextEntry{
                         id: data_last
                         text: ""
                         defaultText: defaultLastName
                         width:(parent.width-avatar.width)
-                        anchors{ verticalCenter: quad2.verticalCenter; left: parent.left; leftMargin: 10; right: parent.right; rightMargin: 20}
+                        anchors {top: parent.top;
+                                 left: parent.left; leftMargin: 10;
+                                 right: parent.right; rightMargin: 20}
+                    }
+                    TextEntry{
+                        id: data_last_p
+                        text: ""
+                        defaultText: defaultPronounciation
+                        width: (parent.width - avatar.width)
+                        anchors {top: data_last.bottom; topMargin: 10;
+                                 left: parent.left; leftMargin: 10;
+                                 right: parent.right; rightMargin: 20}
+                        visible: localeUtils.needPronounciationFields()
                     }
                 }
                 Item{
                     id: quad3
                     width: headerGrid.width/2
-                    height: headerGrid.height/2
+                    height: childrenRect.height
                     TextEntry{
                         id: data_company
                         text: ""
                         defaultText: defaultCompany
                         width:(parent.width-avatar.width)
-                        anchors{ verticalCenter: quad3.verticalCenter; left: parent.left; leftMargin: 20; right: parent.right; rightMargin: 10;}
+                        anchors{ top: parent.top; topMargin: 10; left: parent.left; leftMargin: 20; right: parent.right; rightMargin: 10;}
                     }
                 }
                 Item{
                     id: quad4
                     width: headerGrid.width/2
-                    height: headerGrid.height/2
+                    height: childrenRect.height
                     Item{
-                        anchors{  verticalCenter: quad4.verticalCenter; left: parent.left; leftMargin: 10}
+                        anchors{ top: parent.top; topMargin: 10; left: parent.left; leftMargin: 10}
                         width: childrenRect.width
                         height: childrenRect.height
                         Image {

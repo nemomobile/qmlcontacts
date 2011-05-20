@@ -32,6 +32,8 @@ public:
     static LocaleUtils *self();
 
     Q_INVOKABLE QStringList getAddressFieldOrder() const;
+    Q_INVOKABLE bool needPronounciationFields() const;
+
     bool isLessThan(QString lStr, QString rStr, 
                     int collType = 0, QString locale = QString());
     bool checkForAlphaChar(QString str);
