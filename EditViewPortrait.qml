@@ -295,7 +295,7 @@ Flickable {
                 id: data_birthday
                 text: dataModel.data(index, PeopleModel.BirthdayRole)
                 defaultText: defaultBirthday
-                anchors {verticalCenter: birthday.verticalCenter; left: parent.left; topMargin: 30; leftMargin: 30; right: parent.right; rightMargin: 30}
+                anchors {verticalCenter: birthday.verticalCenter; left: parent.left; topMargin: 30; leftMargin: 30; right: delete_button.left; rightMargin: 30}
                 MouseArea{
                     id: mouse_birthday
                     anchors.fill: parent
@@ -304,6 +304,26 @@ Flickable {
                         datePicker.show(map.x, map.y)
                     }
                 }
+            }
+            Image {
+                id: delete_button
+                source: "image://theme/contacts/icn_trash"
+                width: 36
+                height: 36
+                anchors {verticalCenter: birthday.verticalCenter; right: parent.right; rightMargin: 10}
+                opacity: 1
+                MouseArea {
+                    id: mouse_delete
+                    anchors.fill: parent
+                    onPressed: {
+                        delete_button.source = "image://theme/contacts/icn_trash_dn";
+                    }
+                    onClicked: {
+                        data_birthday.text = "";
+                    }
+                }
+                Binding{target: delete_button; property: "visible"; value: true; when: data_birthday.text != ""}
+                Binding{target: delete_button; property: "visible"; value: false; when: data_birthday.text == ""}
             }
         }
 
