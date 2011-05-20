@@ -110,11 +110,11 @@ Window {
     }
 
     onBookMenuTriggered: {
-        if (selectedItem == myAppAllContacts) {
+        if (bookMenuModel[index] == filterAll) {
             peopleModel.setFilter(PeopleModel.AllFilter);
-        } else if (selectedItem == myAppFavContacts) {
+        } else if (bookMenuModel[index] == filterFavorites) {
             peopleModel.setFilter(PeopleModel.FavoritesFilter);
-        } else if (selectedItem == myAppOnlineContacts) {
+        } else if (bookMenuModel[index] == filterWhosOnline) {
             var onlineIds = getOnlinePeople();
             peopleModel.fetchOnlineOnly(onlineIds);
         }
