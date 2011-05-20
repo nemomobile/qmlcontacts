@@ -316,20 +316,26 @@ QVariant PeopleModel::data(int row, int role) const
         foreach (const QContactAddress& address,
                  contact.details<QContactAddress>()) {
             QString aStr;
+            QString temp;
 
             for (int i = 0; i < fieldOrder.size(); ++i) {
+                temp = "";
                 if (fieldOrder.at(i) == "street")
-                    aStr += address.street();
+                    temp += address.street();
                 else if (fieldOrder.at(i) == "locale")
-                    aStr += address.locality();
+                    temp += address.locality();
                 else if (fieldOrder.at(i) == "region")
-                    aStr += address.region();
+                    temp += address.region();
                 else if (fieldOrder.at(i) == "zip")
-                    aStr += address.postcode();
+                    temp += address.postcode();
                 else if (fieldOrder.at(i) == "country")
-                    aStr += address.country();
-                if (i < fieldOrder.size() - 1)
-                    aStr += "\n";
+                    temp += address.country();
+                if(temp.trimmed() != ""){
+                    if (i > 0)
+                          aStr += "\n"+temp;
+                    else
+                        aStr += temp;
+                }
             }
 
             if (aStr == "")

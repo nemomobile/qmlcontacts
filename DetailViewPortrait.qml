@@ -615,13 +615,13 @@ Flickable {
                     }
                     Column{
                         width: parent.width-100
-                        height: 300
+                        height: childrenRect.height
                         anchors {verticalCenter: addyBar.verticalCenter; left: addyBar.left; leftMargin: 145 }
                         spacing: 10
 
                         Item{
                             id: address_rect
-                            height: parent.height
+                            height: childrenRect.height
                             width: parent.width
 
                             Text{
