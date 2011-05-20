@@ -19,6 +19,15 @@ LocaleUtils *LocaleUtils::mSelf = 0;
 LocaleUtils::LocaleUtils(QObject *parent) :
     QObject(parent)
 {
+    int collType = LocaleUtils::Default;
+    if (getCountry() == QLocale::Germany)
+        collType = LocaleUtils::PhoneBook;
+
+    initCollator(collType);
+}
+
+LocaleUtils::~LocaleUtils()
+{
 }
 
 LocaleUtils *LocaleUtils::self()
@@ -76,19 +85,12 @@ bool LocaleUtils::checkForAlphaChar(QString str)
     return u_hasBinaryProperty(uniStr.char32At(0), UCHAR_ALPHABETIC);
 }
 
-bool LocaleUtils::isLessThan(QString lStr, QString rStr,
-                             int collType, QString locale)
+bool LocaleUtils::initCollator(int collType, QString locale)
 {
-    //Convert strings to UnicodeStrings
-    const ushort *lShort = lStr.utf16();
-    UnicodeString lUniStr = UnicodeString(static_cast<const UChar *>(lShort));
-    const ushort *rShort = rStr.utf16();
-    UnicodeString rUniStr = UnicodeString(static_cast<const UChar *>(rShort));
-
     //Get the locale in a ICU supported format
     if (locale == "")
         locale = getLanguage();
-    
+   
     switch (collType) {
         case PhoneBook:
             locale += "@collation=phonebook";
@@ -113,15 +115,43 @@ bool LocaleUtils::isLessThan(QString lStr, QString rStr,
     Locale localeName = Locale(name);
 
     UErrorCode status = U_ZERO_ERROR;
-    Collator *coll = Collator::createInstance(localeName, status);
-    if (!U_SUCCESS(status)) {
-        //Unable to get collator, use fall back
+    mColl = (RuleBasedCollator *)Collator::createInstance(localeName, status);
+    if (!U_SUCCESS(status))
+        return false;
+
+    QLocale::Country country = getCountry();
+    if ((country == QLocale::DemocraticRepublicOfKorea) ||
+        (country == QLocale::RepublicOfKorea)) {
+
+        //ASCII characters should be sorted after KOR characters
+        UnicodeString rules = mColl->getRules();
+        rules += "< a,A< b,B< c,C< d,D< e,E< f,F< g,G< h,H< i,I< j,J < k,K"
+                 "< l,L< m,M< n,N< o,O< p,P< q,Q< r,R< s,S< t,T < u,U< v,V"
+                 "< w,W< x,X< y,Y< z,Z";
+        mColl = new RuleBasedCollator(rules, status);
+        if (!U_SUCCESS(status))
+            mColl = (RuleBasedCollator *)Collator::createInstance(localeName, status);
+    }
+
+    if (U_SUCCESS(status))
+        return true;
+    return false;
+}
+
+bool LocaleUtils::isLessThan(QString lStr, QString rStr)
+{
+    //Convert strings to UnicodeStrings
+    const ushort *lShort = lStr.utf16();
+    UnicodeString lUniStr = UnicodeString(static_cast<const UChar *>(lShort));
+    const ushort *rShort = rStr.utf16();
+    UnicodeString rUniStr = UnicodeString(static_cast<const UChar *>(rShort));
+
+    if (!mColl) {
+        //No collator set, use fall back
         return QString::localeAwareCompare(lStr, rStr) < 0;
     }
 
-    Collator::EComparisonResult res = coll->compare(lUniStr, rUniStr);
-    delete coll;
-
+    Collator::EComparisonResult res = mColl->compare(lUniStr, rUniStr);
     if (res == Collator::LESS)
         return true;
 

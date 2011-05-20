@@ -12,6 +12,7 @@
 #include <QObject>
 #include <QStringList>
 #include <QLocale>
+#include <unicode/tblcoll.h>
 
 class LocaleUtils: public QObject
 {
@@ -19,6 +20,7 @@ class LocaleUtils: public QObject
 
 public:
     explicit LocaleUtils(QObject *parent = 0);
+    virtual ~LocaleUtils();
 
     enum CollationTypes {
         Default = 0,
@@ -34,8 +36,8 @@ public:
     Q_INVOKABLE QStringList getAddressFieldOrder() const;
     Q_INVOKABLE bool needPronounciationFields() const;
 
-    bool isLessThan(QString lStr, QString rStr, 
-                    int collType = 0, QString locale = QString());
+    bool initCollator(int collType = 0, QString locale = QString());
+    bool isLessThan(QString lStr, QString rStr); 
     bool checkForAlphaChar(QString str);
     QString getBinForString(QString str);
     QLocale::Country getCountry() const;
@@ -45,6 +47,7 @@ protected:
 
 private:
     static LocaleUtils *mSelf;
+    RuleBasedCollator *mColl;
 };
 
 #endif // LOCALEUTILS_H
