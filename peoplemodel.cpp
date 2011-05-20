@@ -674,6 +674,7 @@ void PeopleModel::onChangedFetchChanged(QContactAbstractRequest::State requestSt
 
     qDebug() << Q_FUNC_INFO << "Done updating model after contacts update";
     fetchRequest->deleteLater();
+    dataReset();
 }
 
 void PeopleModel::contactsRemoved(const QList<QContactLocalId>& contactIds)
