@@ -72,8 +72,7 @@ BINNING: 7
 15914   Kaitlin TBUG    MED	 GLS - i18n  Asian langs -should be default settings				1.2.2
 17442   Kaitlin TBUG    MED      GLS -i18n -Contacts: KOR: customization of binning is required
 
-Connie: 3
-	Connie	TBUG	MED	 Delete Confirmation strings need to vary depending
+Connie: 2
 15434	Connie	TBUG	MED	 Thumbnail for the avatar needs to be used instead of full size image	        1.2.2      
 17218   Connie  TBUG    MED      MeCard/Favorite not update in list view on dataChanged
 
@@ -93,6 +92,7 @@ Connie: 3
 	Connie  TBUG    FIXED	Contact page gets hanging after saving the details					-0.2.7
 	Connie  TBUG    FIXED	Action Menu does not open under the corrensponding icon					-0.2.7
 	Connie  TBUG    FIXED  	MeCard 	    										-0.2.7
+16227	Connie	TBUG	FIXED	 Delete Confirmation strings need to vary depending
 16988	Connie	TBUG	FIXED	Longer text does not wrap in Note field
 15427	Kaitlin TBUG    FIXED   Name starting with special characters are not getting ordered properly          1.2.5
 16096   Kaitlin TBUG    FIXED   GLS - i18n - Contacts: CHT: sorted by the last name, and by the stroke order    1.2.5

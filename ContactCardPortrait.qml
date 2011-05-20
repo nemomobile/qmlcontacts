@@ -209,7 +209,10 @@ Image {
         onPressAndHold: {
             var map = mapToItem(window, mouseX, mouseY);
             if(dataFirst != "" && dataLast != ""){
-                contactCardPortrait.pressAndHold(map.x, map.y, dataUuid, getTruncatedString(dataFirst +" " + dataLast, 25));
+                if(settingsDataStore.getDisplayOrder() == PeopleModel.LastNameRole)
+                    contactCardPortrait.pressAndHold(map.x, map.y, dataUuid, getTruncatedString(dataLast +", " + dataFirst, 25));
+                else
+                    contactCardPortrait.pressAndHold(map.x, map.y, dataUuid, getTruncatedString(dataFirst +" " + dataLast, 25));
             }else if(dataFirst == ""){
                 contactCardPortrait.pressAndHold(map.x, map.y, dataUuid, getTruncatedString(dataLast, 25));
             }else if(dataLast == ""){

@@ -321,10 +321,11 @@ Window {
         content: Text {
             id: text
             wrapMode: Text.WordWrap
+            width: parent.width-60
             text: promptStr
             color: theme_fontColorNormal
             font.pointSize: theme_fontPixelSizeMedium
-            anchors {horizontalCenter: parent.horizontalCenter}
+            anchors {horizontalCenter: parent.horizontalCenter; verticalCenter: parent.verticalCenter}
             smooth: true
             opacity: 1
         }
