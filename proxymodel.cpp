@@ -129,8 +129,18 @@ QString ProxyModel::findString(int row, PeopleModel *model) const {
     int secondaryRole = PeopleModel::LastNameRole;
 
     if (priv->sortType == PeopleModel::LastNameRole) {
-        searchRole = PeopleModel::LastNameRole;
-        secondaryRole = PeopleModel::FirstNameRole;
+        if (priv->localeHelper->needPronounciationFields()) {
+            searchRole = PeopleModel::LastNameProRole;
+            secondaryRole = PeopleModel::FirstNameProRole;
+        } else {
+            searchRole = PeopleModel::LastNameRole;
+            secondaryRole = PeopleModel::FirstNameRole;
+        }
+    } else {
+        if (priv->localeHelper->needPronounciationFields()) {
+            searchRole = PeopleModel::FirstNameProRole;
+            secondaryRole = PeopleModel::LastNameProRole;
+        }
     }
 
     QList<int> roleOrder;
@@ -143,8 +153,20 @@ QString ProxyModel::findString(int row, PeopleModel *model) const {
 
     for (int i = 0; i < roleOrder.size(); ++i) {
         lStr = model->data(row, roleOrder.at(i)).toString();
+
         if (!lStr.isEmpty())
             return lStr;
+
+        if (priv->localeHelper->needPronounciationFields()) {
+            if (roleOrder.at(i) == PeopleModel::FirstNameProRole)
+                lStr = model->data(row, PeopleModel::FirstNameRole).toString();
+            else if (roleOrder.at(i) == PeopleModel::LastNameProRole)
+                lStr = model->data(row, PeopleModel::LastNameRole).toString();
+
+            if (!lStr.isEmpty())
+                return lStr;
+        }
+
     }
 
     lStr = QString("");

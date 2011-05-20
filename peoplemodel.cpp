@@ -478,18 +478,41 @@ QVariant PeopleModel::data(int row, int role) const
     }
     case FirstCharacterRole:
     {
+        //REVISIT: Move this or parts of this to localeutils.cpp
         QContactName name = contact.detail<QContactName>();
         QString nameStr1;
         QString nameStr2;
         if ((priv->sortOrder.isEmpty()) ||
            (priv->sortOrder.at(0).detailFieldName() == QContactName::FieldFirstName)) {
-            nameStr1 = name.firstName();
-            nameStr2 = name.lastName();
+            if (priv->localeHelper->needPronounciationFields()) {
+                QContactNickname nickname = contact.detail<QContactNickname>();
+                QStringList list = nickname.nickname().split("\n");
+                if (list.size() > 1)
+                    nameStr1 = list.at(1);
+                if (list.size() > 0)
+                    nameStr2 = list.at(0);
+            }
+
+            if (nameStr1 == "")
+                nameStr1 = name.firstName();
+            if (nameStr2 == "")
+                nameStr2 = name.lastName();
         }
 
         if (priv->sortOrder.at(0).detailFieldName() == QContactName::FieldLastName) {
-            nameStr1 = name.lastName();
-            nameStr2 = name.firstName();
+            if (priv->localeHelper->needPronounciationFields()) {
+                QContactNickname nickname = contact.detail<QContactNickname>();
+                QStringList list = nickname.nickname().split("\n");
+                if (list.size() > 0)
+                    nameStr1 = list.at(0);
+                if (list.size() > 1)
+                    nameStr2 = list.at(1);
+            }
+
+            if (nameStr1 == "")
+                nameStr1 = name.lastName();
+            if (nameStr2 == "")
+                nameStr2 = name.firstName();
         }
 
         if (!nameStr1.isNull())
