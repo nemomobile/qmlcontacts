@@ -5,8 +5,8 @@ ListModel {
 
     function appendLetters()
     {
-        var list = qsTr("A B C D E F G H I J K L M N O P Q R S T U V W X Y Z #");
-        for(var i=0 ; i < list.length; i=i+2)
+        var list = localeUtils.getIndexBarChars();
+        for(var i=0 ; i < list.length; i++)
         {
             append({"dletter": list[i]});
         }

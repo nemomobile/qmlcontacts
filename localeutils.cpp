@@ -7,10 +7,13 @@
  */
 
 #include <QDebug>
+#include <string.h>
 #include <unicode/unistr.h>
 #include <unicode/locid.h>
 #include <unicode/coll.h>
 #include <unicode/uchar.h>
+#include <unicode/ulocdata.h>
+#include <unicode/ustring.h>
 
 #include "localeutils.h"
 
@@ -158,12 +161,95 @@ bool LocaleUtils::isLessThan(QString lStr, QString rStr)
     return false;
 }
 
+QString LocaleUtils::getExemplarForString(QString str)
+{
+    QStringList indexes = getIndexBarChars();
+    int i = 0;
+
+    for (; i < indexes.size(); i++) {
+        if (isLessThan(str, indexes.at(i))) {
+            if (i == 0) {
+                return str;
+            }
+            return indexes.at(i-1);
+        }
+    }
+    
+    return QString(tr("#"));
+}
+
 QString LocaleUtils::getBinForString(QString str)
 {
     //REVISIT: Might need to use a locale aware version of toUpper() and at()
-    if (checkForAlphaChar(str))
-        return str.at(0).toUpper();
+    if (!checkForAlphaChar(str))
+        return QString(tr("#"));
 
-    return QString(tr("#"));
+    QString temp(str.at(0).toUpper());
+    
+    //REVISIT:  This should return the proper bin - work around for an
+    //encoding issue
+    QLocale::Country country = getCountry();
+    if ((country == QLocale::DemocraticRepublicOfKorea) ||
+        (country == QLocale::RepublicOfKorea))
+        return temp;
+
+
+    //The proper bin for these locales does not correspond
+    //with a bin listed in the index bar
+    if ((country == QLocale::Taiwan) || (country == QLocale::China))
+        return temp;
+
+    return getExemplarForString(temp);
+}
+
+QStringList LocaleUtils::getIndexBarChars()
+{
+    UErrorCode  status = U_ZERO_ERROR;
+    QStringList list;
+
+    QLocale::Country country = getCountry();
+    QString locale = getLanguage();
+    const char *name = locale.toLatin1().constData();
+
+    //REVISIT: ulocdata_getExemplarSet() does not return the index characters
+    //We need to query the locale data directly using the resource bundle 
+    UResourceBundle *resource = ures_open(NULL, name, &status);
+
+    //REVISIT:  This should return the proper bin - work around for an
+    //encoding issue
+    if ((U_SUCCESS(status) && 
+        ((country != QLocale::DemocraticRepublicOfKorea) && 
+        (country != QLocale::RepublicOfKorea)))) {
+        qint32 size;
+        const UChar *indexes = ures_getStringByKey(resource,
+                                                   "ExemplarCharactersIndex",
+                                                   &size, &status);
+        if (U_SUCCESS(status)) {
+            UnicodeString uniStr = UnicodeString(indexes, size);
+            int i = 0;
+
+            for (i = 0; i < uniStr.length(); i++) {
+                QString temp(uniStr.char32At(i));
+
+                if ((temp != QString(" ")) && (temp != QString("[")) &&
+                    (temp != QString("]")))
+                    list << temp;
+            }
+
+            if ((country == QLocale::Taiwan) || (country == QLocale::Japan) ||
+                (country == QLocale::DemocraticRepublicOfKorea) ||
+                (country == QLocale::RepublicOfKorea))
+                list << "A" << "Z";
+        }
+    }
+
+    ures_close(resource);
+    if (list.isEmpty())
+        list << "A" << "B" << "C" << "D" << "E" << "F" << "G" << "H"
+             << "I" << "J" << "K" << "L" << "M" << "N" << "O" << "P"
+             << "Q" << "R" << "S" << "T" << "U" << "V" << "W" << "Y" << "Z";
+
+    list << QString(tr("#"));
+    return list;
 }
 

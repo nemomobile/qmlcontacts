@@ -165,7 +165,9 @@ Item {
 
                     onClicked: {
                         for(var i=0; i < dlist.count; i++){
-                            if(people.data(proxy.getSourceRow(i), PeopleModel.FirstCharacterRole) == letter.text){
+                            var c = people.data(proxy.getSourceRow(i), PeopleModel.FirstCharacterRole);
+                            var exemplar = localeUtils.getExemplarForString(c);
+                            if(exemplar == letter.text){
                                 dlist.positionViewAtIndex(i, ListView.Beginning);
                                 break;
                             }
