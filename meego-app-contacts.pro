@@ -2,7 +2,7 @@ include(common.pri)
 PROJECT_NAME = meego-app-contacts
 TEMPLATE = subdirs
 CONFIG += ordered
-SUBDIRS += lib plugin
+SUBDIRS += lib plugin content
 
 QML_FILES = *.qml
 
