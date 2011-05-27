@@ -52,6 +52,39 @@ Window {
     bookMenuModel: [filterAll, filterFavorites, filterWhosOnline];
     bookMenuPayload: [myAppAllContacts, myAppFavContacts, myAppOnlineContacts];
 
+    overlayItem:  Item {
+        id: globalSpaceItems
+        anchors.fill: parent
+
+        ModalDialog {
+            id:confirmDelete
+            height: parent.height
+            cancelButtonText: contextCancel
+            acceptButtonText: contextDelete
+            title:  deleteConfirmation
+            acceptButtonImage: "image://theme/btn_red_up"
+            acceptButtonImagePressed: "image://theme/btn_red_dn"
+            anchors {verticalCenter: window.verticalCenter;
+                     horizontalCenter: window.horizontalCenter}
+            content: Text {
+                id: text
+                wrapMode: Text.WordWrap
+                width: parent.width-60
+                text: promptStr
+                color: theme_fontColorNormal
+                font.pointSize: theme_fontPixelSizeMedium
+                anchors {horizontalCenter: parent.horizontalCenter;
+                         verticalCenter: parent.verticalCenter}
+                smooth: true
+                opacity: 1
+            }
+            onAccepted: {
+                peopleModel.deletePerson(window.currentContactId);
+                window.switchBook(myAppAllContacts);
+            }
+        }
+    } 
+
     Component.onCompleted: {
         addPage(myAppAllContacts)
     }
@@ -308,31 +341,6 @@ Window {
 
     Labs.ApplicationsModel{
         id: appModel
-    }
-
-    ModalDialog {
-        id:confirmDelete
-        cancelButtonText: contextCancel
-        acceptButtonText: contextDelete
-        title:  deleteConfirmation
-        acceptButtonImage: "image://theme/btn_red_up"
-        acceptButtonImagePressed: "image://theme/btn_red_dn"
-        anchors {verticalCenter: parent.verticalCenter; horizontalCenter: parent.horizontalCenter}
-        content: Text {
-            id: text
-            wrapMode: Text.WordWrap
-            width: parent.width-60
-            text: promptStr
-            color: theme_fontColorNormal
-            font.pointSize: theme_fontPixelSizeMedium
-            anchors {horizontalCenter: parent.horizontalCenter; verticalCenter: parent.verticalCenter}
-            smooth: true
-            opacity: 1
-        }
-        onAccepted: {
-            peopleModel.deletePerson(window.currentContactId);
-            window.switchBook(myAppAllContacts);
-        }
     }
 }
 
