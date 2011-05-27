@@ -97,10 +97,13 @@ Image {
         id: nameFirst
         text: {
             if((dataFirst != "") || (dataLast != "")) {
-                if (settingsDataStore.getDisplayOrder() == PeopleModel.LastNameRole)
-                    return qsTr("%1 %2").arg(getTruncatedString(dataLast, 25)).arg(getTruncatedString(dataFirst, 25)); //Construct a string for the contact's name using "Last Name / First Name" display order.  
-                else
-                    return qsTr("%1 %2").arg(getTruncatedString(dataFirst, 25)).arg(getTruncatedString(dataLast, 25)); //Construct a string for the contact's name using "First Name / Last Name" display order.
+                if (settingsDataStore.getDisplayOrder() == PeopleModel.LastNameRole) {
+                    //: %1 is last name, %2 is first name
+                    return qsTr("%1 %2").arg(getTruncatedString(dataLast, 25)).arg(getTruncatedString(dataFirst, 25));
+                } else {
+                    //: %1 is first name, %2 is last name
+                    return qsTr("%1 %2").arg(getTruncatedString(dataFirst, 25)).arg(getTruncatedString(dataLast, 25));
+                }
             }
             else if(dataPeople.data(sourceIndex, PeopleModel.CompanyNameRole) != "")
                 return getTruncatedString(dataPeople.data(sourceIndex, PeopleModel.CompanyNameRole), 25);
