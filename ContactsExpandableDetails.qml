@@ -154,7 +154,10 @@ Column {
                         delete_button.source = "image://theme/contacts/icn_trash_dn";
                     }
                     onClicked: {
-                        if (detailsRepeater.count != 1) {
+                        if (detailsRepeater.count == 1) {
+                            existingFieldItem.resetFields();
+                        } 
+                        else if (detailsRepeater.count != 1) {
                             removeItemFromList(index);
                             detailsRepeater.model.remove(index);
                         }
@@ -166,8 +169,8 @@ Column {
                         detailsColumn.height -= existingFieldItem.height
                     }
                 }
-                Binding{target: delete_button; property: "visible"; value: false; when: detailsRepeater.count < 2}
-                Binding{target: delete_button; property: "visible"; value: true; when: detailsRepeater.count > 1}
+                Binding{target: delete_button; property: "visible"; value: false; when: !existingFieldItem.validInput}
+                Binding{target: delete_button; property: "visible"; value: true; when: existingFieldItem.validInput}
             }
         }
     }
