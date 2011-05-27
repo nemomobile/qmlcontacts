@@ -115,9 +115,13 @@ Binding{target: cardListView; property: "opacity"; value: ((cardListView.count >
             onTriggered: {
                 if(index == 0) {
                     var filename = currentContactName.replace(" ", "_");
-                    peopleModel.exportContact(window.currentContactId,  "/tmp/vcard_"+filename+".vcf");
+                    //REVISIT: Non-ASCII characters are corrupted when calling
+                    //meego-qml-launcher via the command-line.
+                    //peopleModel.exportContact(window.currentContactId,  "/tmp/vcard_"+filename+".vcf");
+                    peopleModel.exportContact(window.currentContactId,  "/tmp/vcard.vcf");
                     shareMenu.visible = false;
-                    var cmd = "/usr/bin/meego-qml-launcher --app meego-app-email --fullscreen --cmd openComposer --cdata \"file:///tmp/vcard_"+filename+".vcf\"";
+                    //var cmd = "/usr/bin/meego-qml-launcher --app meego-app-email --fullscreen --cmd openComposer --cdata \"file:///tmp/vcard_"+filename+".vcf\"";
+                    var cmd = "/usr/bin/meego-qml-launcher --app meego-app-email --fullscreen --cmd openComposer --cdata \"file:///tmp/vcard.vcf\"";
                     appModel.launch(cmd);
                 }
             }
