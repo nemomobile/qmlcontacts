@@ -52,7 +52,11 @@ Item {
         {
             cardListView.currentIndex = index;
             window.currentContactIndex = index;
-            window.currentContactId = dataPeople.data(index, PeopleModel.UuidRole);
+
+            //When querying the DataModel, use the index of the contact in the
+            //not the index of the contact in the ProxyModel
+            var srcIndex = sortModel.getSourceRow(index);
+            window.currentContactId = dataPeople.data(srcIndex, PeopleModel.UuidRole);
             window.addPage(myAppDetails);
         }
         onPressAndHold: {
