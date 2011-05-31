@@ -49,7 +49,7 @@ Item {
 
     function getDetails(reset) {
         var arr = {"email": data_email.text,
-                   "type": emailComboBox.selectedTitle};
+                   "type": emailComboBox.model[emailComboBox.selectedIndex]};
 
         if (reset)
             resetFields();
@@ -59,7 +59,17 @@ Item {
 
     function resetFields() {
        data_email.text = "";
-       emailComboBox.selectedTitle = contextHome;
+       emailComboBox.selectedIndex = 0;
+    }
+
+    function getIndexVal(type) {
+        if (updateMode) {
+            for (var i = 0; i < emailComboBox.model.length; i++) {
+                if (emailComboBox.model[i] == newDetailsModel.get(rIndex).type)
+                    return i;
+            }
+        }
+        return 0;
     }
 
     DropDown {
@@ -74,20 +84,9 @@ Item {
 
         model: [contextHome, contextWork, contextOther]
 
-        state: "notInUpdateMode"
-
-        states: [
-            State {
-                name: "inUpdateMode"; when: (emailRect.updateMode == true)
-                PropertyChanges{target: emailComboBox; title: newDetailsModel.get(rIndex).type}
-                PropertyChanges{target: emailComboBox; selectedTitle: newDetailsModel.get(rIndex).type}
-            },
-            State {
-                name: "notInUpdateMode"; when: (emailRect.updateMode == false)
-                PropertyChanges{target: emailComboBox; title: contextHome}
-                PropertyChanges{target: emailComboBox; selectedTitle: contextHome}
-            }
-        ]
+        title: (updateMode) ? newDetailsModel.get(rIndex).type : contextHome
+        selectedIndex: getIndexVal(newDetailsModel.get(rIndex).type);
+        replaceDropDownTitle: true
     }
 
     TextEntry {

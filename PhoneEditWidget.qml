@@ -54,7 +54,7 @@ Item{
 
     function getDetails(reset) {
         var arr = {"phone": data_phone.text, 
-                   "type": phoneComboBox.selectedTitle};
+                   "type": phoneComboBox.model[phoneComboBox.selectedIndex]};
 
         if (reset)
             resetFields();
@@ -64,7 +64,17 @@ Item{
 
     function resetFields() {
        data_phone.text = "";
-       phoneComboBox.selectedTitle = mobileContext;
+       phoneComboBox.title = mobileContext;
+    }
+
+    function getIndexVal(type) {
+        if (updateMode) {
+            for (var i = 0; i < phoneComboBox.model.length; i++) {
+                if (phoneComboBox.model[i] == newDetailsModel.get(rIndex).type)
+                    return i;
+            }
+        }
+        return 0;
     }
 
     DropDown {
@@ -79,20 +89,9 @@ Item{
 
         model: [mobileContext, homeContext, workContext, otherContext]
 
-        state: "notInUpdateMode"
-
-        states: [
-            State {
-                name: "inUpdateMode"; when: (updateMode == true)
-                PropertyChanges{target: phoneComboBox; title: newDetailsModel.get(rIndex).type}
-                PropertyChanges{target: phoneComboBox; selectedTitle: newDetailsModel.get(rIndex).type}
-            },
-            State {
-                name: "notInUpdateMode"; when: (updateMode == false)
-                PropertyChanges{target: phoneComboBox; title: mobileContext}
-                PropertyChanges{target: phoneComboBox; selectedTitle: mobileContext}
-            }
-        ]
+        title: (updateMode) ? newDetailsModel.get(rIndex).type : mobileContext
+        selectedIndex: getIndexVal(newDetailsModel.get(rIndex).type);
+        replaceDropDownTitle: true
     }
 
     TextEntry {

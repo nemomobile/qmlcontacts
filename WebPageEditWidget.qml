@@ -48,7 +48,7 @@ Item {
 
     function getDetails(reset) {
         var arr = {"web": data_url.text, 
-                   "type": urlComboBox.selectedTitle};
+                   "type": urlComboBox.model[urlComboBox.selectedIndex]};
 
         if (reset)
             resetFields();
@@ -58,7 +58,17 @@ Item {
 
     function resetFields() {
        data_url.text = "";
-       urlComboBox.selectedTitle = bookmarkWeb;
+       urlComboBox.selectedIndex = 0;
+    }
+
+    function getIndexVal(type) {
+        if (updateMode) {
+            for (var i = 0; i < urlComboBox.model.length; i++) {
+                if (urlComboBox.model[i] == newDetailsModel.get(rIndex).type)
+                    return i;
+            }
+        }
+        return 0;
     }
 
     DropDown {
@@ -73,20 +83,9 @@ Item {
 
         model: [favoriteWeb, bookmarkWeb]
 
-        state: "notInUpdateMode"
-
-        states: [
-            State {
-                name: "inUpdateMode"; when: (webRect.updateMode == true)
-                PropertyChanges{target: urlComboBox; title: newDetailsModel.get(rIndex).type}
-                PropertyChanges{target: urlComboBox; selectedTitle: newDetailsModel.get(rIndex).type}
-            },
-            State {
-                name: "notInUpdateMode"; when: (webRect.updateMode == false)
-                PropertyChanges{target: urlComboBox; title: bookmarkWeb}
-                PropertyChanges{target: urlComboBox; selectedTitle: bookmarkWeb}
-            }
-        ]
+        title: (updateMode) ? newDetailsModel.get(rIndex).type : bookmarkWeb 
+        selectedIndex: getIndexVal(newDetailsModel.get(rIndex).type);
+        replaceDropDownTitle: true
     }
 
     TextEntry {

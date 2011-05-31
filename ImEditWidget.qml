@@ -60,7 +60,7 @@ Item {
 
     function getDetails(reset) {
         var arr = {"im": imComboBox2.selectedTitle,
-                   "type": imComboBox.selectedTitle};
+                   "type": im.model[imComboBox.selectedIndex]};
 
         if (reset)
             resetFields();
@@ -69,7 +69,7 @@ Item {
     }
 
     function resetFields() {
-       imComboBox.selectedTitle = defaultAccount;
+       imComboBox.Index = 0;
        imComboBox2.selectedTitle = defaultIm;
     }
 
@@ -115,6 +115,16 @@ Item {
         }
     }
 
+    function getIndexVal(type) {
+        if (updateMode) {
+            for (var i = 0; i < imComboBox.model.length; i++) {
+                if (imComboBox.model[i] == newDetailsModel.get(rIndex).type)
+                    return i;
+            }
+        }
+        return 0;
+    }
+
     DropDown {
         id: imComboBox
  
@@ -126,23 +136,10 @@ Item {
         maxWidth: width + 50
  
         model: getAvailableAccountTypes()
- 
-        state: "notInUpdateMode"
- 
-        states: [
-            State {
-                name: "inUpdateMode"; when: (imsRect.updateMode == true)
-                PropertyChanges{target: imComboBox; 
-                                title: newDetailsModel.get(rIndex).type}
-                PropertyChanges{target: imComboBox; 
-                                selectedTitle: newDetailsModel.get(rIndex).type}
-            },
-            State {
-                name: "notInUpdateMode"; when: (imsRect.updateMode == false)
-                PropertyChanges{target: imComboBox; title: defaultAccount}
-                PropertyChanges{target: imComboBox; selectedTitle: defaultAccount}
-            }
-        ]
+
+        title: (updateMode) ? newDetailsModel.get(rIndex).type : defaultAccount 
+        selectedIndex: getIndexVal(newDetailsModel.get(rIndex).type);
+        replaceDropDownTitle: true
     }
 
     DropDown {
@@ -155,7 +152,7 @@ Item {
         minWidth: width
         maxWidth: width + 50
  
-        model: (imComboBox.selectedTitle) ? getAvailableBuddies(imComboBox.selectedTitle) : [noBuddies]
+        model: (imComboBox.selectedIndex) ? getAvailableBuddies(imComboBox.selectedTitle) : [noBuddies]
  
         state: "notInUpdateMode"
  

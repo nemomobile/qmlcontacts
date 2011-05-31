@@ -84,7 +84,7 @@ Item {
                    "region": data["region"],
                    "zip": data["zip"], 
                    "country": data["country"], 
-                   "type": addressComboBox.selectedTitle};
+                   "type": addressComboBox.model[addressComboBox.selectedIndex]};
 
         if (reset)
             resetFields();
@@ -96,7 +96,7 @@ Item {
         for (var i = 0; i < addressColumn.children.length - 1; i++)
             addressColumn.children[i].text = "";
 
-       addressComboBox.selectedTitle = contextHome;
+       addressComboBox.selectedIndex = 0;
     }
 
     ListModel {
@@ -131,6 +131,16 @@ Item {
         }
     }
 
+    function getIndexVal(type) {
+        if (updateMode) {
+            for (var i = 0; i < addressComboBox.model.length; i++) {
+                if (addressComboBox.model[i] == newDetailsModel.get(rIndex).type)
+                    return i;
+            }
+        }
+        return 0;
+    }
+
     DropDown {
         id: addressComboBox
 
@@ -143,20 +153,9 @@ Item {
 
         model: [contextHome, contextWork, contextOther]
 
-        state: "notInUpdateMode"
-
-        states: [
-            State {
-                name: "inUpdateMode"; when: (addressRect.updateMode == true)
-                PropertyChanges{target: addressComboBox; title: newDetailsModel.get(rIndex).type}
-                PropertyChanges{target: addressComboBox; selectedTitle: newDetailsModel.get(rIndex).type}
-            },
-            State {
-                name: "notInUpdateMode"; when: (addressRect.updateMode == false)
-                PropertyChanges{target: addressComboBox; title: contextHome}
-                PropertyChanges{target: addressComboBox; selectedTitle: contextHome}
-            }
-        ]
+        title: (updateMode) ? newDetailsModel.get(rIndex).type : contextHome
+        selectedIndex: getIndexVal(newDetailsModel.get(rIndex).type);
+        replaceDropDownTitle: true
     }
 
     Column {
