@@ -23,6 +23,34 @@ Item {
     property string bookmarkWeb : qsTr("Bookmark")
     property string favoriteWeb : qsTr("Favorite")
 
+    SaveRestoreState {
+        id: srsWebPage
+        onSaveRequired: {
+            if(newDetailsModel != null){
+                if(newDetailsModel.count > 0){
+                    setValue("web.count", newDetailsModel.count)
+                    for (var i = 0; i < newDetailsModel.count; i++){
+                        setValue("web.address" + i, newDetailsModel.get(i).web)
+                        setValue("web.type" + i, newDetailsModel.get(i).type)
+                    }
+                }
+            }
+            sync()
+        }
+    }
+
+    Component.onCompleted: {
+        if (srsWebPage.restoreRequired) {
+            var webCount = srsWebPage.value("web.count", 0)
+            if(webCount > 0){
+                for(var i = 0; i < webCount; i++){
+                    newDetailsModel.set(i, {"web": srsWebPage.restoreOnce("web.address" + i, "")})
+                    newDetailsModel.set(i, {"type": srsWebPage.restoreOnce("web.type" + i, "")})
+                }
+            }
+        }
+    }
+
     function parseDetailsModel(existingDetailsModel, contextModel) {
         var arr = new Array(); 
         for (var i = 0; i < existingDetailsModel.length; i++)

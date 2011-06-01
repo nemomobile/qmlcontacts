@@ -28,6 +28,42 @@ Item {
     property string countryAddress:  qsTr("Country")
     property string postcodeAddress:  qsTr("Postcode / Zip")
 
+    SaveRestoreState {
+        id: srsAddress
+        onSaveRequired: {
+            if(newDetailsModel != null){
+                if(newDetailsModel.count > 0){
+                    setValue("address.count", newDetailsModel.count)
+                    for (var i = 0; i < newDetailsModel.count; i++){
+                        setValue("address.street" + i, newDetailsModel.get(i).street)
+                        setValue("address.locale" + i, newDetailsModel.get(i).locale)
+                        setValue("address.region" + i, newDetailsModel.get(i).region)
+                        setValue("address.zip" + i, newDetailsModel.get(i).zip)
+                        setValue("address.country" + i, newDetailsModel.get(i).country)
+                        setValue("address.type" + i, newDetailsModel.get(i).type)
+                    }
+                }
+            }
+            sync()
+        }
+    }
+
+    Component.onCompleted: {
+        if (srsAddress.restoreRequired) {
+            var addrCount = srsAddress.value("address.count", 0)
+            if(addrCount > 0){
+                for(var i = 0; i < addrCount; i++){
+                    newDetailsModel.set(i, {"street": srsAddress.restoreOnce("address.street" + i, "")})
+                    newDetailsModel.set(i, {"locale": srsAddress.restoreOnce("address.locale" + i, "")})
+                    newDetailsModel.set(i, {"region": srsAddress.restoreOnce("address.region" + i, "")})
+                    newDetailsModel.set(i, {"zip": srsAddress.restoreOnce("address.zip" + i, "")})
+                    newDetailsModel.set(i, {"country": srsAddress.restoreOnce("address.country" + i, "")})
+                    newDetailsModel.set(i, {"type": srsAddress.restoreOnce("address.type" + i, "")})
+                }
+            }
+        }
+    }
+
     function parseDetailsModel(existingDetailsModel, contextModel) {
         var fieldOrder = localeUtils.getAddressFieldOrder();
         var arr = new Array(); 

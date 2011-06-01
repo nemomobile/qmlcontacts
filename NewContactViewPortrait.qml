@@ -56,6 +56,23 @@ Flickable{
     property string addAddress: qsTr("Add address")
 
     property bool validInput: false
+    property string restoredFirstName: ""
+    property string restoredLastName: ""
+    property string restoredCompany: ""
+    property string restoredNotes: ""
+    property date restoredBirthday
+
+    SaveRestoreState {
+	id: justRestore
+	onSaveRequired: sync()
+	Component.onCompleted: {
+	    restoredFirstName = restoreOnce("newContact.firstName", "")
+	    restoredLastName = restoreOnce("newContact.lastName", "")
+	    restoredCompany = restoreOnce("newContact.company", "")
+	    restoredNotes = restoreOnce("newContact.notes", "")
+	    restoredBirthday = restoreOnce("newContact.birthday", "2011-01-01")
+	}
+    }
 
     function contactSave(){
         var newPhones = phones.getNewDetails();
@@ -155,7 +172,7 @@ Flickable{
                     height: (data_first_p.visible ? childrenRect.height : data_first.height)
                     TextEntry{
                         id: data_first
-                        text: ""
+                        text: newContactPage.restoredFirstName
                         defaultText: defaultFirstName
                         width: (parent.width-avatar.width)
                         anchors {top: parent.top;
@@ -172,6 +189,19 @@ Flickable{
                                  right: parent.right; rightMargin: 10}
                         visible: localeUtils.needPronounciationFields()
                     }
+
+		    SaveRestoreState {
+			id: srsMainView
+			onSaveRequired: {
+			    setValue("newContact.firstName", data_first.text)
+			    setValue("newContact.lastName", data_last.text)
+			    setValue("newContact.company",data_company.text)
+			    setValue("newContact.photo", avatar_img.source)
+			    setValue("newContact.birthday", datePicker.selectedDate)
+			    setValue("newContact.notes",data_notes.text)
+			    sync()
+			}
+		    }
                 }
                 Item{
                     id: quad2
@@ -179,7 +209,7 @@ Flickable{
                     height: (data_last_p.visible ? childrenRect.height : data_last.height)
                     TextEntry{
                         id: data_last
-                        text: ""
+                        text: newContactPage.restoredLastName
                         defaultText: defaultLastName
                         width:(parent.width-avatar.width)
                         anchors {top: parent.top;
@@ -203,7 +233,7 @@ Flickable{
                     height: childrenRect.height
                     TextEntry{
                         id: data_company
-                        text: ""
+                        text: newContactPage.restoredCompany
                         defaultText: defaultCompany
                         width:(parent.width-avatar.width)
                         anchors{ top: parent.top; topMargin: 10; left: parent.left; leftMargin: 20; right: parent.right; rightMargin: 10;}
@@ -364,8 +394,9 @@ Flickable{
             id:datePicker
             parent: newContactPage
 
-            property date datePicked 
-            property string selectedBirthday
+            selectedDate: newContactPage.restoredBirthday
+            property date datePicked
+            property string selectedBirthday: Qt.formatDate(newContactPage.restoredBirthday, window.dateFormat)
 
             onDateSelected: {
                 datePicked = selectedDate;
@@ -398,7 +429,7 @@ Flickable{
             source: "image://theme/contacts/active_row"
             TextField{
                 id: data_notes
-                text: ""
+                text: newContactPage.restoredNotes
                 defaultText: defaultNote
                 width:540
                 height: 300

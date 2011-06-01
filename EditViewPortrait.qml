@@ -58,6 +58,24 @@ Flickable {
     property string addressLabel: qsTr("Address")
     property string addAddress: qsTr("Add address")
 
+    property string restoredFirstName: ""
+    property string restoredLastName: ""
+    property string restoredCompany: ""
+    property string restoredNotes: ""
+    property date restoredBirthday
+
+    SaveRestoreState {
+	id: justRestore
+	onSaveRequired: sync()
+	Component.onCompleted: {
+	    restoredFirstName = restoreOnce("contact.firstName", "")
+	    restoredLastName = restoreOnce("contact.lastName", "")
+	    restoredCompany = restoreOnce("contact.company", "")
+	    restoredNotes = restoreOnce("contact.notes", "")
+	    restoredBirthday = restoreOnce("contact.birthday", "2011-01-01")
+	}
+    }
+
     function contactSave(contactId){
         var newPhones = phones.getNewDetails();
         var newIms = ims.getNewDetails();
@@ -155,7 +173,7 @@ Flickable {
                     height: (data_first_p.visible ? childrenRect.height : data_first.height)
                     TextEntry{
                         id: data_first
-                        text: dataModel.data(index, PeopleModel.FirstNameRole)
+                        text: editViewPortrait.restoredFirstName != "" ? editViewPortrait.restoredFirstName : dataModel.data(index, PeopleModel.FirstNameRole)
                         defaultText: defaultFirstName
                         width: (parent.width-avatar.width)
                         anchors {top: parent.top;
@@ -172,6 +190,20 @@ Flickable {
                                  right: parent.right; rightMargin: 10}
                         visible: localeUtils.needPronounciationFields()
                     }
+
+		    SaveRestoreState {
+			id: srsMainView
+			onSaveRequired: {
+			    console.log("MAIN.QML saving firstName and lastName: ")
+			    setValue("contact.firstName", data_first.text)
+			    setValue("contact.lastName", data_last.text)
+			    setValue("contact.company",data_company.text)
+			    setValue("contact.photo", avatar_img.source)
+			    setValue("contact.birthday", datePicker.selectedDate)
+			    setValue("contact.notes",data_notes.text)
+			    sync()
+			}
+		    }
                 }
                 Item{
                     id: quad2
@@ -179,7 +211,7 @@ Flickable {
                     height: (data_last_p.visible ? childrenRect.height : data_last.height)
                     TextEntry{
                         id: data_last
-                        text: dataModel.data(index, PeopleModel.LastNameRole)
+                        text: editViewPortrait.restoredLastName != "" ? editViewPortrait.restoredLastName : dataModel.data(index, PeopleModel.LastNameRole)
                         defaultText: defaultLastName
                         width:(parent.width-avatar.width)
                         anchors {top: parent.top;
@@ -203,7 +235,7 @@ Flickable {
                     height: childrenRect.height
                     TextEntry{
                         id: data_company
-                        text: dataModel.data(index, PeopleModel.CompanyNameRole)
+                        text: editViewPortrait.restoredCompany != "" ? editViewPortrait.restoredCompany : dataModel.data(index, PeopleModel.CompanyNameRole)
                         defaultText: defaultCompany
                         width:(parent.width-avatar.width)
                         anchors{ top: parent.top; topMargin: 10; left: parent.left; leftMargin: 20; right: parent.right; rightMargin: 10;}
@@ -326,7 +358,7 @@ Flickable {
             source: "image://theme/contacts/active_row"
             TextEntry{
                 id: data_birthday
-                text: dataModel.data(index, PeopleModel.BirthdayRole)
+                text: datePicker.selectedBirthday != "" ? datePicker.selectedBirthday : dataModel.data(index, PeopleModel.BirthdayRole)
                 defaultText: defaultBirthday
                 anchors {verticalCenter: birthday.verticalCenter; left: parent.left; topMargin: 30; leftMargin: 30; right: delete_button.left; rightMargin: 30}
                 MouseArea{
@@ -360,12 +392,23 @@ Flickable {
             }
         }
 
+
         DatePicker {
             id:datePicker
             parent: editViewPortrait
 
-            property date datePicked 
+            selectedDate: editViewPortrait.restoredBirthday
+            property date datePicked
+            property string selectedBirthday: useRestoredBirthday(editViewPortrait.restoredBirthday) ? Qt.formatDate(editViewPortrait.restoredBirthday, window.dateFormat) : ""
 
+	    function useRestoredBirthday(restoredBDay) {
+		var defaultDate = "2011-01-01"
+		var retval = (Qt.formatDate(restoredBDay) != Qt.formatDate(defaultDate))
+		console.log("MAIN useRestoredBirthday returns " + retval)
+		console.log("MAIN after comparing "  +Qt.formatDate(restoredBDay) + " != " + Qt.formatDate(defaultDate))
+		return retval
+	    }
+	    
             onDateSelected: {
                 datePicked = selectedDate;
                 data_birthday.text = Qt.formatDate(selectedDate, window.dateFormat);
@@ -397,7 +440,7 @@ Flickable {
             anchors.bottomMargin: 1
             TextField{
                 id: data_notes
-                text: dataModel.data(index, PeopleModel.NotesRole)
+                text: editViewPortrait.restoredNotes != "" ? editViewPortrait.restoredNotes : dataModel.data(index, PeopleModel.NotesRole)
                 defaultText: defaultNote
                 height: 300
                 anchors {top: parent.top; left: parent.left; right: parent.right; rightMargin: 30; topMargin: 20; leftMargin: 30}

@@ -80,6 +80,7 @@ public:
 
     //QML API
     Q_INVOKABLE QVariant data(const int row, int role) const;
+    Q_INVOKABLE bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
     Q_INVOKABLE bool createPersonModel(QString avatarUrl, QString thumbUrl, QString firstName, QString firstPro,
                                        QString lastName, QString lastPro,

@@ -30,6 +30,34 @@ Item{
     property string cancelLabel: qsTr("Cancel")
     property string addLabel: qsTr("Add")
 
+    SaveRestoreState {
+        id: srsPhone
+        onSaveRequired: {
+            if(newDetailsModel != null){
+                if(newDetailsModel.count > 0){
+                    setValue("phone.count", newDetailsModel.count)
+                    for (var i = 0; i < newDetailsModel.count; i++){
+                        setValue("phone.number" + i, newDetailsModel.get(i).phone)
+                        setValue("phone.type" + i, newDetailsModel.get(i).type)
+                    }
+                }
+            }
+            sync()
+        }
+    }
+
+    Component.onCompleted: {
+        if (srsPhone.restoreRequired) {
+            var phoneCount = srsPhone.value("phone.count", 0)
+            if(phoneCount > 0){
+                for(var i = 0; i < phoneCount; i++){
+                    newDetailsModel.set(i, {"phone": srsPhone.restoreOnce("phone.number" + i, "")})
+                    newDetailsModel.set(i, {"type": srsPhone.restoreOnce("phone.type" + i, "")})
+                }
+            }
+        }
+    }
+
     function parseDetailsModel(existingDetailsModel, contextModel) {
         var arr = new Array(); 
         for (var i = 0; i < existingDetailsModel.length; i++)

@@ -11,6 +11,7 @@
 
 #include <QSortFilterProxyModel>
 #include "peoplemodel.h"
+#include <QString>
 
 class ProxyModelPriv;
 
@@ -32,7 +33,7 @@ public:
     Q_INVOKABLE virtual void setSortType(PeopleModel::PeopleRoles sortType);
     Q_INVOKABLE virtual void setDisplayType(PeopleModel::PeopleRoles displayType);
     Q_INVOKABLE void setModel(PeopleModel *model);
-    Q_INVOKABLE int getSourceRow(int row);
+    Q_INVOKABLE int getSourceRow(int row, const QString &s = QString());
 
 protected:
     virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;

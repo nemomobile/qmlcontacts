@@ -24,6 +24,34 @@ Item {
     property string contextOther : qsTr("Other")
     property string defaultEmail : qsTr("Email address")
 
+    SaveRestoreState {
+        id: srsMail
+        onSaveRequired: {
+            if(newDetailsModel != null){
+                if(newDetailsModel.count > 0){
+                    setValue("mail.count", newDetailsModel.count)
+                    for (var i = 0; i < newDetailsModel.count; i++){
+                        setValue("mail.address" + i, newDetailsModel.get(i).email)
+                        setValue("mail.type" + i, newDetailsModel.get(i).type)
+                    }
+                }
+            }
+            sync()
+        }
+    }
+
+    Component.onCompleted: {
+        if (srsMail.restoreRequired) {
+            var mailCount = srsMail.value("mail.count", 0)
+            if(mailCount > 0){
+                for(var i = 0; i < mailCount; i++){
+                    newDetailsModel.set(i, {"email": srsMail.restoreOnce("mail.address" + i, "")})
+                    newDetailsModel.set(i, {"type": srsMail.restoreOnce("mail.type" + i, "")})
+                }
+            }
+        }
+    }
+
     function parseDetailsModel(existingDetailsModel, contextModel) {
         var arr = new Array(); 
         for (var i = 0; i < existingDetailsModel.length; i++)

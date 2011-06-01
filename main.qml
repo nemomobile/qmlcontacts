@@ -52,6 +52,43 @@ Window {
     bookMenuModel: [filterAll, filterFavorites, filterWhosOnline];
     bookMenuPayload: [myAppAllContacts, myAppFavContacts, myAppOnlineContacts];
 
+    SaveRestoreState {
+        id: srsUnsavedContact
+        onSaveRequired: {
+            var currentlyActivePage = 0
+	    console.log("MAIN.QML: pageStack.currentPage == " + window.pageStack.currentPage)
+	    console.log("MAIN.QML: pageStack.currentPage.pageTitle == " + window.pageStack.currentPage.pageTitle)
+            switch(window.pageStack.currentPage.pageTitle){
+            case filterFavorites:
+                currentlyActivePage = 1
+                break;
+            case filterWhosOnline:
+                currentlyActivePage = 2
+                break;
+            case labelGroupedView:
+                currentlyActivePage = 3
+                break;
+            case labelDetailView:
+                currentlyActivePage = 4
+                break;
+            case labelEditView:
+                currentlyActivePage = 5
+                break;
+            case labelNewContactView:
+                currentlyActivePage = 6
+                break;
+            }
+
+	    console.log("MAIN.QML saving now, currentContactIndex == " + window.currentContactIndex)
+            setValue("contacts.currentlyActivePage", currentlyActivePage)
+            setValue("contacts.currentContactIndex", window.currentContactIndex)
+            setValue("contacts.currentContactId", window.currentContactId)
+            setValue("contacts.currentContactName", window.currentContactName)
+
+            sync()
+        }
+    }
+
     overlayItem:  Item {
         id: globalSpaceItems
         anchors.fill: parent
@@ -86,7 +123,40 @@ Window {
     } 
 
     Component.onCompleted: {
-        addPage(myAppAllContacts)
+	if (srsUnsavedContact.restoreRequired) {
+	    
+            var currentlyActivePage = srsUnsavedContact.restoreOnce("contacts.currentlyActivePage", 0)
+            var contactIndex = srsUnsavedContact.restoreOnce("contacts.currentContactIndex", window.currentContactIndex)
+            var contactId = srsUnsavedContact.restoreOnce("contacts.currentContactId", "")
+            var contactName = srsUnsavedContact.restoreOnce("contacts.currentContactName", "")
+            window.currentContactId = contactId
+            window.currentContactIndex = contactIndex
+            window.currentContactName = contactName
+	    
+            // // Adding first the "main" page
+	    if (currentlyActivePage == 1) {
+		addPage(myAppFavContacts)
+	    } else if (currentlyActivePage == 2) {
+		addPage(myAppOnlineContacts)
+	    } else if (currentlyActivePage == 4 
+		       || currentlyActivePage == 5 
+		       || currentlyActivePage == 6) {
+		addPage(myAppAllContacts)
+	    } else {
+		addPage(myAppAllContacts)
+	    }
+
+            // Add pages that are not "main" pages
+	    if (currentlyActivePage == 4) {
+		addPage(myAppDetails)
+	    } else if (currentlyActivePage == 5) {
+		addPage(myAppEdit)
+	    } else if (currentlyActivePage == 6) {
+		addPage(myAppNewContact)
+	    }
+	} else { // nothing to restore
+	    addPage(myAppAllContacts)
+	}
     }
 
     function getOnlinePeople() {
@@ -260,6 +330,7 @@ Window {
     Component {
         id: myAppEdit
 	AppPage {
+            property int needSave: 1
             id: editViewPage
             pageTitle: labelEditView
             Component.onCompleted : {
@@ -269,7 +340,7 @@ Window {
             EditViewPortrait{
                 id: editContact
                 dataModel: peopleModel
-                index: proxyModel.getSourceRow(window.currentContactIndex)
+                index: proxyModel.getSourceRow(window.currentContactIndex, "editviewportrait")
                 anchors.fill: parent
             }
             FooterBar { 
@@ -284,12 +355,15 @@ Window {
                 if(actionMenuModel[selectedItem] == contextSave) {
                     window.switchBook(myAppAllContacts);
                     editContact.contactSave(window.currentContactId);
+                    editViewPage.needSave = 0
                 }
                 else if(actionMenuModel[selectedItem] == contextCancel) {
                     window.switchBook(myAppAllContacts);
+                    editViewPage.needSave = 0
                 }
                 else if(actionMenuModel[selectedItem] == contextDelete) {
                     confirmDelete.show();
+                    editViewPage.needSave = 0
                 }
             }
         }

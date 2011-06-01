@@ -183,6 +183,12 @@ QVariant PeopleModel::data(const QModelIndex& index, int role) const
     return data(index.row(), role);
 }
 
+bool
+PeopleModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    return QAbstractListModel::setData(index, value, role);
+}
+
 QVariant PeopleModel::data(int row, int role) const
 {
     QContactLocalId id = priv->contactIds[row];
