@@ -1,57 +1,20 @@
-VERSION = 0.2.11
+include(common.pri)
 PROJECT_NAME = meego-app-contacts
-
-TEMPLATE = lib
-TARGET = Contacts
-QT += declarative \
-    dbus
-CONFIG += qt \
-        plugin \
-        dbus \
-        mobility \
-        link_pkconfig
-
-#PKGCONFIG += telepathy-qml-lib
-PKGCONFIG += QtContacts QtVersit icu-uc icu-i18n
-
-TARGET = $$qtLibraryTarget($$TARGET)
-DESTDIR = $$TARGET
-OBJECTS_DIR = .obj
-MOC_DIR = .moc
-LIBS += -licuuc -licui18n
-
-MOBILITY = contacts versit
-
-HEADERS += \
-    contacts.h \
-    peoplemodel.h \
-    peoplemodel_p.h \
-    proxymodel.h \
-    settingsdatastore.h \
-    localeutils.h
-
-SOURCES += \
-    contacts.cpp \
-    peoplemodel.cpp \
-    proxymodel.cpp \
-    settingsdatastore.cpp \
-    localeutils.cpp
+TEMPLATE = subdirs
+CONFIG += ordered
+SUBDIRS += lib plugin content
 
 QML_FILES = *.qml
 
-OTHER_FILES += $${QML_FILES} Contacts/qmldir
+OTHER_FILES += $${QML_FILES}
 
 qmlfiles.files += $${QML_FILES}
 qmlfiles.path += $$INSTALL_ROOT/usr/share/$${PROJECT_NAME}
-qmldir.files += $$TARGET
-qmldir.path += $$[QT_INSTALL_IMPORTS]/MeeGo/App
 
 desktop.files += contacts-settings.desktop
 desktop.path += $$INSTALL_ROOT/usr/share/meego-ux-settings/apps/
 
-INSTALLS += qmldir qmlfiles desktop
-
-DEFINES += QMLJSDEBUGGER
+INSTALLS += qmlfiles desktop
 
 TRANSLATIONS += *.qml
 dist.commands += rm -fR $${PROJECT_NAME}-$${VERSION} &&
