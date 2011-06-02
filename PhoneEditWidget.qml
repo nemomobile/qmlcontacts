@@ -90,7 +90,7 @@ Item{
         model: [mobileContext, homeContext, workContext, otherContext]
 
         title: (updateMode) ? newDetailsModel.get(rIndex).type : mobileContext
-        selectedIndex: getIndexVal(newDetailsModel.get(rIndex).type);
+        selectedIndex: (updateMode) ? getIndexVal(newDetailsModel.get(rIndex).type) : 0
         replaceDropDownTitle: true
     }
 

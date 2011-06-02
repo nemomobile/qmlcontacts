@@ -154,7 +154,7 @@ Item {
         model: [contextHome, contextWork, contextOther]
 
         title: (updateMode) ? newDetailsModel.get(rIndex).type : contextHome
-        selectedIndex: getIndexVal(newDetailsModel.get(rIndex).type);
+        selectedIndex: (updateMode) ? getIndexVal(newDetailsModel.get(rIndex).type) : 0
         replaceDropDownTitle: true
     }
 

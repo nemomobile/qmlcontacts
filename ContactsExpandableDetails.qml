@@ -192,8 +192,7 @@ Column {
 
                 property int boxHeight
 
-                anchors {verticalCenter: addBar.verticalCenter; 
-                         top: addBar.top; leftMargin: itemMargins;}
+                anchors {top: addBar.top; leftMargin: itemMargins}
                 width: parent.width
                 titleText: expandingBoxTitle
                 titleTextColor: theme_fontColorNormal
@@ -212,7 +211,7 @@ Column {
 
                 onExpandingChanged: {
                     add_button.source = expanded ? "image://theme/contacts/icn_add_dn" : "image://theme/contacts/icn_add";
-                    detailsColumn.height = expanded ? (initialHeight + detailsItem.height + add_button.height) : initialHeight;
+                    detailsColumn.height = expanded ? (initialHeight + detailsItem.height) : initialHeight;
                 }
             }
 
@@ -220,8 +219,9 @@ Column {
                 id: fieldDetailComponent
                 Item {
                     id: fieldDetailItem
-                    height: childrenRect.height
+                    height: childrenRect.height + itemMargins*2
                     width: parent.width
+                    anchors {left:parent.left; top: parent.top; margins: itemMargins;}
 
                     Component.onCompleted: {
                         if (newDetailsComponent) {
@@ -237,7 +237,6 @@ Column {
 
                         height: childrenRect.height
                         width: parent.width
-                        anchors {left:parent.left; top: parent.top; }
                     }
 
                     Button {
@@ -268,7 +267,7 @@ Column {
                         height: 36
                         text: cancelLabel
                         font.pixelSize: theme_fontPixelSizeMediumLarge
-                        anchors {right: newContentArea.right;
+                        anchors {right: newContentArea.right; rightMargin: itemMargins;
                                  top: newContentArea.bottom; topMargin: itemMargins;}
                         onClicked: {
                             detailsBox.expanded = false;

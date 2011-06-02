@@ -84,7 +84,7 @@ Item {
         model: [favoriteWeb, bookmarkWeb]
 
         title: (updateMode) ? newDetailsModel.get(rIndex).type : bookmarkWeb 
-        selectedIndex: getIndexVal(newDetailsModel.get(rIndex).type);
+        selectedIndex: (updateMode) ? getIndexVal(newDetailsModel.get(rIndex).type) : 1
         replaceDropDownTitle: true
     }
 
