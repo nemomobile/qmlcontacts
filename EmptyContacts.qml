@@ -43,7 +43,7 @@ Item {
         bgSourceDn: "image://theme/btn_blue_dn"
         enabled: true
         anchors{ top: no_contacts.bottom; topMargin: 30; horizontalCenter: no_contacts.horizontalCenter;}
-        width: 250
+        maxWidth: Math.round(parent.width/2)
         height: 60
         opacity: 1
         onClicked: {
