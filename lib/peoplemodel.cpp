@@ -1420,6 +1420,9 @@ void PeopleModel::onMeFetchRequestStateChanged(QContactAbstractRequest::State re
 
 bool PeopleModel::isSelfContact(const QContactLocalId id) const
 {
+    if (!priv->manager->hasFeature(QContactManager::SelfContact, QContactType::TypeContact))
+        return false;
+
     if (id == priv->manager->selfContactId())
         return true;
     return false;
