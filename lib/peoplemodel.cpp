@@ -289,8 +289,8 @@ QVariant PeopleModel::data(int row, int role) const
     }
     case IsSelfRole:
     {
-            if(contact.id().localId() == priv->manager->selfContactId())
-                return true;
+        if (isSelfContact(contact.id().localId()))
+            return true;
         return false;
     }
     case EmailAddressRole:
@@ -1418,15 +1418,16 @@ void PeopleModel::onMeFetchRequestStateChanged(QContactAbstractRequest::State re
     fetchRequest->deleteLater();
 }
 
-bool PeopleModel::isSelfContact(const QContactLocalId id)
+bool PeopleModel::isSelfContact(const QContactLocalId id) const
 {
-  if(id == priv->manager->selfContactId())
-    return true;
-  return false;
+    if (id == priv->manager->selfContactId())
+        return true;
+    return false;
 }
 
-bool PeopleModel::isSelfContact(const QUuid id){
-  return isSelfContact(priv->uuidToId[id]);
+bool PeopleModel::isSelfContact(const QUuid id) const
+{
+    return isSelfContact(priv->uuidToId[id]);
 }
 
 void PeopleModel::fetchOnlineOnly(const QVariantList &stringids){

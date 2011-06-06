@@ -114,8 +114,8 @@ public:
     QString currentUuid();
 
     Q_INVOKABLE void toggleFavorite(const QString& uuid);
-    bool isSelfContact(const QContactLocalId id);
-    bool isSelfContact(const QUuid id);
+    bool isSelfContact(const QContactLocalId id) const;
+    bool isSelfContact(const QUuid id) const;
     Q_INVOKABLE void setSorting(int role);
     Q_INVOKABLE void setFilter(int role, bool dataResetNeeded = true);
     Q_INVOKABLE int getSortingRole();
