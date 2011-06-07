@@ -56,21 +56,7 @@ PeopleModel::PeopleModel(QObject *parent)
     priv->sortOrder.append(sort);
 
     qDebug() << Q_FUNC_INFO << QContactManager::availableManagers();
-    if (QContactManager::availableManagers().contains("tracker")) {
-        priv->manager = new QContactManager("tracker");
-        qDebug() << "[PeopleModel] Manager is tracker";
-    }
-    else if (QContactManager::availableManagers().contains("memory")) {
-        priv->manager = new QContactManager("memory");
-        qDebug() << "[PeopleModel] Manager is memory";
-
-        qWarning() << Q_FUNC_INFO << "Only recognised tracker engine available is 'memory'";
-        qWarning() << Q_FUNC_INFO << "Changes to contacts WILL NOT be persistent!";
-
-    }else{
-        priv->manager = new QContactManager("default");
-        qDebug() << "[PeopleModel] Manager is empty";
-    }
+    priv->manager = new QContactManager;
 
     qDebug() << Q_FUNC_INFO << "Manager is " << priv->manager->managerName();
 
