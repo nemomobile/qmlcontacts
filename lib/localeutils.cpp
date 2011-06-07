@@ -143,6 +143,13 @@ bool LocaleUtils::initCollator(int collType, QString locale)
 
 bool LocaleUtils::isLessThan(QString lStr, QString rStr)
 {
+    if (lStr == "#") {
+        return false;
+    }
+    if (rStr == "#") {
+        return true;
+    }
+
     //Convert strings to UnicodeStrings
     const ushort *lShort = lStr.utf16();
     UnicodeString lUniStr = UnicodeString(static_cast<const UChar *>(lShort));
