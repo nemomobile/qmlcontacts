@@ -95,7 +95,6 @@ Window {
 
         ModalDialog {
             id:confirmDelete
-            height: parent.height
             cancelButtonText: contextCancel
             acceptButtonText: contextDelete
             title:  deleteConfirmation
