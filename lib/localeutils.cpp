@@ -193,16 +193,9 @@ QString LocaleUtils::getBinForString(QString str)
 
     QString temp(str.at(0).toUpper());
     
-    //REVISIT:  This should return the proper bin - work around for an
-    //encoding issue
-    QLocale::Country country = getCountry();
-    if ((country == QLocale::DemocraticRepublicOfKorea) ||
-        (country == QLocale::RepublicOfKorea))
-        return temp;
-
-
     //The proper bin for these locales does not correspond
     //with a bin listed in the index bar
+    QLocale::Country country = getCountry();
     if ((country == QLocale::Taiwan) || (country == QLocale::China))
         return temp;
 
@@ -212,6 +205,11 @@ QString LocaleUtils::getBinForString(QString str)
 QStringList LocaleUtils::getIndexBarChars()
 {
     UErrorCode  status = U_ZERO_ERROR;
+    QStringList default_list = QStringList() << "A" << "B" << "C" << "D" << "E"
+                                             << "F" << "G" << "H" << "I" << "J"
+                                             << "K" << "L" << "M" << "N" << "O"
+                                             << "P" << "Q" << "R" << "S" << "T"
+                                             << "U" << "V" << "W" << "Y" << "Z";
     QStringList list;
 
     QLocale::Country country = getCountry();
@@ -222,39 +220,52 @@ QStringList LocaleUtils::getIndexBarChars()
     //We need to query the locale data directly using the resource bundle 
     UResourceBundle *resource = ures_open(NULL, name, &status);
 
-    //REVISIT:  This should return the proper bin - work around for an
-    //encoding issue
-    if ((U_SUCCESS(status) && 
-        ((country != QLocale::DemocraticRepublicOfKorea) && 
-        (country != QLocale::RepublicOfKorea)))) {
-        qint32 size;
-        const UChar *indexes = ures_getStringByKey(resource,
-                                                   "ExemplarCharactersIndex",
-                                                   &size, &status);
-        if (U_SUCCESS(status)) {
-            UnicodeString uniStr = UnicodeString(indexes, size);
-            int i = 0;
+    if (!U_SUCCESS(status))
+        return default_list;
 
-            for (i = 0; i < uniStr.length(); i++) {
-                QString temp(uniStr.char32At(i));
+    qint32 size;
+    const UChar *indexes = ures_getStringByKey(resource,
+                                               "ExemplarCharactersIndex",
+                                               &size, &status);
+    if (!U_SUCCESS(status))
+        return default_list;
 
-                if ((temp != QString(" ")) && (temp != QString("[")) &&
-                    (temp != QString("]")))
-                    list << temp;
-            }
+    //REVISIT:  This is work around for an encoding issue with KOR chars
+    //returned by ICU. Use the compatiblity Jamo unicode values instead
+    if ((country == QLocale::DemocraticRepublicOfKorea) ||
+       (country == QLocale::RepublicOfKorea)) {
+        int i = 0;
+        static const QChar unicode[] = {0x3131, 0x3134, 0x3137, 0x3139, 0x3141,
+                                        0x3142, 0x3145, 0x3147, 0x3148, 0x314A,
+                                        0x314B, 0x314C, 0x314D, 0x314E};
+        size = sizeof(unicode) / sizeof(QChar);
+        QString jamo = QString::fromRawData(unicode, size);
 
-            if ((country == QLocale::Taiwan) || (country == QLocale::Japan) ||
-                (country == QLocale::DemocraticRepublicOfKorea) ||
-                (country == QLocale::RepublicOfKorea))
-                list << "A" << "Z";
+        for (i = 0; i < jamo.length(); i++)
+            list << jamo.at(i);
+    }
+
+    else {
+        UnicodeString uniStr = UnicodeString(indexes, size);
+        int i = 0;
+
+        for (i = 0; i < uniStr.length(); i++) {
+            QString temp(uniStr.char32At(i));
+
+            if ((temp != QString(" ")) && (temp != QString("[")) &&
+               (temp != QString("]")))
+                list << temp;
         }
     }
 
     ures_close(resource);
     if (list.isEmpty())
-        list << "A" << "B" << "C" << "D" << "E" << "F" << "G" << "H"
-             << "I" << "J" << "K" << "L" << "M" << "N" << "O" << "P"
-             << "Q" << "R" << "S" << "T" << "U" << "V" << "W" << "Y" << "Z";
+        return default_list;
+
+    if ((country == QLocale::Taiwan) || (country == QLocale::Japan) ||
+       (country == QLocale::DemocraticRepublicOfKorea) ||
+       (country == QLocale::RepublicOfKorea))
+        list << "A" << "Z";
 
     list << QString(tr("#"));
     return list;
