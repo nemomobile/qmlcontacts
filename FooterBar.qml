@@ -105,88 +105,109 @@ Item {
             source: "image://theme/email/div"
         }
 
-        ListView {
-            id: indexListView
-            orientation: "Horizontal"
-            anchors {top: parent.top; topMargin: 3;
-                bottom: parent.bottom; bottomMargin: 3;
-            left: divIcon.left; leftMargin:divIcon.width+settingsIcon.width+3; right: parent.right; rightMargin: 3}
-            interactive: false
-            width: parent.width;
-            opacity: (letterBar ? 1 : 0)
-            keyNavigationWraps: true
+        Item {
+            id: indexBarItem
 
-            model: IndexModel{
-                id: indexModel
-            }
+            property int sideMargins: 10
 
-            delegate: Image{
-                id: dIndexBar
+            anchors { verticalCenter: parent.verticalCenter;
+                     left: divIcon.right; leftMargin: sideMargins;
+                     right: parent.right; rightMargin: sideMargins}
 
-                parent: indexListView
+            ListView {
+                id: indexListView
+                orientation: "Horizontal"
+                anchors {horizontalCenter: parent.horizontalCenter; }
 
-                property string dataAlpha: dletter
+                interactive: false
+                width: parent.width
+                opacity: (letterBar ? 1 : 0)
+                keyNavigationWraps: true
 
-                signal clicked
-
-                width: (parent.width/45)+letter.width//REVISIT
-                height: letter.height
-
-                anchors.verticalCenter : parent.verticalCenter
-
-                Text {
-                    id: letter
-                    text: dletter
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: theme_fontPixelSizeLargest2
-                    color: theme_fontColorInactive
-
+                model: IndexModel{
+                    id: indexModel
                 }
-                Image{
-                    id: slider
-                    source: "image://theme/contacts/slider_alphabetical"
-                    anchors { horizontalCenter: letter.horizontalCenter}
-                    y: -75
-                    visible: false
-                }
-                Text {
-                    id: letterDownState
-                    text: dletter
-                    anchors.top: slider.top
-                    anchors.topMargin: 5
-                    anchors.horizontalCenter: slider.horizontalCenter
-                    font.pixelSize: theme_fontPixelSizeLargest3
-                    visible: false
-                    color: theme_fontColorSelected
-                }
-                MouseArea {
-                    id: mouseArea
-                    anchors.fill: letter
 
-                    onClicked: {
-                        for(var i=0; i < dlist.count; i++){
-                            var c = people.data(proxy.getSourceRow(i), PeopleModel.FirstCharacterRole);
-                            var exemplar = localeUtils.getExemplarForString(c);
-                            if(exemplar == letter.text){
-                                dlist.positionViewAtIndex(i, ListView.Beginning);
-                                break;
+                delegate: Image{
+                    id: dIndexBar
+
+                    parent: indexListView
+
+                    property string dataAlpha: dletter
+
+                    signal clicked
+
+                    width: Math.round(parent.width/indexListView.count)
+                    height: letter.height
+                    visible: {
+                        //When in landscape mode, return all index characters
+                        if (window.orientation & 1)
+                            return true;
+
+                        //When in portrait mode, return every other character
+                        if (indexListView.count <= 10)
+                            return true;
+                        if (index % 2)
+                            return false;
+                        return true;
+                    }
+
+                    anchors.verticalCenter : parent.verticalCenter
+
+                    Text {
+                        id: letter
+                        text: dletter
+                        font.pixelSize: theme_fontPixelSizeLargest2
+                        color: theme_fontColorInactive
+
+                    }
+                    Image{
+                        id: slider
+                        source: "image://theme/contacts/slider_alphabetical"
+                        anchors { horizontalCenter: letter.horizontalCenter}
+                        y: -75
+                        visible: false
+                    }
+                    Text {
+                        id: letterDownState
+                        text: dletter
+                        anchors.top: slider.top
+                        anchors.topMargin: 5
+                        anchors.horizontalCenter: slider.horizontalCenter
+                        font.pixelSize: theme_fontPixelSizeLargest3
+                        visible: false
+                        color: theme_fontColorSelected
+                    }
+                    MouseArea {
+                        id: mouseArea
+                        anchors.fill: letter
+
+                        onClicked: {
+                            for(var i=0; i < dlist.count; i++){
+                                var c = people.data(proxy.getSourceRow(i),
+                                                    PeopleModel.FirstCharacterRole);
+                                var exemplar = localeUtils.getExemplarForString(c);
+                                if(exemplar == letter.text){
+                                    dlist.positionViewAtIndex(i, ListView.Beginning);
+                                    break;
+                                }
                             }
                         }
                     }
-                }
-                states: State {
-                    name: "pressed"; when: mouseArea.pressed == true
-                    PropertyChanges {
-                        target: letter
-                        color: theme_fontColorSelected
-                    }
-                    PropertyChanges {
-                        target: slider
-                        visible: true
-                    }
-                    PropertyChanges {
-                        target: letterDownState
-                        visible: true
+                    states: State {
+                        name: "pressed"; when: mouseArea.pressed == true
+                        PropertyChanges {
+                            target: letter
+                            color: theme_fontColorSelected
+                        }
+                        PropertyChanges {
+                            target: slider
+                            visible: true
+                        }
+                        PropertyChanges {
+                            target: letterDownState
+                            visible: true
+                        }
                     }
                 }
             }
