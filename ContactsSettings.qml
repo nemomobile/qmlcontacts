@@ -20,6 +20,7 @@ AppPage {
     property string sortByLast: qsTr("Sort by last name")
     property string displayByFirst: qsTr("Display by first name")
     property string displayByLast: qsTr("Display by last name")
+    property int itemMargins: 10
 
     Translator { catalog: "meego-app-contacts" }
     pageTitle: titleStr
@@ -104,33 +105,38 @@ AppPage {
             width: parent.width
 
             Text {
+                id: settingsText
                 anchors.top: parent.top
                 anchors.left: parent.left
-                anchors.leftMargin: 10
+                anchors.leftMargin: itemMargins
                 text: getSettingText(modelData)
-                width: 100
+                width: Math.round(parent.width/2) - itemMargins
                 height: parent.height
                 verticalAlignment: Text.AlignVCenter
             }
 
-            DropDown {
+            Item {
+                id: dropDownItem
                 anchors {verticalCenter: parent.verticalCenter;
+                         left: settingsText.right;
+                         leftMargin: itemMargins;
                          right: parent.right
                          rightMargin: 10 }
-                selectedIndex: getCurrentVal(modelData)
-                titleColor: theme_fontColorNormal
-                replaceDropDownTitle: true
+                DropDown {
+                    anchors {verticalCenter: parent.verticalCenter;}
+                    selectedIndex: getCurrentVal(modelData)
+                    titleColor: theme_fontColorNormal
+                    replaceDropDownTitle: true
 
-                model: getDataList(modelData)
+                    model: getDataList(modelData)
 
-                width: 300
-                minWidth: width
-                maxWidth: width + 50
+                    maxWidth: (parent.width <= 0) ? 400 : Math.round(parent.width/2)
 
-                onTriggered: {
-                    handleSelectionChanged(modelData, selectedIndex, model);
-                }
-            } //DropDown
+                    onTriggered: {
+                        handleSelectionChanged(modelData, selectedIndex, model);
+                    }
+                } //DropDown
+            } //Item
         }  //Image
     }  //Component
 }
