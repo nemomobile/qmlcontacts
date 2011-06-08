@@ -35,15 +35,15 @@ AppPage {
     function getCurrentVal(type) {
         if (type == "sort") {
             if (settingsDataStore.getSortOrder() == PeopleModel.LastNameRole)
-                return sortByLast;
+                return 1;
             else
-                return sortByFirst;
+                return 0;
         }
 
         if (settingsDataStore.getDisplayOrder() == PeopleModel.LastNameRole)
-            return displayByLast;
+            return 1;
         else
-            return displayByFirst;
+            return 0;
     }
 
     function getDataList(type) {
@@ -53,17 +53,17 @@ AppPage {
         return [displayByFirst, displayByLast];
     }
 
-    function handleSelectionChanged(type, data) {
+    function handleSelectionChanged(type, data, dataList) {
         if (type == "sort") {
-            if (data == sortByFirst)
+            if (dataList[data] == sortByFirst)
                 settingsDataStore.setSortOrder(PeopleModel.FirstNameRole);
-            else if (data == sortByLast)
+            else if (dataList[data] == sortByLast)
                 settingsDataStore.setSortOrder(PeopleModel.LastNameRole);
         }
 
-        if (data == displayByFirst)
+        if (dataList[data] == displayByFirst)
             settingsDataStore.setDisplayOrder(PeopleModel.FirstNameRole);
-        else if (data == displayByLast)
+        else if (dataList[data] == displayByLast)
             settingsDataStore.setDisplayOrder(PeopleModel.LastNameRole);
     }
 
@@ -117,7 +117,7 @@ AppPage {
                 anchors {verticalCenter: parent.verticalCenter;
                          right: parent.right
                          rightMargin: 10 }
-                title: getCurrentVal(modelData)
+                selectedIndex: getCurrentVal(modelData)
                 titleColor: theme_fontColorNormal
                 replaceDropDownTitle: true
 
@@ -128,7 +128,7 @@ AppPage {
                 maxWidth: width + 50
 
                 onTriggered: {
-                    handleSelectionChanged(modelData, selectedTitle);
+                    handleSelectionChanged(modelData, selectedIndex, model);
                 }
             } //DropDown
         }  //Image
