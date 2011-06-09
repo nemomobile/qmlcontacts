@@ -254,24 +254,56 @@ Window {
                 if(needle != "")
                     peopleModel.searchContacts(needle);
             }
-            GroupedViewPortrait{
-                id: gvp
+
+            Item {
+                id: groupedView
                 anchors {top: parent.top; bottom: groupedViewFooter.top; left: parent.left; right: parent.right;}
-                dataModel: peopleModel
-                sortModel: proxyModel
-                onAddNewContact:{
-                    window.addPage(myAppNewContact);
+
+                GroupedViewPortrait{
+                    id: gvp
+                    anchors.fill: parent
+                    dataModel: peopleModel
+                    sortModel: proxyModel
+                    onAddNewContact:{
+                        window.addPage(myAppNewContact);
+                    }
+                    visible: (window.orientation == 0 || window.orientation == 2) // portrait
+                }
+
+                GroupedViewLandscape {
+                    id: gvl
+                    anchors.fill: parent
+                    dataModel: peopleModel
+                    sortModel: proxyModel
+                    onAddNewContact:{
+                        window.addPage(myAppNewContact);
+                    }
+                    visible: (window.orientation == 1 || window.orientation == 3) // landscape
                 }
             }
+
             FooterBar { 
                 id: groupedViewFooter 
                 type: ""
                 currentView: gvp
                 pageToLoad: myAppAllContacts
-                dlist: gvp.cards
                 letterBar: true
                 proxy:  proxyModel
                 people: peopleModel
+                onDirectoryCharacterClicked: {
+                    // Update landscape view
+                    gvl.cards.positionViewAtHeader(character)
+
+                    // Update portrait view
+                    for(var i=0; i < gvp.cards.count; i++){
+                        var c = peopleModel.data(proxyModel.getSourceRow(i), PeopleModel.FirstCharacterRole);
+                        var exemplar = localeUtils.getExemplarForString(c);
+                        if(exemplar == character){
+                            gvp.cards.positionViewAtIndex(i, ListView.Beginning);
+                            break;
+                        }
+                    }
+                }
             }
             actionMenuModel: [labelNewContactView]
             actionMenuPayload: [0]

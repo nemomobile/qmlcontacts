@@ -15,16 +15,15 @@ Item {
     property string type 
     property variant currentView
     property variant pageToLoad
-    property ListView dlist: cardlist
     property bool letterBar : false
     property ProxyModel proxy: proxyModel
     property PeopleModel people: peopleModel
 
-    signal clicked
-
     width: parent.width
     height: footer_bar.height
     anchors {bottom: parent.bottom; left: parent.left; right: parent.right;}
+
+    signal directoryCharacterClicked(string character)
 
     Labs.ApplicationsModel {
         id: appModel
@@ -179,36 +178,25 @@ Item {
                         color: theme_fontColorSelected
                     }
                     MouseArea {
-                        id: mouseArea
-                        anchors.fill: letter
-
-                        onClicked: {
-                            for(var i=0; i < dlist.count; i++){
-                                var c = people.data(proxy.getSourceRow(i),
-                                                    PeopleModel.FirstCharacterRole);
-                                var exemplar = localeUtils.getExemplarForString(c);
-                                if(exemplar == letter.text){
-                                    dlist.positionViewAtIndex(i, ListView.Beginning);
-                                    break;
-                                }
-                            }
-                        }
+                    id: mouseArea
+                    anchors.fill: letter
+                    onClicked: directoryCharacterClicked(letter.text)
+                }
+                states: State {
+                    name: "pressed"; when: mouseArea.pressed == true
+                    PropertyChanges {
+                        target: letter
+                        color: theme_fontColorSelected
                     }
-                    states: State {
-                        name: "pressed"; when: mouseArea.pressed == true
-                        PropertyChanges {
-                            target: letter
-                            color: theme_fontColorSelected
-                        }
-                        PropertyChanges {
-                            target: slider
-                            visible: true
-                        }
-                        PropertyChanges {
-                            target: letterDownState
-                            visible: true
-                        }
+                    PropertyChanges {
+                        target: slider
+                        visible: true
                     }
+                    PropertyChanges {
+                        target: letterDownState
+                        visible: true
+                    }
+			       }
                 }
             }
         }
@@ -245,4 +233,4 @@ Item {
             onClicked: { handleButtonClick(buttonRight.text); }
          }
      }
- }
+}
