@@ -1425,6 +1425,12 @@ bool PeopleModel::isSelfContact(const QUuid id) const
     return isSelfContact(priv->uuidToId[id]);
 }
 
+bool PeopleModel::isSelfContact(const QString id) const
+{
+    QUuid uuid(id);
+    return isSelfContact(priv->uuidToId[uuid]);
+}
+
 void PeopleModel::fetchOnlineOnly(const QVariantList &stringids){
     QList<QContactLocalId> ids;
     for(int iter = 0; iter < stringids.count(); iter++)
