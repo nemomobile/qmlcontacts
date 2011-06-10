@@ -14,6 +14,7 @@
 #include <unicode/uchar.h>
 #include <unicode/ulocdata.h>
 #include <unicode/ustring.h>
+#include <unicode/uchriter.h>
 
 #include "localeutils.h"
 
@@ -246,15 +247,22 @@ QStringList LocaleUtils::getIndexBarChars()
     }
 
     else {
-        UnicodeString uniStr = UnicodeString(indexes, size);
-        int i = 0;
+        UCharCharacterIterator iter = UCharCharacterIterator(indexes, size);
+        UChar c = iter.first();
 
-        for (i = 0; i < uniStr.length(); i++) {
-            QString temp(uniStr.char32At(i));
-
-            if ((temp != QString(" ")) && (temp != QString("[")) &&
-               (temp != QString("]")))
+        for (; c != CharacterIterator::DONE; c = iter.next()) {
+            QString temp(c);
+            if ((c != ' ') && (c != '[') && (c != ']')) { 
+                //Check for exemplars that are two characters
+                //These are denoted by '{}'
+                if (c == '{') {
+                    c = iter.next();
+                    temp = "";
+                    for (; c != '}'; c = iter.next())
+                        temp += QString(c);
+                }
                 list << temp;
+            }
         }
     }
 

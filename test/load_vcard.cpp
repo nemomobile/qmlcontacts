@@ -37,6 +37,7 @@ void Load_Vcard::addNewContacts_data()
      QTest::newRow("JPN") << "vcardJPN.vcf" << "0";
      QTest::newRow("KOR") << "vcardKOR.vcf" << "0";
      QTest::newRow("DEU") << "vcardDEU.vcf" << "0";
+     QTest::newRow("CSY") << "vcardCSY.vcf" << "0";
      QTest::newRow("example") << "example.vcf" << "0";
 }
 
