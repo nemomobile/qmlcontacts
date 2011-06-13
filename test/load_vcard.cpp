@@ -32,12 +32,27 @@ void Load_Vcard::addNewContacts_data()
      QTest::addColumn<QString>("vcard");
      QTest::addColumn<QString>("result");
 
-     QTest::newRow("CHT") << "vcardCHT.vcf" << "0";
      QTest::newRow("CHS") << "vcardCHS.vcf" << "0";
+     QTest::newRow("CHT") << "vcardCHT.vcf" << "0";
+     QTest::newRow("CSY") << "vcardCSY.vcf" << "0";
+     QTest::newRow("DAN") << "vcardDAN.vcf" << "0";
+     QTest::newRow("DEU") << "vcardDEU.vcf" << "0";
+     QTest::newRow("ELL") << "vcardELL.vcf" << "0";
+     QTest::newRow("ESP") << "vcardESP.vcf" << "0";
+     QTest::newRow("FIN") << "vcardFIN.vcf" << "0";
+     QTest::newRow("FRA") << "vcardFRA.vcf" << "0";
+     QTest::newRow("HUN") << "vcardHUN.vcf" << "0";
+     QTest::newRow("ITA") << "vcardITA.vcf" << "0";
      QTest::newRow("JPN") << "vcardJPN.vcf" << "0";
      QTest::newRow("KOR") << "vcardKOR.vcf" << "0";
-     QTest::newRow("DEU") << "vcardDEU.vcf" << "0";
-     QTest::newRow("CSY") << "vcardCSY.vcf" << "0";
+     QTest::newRow("NLD") << "vcardNLD.vcf" << "0";
+     QTest::newRow("NOR") << "vcardNOR.vcf" << "0";
+     QTest::newRow("PLK") << "vcardPLK.vcf" << "0";
+     QTest::newRow("PTB") << "vcardPTB.vcf" << "0";
+     QTest::newRow("PTG") << "vcardPTG.vcf" << "0";
+     QTest::newRow("RUS") << "vcardRUS.vcf" << "0";
+     QTest::newRow("SVE") << "vcardSVE.vcf" << "0";
+     QTest::newRow("TRK") << "vcardTRK.vcf" << "0";
      QTest::newRow("example") << "example.vcf" << "0";
 }
 
