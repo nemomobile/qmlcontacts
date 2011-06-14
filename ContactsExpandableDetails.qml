@@ -31,6 +31,57 @@ Column {
     property string addLabel: qsTr("Add")
     property string cancelLabel: qsTr("Cancel")
 
+    property alias expanded: detailsBox.expanded
+    property alias itemCount: detailsRepeater.itemCount
+    property alias repeaterModel: detailsRepeater.model
+    property alias repeaterItemCount: detailsRepeater.itemCount
+    property alias repeaterItemList: detailsRepeater.itemList
+
+    SaveRestoreState {
+        id: srsExpandableDetails
+        onSaveRequired: {
+            // Header
+            var detailId = headerLabel + "."
+
+            setValue(detailId + "expandableDetails.expanded", expanded)
+
+            // Model
+            setValue(detailId + "expandableDetails.itemCount", detailsRepeater.itemCount)
+
+
+            if(detailsRepeater.model.count > 0){
+                var propIndex = 0;
+
+                for(var i = 0; i < detailsRepeater.count; i++){
+                    var entryName = detailId + "expandableDetails.items." + i + "."
+
+                    var arr = repeaterItemList[i].getDetails(false);
+                    console.log("arr: " + arr);
+                    propIndex = 0;
+                    for (var key in arr){
+                        var keyName     = entryName + "property." + propIndex + ".name";
+                        var keyValue    = entryName + "property." + propIndex + ".value";
+
+                        setValue(keyName, key)
+                        setValue(keyValue, arr[key])
+                        propIndex++
+                    }
+                }
+
+                setValue(detailId + "expandableDetails.items.property.count", propIndex)
+            }
+
+            sync()
+        }
+    }
+
+    Component.onCompleted: {
+        if(srsExpandableDetails.restoreRequired){
+            var detailId = headerLabel + "."
+            expanded = srsExpandableDetails.restoreOnce(detailId + "expandableDetails.expanded", false)
+        }
+    }
+
     function getNewDetails() {
         if (detailsRepeater.itemCount <= 0)
             return [""];
@@ -63,6 +114,28 @@ Column {
                     detailsModel.append({"type" : ""});
                     for (var key in tmpArr[i])
                          detailsModel.setProperty(i, key, tmpArr[i][key]);
+                }
+            }
+
+            if(srsExpandableDetails.restoreRequired){
+                var detailId = headerLabel + "."
+                var itemCount = srsExpandableDetails.value(detailId + "expandableDetails.itemCount", 0)
+
+                if(itemCount > 0){
+                    var entryName = detailId + "expandableDetails.items."
+                    var propertyCount = srsExpandableDetails.restoreOnce(entryName + ".property.count", 0)
+
+                    for(var i = 0; i < itemCount; i++){
+                        entryName = entryName + i + ".property."
+                        detailsModel.append({"type" : ""});
+
+                        for(var j = 0; j < propertyCount; j++){
+                            var key     = srsExpandableDetails.restoreOnce(entryName + j + ".name", "")
+                            var value   = srsExpandableDetails.restoreOnce(entryName + j + ".value", "")
+
+                            detailsModel.setProperty(i, key, value);
+                        }
+                    }
                 }
             }
         }
@@ -123,7 +196,7 @@ Column {
                     existingFieldItem.newDetailsModel = detailsRepeater.model;
                     existingFieldItem.rIndex = index;
                     existingFieldItem.updateMode = true;
- 
+
                     //REVISIT: Better way to calculate? Use a state?
                     //We need to grow the parent based on the height
                     //of the children we're stuffing in
@@ -174,6 +247,7 @@ Column {
             }
         }
     }
+
     Binding {target: detailsColumn; property: "validInput"; value: true; when: detailsRepeater.count > 0}
     Binding {target: detailsColumn; property: "validInput"; value: false; when: detailsRepeater.count <= 0}
 
@@ -233,7 +307,7 @@ Column {
                     }
 
                     Item {
-                        id: newContentArea 
+                        id: newContentArea
 
                         height: childrenRect.height
                         width: parent.width

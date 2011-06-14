@@ -63,16 +63,18 @@ Flickable{
     property date restoredBirthday
 
     SaveRestoreState {
-	id: justRestore
-	onSaveRequired: sync()
-	Component.onCompleted: {
-	    restoredFirstName = restoreOnce("newContact.firstName", "")
-	    restoredLastName = restoreOnce("newContact.lastName", "")
-	    restoredCompany = restoreOnce("newContact.company", "")
-	    restoredNotes = restoreOnce("newContact.notes", "")
-	    restoredBirthday = restoreOnce("newContact.birthday", "2011-01-01")
-	}
+        id: justRestore
+        onSaveRequired: sync()
     }
+
+    Component.onCompleted: {
+        restoredFirstName       = justRestore.restoreOnce("newContact.firstName", "")
+        restoredLastName        = justRestore.restoreOnce("newContact.lastName", "")
+        restoredCompany         = justRestore.restoreOnce("newContact.company", "")
+        restoredNotes           = justRestore.restoreOnce("newContact.notes", "")
+        restoredBirthday        = justRestore.restoreOnce("newContact.birthday", "2011-01-01")
+    }
+
 
     function contactSave(){
         var newPhones = phones.getNewDetails();
@@ -198,7 +200,7 @@ Flickable{
 			    setValue("newContact.company",data_company.text)
 			    setValue("newContact.photo", avatar_img.source)
 			    setValue("newContact.birthday", datePicker.selectedDate)
-			    setValue("newContact.notes",data_notes.text)
+                           setValue("newContact.notes",data_notes.text)
 			    sync()
 			}
 		    }
@@ -278,7 +280,7 @@ Flickable{
         }
 
         ContactsExpandableDetails {
-            id: phones 
+            id: phones
 
             headerLabel: phoneLabel
             expandingBoxTitle: addPhones
