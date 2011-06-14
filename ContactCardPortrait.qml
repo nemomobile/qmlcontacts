@@ -105,10 +105,10 @@ Image {
             if((dataFirst != "") || (dataLast != "")) {
                 if (settingsDataStore.getDisplayOrder() == PeopleModel.LastNameRole) {
                     //: %1 is last name, %2 is first name
-                    return qsTr("%1 %2").arg(getTruncatedString(dataLast, 25)).arg(getTruncatedString(dataFirst, 25));
+                    return qsTr("%1 %2", "LastFirstName").arg(getTruncatedString(dataLast, 25)).arg(getTruncatedString(dataFirst, 25));
                 } else {
                     //: %1 is first name, %2 is last name
-                    return qsTr("%1 %2").arg(getTruncatedString(dataFirst, 25)).arg(getTruncatedString(dataLast, 25));
+                    return qsTr("%1 %2", "FirstLastName").arg(getTruncatedString(dataFirst, 25)).arg(getTruncatedString(dataLast, 25));
                 }
             }
             else if(dataPeople.data(sourceIndex, PeopleModel.CompanyNameRole) != "")
