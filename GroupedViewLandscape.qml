@@ -24,14 +24,6 @@ Item {
         id: emptyOrCardListView
         anchors.fill: parent
 
-        EmptyContacts {
-            id: emptyListView
-            anchors.fill: parent
-            onClicked: {
-                groupedViewLandscape.addNewContact();
-            }
-        }
-
         ListOfGridsView {
             id: cardListView
             anchors.fill: parent
@@ -78,10 +70,21 @@ Item {
                     }
                 }
             }
+
+            EmptyContacts {
+                id: emptyListView
+                anchors.top: parent.bottom
+                onClicked: {
+                    groupedViewLandscape.addNewContact();
+                }
+            }
+
+            Binding {target: emptyListView;
+                     property: "visible"; value: cardListView.count == 1 }
         }
 
-        Binding{target: emptyListView; property: "visible"; value: cardListView.count == 1 }
-        Binding{target: cardListView; property: "visible"; value: cardListView.count > 0 }
+        Binding {target: cardListView;
+                 property: "visible"; value: cardListView.count > 0 }
     }
 
     onPressAndHold: {
