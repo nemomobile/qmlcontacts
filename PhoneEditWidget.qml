@@ -30,6 +30,28 @@ Item{
     property string cancelLabel: qsTr("Cancel")
     property string addLabel: qsTr("Add")
 
+    property string restoredPhoneNumber: ""
+    property int restoredPhoneTypeIndex: -1
+
+    SaveRestoreState {
+        id: srsPhone
+        onSaveRequired: {
+            if(!updateMode){
+                // Save the phone number that is currently being edited
+                setValue("phone.number", data_phone.text)
+                setValue("phone.typeIndex", phoneComboBox.selectedIndex)
+            }
+
+            sync()
+        }
+
+        Component.onCompleted: {
+            restoredPhoneNumber     = srsPhone.restoreOnce("phone.number", "")
+            restoredPhoneTypeIndex  = srsPhone.restoreOnce("phone.typeIndex", -1)
+        }
+    }
+
+
     function parseDetailsModel(existingDetailsModel, contextModel) {
         var arr = new Array();
         for (var i = 0; i < existingDetailsModel.length; i++)
@@ -89,14 +111,14 @@ Item{
 
         model: [mobileContext, homeContext, workContext, otherContext]
 
-        title: (updateMode) ? newDetailsModel.get(rIndex).type : mobileContext
-        selectedIndex: (updateMode) ? getIndexVal(newDetailsModel.get(rIndex).type) : 0
+        title: (updateMode) ? newDetailsModel.get(rIndex).type : (restoredPhoneTypeIndex != -1 ? newDetailsModel.get(restoredPhoneTypeIndex).type : mobileContext)
+        selectedIndex: (updateMode) ? getIndexVal(newDetailsModel.get(rIndex).type) : (restoredPhoneTypeIndex != -1 ? restoredPhoneTypeIndex : 0)
         replaceDropDownTitle: true
     }
 
     TextEntry {
         id: data_phone
-        text: (updateMode) ? newDetailsModel.get(rIndex).phone : ""
+        text: (updateMode) ? newDetailsModel.get(rIndex).phone : (restoredPhoneNumber != "" ? restoredPhoneNumber : "")
         defaultText: defaultPhone
         width: 400
         anchors {left:phoneComboBox.right; leftMargin: 10;}
