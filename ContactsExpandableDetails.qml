@@ -42,11 +42,9 @@ Column {
             var detailId = headerLabel + "."
 
             setValue(detailId + "expandableDetails.expanded", expanded)
-
-            // Model
             setValue(detailId + "expandableDetails.itemCount", detailsRepeater.itemCount)
 
-
+            // Repeater data
             if(detailsRepeater.model.count > 0){
                 var propIndex = 0;
 
@@ -144,6 +142,7 @@ Column {
 
         property int itemCount 
         property variant itemList: []
+        property variant keys: []
 
         Component.onCompleted: {
             if(srsExpandableDetails.restoreRequired){
@@ -152,25 +151,64 @@ Column {
 
                 if(itemCount > 0){
                     var entryNameHeader = detailId + "expandableDetails.items."
-//                    console.log("Reading value for: " + headerLabel + ".expandableDetails.items.property.count")
                     var propertyCount = srsExpandableDetails.restoreOnce(headerLabel + ".expandableDetails.items.property.count", 0)
 
                     console.log("Item count: " + itemCount)
                     for(var i = 0; i < itemCount; i++){
                         var entryName = entryNameHeader + i + ".property."
-                        model.append({"type" : ""});
 
-//                        console.log("reading: " + entryName)
-//                        console.log("Property count: " + propertyCount)
+                        if(propertyCount == 1)
+                            model.append({"type" : ""});
+                        else if(propertyCount == 2){
+                            model.append({"type" : "", "phone" : ""});
+                        }
+
+                        keys = new Array()
+                        for(var j = 0; j < propertyCount; j++){
+                            keys.push(srsExpandableDetails.value(entryName + j + ".name", ""))
+                        }
+
+                        if(keys.length == 1){
+                            var stringData = keys[0];
+                            model.append({stringData : ""});
+                        }else if(keys.length == 2){
+                            var stringData1 = keys[0];
+                            var stringData2 = keys[1];
+                            model.append({stringData1 : "", stringData2 : ""});
+                        }else if(keys.length == 3){
+                            var stringData1 = keys[0];
+                            var stringData2 = keys[1];
+                            var stringData3 = keys[2];
+                            model.append({stringData1 : "", stringData2 : "", stringData3 : ""});
+                        }else if(keys.length == 4){
+                            var stringData1 = keys[0];
+                            var stringData2 = keys[1];
+                            var stringData3 = keys[2];
+                            var stringData4 = keys[3];
+                            model.append({stringData1 : "", stringData2 : "", stringData3 : "", stringData4 : ""});
+                        }else if(keys.length == 5){
+                            var stringData1 = keys[0];
+                            var stringData2 = keys[1];
+                            var stringData3 = keys[2];
+                            var stringData4 = keys[3];
+                            var stringData5 = keys[4];
+                            model.append({stringData1 : "", stringData2 : "", stringData3 : "", stringData4 : "", stringData5 : ""});
+                        }
+
                         for(var j = 0; j < propertyCount; j++){
                             var key     = srsExpandableDetails.restoreOnce(entryName + j + ".name", "")
                             var value   = srsExpandableDetails.restoreOnce(entryName + j + ".value", "")
 
-//                            console.log("Restore property: " + key + " to value: " + value)
+                            console.log("Setting property \"" + key + "\" to value (" + value + ")")
 
                             model.setProperty(i, key, value);
                         }
                     }
+                }
+
+                for(var i = 0; i < itemList.length; i++){
+                    itemList[i].visible = true
+                    console.log("Item " + i + " is visible: " + itemList[i].visible + " item opacity: " + itemList[i].opacity)
                 }
             }
         }
