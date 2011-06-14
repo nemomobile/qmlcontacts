@@ -17,7 +17,7 @@ Item{
     property variant newDetailsModel: null
     property int rIndex: -1
     property bool updateMode: false 
-    property bool validInput: false 
+    property bool validInput: false
 
     property string addressLabel: qsTr("Address")
     property string homeContext: qsTr("Home")
@@ -30,36 +30,8 @@ Item{
     property string cancelLabel: qsTr("Cancel")
     property string addLabel: qsTr("Add")
 
-    SaveRestoreState {
-        id: srsPhone
-        onSaveRequired: {
-            if(newDetailsModel != null){
-                if(newDetailsModel.count > 0){
-                    setValue("phone.count", newDetailsModel.count)
-                    for (var i = 0; i < newDetailsModel.count; i++){
-                        setValue("phone.number" + i, newDetailsModel.get(i).phone)
-                        setValue("phone.type" + i, newDetailsModel.get(i).type)
-                    }
-                }
-            }
-            sync()
-        }
-    }
-
-    Component.onCompleted: {
-        if (srsPhone.restoreRequired) {
-            var phoneCount = srsPhone.value("phone.count", 0)
-            if(phoneCount > 0){
-                for(var i = 0; i < phoneCount; i++){
-                    newDetailsModel.set(i, {"phone": srsPhone.restoreOnce("phone.number" + i, "")})
-                    newDetailsModel.set(i, {"type": srsPhone.restoreOnce("phone.type" + i, "")})
-                }
-            }
-        }
-    }
-
     function parseDetailsModel(existingDetailsModel, contextModel) {
-        var arr = new Array(); 
+        var arr = new Array();
         for (var i = 0; i < existingDetailsModel.length; i++)
             arr[i] = {"phone": existingDetailsModel[i], "type": contextModel[i]};
 

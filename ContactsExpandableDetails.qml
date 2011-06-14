@@ -33,8 +33,6 @@ Column {
 
     property alias expanded: detailsBox.expanded
     property alias itemCount: detailsRepeater.itemCount
-    property alias repeaterModel: detailsRepeater.model
-    property alias repeaterItemCount: detailsRepeater.itemCount
     property alias repeaterItemList: detailsRepeater.itemList
 
     SaveRestoreState {
@@ -56,7 +54,6 @@ Column {
                     var entryName = detailId + "expandableDetails.items." + i + "."
 
                     var arr = repeaterItemList[i].getDetails(false);
-                    console.log("arr: " + arr);
                     propIndex = 0;
                     for (var key in arr){
                         var keyName     = entryName + "property." + propIndex + ".name";
@@ -116,28 +113,6 @@ Column {
                          detailsModel.setProperty(i, key, tmpArr[i][key]);
                 }
             }
-
-            if(srsExpandableDetails.restoreRequired){
-                var detailId = headerLabel + "."
-                var itemCount = srsExpandableDetails.value(detailId + "expandableDetails.itemCount", 0)
-
-                if(itemCount > 0){
-                    var entryName = detailId + "expandableDetails.items."
-                    var propertyCount = srsExpandableDetails.restoreOnce(entryName + ".property.count", 0)
-
-                    for(var i = 0; i < itemCount; i++){
-                        entryName = entryName + i + ".property."
-                        detailsModel.append({"type" : ""});
-
-                        for(var j = 0; j < propertyCount; j++){
-                            var key     = srsExpandableDetails.restoreOnce(entryName + j + ".name", "")
-                            var value   = srsExpandableDetails.restoreOnce(entryName + j + ".value", "")
-
-                            detailsModel.setProperty(i, key, value);
-                        }
-                    }
-                }
-            }
         }
     }
 
@@ -169,6 +144,36 @@ Column {
 
         property int itemCount 
         property variant itemList: []
+
+        Component.onCompleted: {
+            if(srsExpandableDetails.restoreRequired){
+                var detailId = headerLabel + "."
+                var itemCount = srsExpandableDetails.value(detailId + "expandableDetails.itemCount", 0)
+
+                if(itemCount > 0){
+                    var entryNameHeader = detailId + "expandableDetails.items."
+//                    console.log("Reading value for: " + headerLabel + ".expandableDetails.items.property.count")
+                    var propertyCount = srsExpandableDetails.restoreOnce(headerLabel + ".expandableDetails.items.property.count", 0)
+
+                    console.log("Item count: " + itemCount)
+                    for(var i = 0; i < itemCount; i++){
+                        var entryName = entryNameHeader + i + ".property."
+                        model.append({"type" : ""});
+
+//                        console.log("reading: " + entryName)
+//                        console.log("Property count: " + propertyCount)
+                        for(var j = 0; j < propertyCount; j++){
+                            var key     = srsExpandableDetails.restoreOnce(entryName + j + ".name", "")
+                            var value   = srsExpandableDetails.restoreOnce(entryName + j + ".value", "")
+
+//                            console.log("Restore property: " + key + " to value: " + value)
+
+                            model.setProperty(i, key, value);
+                        }
+                    }
+                }
+            }
+        }
 
         delegate: Image {
             id: imageBar
