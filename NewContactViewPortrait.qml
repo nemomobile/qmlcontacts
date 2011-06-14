@@ -41,7 +41,11 @@ Flickable{
 
     property string favoriteValue: "Favorite"
     property string unfavoriteValue: "Unfavorite"
+    
+    //: Remove favorite flag / remove contact from favorites list
     property string unfavoriteTranslated: qsTr("Unfavorite")
+
+    //: Add favorite flag / add contact to favorites list
     property string favoriteTranslated: qsTr("Favorite")
 
     property string phoneLabel: qsTr("Phone numbers")

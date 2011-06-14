@@ -10,6 +10,7 @@ import Qt 4.7
 import MeeGo.Components 0.1
 
 Image{
+    //: If a contact isn't sorted under one of the values in a locale's alphabet, it is sorted under '#'
     property string etcSymbol: qsTr("#")
     id: sectionBackground
     source: "image://theme/contacts/contact_title_bg_p"

@@ -43,16 +43,24 @@ Flickable {
     property string headerNote: qsTr("Note")
 
     property string favoriteValue: "Favorite"
-    property string favoriteTranslated: qsTr("Favorite")
     property string unfavoriteValue: "Unfavorite"
+
+    //: Add favorite flag / add contact to favorites list
+    property string favoriteTranslated: qsTr("Favorite")
+
+    //: Remove favorite flag / remove contact from favorites list
     property string unfavoriteTranslated: qsTr("Unfavorite")
 
     property string phoneLabel: qsTr("Phone numbers")
     property string addPhones: qsTr("Add number")
+
+    //: Instant Messaging Accounts for this contact
     property string imLabel: qsTr("Instant messaging")
     property string addIms: qsTr("Add account")
     property string emailLabel: qsTr("Email")
     property string addEmails: qsTr("Add email address")
+
+    //: The header for the section that shows the web sites for this contact
     property string urlLabel: qsTr("Web")
     property string addUrls: qsTr("Add web page")
     property string addressLabel: qsTr("Address")

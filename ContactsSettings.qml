@@ -15,10 +15,16 @@ AppPage {
     id: settingsPage
     property string titleStr: qsTr("Contacts Settings")
     property string sortPreferenceStr: qsTr("Sort Order:")
+  
+    //: How contacts will be displayed to the user - last first or first last
     property string displayPreferenceStr: qsTr("Display Order:")
     property string sortByFirst: qsTr("Sort by first name")
     property string sortByLast: qsTr("Sort by last name")
+
+    //: Display contacts with the first name first - FirstName LastName
     property string displayByFirst: qsTr("Display by first name")
+
+    //: Display contacts with the last name first - LastName FirstName
     property string displayByLast: qsTr("Display by last name")
     property int itemMargins: 10
 

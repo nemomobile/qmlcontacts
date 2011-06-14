@@ -35,7 +35,11 @@ Flickable {
     property string contextWork: qsTr("Work")
     property string contextOther: qsTr("Other")
     property string contextMobile: qsTr("Mobile")
+
+    //: Denotes whether the web page for this contact is just a bookmark
     property string contextBookmark: qsTr("Bookmark")
+
+    //: Denotes whether the web page for this contact is a favorite bookmark
     property string contextFavorite: qsTr("Favorite")
 
     property string defaultFirstName: qsTr("First name")
@@ -43,11 +47,17 @@ Flickable {
     property string defaultCompany: qsTr("Company")
     property string defaultNote: qsTr("Enter note")
     property string defaultBirthday: qsTr("Enter birthday")
+
+    //: Default website - the user should enter a URL in this field
     property string defaultWeb : qsTr("Site")
 
     property string headerPhone: qsTr("Phone numbers")
+
+    //: Instant Messaging Accounts for this contact
     property string headerIm: qsTr("Instant messaging")
     property string headerEmail: qsTr("Email")
+
+    //: The header for the section that shows the web sites for this contact
     property string headerWeb: qsTr("Web")
     property string headerAddress : qsTr("Address")
     property string headerBirthday: qsTr("Birthday")
@@ -62,7 +72,10 @@ Flickable {
     property string gtalkTr : qsTr("Google Talk")
     property string imTr : qsTr("IM")
 
+    //: Add favorite flag / add contact to favorites list
     property string favoriteTranslated: qsTr("Favorite")
+
+    //: Remove favorite flag / remove contact from favorites list
     property string unfavoriteTranslated: qsTr("Unfavorite")
 
     //do not internationalize
@@ -80,7 +93,10 @@ Flickable {
     property string facebookValue : "im-google-talk"
     property string gtalkValue : "im-yahoo"
 
+    //: Load the details for the selected contact
     property string viewUrl: qsTr("View")
+
+    //: Truncate string - used when a string is too long for the display area
     property string stringTruncater: qsTr("...")
 
     function getTruncatedString(valueStr, stringLen) {

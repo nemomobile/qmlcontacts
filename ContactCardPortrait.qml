@@ -64,12 +64,18 @@ Image {
     //REVISIT: Instead of using the URI from AvatarRole, need to use thumbnail URI
     property string dataAvatar: dataPeople.data(sourceIndex, PeopleModel.AvatarRole)
 
+    //: Remove favorite flag / remove contact from favorites list
     property string unfavoriteTranslated: qsTr("Unfavorite")
+
+    //: Add favorite flag / add contact to favorites list
     property string favoriteTranslated: qsTr("Favorite")
+
     property string statusIdle: qsTr("Idle")
     property string statusBusy: qsTr("Busy")
     property string statusOnline: qsTr("Online")
     property string statusOffline: qsTr("Offline")
+
+    //: Truncate string - used when a string is too long for the display area
     property string ellipse: qsTr("(...)")
 
     signal clicked

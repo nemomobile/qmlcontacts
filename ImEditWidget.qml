@@ -21,12 +21,15 @@ Item {
     property bool updateMode: false 
     property bool validInput: false
 
+    //: Instant Messaging Accounts for this contact
     property string imLabel : qsTr("Instant messaging")
     property string aim_sp : qsTr("AIM")
     property string msn_sp : qsTr("MSN")
     property string jabber_sp : qsTr("Jabber")
     property string yahoo_sp : qsTr("Yahoo!")
     property string facebook_sp : qsTr("Facebook")
+
+    //: Name of the Google Talk messaging service - this might differ by locale
     property string gtalk_sp : qsTr("gTalk")
     property string defaultIm : qsTr("Account Name / ID")
     property string defaultAccount : qsTr("Account Type")
