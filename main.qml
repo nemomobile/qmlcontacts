@@ -33,7 +33,7 @@ Window {
     property string contextEmail: qsTr("Email")
 
     //: Add favorite flag / add contact to favorites list
-    property string contextFavorite: qsTr("Favorite")
+    property string contextFavorite: qsTr("Favorite", "Verb")
 
     //: Remove favorite flag / remove contact from favorites list 
     property string contextUnFavorite: qsTr("UnFavorite")

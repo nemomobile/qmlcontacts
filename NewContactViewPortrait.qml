@@ -46,7 +46,7 @@ Flickable{
     property string unfavoriteTranslated: qsTr("Unfavorite")
 
     //: Add favorite flag / add contact to favorites list
-    property string favoriteTranslated: qsTr("Favorite")
+    property string favoriteTranslated: qsTr("Favorite", "Verb")
 
     property string phoneLabel: qsTr("Phone numbers")
     property string addPhones: qsTr("Add number")

@@ -68,7 +68,7 @@ Image {
     property string unfavoriteTranslated: qsTr("Unfavorite")
 
     //: Add favorite flag / add contact to favorites list
-    property string favoriteTranslated: qsTr("Favorite")
+    property string favoriteTranslated: qsTr("Favorite", "Verb")
 
     property string statusIdle: qsTr("Idle")
     property string statusBusy: qsTr("Busy")
