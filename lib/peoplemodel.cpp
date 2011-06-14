@@ -330,11 +330,14 @@ QVariant PeopleModel::data(int row, int role) const
                  contact.details<QContactAddress>()) {
             QString aStr;
             QString temp;
+            QString addy = address.street();
 
             for (int i = 0; i < fieldOrder.size(); ++i) {
                 temp = "";
                 if (fieldOrder.at(i) == "street")
-                    temp += address.street();
+                    temp += addy.split("\n")[0];
+                else if (fieldOrder.at(i) == "street2")
+                    temp += addy.split("\n")[1];
                 else if (fieldOrder.at(i) == "locale")
                     temp += address.locality();
                 else if (fieldOrder.at(i) == "region")
@@ -343,12 +346,11 @@ QVariant PeopleModel::data(int row, int role) const
                     temp += address.postcode();
                 else if (fieldOrder.at(i) == "country")
                     temp += address.country();
-                if(temp.trimmed() != ""){
-                    if (i > 0)
-                          aStr += "\n"+temp;
-                    else
-                        aStr += temp;
-                }
+
+                if (i > 0)
+                    aStr += "\n" + temp.trimmed();
+                else
+                    aStr += temp.trimmed();
             }
 
             if (aStr == "")

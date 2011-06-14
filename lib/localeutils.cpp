@@ -59,14 +59,14 @@ QStringList LocaleUtils::getAddressFieldOrder() const
     QLocale::Country country = getCountry();
 
     if ((country == QLocale::China) || (country == QLocale::Taiwan))
-        fieldOrder << "country" << "region" << "locale" << "street" << "zip";
+        fieldOrder << "country" << "region" << "locale" << "street" << "street2" << "zip";
     else if (country == QLocale::Japan)
-        fieldOrder << "country" << "zip" << "region" << "locale" << "street";
+        fieldOrder << "country" << "zip" << "region" << "locale" << "street" << "street2";
     else if ((country == QLocale::DemocraticRepublicOfKorea) ||
              (country == QLocale::RepublicOfKorea))
-        fieldOrder << "country" << "region" << "locale" << "street" << "zip";
+        fieldOrder << "country" << "region" << "locale" << "street" << "street2" << "zip";
     else
-        fieldOrder << "street" << "locale" << "region" << "zip" << "country";
+        fieldOrder << "street" << "street2" << "locale" << "region" << "zip" << "country";
 
     return fieldOrder;
 }

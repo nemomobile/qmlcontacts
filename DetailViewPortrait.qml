@@ -125,6 +125,25 @@ Flickable {
         return presence;
     }
 
+    //Strip out any empty fields in the address - must do this on the
+    //QML side, as the "\n" are needed in the EditView to denote the
+    //different fields
+    function getAddressDisplayVal(modelData) {
+        var addy = getTruncatedString(modelData, 25);
+        var res = addy.split("\n");
+        addy = "";
+
+        for (var i = 0; i < res.length; i++) {
+            if (res[i] != "") {
+                if (i > 0)
+                    addy += "\n" + res[i];
+                else
+                    addy += res[i];
+            }
+        }
+        return addy;
+    }
+
     Column{
         id: detailsList
         spacing: 1
@@ -636,7 +655,7 @@ Flickable {
                             Text{
                                 id: data_street
                                 anchors.verticalCenter: address_rect.verticalCenter
-                                text: getTruncatedString(modelData, 25)
+                                text: getAddressDisplayVal(modelData);
                                 color: theme_fontColorNormal
                                 font.pixelSize: theme_fontPixelSizeLarge
                                 smooth: true

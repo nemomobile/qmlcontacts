@@ -36,6 +36,7 @@ Item {
                     setValue("address.count", newDetailsModel.count)
                     for (var i = 0; i < newDetailsModel.count; i++){
                         setValue("address.street" + i, newDetailsModel.get(i).street)
+                        setValue("address.street2" + i, newDetailsModel.get(i).street2)
                         setValue("address.locale" + i, newDetailsModel.get(i).locale)
                         setValue("address.region" + i, newDetailsModel.get(i).region)
                         setValue("address.zip" + i, newDetailsModel.get(i).zip)
@@ -54,6 +55,7 @@ Item {
             if(addrCount > 0){
                 for(var i = 0; i < addrCount; i++){
                     newDetailsModel.set(i, {"street": srsAddress.restoreOnce("address.street" + i, "")})
+                    newDetailsModel.set(i, {"street2": srsAddress.restoreOnce("address.street2" + i, "")})
                     newDetailsModel.set(i, {"locale": srsAddress.restoreOnce("address.locale" + i, "")})
                     newDetailsModel.set(i, {"region": srsAddress.restoreOnce("address.region" + i, "")})
                     newDetailsModel.set(i, {"zip": srsAddress.restoreOnce("address.zip" + i, "")})
@@ -91,9 +93,12 @@ Item {
         var count = 0;
 
         for (var i = 0; i < newDetailsModel.count; i++) {
-            if (newDetailsModel.get(i).street != "" || newDetailsModel.get(i).locale != "" 
-                || newDetailsModel.get(i).region != "" || newDetailsModel.get(i).zip != "" 
-                || newDetailsModel.get(i).country != "") {
+            if (newDetailsModel.get(i).street != "" ||
+                newDetailsModel.get(i).street2 != "" ||
+                newDetailsModel.get(i).locale != "" ||
+                newDetailsModel.get(i).region != "" ||
+                newDetailsModel.get(i).zip != ""  ||
+                newDetailsModel.get(i).country != "") {
                 streetList[count] = newDetailsModel.get(i).street;
                 localeList[count] = newDetailsModel.get(i).locale;
                 regionList[count] = newDetailsModel.get(i).region;
@@ -104,8 +109,9 @@ Item {
             }
         }
 
-        return {"streets": streetList, "locales": localeList, "regions": regionList, 
-                "zips": zipList, "countries": countryList, "types": addressTypeList};
+        return {"streets": streetList, "locales": localeList,
+                "regions": regionList, "zips": zipList,
+                "countries": countryList, "types": addressTypeList};
     }
 
     function getDetails(reset) {
@@ -116,6 +122,7 @@ Item {
         }
  
         var arr = {"street": data["street"], 
+                   "street2": data["street2"],
                    "locale": data["locale"], 
                    "region": data["region"],
                    "zip": data["zip"], 
@@ -139,6 +146,7 @@ Item {
         id: addressFields
         Component.onCompleted: {
             var pairs = {"street": streetAddress,
+                         "street2": streetAddress,
                          "locale": localeAddress,
                          "region": regionAddress,
                          "zip": postcodeAddress,
@@ -156,6 +164,8 @@ Item {
         switch(field) {
             case "street":
                 return newDetailsModel.get(rIndex).street;
+            case "street2":
+                return newDetailsModel.get(rIndex).street2;
             case "locale":
                 return newDetailsModel.get(rIndex).locale;
             case "region":
