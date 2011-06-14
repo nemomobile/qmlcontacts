@@ -2,7 +2,7 @@
 VERSION:3.0
 UID:{3b7dba5f-92c6-4c20-a0c8-c624b49379cd}
 N:阿南;惟正;;;
-NICKNAME:きみはら\nけんじ
+NICKNAME:あなべ\nけんじ
 CATEGORIES:[Úñƒàvõrï†é ÞàÐÐïñg ÞàÐÐïñg ÞàX]
 REV:2011-04-22T08:58:03
 END:VCARD
@@ -33,15 +33,6 @@ END:VCARD
 
 BEGIN:VCARD
 VERSION:3.0
-UID:{3b7dba5f-92c6-4c20-a0c8-c624b49379d1}
-N:阿南;惟正;;;
-NICKNAME:あなみ\nのぶよし
-CATEGORIES:[Úñƒàvõrï†é ÞàÐÐïñg ÞàÐÐïñg ÞàX]
-REV:2011-04-22T08:58:03
-END:VCARD
-
-BEGIN:VCARD
-VERSION:3.0
 UID:{3b7dba5f-92c6-4c20-a0c8-c624b49379d2}
 N:横山;宏章;;;
 NICKNAME:よこやま\nあきひろ
@@ -53,7 +44,7 @@ BEGIN:VCARD
 VERSION:3.0
 UID:{3b7dba5f-92c6-4c20-a0c8-c624b49379d3}
 N:久木;尚志;;;
-NICKNAME:たかし\nひさぎ
+NICKNAME:ひさき\nひさぎ
 CATEGORIES:[Úñƒàvõrï†é ÞàÐÐïñg ÞàÐÐïñg ÞàX]
 REV:2011-04-22T08:58:03
 END:VCARD
@@ -62,7 +53,7 @@ BEGIN:VCARD
 VERSION:3.0
 UID:{3b7dba5f-92c6-4c20-a0c8-c624b49379d4}
 N:君原;健二;;;
-NICKNAME:きみはら\nけんじ
+NICKNAME:くんばる\nけんじ
 CATEGORIES:[Úñƒàvõrï†é ÞàÐÐïñg ÞàÐÐïñg ÞàX]
 REV:2011-04-22T08:58:03
 END:VCARD
