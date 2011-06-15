@@ -107,7 +107,7 @@ AppPage {
 
         Image {
             id: sortSettingItem
-            source: "image://theme/pulldown_box"
+            source: "image://themedimage/pulldown_box"
             width: parent.width
 
             Text {

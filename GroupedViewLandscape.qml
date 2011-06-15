@@ -57,7 +57,7 @@ Item {
                     id: sectionBackground
                     property string etcSymbol: qsTr("#")
                     property string section
-                    source: "image://theme/contacts/contact_title_bg_l"
+                    source: "image://themedimage/widgets/common/list/list-dividerbar"
                     fillMode: Image.Stretch
                     Text {
                         id: headerTitle

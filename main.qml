@@ -107,8 +107,8 @@ Window {
             cancelButtonText: contextCancel
             acceptButtonText: contextDelete
             title:  deleteConfirmation
-            acceptButtonImage: "image://theme/btn_red_up"
-            acceptButtonImagePressed: "image://theme/btn_red_dn"
+            acceptButtonImage: "image://themedimage/widgets/common/button/button-negative"
+            acceptButtonImagePressed: "image://themedimage/widgets/common/button/button-negative-pressed"
             anchors {verticalCenter: window.verticalCenter;
                      horizontalCenter: window.horizontalCenter}
             content: Text {

@@ -114,7 +114,7 @@ Flickable{
             id: detailHeader
             width: parent.width
             height: (data_first_p.visible ? 175 : 150)
-            source: "image://theme/contacts/active_row"
+            source: "image://themedimage/widgets/common/header/header-inverted-small"
 
             Item{
                 id: avatar
@@ -124,7 +124,7 @@ Flickable{
 
                 Image{
                     id: avatar_img
-                    source: "image://theme/contacts/img_blankavatar"
+                    source: "image://themedimage/icons/internal/contacts-avatar-add"
                     anchors.centerIn: avatar
                     opacity: 1
                     signal clicked
@@ -143,7 +143,7 @@ Flickable{
                         }
                         onPressed: {
                             avatar.opacity = .5;
-                            avatar_img.source = (avatar_img.source == "image://theme/contacts/img_blankavatar" ? "image://theme/contacts/img_blankavatar_dn" : avatar_img.source)
+                            avatar_img.source = (avatar_img.source == "image://themedimage/icons/internal/contacts-avatar-add" ? "image://themedimage/icons/internal/contacts-avatar-add-selected" : avatar_img.source)
                         }
                     }
                 }
@@ -253,7 +253,7 @@ Flickable{
                         height: childrenRect.height
                         Image {
                             id: icn_faves
-                            source: "image://theme/contacts/icn_fav_star_dn"
+                            source: "image://themedimage/icons/actionbar/favorite-selected"
                             opacity: 1
                             state: unfavoriteValue
 
@@ -261,11 +261,11 @@ Flickable{
                             states: [
                                 State{ name: favoriteValue
                                     PropertyChanges{target: icn_faves; favoriteText: favoriteTranslated}
-                                    PropertyChanges{target: icn_faves; source: "image://theme/contacts/icn_fav_star_dn"}
+                                    PropertyChanges{target: icn_faves; source: "image://themedimage/icons/actionbar/favorite-selected"}
                                 },
                                 State{ name: unfavoriteValue
                                     PropertyChanges{target: icn_faves; favoriteText: unfavoriteTranslated}
-                                    PropertyChanges{target: icn_faves; source: "image://theme/contacts/icn_fav_star"}
+                                    PropertyChanges{target: icn_faves; source: "image://themedimage/icons/actionbar/favorite"}
                                 }
                             ]
                         }
@@ -274,7 +274,7 @@ Flickable{
                         id: fav
                         anchors.fill: parent
                         onClicked: {
-                            icn_faves.state = (icn_faves.source != "image://theme/contacts/icn_fav_star_dn" ? favoriteValue : unfavoriteValue)
+                            icn_faves.state = (icn_faves.source != "image://themedimage/icons/actionbar/favorite-selected" ? favoriteValue : unfavoriteValue)
                         }
                     }
                 }
@@ -347,7 +347,7 @@ Flickable{
             id: birthday
             width: parent.width
             height: 80
-            source: "image://theme/contacts/active_row"
+            source: "image://themedimage/widgets/common/header/header-inverted-small"
             TextEntry{
                 id: data_birthday
                 text: datePicker.selectedBirthday
@@ -430,7 +430,7 @@ Flickable{
             id: notesBar
             width: parent.width
             height: 340
-            source: "image://theme/contacts/active_row"
+            source: "image://themedimage/widgets/common/header/header-inverted-small"
             TextField{
                 id: data_notes
                 text: newContactPage.restoredNotes

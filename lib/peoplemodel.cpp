@@ -120,7 +120,7 @@ void PeopleModel::createMeCard()
     qWarning() << Q_FUNC_INFO << "failed to save guid in mecard contact";
 
   QContactAvatar avatar;
-  avatar.setImageUrl(QUrl("image://theme/contacts/img_blankavatar"));
+  avatar.setImageUrl(QUrl("image://themedimage/widgets/common/avatar/avatar-default"));
   if (!contact.saveDetail(&avatar))
       qWarning() << Q_FUNC_INFO << "failed to save avatar in mecard contact";
 

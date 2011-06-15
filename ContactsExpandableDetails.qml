@@ -99,7 +99,7 @@ Column {
 
         delegate: Image {
             id: imageBar
-            source: "image://theme/contacts/active_row"
+            source: "image://themedimage/widgets/common/header/header-inverted-small"
             parent: detailsRepeater
             width: parent.width
 
@@ -184,7 +184,7 @@ Column {
 
         Image {
             id: addBar
-            source: "image://theme/contacts/active_row"
+            source: "image://themedimage/widgets/common/header/header-inverted-small"
             anchors {fill: parent; bottomMargin: 1}
 
             ExpandingBox {
@@ -246,8 +246,8 @@ Column {
                         height: 36
                         text: addLabel
                         font.pixelSize: theme_fontPixelSizeMediumLarge
-                        bgSourceUp: "image://theme/btn_blue_up"
-                        bgSourceDn: "image://theme/btn_blue_dn"
+                        bgSourceUp: "image://themedimage/widgets/common/button/button-default"
+                        bgSourceDn: "image://themedimage/widgets/common/button/button-default-pressed"
                         anchors {right: cancelButton.left; rightMargin: itemMargins;
                                  top: newContentArea.bottom; topMargin: itemMargins;}
                         enabled: newFieldItem.validInput
