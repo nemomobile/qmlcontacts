@@ -157,52 +157,46 @@ Column {
                     for(var i = 0; i < itemCount; i++){
                         var entryName = entryNameHeader + i + ".property."
 
-                        if(propertyCount == 1)
-                            model.append({"type" : ""});
-                        else if(propertyCount == 2){
-                            model.append({"type" : "", "phone" : ""});
-                        }
-
                         if(keys) delete keys;
                         keys = new Array()
                         for(var j = 0; j < propertyCount; j++){
                             keys.push(srsExpandableDetails.value(entryName + j + ".name", ""))
                         }
 
-                        if(keys.length == 1){
+                        if(propertyCount == 1){
                             var stringData = keys[0];
-                            model.append({stringData : ""});
-                        }else if(keys.length == 2){
+                            detailsModel.append({stringData : ""});
+                        }else if(propertyCount == 2){
                             var stringData1 = keys[0];
                             var stringData2 = keys[1];
-                            model.append({stringData1 : "", stringData2 : ""});
-                        }else if(keys.length == 3){
+                            detailsModel.append({stringData1 : "", stringData2 : ""});
+                        }else if(propertyCount == 3){
                             var stringData1 = keys[0];
                             var stringData2 = keys[1];
                             var stringData3 = keys[2];
-                            model.append({stringData1 : "", stringData2 : "", stringData3 : ""});
-                        }else if(keys.length == 4){
+                            detailsModel.append({stringData1 : "", stringData2 : "", stringData3 : ""});
+                        }else if(propertyCount == 4){
                             var stringData1 = keys[0];
                             var stringData2 = keys[1];
                             var stringData3 = keys[2];
                             var stringData4 = keys[3];
-                            model.append({stringData1 : "", stringData2 : "", stringData3 : "", stringData4 : ""});
-                        }else if(keys.length == 5){
+                            detailsModel.append({stringData1 : "", stringData2 : "", stringData3 : "", stringData4 : ""});
+                        }else if(propertyCount == 5){
                             var stringData1 = keys[0];
                             var stringData2 = keys[1];
                             var stringData3 = keys[2];
                             var stringData4 = keys[3];
                             var stringData5 = keys[4];
-                            model.append({stringData1 : "", stringData2 : "", stringData3 : "", stringData4 : "", stringData5 : ""});
-                        }else if(keys.length == 6){
+                            detailsModel.append({stringData1 : "", stringData2 : "", stringData3 : "", stringData4 : "", stringData5 : ""});
+                        }else if(propertyCount == 6){
                             var stringData1 = keys[0];
                             var stringData2 = keys[1];
                             var stringData3 = keys[2];
                             var stringData4 = keys[3];
                             var stringData5 = keys[4];
                             var stringData6 = keys[5];
-                            model.append({stringData1 : "", stringData2 : "", stringData3 : "", stringData4 : "", stringData5 : "", stringData6 : ""});
-                        }else if(keys.length == 7){
+                            detailsModel.append({stringData1 : "", stringData2 : "", stringData3 : "", stringData4 : "", stringData5 : "", stringData6 : ""});
+                        }else if(propertyCount == 7){
                             var stringData1 = keys[0];
                             var stringData2 = keys[1];
                             var stringData3 = keys[2];
@@ -210,8 +204,8 @@ Column {
                             var stringData5 = keys[4];
                             var stringData6 = keys[5];
                             var stringData7 = keys[6];
-                            model.append({stringData1 : "", stringData2 : "", stringData3 : "", stringData4 : "", stringData5 : "", stringData6 : "", stringData7 : ""});
-                        }else if(keys.length == 8){
+                            detailsModel.append({stringData1 : "", stringData2 : "", stringData3 : "", stringData4 : "", stringData5 : "", stringData6 : "", stringData7 : ""});
+                        }else if(propertyCount == 8){
                             var stringData1 = keys[0];
                             var stringData2 = keys[1];
                             var stringData3 = keys[2];
@@ -220,7 +214,7 @@ Column {
                             var stringData6 = keys[5];
                             var stringData7 = keys[6];
                             var stringData8 = keys[7];
-                            model.append({stringData1 : "", stringData2 : "", stringData3 : "", stringData4 : "", stringData5 : "", stringData6 : "", stringData7 : "", stringData8 : ""});
+                            detailsModel.append({stringData1 : "", stringData2 : "", stringData3 : "", stringData4 : "", stringData5 : "", stringData6 : "", stringData7 : "", stringData8 : ""});
                         }
 
                         for(var j = 0; j < propertyCount; j++){
@@ -229,7 +223,7 @@ Column {
 
                             console.log("Setting property \"" + key + "\" to value (" + value + ")")
 
-                            model.setProperty(i, key, value);
+                            detailsModel.setProperty(i, key, value);
                         }
                     }
                 }
@@ -242,6 +236,7 @@ Column {
         }
 
         delegate: Image {
+            visible: true
             id: imageBar
             source: "image://theme/contacts/active_row"
             parent: detailsRepeater
@@ -254,6 +249,78 @@ Column {
 
                 anchors {top: parent.top; bottom: parent.bottom;
                          margins: itemMargins;}
+            }
+
+            onActiveFocusChanged: {
+                console.log("CONTACTS_EXPANDABLE_DETAILS.onActiveFocusChanged: " + activeFocus)
+            }
+
+            onAsynchronousChanged: {
+                console.log("CONTACTS_EXPANDABLE_DETAILS.onAsynchronousChanged: " + asynchronous)
+            }
+
+            onBaselineOffsetChanged: {
+                console.log("CONTACTS_EXPANDABLE_DETAILS.onBaselineOffsetChanged: " + baselineOffset)
+            }
+
+            onChildrenChanged: {
+                console.log("CONTACTS_EXPANDABLE_DETAILS.onChildrenChanged: ")
+            }
+
+            onChildrenRectChanged: {
+                console.log("CONTACTS_EXPANDABLE_DETAILS.onChildrenRectChanged: " + childrenRect)
+            }
+
+            onClipChanged: {
+                console.log("CONTACTS_EXPANDABLE_DETAILS.onClipChanged: " + clip)
+            }
+
+            onFocusChanged: {
+                console.log("CONTACTS_EXPANDABLE_DETAILS.onFocusChanged: " + focus)
+            }
+
+            onHeightChanged: {
+                console.log("CONTACTS_EXPANDABLE_DETAILS.onHeightChanged: " + height)
+            }
+
+            onOpacityChanged: {
+                console.log("CONTACTS_EXPANDABLE_DETAILS.onOpacityChanged: " + opacity)
+            }
+
+            onPaintedGeometryChanged: {
+                console.log("CONTACTS_EXPANDABLE_DETAILS.onPaintedGeometryChanged: " + paintedHeight + " " + paintedWidth)
+            }
+
+            onParentChanged: {
+                console.log("CONTACTS_EXPANDABLE_DETAILS.onParentChanged: " + parent)
+            }
+
+            onScaleChanged: {
+                console.log("CONTACTS_EXPANDABLE_DETAILS.onScaleChanged: " + scale)
+            }
+
+            onSourceChanged: {
+                console.log("CONTACTS_EXPANDABLE_DETAILS.onSourceChanged: " + source)
+            }
+
+            onSourceSizeChanged: {
+                console.log("CONTACTS_EXPANDABLE_DETAILS.onSourceSizeChanged: " + sourceSize)
+            }
+
+            onVisibleChanged: {
+                console.log("CONTACTS_EXPANDABLE_DETAILS.onVisibleChanged: " + visible)
+            }
+
+            onXChanged: {
+                console.log("CONTACTS_EXPANDABLE_DETAILS.onXChanged: " + x)
+            }
+
+            onYChanged: {
+                console.log("CONTACTS_EXPANDABLE_DETAILS.onYChanged: " + y)
+            }
+
+            onZChanged: {
+                console.log("CONTACTS_EXPANDABLE_DETAILS.onZChanged: " + z)
             }
 
             //REVISIT: Should use a loader for this?
@@ -326,6 +393,7 @@ Column {
         id: addFooter
         width: parent.width
         height: 80
+//        visible: false
 
         Image {
             id: addBar
