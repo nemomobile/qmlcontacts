@@ -156,15 +156,16 @@ Column {
                     for(var i = 0; i < itemCount; i++){
                         var entryName = entryNameHeader + i + ".property."
 
-                        if(headerLabel == "Phone numbers"){
+                        if(headerLabel == detailsColumn.parent.parent.parent.phoneLabel){
                             detailsModel.append({"phone" : "", "type" : ""})
-                        }else if(headerLabel == "Address"){
+                            console.log("QUIZDA MATII!!!")
+                        }else if(headerLabel == detailsColumn.parent.parent.parent.addressLabel){
                             detailsModel.append({"street" : "", "locale" : "", "region" : "", "zip" : "", "country" : "", "type" : ""})
-                        }else if(headerLabel == "Instant messaging"){
+                        }else if(headerLabel == detailsColumn.parent.parent.parent.imLabel){
                             detailsModel.append({"im" : "", "account" : "", "type" : ""})
-                        }else if(headerLabel == "Email"){
+                        }else if(headerLabel == detailsColumn.parent.parent.parent.emailLabel){
                             detailsModel.append({"email" : "", "type" : ""})
-                        }else if(headerLabel == "Web"){
+                        }else if(headerLabel == detailsColumn.parent.parent.parent.urlLabel){
                             detailsModel.append({"web" : "", "type" : ""})
                         }
 
@@ -187,7 +188,6 @@ Column {
         }
 
         delegate: Image {
-            visible: true
             id: imageBar
             source: "image://theme/contacts/active_row"
             parent: detailsRepeater
@@ -272,7 +272,6 @@ Column {
         id: addFooter
         width: parent.width
         height: 80
-//        visible: false
 
         Image {
             id: addBar
