@@ -143,7 +143,7 @@ bool LocaleUtils::initCollator(int collType, QString locale)
     return false;
 }
 
-bool LocaleUtils::isLessThan(QString lStr, QString rStr)
+int LocaleUtils::compare(QString lStr, QString rStr)
 {
     if (lStr == "#") {
         return false;
@@ -165,6 +165,20 @@ bool LocaleUtils::isLessThan(QString lStr, QString rStr)
 
     Collator::EComparisonResult res = mColl->compare(lUniStr, rUniStr);
     if (res == Collator::LESS)
+        return -1;
+
+    if (res == Collator::GREATER)
+        return 1;
+
+    return 0;
+}
+
+bool LocaleUtils::isLessThan(QString lStr, QString rStr)
+{
+    int ret;
+
+    ret = compare(lStr, rStr);
+    if (ret == -1) 
         return true;
 
     return false;
