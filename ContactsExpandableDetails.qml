@@ -194,18 +194,28 @@ Column {
 
                 anchors {top: addBar.top; leftMargin: itemMargins}
                 width: parent.width
-                titleText: expandingBoxTitle
-                titleTextColor: theme_fontColorNormal
 
-                iconRow: [
+                headerContent: Item {
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.fill: parent
+
                     Image {
                         id: add_button
-                        source: "image://theme/contacts/icn_add"
-                        anchors { verticalCenter: parent.verticalCenter; }
+                        anchors.left: parent.left 
+                        anchors.leftMargin: 10
+                        anchors.verticalCenter: parent.verticalCenter
                         fillMode: Image.PreserveAspectFit
-                        opacity: 1
+                        source: "image://theme/contacts/icn_add"
                     }
-                ]
+                    Text {
+                        id: text_box
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.left: add_button.right
+                        anchors.leftMargin: 10
+                        text: expandingBoxTitle
+                        font.pixelSize: theme_fontPixelSizeLarge2
+                    }
+                }
 
                 detailsComponent: fieldDetailComponent
 
@@ -279,3 +289,4 @@ Column {
         }
     }
 }
+
