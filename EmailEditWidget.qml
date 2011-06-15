@@ -110,6 +110,11 @@ Item {
         title: (updateMode) ? newDetailsModel.get(rIndex).type : (restoredEmailTypeIndex != 0 ? model[restoredEmailTypeIndex] : contextHome)
         selectedIndex: (updateMode) ? getIndexVal(newDetailsModel.get(rIndex).type) : 0
         replaceDropDownTitle: true
+
+        Component.onCompleted: {
+            emailComboBox.title = (restoredEmailTypeIndex != -1 ? emailComboBox.model[restoredEmailTypeIndex] : contextHome)
+            emailComboBox.selectedIndex = (restoredEmailTypeIndex != -1 ? restoredEmailTypeIndex : 1)
+        }
     }
 
     TextEntry {

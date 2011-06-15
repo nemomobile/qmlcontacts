@@ -111,14 +111,19 @@ Item{
 
         model: [mobileContext, homeContext, workContext, otherContext]
 
-        title: (updateMode) ? newDetailsModel.get(rIndex).type : (restoredPhoneTypeIndex != 0 ? model[restoredPhoneTypeIndex] : mobileContext)
-        selectedIndex: (updateMode) ? getIndexVal(newDetailsModel.get(rIndex).type) : (restoredPhoneTypeIndex != -1 ? restoredPhoneTypeIndex : 0)
+        title: (updateMode) ? newDetailsModel.get(rIndex).type : mobileContext
+        selectedIndex: (updateMode) ? getIndexVal(newDetailsModel.get(rIndex).type) : 0
         replaceDropDownTitle: true
+
+        Component.onCompleted: {
+            phoneComboBox.title = (restoredPhoneTypeIndex != -1 ? phoneComboBox.model[restoredPhoneTypeIndex] : mobileContext)
+            phoneComboBox.selectedIndex = (restoredPhoneTypeIndex != -1 ? restoredPhoneTypeIndex : 1)
+        }
     }
 
     TextEntry {
         id: data_phone
-        text: (updateMode) ? newDetailsModel.get(rIndex).phone : (restoredPhoneNumber != "" ? restoredPhoneNumber : "")
+        text: (updateMode) ? (newDetailsModel ? newDetailsModel.get(rIndex).phone : "") : (restoredPhoneNumber != "" ? restoredPhoneNumber : "")
         defaultText: defaultPhone
         width: 400
         anchors {left:phoneComboBox.right; leftMargin: 10;}
