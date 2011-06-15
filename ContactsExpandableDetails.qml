@@ -158,7 +158,6 @@ Column {
 
                         if(headerLabel == detailsColumn.parent.parent.parent.phoneLabel){
                             detailsModel.append({"phone" : "", "type" : ""})
-                            console.log("QUIZDA MATII!!!")
                         }else if(headerLabel == detailsColumn.parent.parent.parent.addressLabel){
                             detailsModel.append({"street" : "", "locale" : "", "region" : "", "zip" : "", "country" : "", "type" : ""})
                         }else if(headerLabel == detailsColumn.parent.parent.parent.imLabel){
