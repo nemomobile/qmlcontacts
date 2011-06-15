@@ -24,31 +24,26 @@ Item {
     property string contextOther : qsTr("Other")
     property string defaultEmail : qsTr("Email address")
 
+    property string restoredEmail: ""
+    property int restoredEmailTypeIndex: 0
+
     SaveRestoreState {
         id: srsMail
         onSaveRequired: {
-            if(newDetailsModel != null){
-                if(newDetailsModel.count > 0){
-                    setValue("mail.count", newDetailsModel.count)
-                    for (var i = 0; i < newDetailsModel.count; i++){
-                        setValue("mail.address" + i, newDetailsModel.get(i).email)
-                        setValue("mail.type" + i, newDetailsModel.get(i).type)
-                    }
-                }
+            if(!updateMode){
+                // Save the phone number that is currently being edited
+                setValue("email.address", data_email.text)
+                setValue("email.typeIndex", emailComboBox.selectedIndex)
             }
+
             sync()
         }
     }
 
     Component.onCompleted: {
         if (srsMail.restoreRequired) {
-            var mailCount = srsMail.value("mail.count", 0)
-            if(mailCount > 0){
-                for(var i = 0; i < mailCount; i++){
-                    newDetailsModel.set(i, {"email": srsMail.restoreOnce("mail.address" + i, "")})
-                    newDetailsModel.set(i, {"type": srsMail.restoreOnce("mail.type" + i, "")})
-                }
-            }
+            restoredEmail           = srsMail.restoreOnce("email.address", "")
+            restoredEmailTypeIndex  = srsMail.restoreOnce("email.typeIndex", 0)
         }
     }
 
@@ -112,14 +107,14 @@ Item {
 
         model: [contextHome, contextWork, contextOther]
 
-        title: (updateMode) ? newDetailsModel.get(rIndex).type : contextHome
+        title: (updateMode) ? newDetailsModel.get(rIndex).type : (restoredEmailTypeIndex != 0 ? model[restoredEmailTypeIndex] : contextHome)
         selectedIndex: (updateMode) ? getIndexVal(newDetailsModel.get(rIndex).type) : 0
         replaceDropDownTitle: true
     }
 
     TextEntry {
         id: data_email
-        text: (updateMode) ? newDetailsModel.get(rIndex).email : ""
+        text: (updateMode) ? newDetailsModel.get(rIndex).email : (restoredEmail != "" ? restoredEmail : "")
         defaultText: defaultEmail
         width: 400
         anchors {left:emailComboBox.right; leftMargin: 10;}

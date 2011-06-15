@@ -31,7 +31,7 @@ Item{
     property string addLabel: qsTr("Add")
 
     property string restoredPhoneNumber: ""
-    property int restoredPhoneTypeIndex: -1
+    property int restoredPhoneTypeIndex: 0
 
     SaveRestoreState {
         id: srsPhone
@@ -41,16 +41,16 @@ Item{
                 setValue("phone.number", data_phone.text)
                 setValue("phone.typeIndex", phoneComboBox.selectedIndex)
             }
-
             sync()
-        }
-
-        Component.onCompleted: {
-            restoredPhoneNumber     = srsPhone.restoreOnce("phone.number", "")
-            restoredPhoneTypeIndex  = srsPhone.restoreOnce("phone.typeIndex", -1)
         }
     }
 
+    Component.onCompleted: {
+        if(srsPhone.restoreRequired){
+            restoredPhoneNumber     = srsPhone.restoreOnce("phone.number", "")
+            restoredPhoneTypeIndex  = srsPhone.restoreOnce("phone.typeIndex", 0)
+        }
+    }
 
     function parseDetailsModel(existingDetailsModel, contextModel) {
         var arr = new Array();
@@ -111,7 +111,7 @@ Item{
 
         model: [mobileContext, homeContext, workContext, otherContext]
 
-        title: (updateMode) ? newDetailsModel.get(rIndex).type : (restoredPhoneTypeIndex != -1 ? newDetailsModel.get(restoredPhoneTypeIndex).type : mobileContext)
+        title: (updateMode) ? newDetailsModel.get(rIndex).type : (restoredPhoneTypeIndex != 0 ? model[restoredPhoneTypeIndex] : mobileContext)
         selectedIndex: (updateMode) ? getIndexVal(newDetailsModel.get(rIndex).type) : (restoredPhoneTypeIndex != -1 ? restoredPhoneTypeIndex : 0)
         replaceDropDownTitle: true
     }

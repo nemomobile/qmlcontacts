@@ -163,6 +163,7 @@ Column {
                             model.append({"type" : "", "phone" : ""});
                         }
 
+                        if(keys) delete keys;
                         keys = new Array()
                         for(var j = 0; j < propertyCount; j++){
                             keys.push(srsExpandableDetails.value(entryName + j + ".name", ""))
@@ -193,6 +194,33 @@ Column {
                             var stringData4 = keys[3];
                             var stringData5 = keys[4];
                             model.append({stringData1 : "", stringData2 : "", stringData3 : "", stringData4 : "", stringData5 : ""});
+                        }else if(keys.length == 6){
+                            var stringData1 = keys[0];
+                            var stringData2 = keys[1];
+                            var stringData3 = keys[2];
+                            var stringData4 = keys[3];
+                            var stringData5 = keys[4];
+                            var stringData6 = keys[5];
+                            model.append({stringData1 : "", stringData2 : "", stringData3 : "", stringData4 : "", stringData5 : "", stringData6 : ""});
+                        }else if(keys.length == 7){
+                            var stringData1 = keys[0];
+                            var stringData2 = keys[1];
+                            var stringData3 = keys[2];
+                            var stringData4 = keys[3];
+                            var stringData5 = keys[4];
+                            var stringData6 = keys[5];
+                            var stringData7 = keys[6];
+                            model.append({stringData1 : "", stringData2 : "", stringData3 : "", stringData4 : "", stringData5 : "", stringData6 : "", stringData7 : ""});
+                        }else if(keys.length == 8){
+                            var stringData1 = keys[0];
+                            var stringData2 = keys[1];
+                            var stringData3 = keys[2];
+                            var stringData4 = keys[3];
+                            var stringData5 = keys[4];
+                            var stringData6 = keys[5];
+                            var stringData7 = keys[6];
+                            var stringData8 = keys[7];
+                            model.append({stringData1 : "", stringData2 : "", stringData3 : "", stringData4 : "", stringData5 : "", stringData6 : "", stringData7 : "", stringData8 : ""});
                         }
 
                         for(var j = 0; j < propertyCount; j++){
@@ -222,9 +250,9 @@ Column {
             property Item existingFieldItem: null
         
             Item {
-                id: existingContentArea 
+                id: existingContentArea
 
-                anchors {top: parent.top; bottom: parent.bottom; 
+                anchors {top: parent.top; bottom: parent.bottom;
                          margins: itemMargins;}
             }
 
@@ -260,7 +288,7 @@ Column {
                 source: "image://theme/contacts/icn_trash"
                 width: 36
                 height: 36
-                anchors {top: parent.top; right: parent.right; 
+                anchors {top: parent.top; right: parent.right;
                          margins: itemMargins;}
                 opacity: 1
                 MouseArea {
@@ -272,7 +300,7 @@ Column {
                     onClicked: {
                         if (detailsRepeater.count == 1) {
                             existingFieldItem.resetFields();
-                        } 
+                        }
                         else if (detailsRepeater.count != 1) {
                             removeItemFromList(index);
                             detailsRepeater.model.remove(index);
