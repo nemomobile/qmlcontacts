@@ -36,7 +36,7 @@ Window {
     property string contextFavorite: qsTr("Favorite", "Verb")
 
     //: Remove favorite flag / remove contact from favorites list 
-    property string contextUnFavorite: qsTr("UnFavorite")
+    property string contextUnFavorite: qsTr("Unfavorite")
 
     property string contextEdit: qsTr("Edit")
     property string contextSave: qsTr("Save")
