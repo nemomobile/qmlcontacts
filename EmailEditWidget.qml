@@ -95,6 +95,14 @@ Item {
         return 0;
     }
 
+    function updateDisplayedData(){
+
+        if(updateMode){
+            emailComboBox.title = (updateMode) ? newDetailsModel.get(rIndex).type : contextHome
+            emailComboBox.selectedIndex = (updateMode) ? getIndexVal(newDetailsModel.get(rIndex).type) : 0
+        }
+    }
+
     DropDown {
         id: emailComboBox
 
@@ -107,13 +115,15 @@ Item {
 
         model: [contextHome, contextWork, contextOther]
 
-        title: (updateMode) ? newDetailsModel.get(rIndex).type : (restoredEmailTypeIndex != 0 ? model[restoredEmailTypeIndex] : contextHome)
+        title: (updateMode) ? newDetailsModel.get(rIndex).type : contextHome
         selectedIndex: (updateMode) ? getIndexVal(newDetailsModel.get(rIndex).type) : 0
         replaceDropDownTitle: true
 
         Component.onCompleted: {
-            emailComboBox.title = (restoredEmailTypeIndex != -1 ? emailComboBox.model[restoredEmailTypeIndex] : contextHome)
-            emailComboBox.selectedIndex = (restoredEmailTypeIndex != -1 ? restoredEmailTypeIndex : 1)
+            if(!updateMode){
+                emailComboBox.title = (restoredEmailTypeIndex != -1 ? emailComboBox.model[restoredEmailTypeIndex] : contextHome)
+                emailComboBox.selectedIndex = (restoredEmailTypeIndex != -1 ? restoredEmailTypeIndex : 1)
+            }
         }
     }
 

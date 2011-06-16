@@ -71,6 +71,7 @@ Item{
                 count = count + 1;
             }
         }
+
         return {"numbers": phoneNumList, "types": phoneTypeList};
     }
 
@@ -99,6 +100,13 @@ Item{
         return 0;
     }
 
+    function updateDisplayedData(){
+        if(updateMode){
+            phoneComboBox.title = (updateMode) ? newDetailsModel.get(rIndex).type : mobileContext
+            phoneComboBox.selectedIndex = (updateMode) ? getIndexVal(newDetailsModel.get(rIndex).type) : 0
+        }
+    }
+
     DropDown {
         id: phoneComboBox
 
@@ -116,8 +124,10 @@ Item{
         replaceDropDownTitle: true
 
         Component.onCompleted: {
-            phoneComboBox.title = (restoredPhoneTypeIndex != -1 ? phoneComboBox.model[restoredPhoneTypeIndex] : mobileContext)
-            phoneComboBox.selectedIndex = (restoredPhoneTypeIndex != -1 ? restoredPhoneTypeIndex : 1)
+            if(!updateMode){
+                phoneComboBox.title = (restoredPhoneTypeIndex != -1 ? phoneComboBox.model[restoredPhoneTypeIndex] : mobileContext)
+                phoneComboBox.selectedIndex = (restoredPhoneTypeIndex != -1 ? restoredPhoneTypeIndex : 1)
+            }
         }
     }
 

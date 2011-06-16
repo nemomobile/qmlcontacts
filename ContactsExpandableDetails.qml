@@ -35,35 +35,40 @@ Column {
     property alias itemCount: detailsRepeater.itemCount
     property alias repeaterItemList: detailsRepeater.itemList
 
+    property bool initializedData: false
+
     SaveRestoreState {
         id: srsExpandableDetails
         onSaveRequired: {
-            // Header
-            var detailId = headerLabel + "."
 
-            setValue(detailId + "expandableDetails.expanded", expanded)
-            setValue(detailId + "expandableDetails.itemCount", detailsRepeater.itemCount)
+            if(initializedData){
+                // Header
+                var detailId = headerLabel + "."
 
-            // Repeater data
-            if(detailsRepeater.model.count > 0){
-                var propIndex = 0;
+                setValue(detailId + "expandableDetails.expanded", expanded)
+                setValue(detailId + "expandableDetails.itemCount", detailsRepeater.itemCount)
 
-                for(var i = 0; i < detailsRepeater.count; i++){
-                    var entryName = detailId + "expandableDetails.items." + i + "."
+                // Repeater data
+                if(detailsRepeater.model.count > 0){
+                    var propIndex = 0;
 
-                    var arr = repeaterItemList[i].getDetails(false);
-                    propIndex = 0;
-                    for (var key in arr){
-                        var keyName     = entryName + "property." + propIndex + ".name";
-                        var keyValue    = entryName + "property." + propIndex + ".value";
+                    for(var i = 0; i < detailsRepeater.count; i++){
+                        var entryName = detailId + "expandableDetails.items." + i + "."
 
-                        setValue(keyName, key)
-                        setValue(keyValue, arr[key])
-                        propIndex++
+                        var arr = repeaterItemList[i].getDetails(false);
+                        propIndex = 0;
+                        for (var key in arr){
+                            var keyName     = entryName + "property." + propIndex + ".name";
+                            var keyValue    = entryName + "property." + propIndex + ".value";
+
+                            setValue(keyName, key)
+                            setValue(keyValue, arr[key])
+                            propIndex++
+                        }
                     }
-                }
 
-                setValue(detailId + "expandableDetails.items.property.count", propIndex)
+                    setValue(detailId + "expandableDetails.items.property.count", propIndex)
+                }
             }
 
             sync()
@@ -99,10 +104,59 @@ Column {
         detailsRepeater.itemCount -= 1;
     }
 
-    ListModel{
-        id: detailsModel 
+    function restoreData(){
+        if(!initializedData){
+            if(srsExpandableDetails.restoreRequired){
+                var detailId = headerLabel + "."
+                var itemCount = srsExpandableDetails.value(detailId + "expandableDetails.itemCount", 0)
 
-        Component.onCompleted:{
+                if(itemCount > 0){
+                    var entryNameHeader = detailId + "expandableDetails.items."
+                    var propertyCount = srsExpandableDetails.restoreOnce(headerLabel + ".expandableDetails.items.property.count", 0)
+
+                    for(var i = 0; i < itemCount; i++){
+                        var entryName = entryNameHeader + i + ".property."
+
+                        if(headerLabel == detailsColumn.parent.parent.parent.phoneLabel){
+                            detailsModel.append({"phone" : "", "type" : ""})
+                        }else if(headerLabel == detailsColumn.parent.parent.parent.addressLabel){
+                            detailsModel.append({"street" : "", "locale" : "", "region" : "", "zip" : "", "country" : "", "type" : ""})
+                        }else if(headerLabel == detailsColumn.parent.parent.parent.imLabel){
+                            detailsModel.append({"im" : "", "account" : "", "type" : ""})
+                        }else if(headerLabel == detailsColumn.parent.parent.parent.emailLabel){
+                            detailsModel.append({"email" : "", "type" : ""})
+                        }else if(headerLabel == detailsColumn.parent.parent.parent.urlLabel){
+                            detailsModel.append({"web" : "", "type" : ""})
+                        }
+
+                        for(var j = 0; j < propertyCount; j++){
+                            var key     = srsExpandableDetails.restoreOnce(entryName + j + ".name", "")
+                            var value   = srsExpandableDetails.restoreOnce(entryName + j + ".value", "")
+
+                            console.log("set property: " + key + " to value " + value)
+
+                            detailsModel.setProperty(i, key, value);
+                        }
+
+                        if( headerLabel == detailsColumn.parent.parent.parent.phoneLabel
+                            || headerLabel == detailsColumn.parent.parent.parent.emailLabel){
+                            if(detailsRepeater){
+                                if(detailsRepeater.itemCount > 0)
+                                    detailsRepeater.itemList[detailsRepeater.itemCount - 1].updateDisplayedData()
+                            }
+                        }
+                    }
+                }
+            }
+
+            initializedData = true
+        }
+    }
+
+    ListModel{
+        id: detailsModel
+
+        Component.onCompleted: {
             if (existingDetailsModel) {
                 var tmpArr = newFieldItem.parseDetailsModel(existingDetailsModel, contextModel);
                 for (var i = 0; i < tmpArr.length; i++) {
@@ -132,6 +186,16 @@ Column {
         }
     }
 
+    Timer {
+        interval: 2000
+        running: true
+        repeat: false
+
+        onTriggered: {
+            restoreData()
+        }
+    }
+
     Repeater {
         id: detailsRepeater
 
@@ -143,48 +207,9 @@ Column {
         property int itemCount 
         property variant itemList: []
 
-        Component.onCompleted: {
-            if(srsExpandableDetails.restoreRequired){
-                var detailId = headerLabel + "."
-                var itemCount = srsExpandableDetails.value(detailId + "expandableDetails.itemCount", 0)
-
-                if(itemCount > 0){
-                    var entryNameHeader = detailId + "expandableDetails.items."
-                    var propertyCount = srsExpandableDetails.restoreOnce(headerLabel + ".expandableDetails.items.property.count", 0)
-
-                    console.log("Item count: " + itemCount)
-                    for(var i = 0; i < itemCount; i++){
-                        var entryName = entryNameHeader + i + ".property."
-
-                        if(headerLabel == detailsColumn.parent.parent.parent.phoneLabel){
-                            detailsModel.append({"phone" : "", "type" : ""})
-                        }else if(headerLabel == detailsColumn.parent.parent.parent.addressLabel){
-                            detailsModel.append({"street" : "", "locale" : "", "region" : "", "zip" : "", "country" : "", "type" : ""})
-                        }else if(headerLabel == detailsColumn.parent.parent.parent.imLabel){
-                            detailsModel.append({"im" : "", "account" : "", "type" : ""})
-                        }else if(headerLabel == detailsColumn.parent.parent.parent.emailLabel){
-                            detailsModel.append({"email" : "", "type" : ""})
-                        }else if(headerLabel == detailsColumn.parent.parent.parent.urlLabel){
-                            detailsModel.append({"web" : "", "type" : ""})
-                        }
-
-                        for(var j = 0; j < propertyCount; j++){
-                            var key     = srsExpandableDetails.restoreOnce(entryName + j + ".name", "")
-                            var value   = srsExpandableDetails.restoreOnce(entryName + j + ".value", "")
-
-                            console.log("Setting property \"" + key + "\" to value (" + value + ")")
-
-                            detailsModel.setProperty(i, key, value);
-                        }
-                    }
-                }
-
-                for(var i = 0; i < itemList.length; i++){
-                    itemList[i].visible = true
-                    console.log("Item " + i + " is visible: " + itemList[i].visible + " item opacity: " + itemList[i].opacity)
-                }
-            }
-        }
+//        Component.onCompleted: {
+//            restoreData
+//        }
 
         delegate: Image {
             id: imageBar
@@ -193,7 +218,7 @@ Column {
             width: parent.width
 
             property Item existingFieldItem: null
-        
+
             Item {
                 id: existingContentArea
 
