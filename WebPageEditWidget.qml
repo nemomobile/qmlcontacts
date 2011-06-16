@@ -20,8 +20,8 @@ Item {
     property bool validInput: false 
 
     property string defaultWeb : qsTr("Site")
-    property string bookmarkWeb : qsTr("Bookmark")
-    property string favoriteWeb : qsTr("Favorite")
+    property string bookmarkWeb : qsTr("Bookmark", "Noun")
+    property string favoriteWeb : qsTr("Favorite", "Noun")
 
     SaveRestoreState {
         id: srsWebPage

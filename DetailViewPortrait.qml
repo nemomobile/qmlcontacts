@@ -37,10 +37,10 @@ Flickable {
     property string contextMobile: qsTr("Mobile")
 
     //: Denotes whether the web page for this contact is just a bookmark
-    property string contextBookmark: qsTr("Bookmark")
+    property string contextBookmark: qsTr("Bookmark", "Noun")
 
     //: Denotes whether the web page for this contact is a favorite bookmark
-    property string contextFavorite: qsTr("Favorite")
+    property string contextFavorite: qsTr("Favorite", "Noun")
 
     property string defaultFirstName: qsTr("First name")
     property string defaultLastName: qsTr("Last name")
@@ -73,7 +73,7 @@ Flickable {
     property string imTr : qsTr("IM")
 
     //: Add favorite flag / add contact to favorites list
-    property string favoriteTranslated: qsTr("Favorite")
+    property string favoriteTranslated: qsTr("Favorite", "Verb")
 
     //: Remove favorite flag / remove contact from favorites list
     property string unfavoriteTranslated: qsTr("Unfavorite")
