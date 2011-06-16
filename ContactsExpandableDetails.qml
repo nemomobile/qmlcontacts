@@ -252,7 +252,8 @@ Column {
                     Button {
                         id: addButton
 
-                        width: 100
+                        minWidth: 100
+                        maxWidth: Math.round(parent.width/3)
                         height: 36
                         text: addLabel
                         font.pixelSize: theme_fontPixelSizeMediumLarge
@@ -273,7 +274,8 @@ Column {
                     Button {
                         id: cancelButton
 
-                        width: 100
+                        minWidth: 100
+                        maxWidth: Math.round(parent.width/3)
                         height: 36
                         text: cancelLabel
                         font.pixelSize: theme_fontPixelSizeMediumLarge
