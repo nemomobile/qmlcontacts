@@ -25,6 +25,8 @@ Flickable {
     interactive: true
     opacity: 1
 
+    property string parentTitle: ""
+
     property PeopleModel dataModel: contactModel
     property int index: personRow
     property bool validInput: false
@@ -68,11 +70,11 @@ Flickable {
 	id: justRestore
 	onSaveRequired: sync()
 	Component.onCompleted: {
-	    restoredFirstName = restoreOnce("contact.firstName", "")
-	    restoredLastName = restoreOnce("contact.lastName", "")
-	    restoredCompany = restoreOnce("contact.company", "")
-	    restoredNotes = restoreOnce("contact.notes", "")
-	    restoredBirthday = restoreOnce("contact.birthday", "2011-01-01")
+            restoredFirstName = restoreOnce(parentTitle + ".contact.firstName", "")
+            restoredLastName = restoreOnce(parentTitle + ".contact.lastName", "")
+            restoredCompany = restoreOnce(parentTitle + ".contact.company", "")
+            restoredNotes = restoreOnce(parentTitle + ".contact.notes", "")
+            restoredBirthday = restoreOnce(parentTitle + ".contact.birthday", "2011-01-01")
 	}
     }
 
@@ -195,12 +197,12 @@ Flickable {
 			id: srsMainView
 			onSaveRequired: {
 			    console.log("MAIN.QML saving firstName and lastName: ")
-			    setValue("contact.firstName", data_first.text)
-			    setValue("contact.lastName", data_last.text)
-			    setValue("contact.company",data_company.text)
-			    setValue("contact.photo", avatar_img.source)
-			    setValue("contact.birthday", datePicker.selectedDate)
-			    setValue("contact.notes",data_notes.text)
+                            setValue(parentTitle + ".contact.firstName", data_first.text)
+                            setValue(parentTitle + ".contact.lastName", data_last.text)
+                            setValue(parentTitle + ".contact.company",data_company.text)
+                            setValue(parentTitle + ".contact.photo", avatar_img.source)
+                            setValue(parentTitle + ".contact.birthday", datePicker.selectedDate)
+                            setValue(parentTitle + ".contact.notes",data_notes.text)
 			    sync()
 			}
 		    }
@@ -285,8 +287,12 @@ Flickable {
 
             headerLabel: phoneLabel
             expandingBoxTitle: addPhones
-            newDetailsComponent: PhoneEditWidget{}
-            existingDetailsComponent: PhoneEditWidget{}
+            newDetailsComponent: PhoneEditWidget{
+                prefixSaveRestore: parentTitle
+            }
+            existingDetailsComponent: PhoneEditWidget{
+                prefixSaveRestore: parentTitle
+            }
             existingDetailsModel: dataModel.data(index, PeopleModel.PhoneNumberRole)
             contextModel: dataModel.data(index, PeopleModel.PhoneContextRole)
         }
@@ -296,8 +302,12 @@ Flickable {
 
             headerLabel: imLabel
             expandingBoxTitle: addIms
-            newDetailsComponent: ImEditWidget{}
-            existingDetailsComponent: ImEditWidget{}
+            newDetailsComponent: ImEditWidget{
+                prefixSaveRestore: parentTitle
+            }
+            existingDetailsComponent: ImEditWidget{
+                prefixSaveRestore: parentTitle
+            }
             existingDetailsModel: dataModel.data(index, PeopleModel.OnlineAccountUriRole)
             contextModel: dataModel.data(index, PeopleModel.OnlineServiceProviderRole)
         }
@@ -307,8 +317,12 @@ Flickable {
 
             headerLabel: emailLabel
             expandingBoxTitle: addEmails
-            newDetailsComponent: EmailEditWidget{}
-            existingDetailsComponent: EmailEditWidget{}
+            newDetailsComponent: EmailEditWidget{
+                prefixSaveRestore: parentTitle
+            }
+            existingDetailsComponent: EmailEditWidget{
+                prefixSaveRestore: parentTitle
+            }
             existingDetailsModel: dataModel.data(index, PeopleModel.EmailAddressRole)
             contextModel: dataModel.data(index, PeopleModel.EmailContextRole)
         }
@@ -318,8 +332,12 @@ Flickable {
 
             headerLabel: urlLabel
             expandingBoxTitle: addUrls
-            newDetailsComponent: WebPageEditWidget{}
-            existingDetailsComponent: WebPageEditWidget{}
+            newDetailsComponent: WebPageEditWidget{
+                prefixSaveRestore: parentTitle
+            }
+            existingDetailsComponent: WebPageEditWidget{
+                prefixSaveRestore: parentTitle
+            }
             existingDetailsModel: dataModel.data(index, PeopleModel.WebUrlRole)
             contextModel: dataModel.data(index, PeopleModel.WebContextRole)
         }
@@ -329,8 +347,12 @@ Flickable {
 
             headerLabel: addressLabel
             expandingBoxTitle: addAddress
-            newDetailsComponent: AddressEditWidget{}
-            existingDetailsComponent: AddressEditWidget{}
+            newDetailsComponent: AddressEditWidget{
+                prefixSaveRestore: parentTitle
+            }
+            existingDetailsComponent: AddressEditWidget{
+                prefixSaveRestore: parentTitle
+            }
             existingDetailsModel: dataModel.data(index, PeopleModel.AddressRole)
             contextModel: dataModel.data(index, PeopleModel.AddressContextRole)
         }

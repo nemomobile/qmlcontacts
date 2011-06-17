@@ -26,14 +26,15 @@ Item {
 
     property string restoredEmail: ""
     property int restoredEmailTypeIndex: 0
+    property string prefixSaveRestore: ""
 
     SaveRestoreState {
         id: srsMail
         onSaveRequired: {
             if(!updateMode){
                 // Save the phone number that is currently being edited
-                setValue("email.address", data_email.text)
-                setValue("email.typeIndex", emailComboBox.selectedIndex)
+                setValue(prefixSaveRestore + ".email.address", data_email.text)
+                setValue(prefixSaveRestore + ".email.typeIndex", emailComboBox.selectedIndex)
             }
 
             sync()
@@ -42,8 +43,8 @@ Item {
 
     Component.onCompleted: {
         if (srsMail.restoreRequired) {
-            restoredEmail           = srsMail.restoreOnce("email.address", "")
-            restoredEmailTypeIndex  = srsMail.restoreOnce("email.typeIndex", 0)
+            restoredEmail           = srsMail.restoreOnce(prefixSaveRestore + ".email.address", "")
+            restoredEmailTypeIndex  = srsMail.restoreOnce(prefixSaveRestore + ".email.typeIndex", 0)
         }
     }
 

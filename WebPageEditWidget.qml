@@ -25,14 +25,15 @@ Item {
 
     property string restoredWeb: ""
     property int restoredWebTypeIndex: -1
+    property string prefixSaveRestore: ""
 
     SaveRestoreState {
         id: srsWebPage
         onSaveRequired: {
             if(!updateMode){
                 // Save the phone number that is currently being edited
-                setValue("web.address", data_url.text)
-                setValue("web.typeIndex", urlComboBox.selectedIndex)
+                setValue(prefixSaveRestore + ".web.address", data_url.text)
+                setValue(prefixSaveRestore + ".web.typeIndex", urlComboBox.selectedIndex)
             }
 
             sync()
@@ -41,8 +42,8 @@ Item {
 
     Component.onCompleted: {
         if (srsWebPage.restoreRequired){
-            restoredWeb           = srsWebPage.restoreOnce("web.address", "")
-            restoredWebTypeIndex  = srsWebPage.restoreOnce("web.typeIndex", -1)
+            restoredWeb           = srsWebPage.restoreOnce(prefixSaveRestore + ".web.address", "")
+            restoredWebTypeIndex  = srsWebPage.restoreOnce(prefixSaveRestore + ".web.typeIndex", -1)
         }
     }
 

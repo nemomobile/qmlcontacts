@@ -56,8 +56,8 @@ Window {
         id: srsUnsavedContact
         onSaveRequired: {
             var currentlyActivePage = 0
-	    console.log("MAIN.QML: pageStack.currentPage == " + window.pageStack.currentPage)
-	    console.log("MAIN.QML: pageStack.currentPage.pageTitle == " + window.pageStack.currentPage.pageTitle)
+           console.log("MAIN.QML: pageStack.currentPage == " + window.pageStack.currentPage)
+           console.log("MAIN.QML: pageStack.currentPage.pageTitle == " + window.pageStack.currentPage.pageTitle)
             switch(window.pageStack.currentPage.pageTitle){
             case filterFavorites:
                 currentlyActivePage = 1
@@ -133,17 +133,17 @@ Window {
             window.currentContactName = contactName
 	    
             // // Adding first the "main" page
-	    if (currentlyActivePage == 1) {
-		addPage(myAppFavContacts)
-	    } else if (currentlyActivePage == 2) {
-		addPage(myAppOnlineContacts)
-	    } else if (currentlyActivePage == 4 
-		       || currentlyActivePage == 5 
-		       || currentlyActivePage == 6) {
-		addPage(myAppAllContacts)
-	    } else {
-		addPage(myAppAllContacts)
-	    }
+            if (currentlyActivePage == 1) {
+                addPage(myAppFavContacts)
+            } else if (currentlyActivePage == 2) {
+                addPage(myAppOnlineContacts)
+            } else if (currentlyActivePage == 4
+                       || currentlyActivePage == 5
+                       || currentlyActivePage == 6) {
+                addPage(myAppAllContacts)
+            } else {
+                addPage(myAppAllContacts)
+            }
 
             // Add pages that are not "main" pages
 	    if (currentlyActivePage == 4) {
@@ -151,11 +151,11 @@ Window {
 	    } else if (currentlyActivePage == 5) {
 		addPage(myAppEdit)
 	    } else if (currentlyActivePage == 6) {
-		addPage(myAppNewContact)
+                addPage(myAppNewContact)
 	    }
 	} else { // nothing to restore
 	    addPage(myAppAllContacts)
-	}
+        }
     }
 
     function getOnlinePeople() {
@@ -268,6 +268,7 @@ Window {
                         window.addPage(myAppNewContact);
                     }
                     visible: (window.orientation == 0 || window.orientation == 2) // portrait
+                    parentTitle: pageTitle
                 }
 
                 GroupedViewLandscape {
@@ -279,6 +280,7 @@ Window {
                         window.addPage(myAppNewContact);
                     }
                     visible: (window.orientation == 1 || window.orientation == 3) // landscape
+                    parentTitle: pageTitle
                 }
             }
 
@@ -334,6 +336,7 @@ Window {
                 anchors.fill:  parent
                 detailModel: peopleModel
                 indexOfPerson: proxyModel.getSourceRow(window.currentContactIndex)
+                parentTitle: pageTitle
             }
             FooterBar { 
                 id: detailsFooter 
@@ -373,6 +376,7 @@ Window {
                 dataModel: peopleModel
                 index: proxyModel.getSourceRow(window.currentContactIndex, "editviewportrait")
                 anchors.fill: parent
+                parentTitle: pageTitle
             }
             FooterBar { 
                 id: editFooter 
@@ -402,6 +406,7 @@ Window {
 
     Component {
         id: myAppNewContact
+
         AppPage {
             id: newContactViewPage
             pageTitle: labelNewContactView
@@ -412,6 +417,7 @@ Window {
             NewContactViewPortrait{
                 id: newContact
                 dataModel: peopleModel
+                parentTitle: pageTitle
             }
             FooterBar { 
                 id: newFooter 

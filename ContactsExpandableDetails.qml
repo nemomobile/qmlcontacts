@@ -36,24 +36,29 @@ Column {
     property alias repeaterItemList: detailsRepeater.itemList
 
     property bool initializedData: false
+    property string prefixSaveRestore: detailsColumn.parent.parent.parent.parentTitle + "." + headerLabel + ".expandableDetails"
 
     SaveRestoreState {
         id: srsExpandableDetails
         onSaveRequired: {
 
-            if(initializedData){
+            var canSave = true
+            if(!initializedData)
+                canSave = srsExpandableDetails.value(prefixSaveRestore + ".valid", true);
+
+            if(initializedData && canSave){
                 // Header
                 var detailId = headerLabel + "."
 
-                setValue(detailId + "expandableDetails.expanded", expanded)
-                setValue(detailId + "expandableDetails.itemCount", detailsRepeater.itemCount)
+                setValue(prefixSaveRestore + ".expanded", expanded)
+                setValue(prefixSaveRestore + ".itemCount", detailsRepeater.itemCount)
 
                 // Repeater data
                 if(detailsRepeater.model.count > 0){
                     var propIndex = 0;
 
                     for(var i = 0; i < detailsRepeater.count; i++){
-                        var entryName = detailId + "expandableDetails.items." + i + "."
+                        var entryName = prefixSaveRestore + ".items." + i + "."
 
                         var arr = repeaterItemList[i].getDetails(false);
                         propIndex = 0;
@@ -67,7 +72,7 @@ Column {
                         }
                     }
 
-                    setValue(detailId + "expandableDetails.items.property.count", propIndex)
+                    setValue(prefixSaveRestore + ".items.property.count", propIndex)
                 }
             }
 
@@ -108,48 +113,60 @@ Column {
         if(!initializedData){
             if(srsExpandableDetails.restoreRequired){
                 var detailId = headerLabel + "."
-                var itemCount = srsExpandableDetails.value(detailId + "expandableDetails.itemCount", 0)
+                var itemCount = srsExpandableDetails.value(prefixSaveRestore + ".itemCount", 0)
 
                 if(itemCount > 0){
-                    var entryNameHeader = detailId + "expandableDetails.items."
-                    var propertyCount = srsExpandableDetails.restoreOnce(headerLabel + ".expandableDetails.items.property.count", 0)
+                    var entryNameHeader = prefixSaveRestore + ".items."
+                    var propertyCount = srsExpandableDetails.restoreOnce(prefixSaveRestore + ".items.property.count", 0)
 
                     for(var i = 0; i < itemCount; i++){
                         var entryName = entryNameHeader + i + ".property."
 
-                        if(headerLabel == detailsColumn.parent.parent.parent.phoneLabel){
-                            detailsModel.append({"phone" : "", "type" : ""})
-                        }else if(headerLabel == detailsColumn.parent.parent.parent.addressLabel){
-                            detailsModel.append({"street" : "", "locale" : "", "region" : "", "zip" : "", "country" : "", "type" : ""})
-                        }else if(headerLabel == detailsColumn.parent.parent.parent.imLabel){
-                            detailsModel.append({"im" : "", "account" : "", "type" : ""})
-                        }else if(headerLabel == detailsColumn.parent.parent.parent.emailLabel){
-                            detailsModel.append({"email" : "", "type" : ""})
-                        }else if(headerLabel == detailsColumn.parent.parent.parent.urlLabel){
-                            detailsModel.append({"web" : "", "type" : ""})
-                        }
+//                        console.log("detailsColumn.parent.parent.parent.id: " + detailsColumn.parent.parent.parent.parentTitle)
+                        console.log("Restoring data for: " + headerLabel + detailsColumn.parent.parent.parent.addressLabel)
+                        appendIntoDetailsModel()
 
                         for(var j = 0; j < propertyCount; j++){
                             var key     = srsExpandableDetails.restoreOnce(entryName + j + ".name", "")
                             var value   = srsExpandableDetails.restoreOnce(entryName + j + ".value", "")
 
-                            console.log("set property: " + key + " to value " + value)
-
                             detailsModel.setProperty(i, key, value);
                         }
 
-                        if( headerLabel == detailsColumn.parent.parent.parent.phoneLabel
-                            || headerLabel == detailsColumn.parent.parent.parent.emailLabel){
-                            if(detailsRepeater){
-                                if(detailsRepeater.itemCount > 0)
-                                    detailsRepeater.itemList[detailsRepeater.itemCount - 1].updateDisplayedData()
-                            }
-                        }
+                        updateModelDisplayedData()
                     }
                 }
             }
 
+            srsExpandableDetails.setValue(prefixSaveRestore + ".valid", false);
+            srsExpandableDetails.sync()
             initializedData = true
+        }
+    }
+
+    function appendIntoDetailsModel(){
+        console.log("appendIntoDetailsModel()")
+        if(headerLabel == detailsColumn.parent.parent.parent.phoneLabel){
+            detailsModel.append({"phone" : "", "type" : ""})
+        }else if(headerLabel == detailsColumn.parent.parent.parent.addressLabel){
+            detailsModel.append({"street" : "", "locale" : "", "region" : "", "zip" : "", "country" : "", "type" : ""})
+        }else if(headerLabel == detailsColumn.parent.parent.parent.imLabel){
+            detailsModel.append({"im" : "", "account" : "", "type" : ""})
+        }else if(headerLabel == detailsColumn.parent.parent.parent.emailLabel){
+            detailsModel.append({"email" : "", "type" : ""})
+        }else if(headerLabel == detailsColumn.parent.parent.parent.urlLabel){
+            detailsModel.append({"web" : "", "type" : ""})
+        }
+    }
+
+    function updateModelDisplayedData(){
+        if( headerLabel == detailsColumn.parent.parent.parent.phoneLabel
+            || headerLabel == detailsColumn.parent.parent.parent.emailLabel
+            || headerLabel == detailsColumn.parent.parent.parent.addressLabel){
+            if(detailsRepeater){
+                if(detailsRepeater.itemCount > 0)
+                    detailsRepeater.itemList[detailsRepeater.itemCount - 1].updateDisplayedData()
+            }
         }
     }
 
@@ -160,7 +177,7 @@ Column {
             if (existingDetailsModel) {
                 var tmpArr = newFieldItem.parseDetailsModel(existingDetailsModel, contextModel);
                 for (var i = 0; i < tmpArr.length; i++) {
-                    detailsModel.append({"type" : ""});
+                    appendIntoDetailsModel()
                     for (var key in tmpArr[i])
                          detailsModel.setProperty(i, key, tmpArr[i][key]);
                 }
@@ -369,9 +386,12 @@ Column {
                         onClicked: {
                             detailsBox.expanded = false;
                             var arr = newFieldItem.getDetails(true);
-                            detailsModel.append({"type" : ""});
-                            for (var key in arr)
+                            appendIntoDetailsModel()
+                            for (var key in arr){
                                 detailsModel.setProperty(detailsModel.count - 1, key, arr[key]);
+                            }
+
+                            updateModelDisplayedData()
                         }
                     }
 

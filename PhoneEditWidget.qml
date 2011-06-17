@@ -32,14 +32,15 @@ Item{
 
     property string restoredPhoneNumber: ""
     property int restoredPhoneTypeIndex: 0
+    property string prefixSaveRestore: ""
 
     SaveRestoreState {
         id: srsPhone
         onSaveRequired: {
             if(!updateMode){
                 // Save the phone number that is currently being edited
-                setValue("phone.number", data_phone.text)
-                setValue("phone.typeIndex", phoneComboBox.selectedIndex)
+                setValue(prefixSaveRestore + ".phone.number", data_phone.text)
+                setValue(prefixSaveRestore + ".phone.typeIndex", phoneComboBox.selectedIndex)
             }
             sync()
         }
@@ -47,8 +48,8 @@ Item{
 
     Component.onCompleted: {
         if(srsPhone.restoreRequired){
-            restoredPhoneNumber     = srsPhone.restoreOnce("phone.number", "")
-            restoredPhoneTypeIndex  = srsPhone.restoreOnce("phone.typeIndex", 0)
+            restoredPhoneNumber     = srsPhone.restoreOnce(prefixSaveRestore + ".phone.number", "")
+            restoredPhoneTypeIndex  = srsPhone.restoreOnce(prefixSaveRestore + ".phone.typeIndex", 0)
         }
     }
 

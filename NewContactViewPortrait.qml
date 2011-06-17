@@ -24,6 +24,8 @@ Flickable{
     interactive: true
     opacity:  1
 
+    property string parentTitle: ""
+
     property PeopleModel dataModel: newContactModel
 
     property string contextHome: qsTr("Home")
@@ -68,11 +70,11 @@ Flickable{
     }
 
     Component.onCompleted: {
-        restoredFirstName       = justRestore.restoreOnce("newContact.firstName", "")
-        restoredLastName        = justRestore.restoreOnce("newContact.lastName", "")
-        restoredCompany         = justRestore.restoreOnce("newContact.company", "")
-        restoredNotes           = justRestore.restoreOnce("newContact.notes", "")
-        restoredBirthday        = justRestore.restoreOnce("newContact.birthday", "2011-01-01")
+        restoredFirstName       = justRestore.restoreOnce(parentTitle + ".newContact.firstName", "")
+        restoredLastName        = justRestore.restoreOnce(parentTitle + ".newContact.lastName", "")
+        restoredCompany         = justRestore.restoreOnce(parentTitle + ".newContact.company", "")
+        restoredNotes           = justRestore.restoreOnce(parentTitle + ".newContact.notes", "")
+        restoredBirthday        = justRestore.restoreOnce(parentTitle + ".newContact.birthday", "2011-01-01")
     }
 
 
@@ -101,6 +103,10 @@ Flickable{
 
         if (!ret) //REVISIT
             console.log("[contactSave] Unable to create new contact due to missing info");
+    }
+
+    function restoreData(){
+        phones.restoreData()
     }
 
     Column{
@@ -195,12 +201,12 @@ Flickable{
 		    SaveRestoreState {
 			id: srsMainView
 			onSaveRequired: {
-			    setValue("newContact.firstName", data_first.text)
-			    setValue("newContact.lastName", data_last.text)
-			    setValue("newContact.company",data_company.text)
-			    setValue("newContact.photo", avatar_img.source)
-			    setValue("newContact.birthday", datePicker.selectedDate)
-                           setValue("newContact.notes",data_notes.text)
+                            setValue(parentTitle + ".newContact.firstName", data_first.text)
+                            setValue(parentTitle + ".newContact.lastName", data_last.text)
+                            setValue(parentTitle + ".newContact.company",data_company.text)
+                            setValue(parentTitle + ".newContact.photo", avatar_img.source)
+                            setValue(parentTitle + ".newContact.birthday", datePicker.selectedDate)
+                           setValue(parentTitle + ".newContact.notes",data_notes.text)
 			    sync()
 			}
 		    }
@@ -284,8 +290,12 @@ Flickable{
 
             headerLabel: phoneLabel
             expandingBoxTitle: addPhones
-            newDetailsComponent: PhoneEditWidget{}
-            existingDetailsComponent: PhoneEditWidget{}
+            newDetailsComponent: PhoneEditWidget{
+                prefixSaveRestore: parentTitle
+            }
+            existingDetailsComponent: PhoneEditWidget{
+                prefixSaveRestore: parentTitle
+            }
         }
 
         ContactsExpandableDetails {
@@ -293,8 +303,12 @@ Flickable{
 
             headerLabel: imLabel
             expandingBoxTitle: addIms
-            newDetailsComponent: ImEditWidget{}
-            existingDetailsComponent: ImEditWidget{}
+            newDetailsComponent: ImEditWidget{
+                prefixSaveRestore: parentTitle
+            }
+            existingDetailsComponent: ImEditWidget{
+                prefixSaveRestore: parentTitle
+            }
         }
 
         ContactsExpandableDetails {
@@ -302,8 +316,12 @@ Flickable{
 
             headerLabel: emailLabel
             expandingBoxTitle: addEmails
-            newDetailsComponent: EmailEditWidget{}
-            existingDetailsComponent: EmailEditWidget{}
+            newDetailsComponent: EmailEditWidget{
+                prefixSaveRestore: parentTitle
+            }
+            existingDetailsComponent: EmailEditWidget{
+                prefixSaveRestore: parentTitle
+            }
         }
 
         ContactsExpandableDetails {
@@ -311,8 +329,12 @@ Flickable{
 
             headerLabel: urlLabel
             expandingBoxTitle: addUrls
-            newDetailsComponent: WebPageEditWidget{}
-            existingDetailsComponent: WebPageEditWidget{}
+            newDetailsComponent: WebPageEditWidget{
+                prefixSaveRestore: parentTitle
+            }
+            existingDetailsComponent: WebPageEditWidget{
+                prefixSaveRestore: parentTitle
+            }
         }
 
         ContactsExpandableDetails {
@@ -320,8 +342,12 @@ Flickable{
 
             headerLabel: addressLabel
             expandingBoxTitle: addAddress
-            newDetailsComponent: AddressEditWidget{}
-            existingDetailsComponent: AddressEditWidget{}
+            newDetailsComponent: AddressEditWidget{
+                prefixSaveRestore: parentTitle
+            }
+            existingDetailsComponent: AddressEditWidget{
+                prefixSaveRestore: parentTitle
+            }
         }
 
         Item{
