@@ -331,13 +331,19 @@ QVariant PeopleModel::data(int row, int role) const
             QString aStr;
             QString temp;
             QString addy = address.street();
+            QStringList streetList = addy.split("\n");
 
             for (int i = 0; i < fieldOrder.size(); ++i) {
                 temp = "";
-                if (fieldOrder.at(i) == "street")
-                    temp += addy.split("\n")[0];
-                else if (fieldOrder.at(i) == "street2")
-                    temp += addy.split("\n")[1];
+                if (fieldOrder.at(i) == "street") {
+                    if (streetList.count() == 2)
+                        temp += streetList.at(0);
+                    else
+                        temp += addy;
+                } else if (fieldOrder.at(i) == "street2") {
+                    if (streetList.count() == 2)
+                        temp += streetList.at(1);
+                }
                 else if (fieldOrder.at(i) == "locale")
                     temp += address.locality();
                 else if (fieldOrder.at(i) == "region")

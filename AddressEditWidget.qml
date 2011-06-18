@@ -99,7 +99,8 @@ Item {
                 newDetailsModel.get(i).region != "" ||
                 newDetailsModel.get(i).zip != ""  ||
                 newDetailsModel.get(i).country != "") {
-                streetList[count] = newDetailsModel.get(i).street;
+                streetList[count] = newDetailsModel.get(i).street + "\n"
+                                    + newDetailsModel.get(i).street2;
                 localeList[count] = newDetailsModel.get(i).locale;
                 regionList[count] = newDetailsModel.get(i).region;
                 zipList[count] = newDetailsModel.get(i).zip;
