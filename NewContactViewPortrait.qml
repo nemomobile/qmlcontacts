@@ -78,6 +78,14 @@ Flickable{
 	}
     }
 
+    function finishPageLoad() {
+        phones.loadExpandingBox();
+        ims.loadExpandingBox();
+        emails.loadExpandingBox();
+        urls.loadExpandingBox();
+        addys.loadExpandingBox();
+    }
+
     function contactSave(){
         var newPhones = phones.getNewDetails();
         var newIms = ims.getNewDetails();

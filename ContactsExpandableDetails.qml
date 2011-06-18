@@ -30,6 +30,10 @@ Column {
     property string addLabel: qsTr("Add")
     property string cancelLabel: qsTr("Cancel")
 
+    function loadExpandingBox() {
+        expandingLoader.sourceComponent = expandingComponent;
+    }
+
     function getNewDetails() {
         if (detailsRepeater.itemCount <= 0)
             return [""];
@@ -54,15 +58,16 @@ Column {
 
     ListModel{
         id: detailsModel 
-
         Component.onCompleted:{
-            if (existingDetailsModel) {
-                var tmpArr = newDLoader.item.parseDetailsModel(existingDetailsModel, contextModel);
+            if ((existingDetailsModel) && (existingDetailsModel != "")) {
+                var newFieldItem = existingDetailsComponent.createObject(detailsColumn);
+                var tmpArr = newFieldItem.parseDetailsModel(existingDetailsModel, contextModel);
                 for (var i = 0; i < tmpArr.length; i++) {
                     detailsModel.append({"type" : ""});
                     for (var key in tmpArr[i])
                          detailsModel.setProperty(i, key, tmpArr[i][key]);
                 }
+                newFieldItem.destroy();
             }
         }
     }
@@ -118,8 +123,8 @@ Column {
                     //REVISIT: Better way to calculate? Use a state?
                     //We need to grow the parent based on the height
                     //of the children we're stuffing in
-                    oldDLoader.item.height += (itemMargins * 6);
-                    imageBar.height = oldDLoader.item.height;
+                    imageBar.height = oldDLoader.item.childrenRect.height
+                                      + (itemMargins * 2);
                     detailsColumn.height += imageBar.height;
 
                     //REVISIT: We can replace this with the itemAt() Repeater
@@ -153,8 +158,6 @@ Column {
                             removeItemFromList(index);
                             detailsRepeater.model.remove(index);
                         }
-                        else
-                            newDLoader.item.resetFields();
 
                         delete_button.source = "image://theme/contacts/icn_trash";
                         //REVISIT: Should use states for this
@@ -179,21 +182,37 @@ Column {
             source: "image://themedimage/widgets/common/header/header-inverted-small"
             anchors {fill: parent; bottomMargin: 1}
 
+            Loader {
+                id: expandingLoader
+            }
+        }
+    }
+
+    Component {
+        id: expandingComponent 
+        Item {
+            id: expandingItem
+            parent: addBar
+
+            property alias expanded: detailsBox.expanded
+
             ExpandingBox {
                 id: detailsBox
 
                 property int boxHeight
 
-                anchors {top: addBar.top; leftMargin: itemMargins}
-                width: parent.width
-
+                lazyCreation: true
+                parent: addBar
+                anchors {top: parent.top; right: parent.right;
+                         left: parent.left; leftMargin: itemMargins}
+ 
                 headerContent: Item {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.fill: parent
 
                     Image {
                         id: add_button
-                        anchors.left: parent.left 
+                        anchors.left: parent.left
                         anchors.leftMargin: 10
                         anchors.verticalCenter: parent.verticalCenter
                         fillMode: Image.PreserveAspectFit
@@ -223,66 +242,67 @@ Column {
                     }
                 }
             }
+        }
+    }
 
-            Component {
-                id: fieldDetailComponent
-                Item {
-                    id: fieldDetailItem
-                    height: childrenRect.height + itemMargins*2
-                    width: parent.width
-                    anchors {left:parent.left; top: parent.top; margins: itemMargins;}
+    Component {
+        id: fieldDetailComponent
 
-                    Loader {
-                        id: newDLoader
+        Item {
+            id: fieldDetailItem
+            height: childrenRect.height + itemMargins*2
+            width: parent.width
+            anchors {left:parent.left; top: parent.top; margins: itemMargins;}
 
-                        height: childrenRect.height
-                        width: parent.width
+            Loader {
+                id: newDLoader
 
-                        sourceComponent: newDetailsComponent
+                height: childrenRect.height
+                width: parent.width
 
-                        Component.onCompleted: {
-                            newDLoader.item.newDetailsModel = detailsModel;
-                            newDLoader.item.rIndex = detailsModel.count;
-                        }
-                    }
+                sourceComponent: newDetailsComponent
 
-                    Button {
-                        id: addButton
+                Component.onCompleted: {
+                    newDLoader.item.newDetailsModel = detailsModel;
+                    newDLoader.item.rIndex = detailsModel.count;
+                }
+            }
 
-                        minWidth: 100
-                        maxWidth: Math.round(parent.width/3)
-                        height: 36
-                        text: addLabel
-                        font.pixelSize: theme_fontPixelSizeMediumLarge
-                        bgSourceUp: "image://themedimage/widgets/common/button/button-default"
-                        bgSourceDn: "image://themedimage/widgets/common/button/button-default-pressed"
-                        anchors {right: cancelButton.left; rightMargin: itemMargins;
-                                 top: newDLoader.bottom; topMargin: itemMargins;}
-                        enabled: newDLoader.item.validInput
-                        onClicked: {
-                            detailsBox.expanded = false;
-                            var arr = newDLoader.item.getDetails(true);
-                            detailsModel.append({"type" : ""});
-                            for (var key in arr)
-                                detailsModel.setProperty(detailsModel.count - 1, key, arr[key]);
-                        }
-                    }
+            Button {
+                id: addButton
 
-                    Button {
-                        id: cancelButton
+                minWidth: 100
+                maxWidth: Math.round(parent.width/3)
+                height: 36
+                text: addLabel
+                font.pixelSize: theme_fontPixelSizeMediumLarge
+                bgSourceUp: "image://themedimage/widgets/common/button/button-default"
+                bgSourceDn: "image://themedimage/widgets/common/button/button-default-pressed"
+                anchors {right: cancelButton.left; rightMargin: itemMargins;
+                         top: newDLoader.bottom; topMargin: itemMargins;}
+                enabled: (newDLoader.item) ? newDLoader.item.validInput : false
+                onClicked: {
+                    expandingLoader.item.expanded = false;
+                    var arr = newDLoader.item.getDetails(true);
+                    detailsModel.append({"type" : ""});
+                    for (var key in arr)
+                        detailsModel.setProperty(detailsModel.count - 1, key, arr[key]);
+                }
+            }
 
-                        minWidth: 100
-                        maxWidth: Math.round(parent.width/3)
-                        height: 36
-                        text: cancelLabel
-                        font.pixelSize: theme_fontPixelSizeMediumLarge
-                        anchors {right: newDLoader.right; rightMargin: itemMargins;
-                                 top: newDLoader.bottom; topMargin: itemMargins;}
-                        onClicked: {
-                            detailsBox.expanded = false;
-                            newDLoader.item.resetFields();
-                        }
-                    }
+            Button {
+                id: cancelButton
+
+                minWidth: 100
+                maxWidth: Math.round(parent.width/3)
+                height: 36
+                text: cancelLabel
+                font.pixelSize: theme_fontPixelSizeMediumLarge
+                anchors {right: newDLoader.right; rightMargin: itemMargins;
+                         top: newDLoader.bottom; topMargin: itemMargins;}
+                onClicked: {
+                    expandingLoader.item.expanded = false;
+                    newDLoader.item.resetFields();
                 }
             }
         }

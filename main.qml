@@ -406,6 +406,9 @@ Window {
                     editViewPage.needSave = 0
                 }
             }
+            onActivated: {
+                editContact.finishPageLoad();
+            }
         }
     }
 
@@ -438,6 +441,10 @@ Window {
                 }else if(actionMenuModel[selectedItem] == contextCancel) {
                     window.switchBook(myAppAllContacts);
                 }
+            }
+
+            onActivated: {
+                newContact.finishPageLoad();
             }
         }
     }
