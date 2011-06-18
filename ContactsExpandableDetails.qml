@@ -25,7 +25,6 @@ Column {
     property string headerLabel
     property string expandingBoxTitle
     property Component newDetailsComponent: null
-    property Item newFieldItem: null
     property Component existingDetailsComponent: null
 
     property string addLabel: qsTr("Add")
@@ -58,7 +57,7 @@ Column {
 
         Component.onCompleted:{
             if (existingDetailsModel) {
-                var tmpArr = newFieldItem.parseDetailsModel(existingDetailsModel, contextModel);
+                var tmpArr = newDLoader.item.parseDetailsModel(existingDetailsModel, contextModel);
                 for (var i = 0; i < tmpArr.length; i++) {
                     detailsModel.append({"type" : ""});
                     for (var key in tmpArr[i])
@@ -103,42 +102,35 @@ Column {
             parent: detailsRepeater
             width: parent.width
 
-            property Item existingFieldItem: null
-        
-            Item {
-                id: existingContentArea 
+            Loader {
+                id: oldDLoader
 
                 anchors {top: parent.top; bottom: parent.bottom; 
                          margins: itemMargins;}
-            }
 
-            //REVISIT: Should use a loader for this?
-            Component.onCompleted: {
-                if (existingDetailsComponent) {
-                    if (existingFieldItem) existingFieldItem.destroy();
-                    existingFieldItem = existingDetailsComponent.createObject(existingContentArea)
+                sourceComponent: existingDetailsComponent
 
-                    //REVISIT: Pass in these values to createObject once it
-                    //has support for passing in properties - QtQuick 1.1
-                    existingFieldItem.newDetailsModel = detailsRepeater.model;
-                    existingFieldItem.rIndex = index;
-                    existingFieldItem.updateMode = true;
- 
+                Component.onCompleted: {
+                    oldDLoader.item.newDetailsModel = detailsRepeater.model;
+                    oldDLoader.item.rIndex = index;
+                    oldDLoader.item.updateMode = true;
+
                     //REVISIT: Better way to calculate? Use a state?
                     //We need to grow the parent based on the height
                     //of the children we're stuffing in
-                    imageBar.height = existingFieldItem.height + (itemMargins * 2)
-                    detailsColumn.height += imageBar.height
+                    oldDLoader.item.height += (itemMargins * 6);
+                    imageBar.height = oldDLoader.item.height;
+                    detailsColumn.height += imageBar.height;
 
                     //REVISIT: We can replace this with the itemAt() Repeater
                     //function once its available - QtQuick 1.1
                     detailsRepeater.itemCount += 1;
                     var items = detailsRepeater.itemList;
-                    items.push(existingFieldItem);
+                    items.push(oldDLoader.item);
                     detailsRepeater.itemList = items;
                 }
             }
-
+        
             Image {
                 id: delete_button
                 source: "image://theme/contacts/icn_trash"
@@ -155,22 +147,22 @@ Column {
                     }
                     onClicked: {
                         if (detailsRepeater.count == 1) {
-                            existingFieldItem.resetFields();
+                            oldDLoader.item.resetFields();
                         } 
                         else if (detailsRepeater.count != 1) {
                             removeItemFromList(index);
                             detailsRepeater.model.remove(index);
                         }
                         else
-                            newFieldItem.resetFields();
+                            newDLoader.item.resetFields();
 
                         delete_button.source = "image://theme/contacts/icn_trash";
                         //REVISIT: Should use states for this
-                        detailsColumn.height -= existingFieldItem.height
+                        detailsColumn.height -= oldDLoader.item.height
                     }
                 }
-                Binding{target: delete_button; property: "visible"; value: false; when: !existingFieldItem.validInput}
-                Binding{target: delete_button; property: "visible"; value: true; when: existingFieldItem.validInput}
+                Binding{target: delete_button; property: "visible"; value: false; when: !oldDLoader.item.validInput}
+                Binding{target: delete_button; property: "visible"; value: true; when: oldDLoader.item.validInput}
             }
         }
     }
@@ -213,15 +205,22 @@ Column {
                         anchors.left: add_button.right
                         anchors.leftMargin: 10
                         text: expandingBoxTitle
-                        font.pixelSize: theme_fontPixelSizeLarge2
+                        font.pixelSize: theme_fontPixelSizeLarge
                     }
                 }
 
                 detailsComponent: fieldDetailComponent
 
                 onExpandingChanged: {
-                    add_button.source = expanded ? "image://theme/contacts/icn_add_dn" : "image://theme/contacts/icn_add";
-                    detailsColumn.height = expanded ? (initialHeight + detailsItem.height) : initialHeight;
+                    if (expanded) {
+                        add_button.source = "image://theme/contacts/icn_add_dn";
+                        detailsColumn.height = (initialHeight + detailsItem.height);
+                    }
+
+                    else {
+                        add_button.source = "image://theme/contacts/icn_add";
+                        detailsColumn.height = initialHeight;
+                    }
                 }
             }
 
@@ -233,20 +232,18 @@ Column {
                     width: parent.width
                     anchors {left:parent.left; top: parent.top; margins: itemMargins;}
 
-                    Component.onCompleted: {
-                        if (newDetailsComponent) {
-                            if (newFieldItem) newFieldItem.destroy();
-                            newFieldItem = newDetailsComponent.createObject(newContentArea);
-                            newFieldItem.newDetailsModel = detailsModel;
-                            newFieldItem.rIndex = detailsModel.count;
-                        }
-                    }
-
-                    Item {
-                        id: newContentArea 
+                    Loader {
+                        id: newDLoader
 
                         height: childrenRect.height
                         width: parent.width
+
+                        sourceComponent: newDetailsComponent
+
+                        Component.onCompleted: {
+                            newDLoader.item.newDetailsModel = detailsModel;
+                            newDLoader.item.rIndex = detailsModel.count;
+                        }
                     }
 
                     Button {
@@ -260,11 +257,11 @@ Column {
                         bgSourceUp: "image://themedimage/widgets/common/button/button-default"
                         bgSourceDn: "image://themedimage/widgets/common/button/button-default-pressed"
                         anchors {right: cancelButton.left; rightMargin: itemMargins;
-                                 top: newContentArea.bottom; topMargin: itemMargins;}
-                        enabled: newFieldItem.validInput
+                                 top: newDLoader.bottom; topMargin: itemMargins;}
+                        enabled: newDLoader.item.validInput
                         onClicked: {
                             detailsBox.expanded = false;
-                            var arr = newFieldItem.getDetails(true);
+                            var arr = newDLoader.item.getDetails(true);
                             detailsModel.append({"type" : ""});
                             for (var key in arr)
                                 detailsModel.setProperty(detailsModel.count - 1, key, arr[key]);
@@ -279,11 +276,11 @@ Column {
                         height: 36
                         text: cancelLabel
                         font.pixelSize: theme_fontPixelSizeMediumLarge
-                        anchors {right: newContentArea.right; rightMargin: itemMargins;
-                                 top: newContentArea.bottom; topMargin: itemMargins;}
+                        anchors {right: newDLoader.right; rightMargin: itemMargins;
+                                 top: newDLoader.bottom; topMargin: itemMargins;}
                         onClicked: {
                             detailsBox.expanded = false;
-                            newFieldItem.resetFields();
+                            newDLoader.item.resetFields();
                         }
                     }
                 }
