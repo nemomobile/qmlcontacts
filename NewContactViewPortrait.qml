@@ -63,6 +63,7 @@ Flickable{
     property string restoredCompany: ""
     property string restoredNotes: ""
     property string restoredPhoto: ""
+    property string restoredFavorite: ""
     property date restoredBirthday
 
     SaveRestoreState {
@@ -72,12 +73,13 @@ Flickable{
 
     Component.onCompleted: {
         if(justRestore.restoreRequired){
-            restoredFirstName       = justRestore.restoreOnce(parentTitle + ".newContact.firstName", "")
-            restoredLastName        = justRestore.restoreOnce(parentTitle + ".newContact.lastName", "")
-            restoredCompany         = justRestore.restoreOnce(parentTitle + ".newContact.company", "")
-            restoredNotes           = justRestore.restoreOnce(parentTitle + ".newContact.notes", "")
-            restoredPhoto           = justRestore.restoreOnce(parentTitle + ".newContact.photo", "")
-            restoredBirthday        = justRestore.restoreOnce(parentTitle + ".newContact.birthday", "2011-01-01")
+            restoredFirstName       = justRestore.restoreOnce(parentTitle + ".contact.firstName", "")
+            restoredLastName        = justRestore.restoreOnce(parentTitle + ".contact.lastName", "")
+            restoredCompany         = justRestore.restoreOnce(parentTitle + ".contact.company", "")
+            restoredNotes           = justRestore.restoreOnce(parentTitle + ".contact.notes", "")
+            restoredPhoto           = justRestore.restoreOnce(parentTitle + ".contact.photo", "")
+            restoredFavorite        = justRestore.restoreOnce(parentTitle + ".contact.favorite", "")
+            restoredBirthday        = justRestore.restoreOnce(parentTitle + ".contact.birthday", "2011-01-01")
         }
     }
 
@@ -205,12 +207,13 @@ Flickable{
 		    SaveRestoreState {
 			id: srsMainView
 			onSaveRequired: {
-                            setValue(parentTitle + ".newContact.firstName", data_first.text)
-                            setValue(parentTitle + ".newContact.lastName", data_last.text)
-                            setValue(parentTitle + ".newContact.company",data_company.text)
-                            setValue(parentTitle + ".newContact.photo", avatar_img.source)
-                            setValue(parentTitle + ".newContact.birthday", datePicker.selectedDate)
-                            setValue(parentTitle + ".newContact.notes",data_notes.text)
+                            setValue(parentTitle + ".contact.firstName", data_first.text)
+                            setValue(parentTitle + ".contact.lastName", data_last.text)
+                            setValue(parentTitle + ".contact.company",data_company.text)
+                            setValue(parentTitle + ".contact.photo", avatar_img.source)
+                            setValue(parentTitle + ".contact.birthday", datePicker.selectedDate)
+                            setValue(parentTitle + ".contact.notes",data_notes.text)
+                            setValue(parentTitle + ".contact.favorite",icn_faves.state)
 			    sync()
 			}
 		    }
@@ -263,7 +266,7 @@ Flickable{
                             id: icn_faves
                             source: "image://theme/contacts/icn_fav_star_dn"
                             opacity: 1
-                            state: unfavoriteValue
+                            state: restoredFavorite == "" ? unfavoriteValue : restoredFavorite
 
                             property string favoriteText: unfavoriteTranslated
                             states: [

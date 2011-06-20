@@ -65,6 +65,7 @@ Flickable {
     property string restoredCompany: ""
     property string restoredNotes: ""
     property string restoredPhoto: ""
+    property string restoredFavorite: ""
     property date restoredBirthday
 
     SaveRestoreState {
@@ -73,12 +74,13 @@ Flickable {
 
 	Component.onCompleted: {
             if(justRestore.restoreRequired){
-                restoredFirstName = restoreOnce(parentTitle + ".contact.firstName", "")
-                restoredLastName = restoreOnce(parentTitle + ".contact.lastName", "")
-                restoredCompany = restoreOnce(parentTitle + ".contact.company", "")
-                restoredNotes = restoreOnce(parentTitle + ".contact.notes", "")
-                restoredPhoto = justRestore.restoreOnce(parentTitle + ".newContact.photo", "")
-                restoredBirthday = restoreOnce(parentTitle + ".contact.birthday", "2011-01-01")
+                restoredFirstName   = restoreOnce(parentTitle + ".contact.firstName", "")
+                restoredLastName    = restoreOnce(parentTitle + ".contact.lastName", "")
+                restoredCompany     = restoreOnce(parentTitle + ".contact.company", "")
+                restoredNotes       = restoreOnce(parentTitle + ".contact.notes", "")
+                restoredPhoto       = restoreOnce(parentTitle + ".contact.photo", "")
+                restoredFavorite    = restoreOnce(parentTitle + ".contact.favorite", "")
+                restoredBirthday    = restoreOnce(parentTitle + ".contact.birthday", "2011-01-01")
             }
 	}
     }
@@ -201,12 +203,12 @@ Flickable {
 		    SaveRestoreState {
 			id: srsMainView
 			onSaveRequired: {
-			    console.log("MAIN.QML saving firstName and lastName: ")
                             setValue(parentTitle + ".contact.firstName", data_first.text)
                             setValue(parentTitle + ".contact.lastName", data_last.text)
                             setValue(parentTitle + ".contact.company",data_company.text)
                             setValue(parentTitle + ".contact.photo", avatar_img.source)
                             setValue(parentTitle + ".contact.birthday", datePicker.selectedDate)
+                            setValue(parentTitle + ".contact.favorite",icn_faves.state)
                             setValue(parentTitle + ".contact.notes",data_notes.text)
 			    sync()
 			}
@@ -261,7 +263,7 @@ Flickable {
                             source: (dataModel.data(index, PeopleModel.FavoriteRole) ? "image://theme/contacts/icn_fav_star_dn" : "image://theme/contacts/icn_fav_star" )
                             opacity: (dataModel.data(index, PeopleModel.IsSelfRole) ? 0 : 1)
 
-                            state: (dataModel.data(index, PeopleModel.FavoriteRole) ? favoriteValue : unfavoriteValue)
+                            state: restoredFavorite == "" ? (dataModel.data(index, PeopleModel.FavoriteRole) ? favoriteValue : unfavoriteValue) : restoredFavorite
                             property string favoriteText: unfavoriteTranslated
 
                             states: [
