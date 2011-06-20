@@ -24,7 +24,7 @@ Flickable{
     interactive: true
     opacity:  1
 
-    property string parentTitle: ""
+    property string parentTitle: parent.pageTitle ? parent.pageTitle : ""
 
     property PeopleModel dataModel: newContactModel
 
@@ -62,6 +62,7 @@ Flickable{
     property string restoredLastName: ""
     property string restoredCompany: ""
     property string restoredNotes: ""
+    property string restoredPhoto: ""
     property date restoredBirthday
 
     SaveRestoreState {
@@ -70,11 +71,14 @@ Flickable{
     }
 
     Component.onCompleted: {
-        restoredFirstName       = justRestore.restoreOnce(parentTitle + ".newContact.firstName", "")
-        restoredLastName        = justRestore.restoreOnce(parentTitle + ".newContact.lastName", "")
-        restoredCompany         = justRestore.restoreOnce(parentTitle + ".newContact.company", "")
-        restoredNotes           = justRestore.restoreOnce(parentTitle + ".newContact.notes", "")
-        restoredBirthday        = justRestore.restoreOnce(parentTitle + ".newContact.birthday", "2011-01-01")
+        if(justRestore.restoreRequired){
+            restoredFirstName       = justRestore.restoreOnce(parentTitle + ".newContact.firstName", "")
+            restoredLastName        = justRestore.restoreOnce(parentTitle + ".newContact.lastName", "")
+            restoredCompany         = justRestore.restoreOnce(parentTitle + ".newContact.company", "")
+            restoredNotes           = justRestore.restoreOnce(parentTitle + ".newContact.notes", "")
+            restoredPhoto           = justRestore.restoreOnce(parentTitle + ".newContact.photo", "")
+            restoredBirthday        = justRestore.restoreOnce(parentTitle + ".newContact.birthday", "2011-01-01")
+        }
     }
 
 
@@ -128,7 +132,7 @@ Flickable{
 
                 Image{
                     id: avatar_img
-                    source: "image://theme/contacts/img_blankavatar"
+                    source: restoredPhoto != "" ? restoredPhoto : "image://theme/contacts/img_blankavatar"
                     anchors.centerIn: avatar
                     opacity: 1
                     signal clicked
@@ -206,7 +210,7 @@ Flickable{
                             setValue(parentTitle + ".newContact.company",data_company.text)
                             setValue(parentTitle + ".newContact.photo", avatar_img.source)
                             setValue(parentTitle + ".newContact.birthday", datePicker.selectedDate)
-                           setValue(parentTitle + ".newContact.notes",data_notes.text)
+                            setValue(parentTitle + ".newContact.notes",data_notes.text)
 			    sync()
 			}
 		    }

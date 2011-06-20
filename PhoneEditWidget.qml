@@ -31,7 +31,7 @@ Item{
     property string addLabel: qsTr("Add")
 
     property string restoredPhoneNumber: ""
-    property int restoredPhoneTypeIndex: 0
+    property int restoredPhoneTypeIndex: -1
     property string prefixSaveRestore: ""
 
     SaveRestoreState {
@@ -46,10 +46,14 @@ Item{
         }
     }
 
-    Component.onCompleted: {
-        if(srsPhone.restoreRequired){
-            restoredPhoneNumber     = srsPhone.restoreOnce(prefixSaveRestore + ".phone.number", "")
-            restoredPhoneTypeIndex  = srsPhone.restoreOnce(prefixSaveRestore + ".phone.typeIndex", 0)
+    function restoreData() {
+        if(srsPhone.restoreRequired && !updateMode){
+            restoredPhoneNumber = srsPhone.restoreOnce(prefixSaveRestore + ".phone.number", "")
+            restoredPhoneTypeIndex  = srsPhone.restoreOnce(prefixSaveRestore + ".phone.typeIndex", -1)
+
+            data_phone.text = restoredPhoneNumber;
+            phoneComboBox.title = (restoredPhoneTypeIndex != -1 ? phoneComboBox.model[restoredPhoneTypeIndex] : mobileContext)
+            phoneComboBox.selectedIndex = (restoredPhoneTypeIndex != -1 ? restoredPhoneTypeIndex : 0)
         }
     }
 
@@ -123,18 +127,11 @@ Item{
         title: (updateMode) ? newDetailsModel.get(rIndex).type : mobileContext
         selectedIndex: (updateMode) ? getIndexVal(newDetailsModel.get(rIndex).type) : 0
         replaceDropDownTitle: true
-
-        Component.onCompleted: {
-            if(!updateMode){
-                phoneComboBox.title = (restoredPhoneTypeIndex != -1 ? phoneComboBox.model[restoredPhoneTypeIndex] : mobileContext)
-                phoneComboBox.selectedIndex = (restoredPhoneTypeIndex != -1 ? restoredPhoneTypeIndex : 1)
-            }
-        }
     }
 
     TextEntry {
         id: data_phone
-        text: (updateMode) ? (newDetailsModel ? newDetailsModel.get(rIndex).phone : "") : (restoredPhoneNumber != "" ? restoredPhoneNumber : "")
+        text: (updateMode) ? (newDetailsModel ? newDetailsModel.get(rIndex).phone : "") : ""
         defaultText: defaultPhone
         width: 400
         anchors {left:phoneComboBox.right; leftMargin: 10;}

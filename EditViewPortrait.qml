@@ -64,17 +64,22 @@ Flickable {
     property string restoredLastName: ""
     property string restoredCompany: ""
     property string restoredNotes: ""
+    property string restoredPhoto: ""
     property date restoredBirthday
 
     SaveRestoreState {
 	id: justRestore
 	onSaveRequired: sync()
+
 	Component.onCompleted: {
-            restoredFirstName = restoreOnce(parentTitle + ".contact.firstName", "")
-            restoredLastName = restoreOnce(parentTitle + ".contact.lastName", "")
-            restoredCompany = restoreOnce(parentTitle + ".contact.company", "")
-            restoredNotes = restoreOnce(parentTitle + ".contact.notes", "")
-            restoredBirthday = restoreOnce(parentTitle + ".contact.birthday", "2011-01-01")
+            if(justRestore.restoreRequired){
+                restoredFirstName = restoreOnce(parentTitle + ".contact.firstName", "")
+                restoredLastName = restoreOnce(parentTitle + ".contact.lastName", "")
+                restoredCompany = restoreOnce(parentTitle + ".contact.company", "")
+                restoredNotes = restoreOnce(parentTitle + ".contact.notes", "")
+                restoredPhoto = justRestore.restoreOnce(parentTitle + ".newContact.photo", "")
+                restoredBirthday = restoreOnce(parentTitle + ".contact.birthday", "2011-01-01")
+            }
 	}
     }
 
@@ -122,7 +127,7 @@ Flickable {
                 Image{
                     id: avatar_img
                     //REVISIT: Instead of using the URI from AvatarRole, need to use thumbnail URI
-                    source: (dataModel.data(index, PeopleModel.AvatarRole) ? dataModel.data(index, PeopleModel.AvatarRole) : "image://theme/contacts/img_blankavatar")
+                    source: restoredPhoto != "" ? restoredPhoto : (dataModel.data(index, PeopleModel.AvatarRole) ? dataModel.data(index, PeopleModel.AvatarRole) : "image://theme/contacts/img_blankavatar")
                     anchors.centerIn: avatar
                     opacity: 1
                     signal clicked
@@ -184,7 +189,7 @@ Flickable {
                     }
                     TextEntry{
                         id: data_first_p
-                        text: dataModel.data(index, PeopleModel.FirstNameProRole)
+                        text: dataModel.data(index, PeopleModel.FirstNameProRole) ? dataModel.data(index, PeopleModel.FirstNameProRole) : ""
                         defaultText: defaultPronounciation
                         width: (parent.width - avatar.width)
                         anchors {top: data_first.bottom; topMargin: 10;
@@ -222,7 +227,7 @@ Flickable {
                     }
                     TextEntry{
                         id: data_last_p
-                        text: dataModel.data(index, PeopleModel.LastNameProRole)
+                        text: dataModel.data(index, PeopleModel.LastNameProRole) ? dataModel.data(index, PeopleModel.LastNameProRole) : ""
                         defaultText: defaultPronounciation
                         width: (parent.width-avatar.width)
                         anchors {top: data_last.bottom; topMargin: 10;
@@ -380,7 +385,7 @@ Flickable {
             source: "image://theme/contacts/active_row"
             TextEntry{
                 id: data_birthday
-                text: datePicker.selectedBirthday != "" ? datePicker.selectedBirthday : dataModel.data(index, PeopleModel.BirthdayRole)
+                text: datePicker.selectedBirthday != "" ? datePicker.selectedBirthday : dataModel.data(index, PeopleModel.BirthdayRole) ? dataModel.data(index, PeopleModel.BirthdayRole) : ""
                 defaultText: defaultBirthday
                 anchors {verticalCenter: birthday.verticalCenter; left: parent.left; topMargin: 30; leftMargin: 30; right: delete_button.left; rightMargin: 30}
                 MouseArea{
@@ -425,9 +430,7 @@ Flickable {
 
 	    function useRestoredBirthday(restoredBDay) {
 		var defaultDate = "2011-01-01"
-		var retval = (Qt.formatDate(restoredBDay) != Qt.formatDate(defaultDate))
-		console.log("MAIN useRestoredBirthday returns " + retval)
-		console.log("MAIN after comparing "  +Qt.formatDate(restoredBDay) + " != " + Qt.formatDate(defaultDate))
+                var retval = (Qt.formatDate(restoredBDay) != Qt.formatDate(defaultDate))
 		return retval
 	    }
 	    
@@ -462,7 +465,7 @@ Flickable {
             anchors.bottomMargin: 1
             TextField{
                 id: data_notes
-                text: editViewPortrait.restoredNotes != "" ? editViewPortrait.restoredNotes : dataModel.data(index, PeopleModel.NotesRole)
+                text: restoredNotes != "" ? restoredNotes : (dataModel.data(index, PeopleModel.NotesRole) ? dataModel.data(index, PeopleModel.NotesRole) : "")
                 defaultText: defaultNote
                 height: 300
                 anchors {top: parent.top; left: parent.left; right: parent.right; rightMargin: 30; topMargin: 20; leftMargin: 30}

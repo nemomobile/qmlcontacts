@@ -36,6 +36,7 @@ Column {
     property alias repeaterItemList: detailsRepeater.itemList
 
     property bool initializedData: false
+    property string parentTitle: detailsColumn.parent.parent.parent.parentTitle
     property string prefixSaveRestore: detailsColumn.parent.parent.parent.parentTitle + "." + headerLabel + ".expandableDetails"
 
     SaveRestoreState {
@@ -82,8 +83,7 @@ Column {
 
     Component.onCompleted: {
         if(srsExpandableDetails.restoreRequired){
-            var detailId = headerLabel + "."
-            expanded = srsExpandableDetails.restoreOnce(detailId + "expandableDetails.expanded", false)
+            expanded = srsExpandableDetails.restoreOnce(prefixSaveRestore + ".expanded", false)
         }
     }
 
@@ -112,6 +112,8 @@ Column {
     function restoreData(){
         if(!initializedData){
             if(srsExpandableDetails.restoreRequired){
+
+                // I. Restore data for the model items
                 var detailId = headerLabel + "."
                 var itemCount = srsExpandableDetails.value(prefixSaveRestore + ".itemCount", 0)
 
@@ -122,8 +124,6 @@ Column {
                     for(var i = 0; i < itemCount; i++){
                         var entryName = entryNameHeader + i + ".property."
 
-//                        console.log("detailsColumn.parent.parent.parent.id: " + detailsColumn.parent.parent.parent.parentTitle)
-                        console.log("Restoring data for: " + headerLabel + detailsColumn.parent.parent.parent.addressLabel)
                         appendIntoDetailsModel()
 
                         for(var j = 0; j < propertyCount; j++){
@@ -136,11 +136,15 @@ Column {
                         updateModelDisplayedData()
                     }
                 }
-            }
 
-            srsExpandableDetails.setValue(prefixSaveRestore + ".valid", false);
-            srsExpandableDetails.sync()
-            initializedData = true
+                // II. Restore data in the newFieldItem
+                if(newFieldItem)
+                    newFieldItem.restoreData()
+
+                srsExpandableDetails.setValue(prefixSaveRestore + ".valid", false);
+                srsExpandableDetails.sync()
+                initializedData = true
+            }
         }
     }
 
@@ -223,10 +227,6 @@ Column {
 
         property int itemCount 
         property variant itemList: []
-
-//        Component.onCompleted: {
-//            restoreData
-//        }
 
         delegate: Image {
             id: imageBar

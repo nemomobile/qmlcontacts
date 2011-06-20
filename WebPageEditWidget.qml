@@ -40,10 +40,14 @@ Item {
         }
     }
 
-    Component.onCompleted: {
-        if (srsWebPage.restoreRequired){
+    function restoreData() {
+        if(srsWebPage.restoreRequired && !updateMode){
             restoredWeb           = srsWebPage.restoreOnce(prefixSaveRestore + ".web.address", "")
             restoredWebTypeIndex  = srsWebPage.restoreOnce(prefixSaveRestore + ".web.typeIndex", -1)
+
+            data_url.text = restoredWeb;
+            urlComboBox.title = (restoredWebTypeIndex != -1 ? urlComboBox.model[restoredWebTypeIndex] : bookmarkWeb)
+            urlComboBox.selectedIndex = (restoredWebTypeIndex != -1 ? restoredWebTypeIndex : 0)
         }
     }
 
@@ -111,17 +115,11 @@ Item {
         title: (updateMode) ? newDetailsModel.get(rIndex).type : bookmarkWeb
         selectedIndex: (updateMode) ? getIndexVal(newDetailsModel.get(rIndex).type) : 1
         replaceDropDownTitle: true
-
-        Component.onCompleted: {
-            urlComboBox.title = (restoredWebTypeIndex != -1 ? urlComboBox.model[restoredWebTypeIndex] : bookmarkWeb)
-            urlComboBox.selectedIndex = (restoredWebTypeIndex != -1 ? restoredWebTypeIndex : 1)
-        }
-
     }
 
     TextEntry {
         id: data_url
-        text: (updateMode) ? newDetailsModel.get(rIndex).web : (restoredWeb != "" ? restoredWeb : "")
+        text: (updateMode) ? newDetailsModel.get(rIndex).web : ""
         defaultText: defaultWeb
         width: 400
         anchors {left:urlComboBox.right; leftMargin: 10;}

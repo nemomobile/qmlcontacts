@@ -40,7 +40,7 @@ Item {
     SaveRestoreState {
         id: srsIM
         onSaveRequired: {
-            if(newDetailsModel != null){
+            if(newDetailsModel != null && !updateMode){
                 if(newDetailsModel.count > 0){
                     setValue(prefixSaveRestore + ".im.count", newDetailsModel.count)
                     for (var i = 0; i < newDetailsModel.count; i++){
@@ -53,8 +53,8 @@ Item {
         }
     }
 
-    Component.onCompleted: {
-        if (srsIM.restoreRequired) {
+    function restoreData() {
+        if(srsIM.restoreRequired && !updateMode){
             var imCount = srsIM.value(prefixSaveRestore + ".im.count", 0)
             if(imCount > 0){
                 for(var i = 0; i < imCount; i++){

@@ -29,7 +29,6 @@ Item {
     property string postcodeAddress:  qsTr("Postcode / Zip")
 
     property int restoredAddressTypeIndex: -1
-    property bool hasRestoredData: false
     property string prefixSaveRestore: ""
 
     SaveRestoreState {
@@ -54,40 +53,49 @@ Item {
                         }
                     }
                 }
-            }
 
-            setValue(prefixSaveRestore + ".address.typeIndex", addressComboBox.selectedIndex);
+                setValue(prefixSaveRestore + ".address.typeIndex", addressComboBox.selectedIndex);
+
+            }
 
             sync()
         }
     }
 
-    Component.onCompleted: {
-        if (srsAddress.restoreRequired) {
-            if(!updateMode){
-                hasRestoredData = true
-                var restoredAddress = srsAddress.restoreOnce(prefixSaveRestore + ".address.street", streetAddress);
-                var restoredLocale  = srsAddress.restoreOnce(prefixSaveRestore + ".address.street", streetAddress);
-                var restoredRegion  = srsAddress.restoreOnce(prefixSaveRestore + ".address.street", streetAddress);
-                var restoredZip     = srsAddress.restoreOnce(prefixSaveRestore + ".address.street", streetAddress);
-                var restoredCountry = srsAddress.restoreOnce(prefixSaveRestore + ".address.street", streetAddress);
+    function restoreData() {
+        if(srsAddress.restoreRequired && !updateMode){
+            var restoredAddress = srsAddress.restoreOnce(prefixSaveRestore + ".address.street", streetAddress);
+            var restoredLocale  = srsAddress.restoreOnce(prefixSaveRestore + ".address.locale", localeAddress);
+            var restoredRegion  = srsAddress.restoreOnce(prefixSaveRestore + ".address.region", regionAddress);
+            var restoredZip     = srsAddress.restoreOnce(prefixSaveRestore + ".address.zip", postcodeAddress);
+            var restoredCountry = srsAddress.restoreOnce(prefixSaveRestore + ".address.country", countryAddress);
 
-                var pairs = {"street": restoredAddress == "" ? streetAddress : restoredAddress,
-                             "locale": restoredLocale == "" ? localeAddress : restoredLocale,
-                             "region": restoredRegion ? regionAddress : restoredRegion,
-                             "zip": restoredZip == "" ? postcodeAddress : restoredZip,
-                             "country": restoredCountry == "" ? countryAddress : restoredCountry};
-
-                var fieldOrder = localeUtils.getAddressFieldOrder();
-                for (var i = 0; i < fieldOrder.length; i++) {
-                    var field = fieldOrder[i];
-                    addressFields.append({"field": field, "dText": pairs[field]});
+            if(addressFieldRepeater){
+                for(var i = 0; i < addressFieldRepeater.itemCount; i++){
+                    var tempItem = addressFieldRepeater.itemList[i]
+                    if(tempItem){
+                        if(tempItem.fieldVal == "street"){
+                            tempItem.text = restoredAddress
+                        }else if(tempItem.fieldVal == "locale"){
+                            tempItem.text = restoredLocale
+                        }else if(tempItem.fieldVal == "region"){
+                            tempItem.text = restoredRegion
+                        }else if(tempItem.fieldVal == "zip"){
+                            tempItem.text = restoredZip
+                        }else if(tempItem.fieldVal == "country"){
+                            tempItem.text = restoredCountry
+                        }
+                    }
                 }
-
-                restoredAddressTypeIndex = srsAddress.restoreOnce(prefixSaveRestore + ".address.typeIndex", -1);
             }
+
+            restoredAddressTypeIndex        = srsAddress.restoreOnce(prefixSaveRestore + ".address.typeIndex", -1);
+            addressComboBox.title           = (restoredAddressTypeIndex != -1 ? addressComboBox.model[restoredAddressTypeIndex] : contextHome)
+            addressComboBox.selectedIndex   = (restoredAddressTypeIndex != -1 ? restoredAddressTypeIndex : 0)
         }
     }
+
+
 
     function parseDetailsModel(existingDetailsModel, contextModel) {
         var fieldOrder = localeUtils.getAddressFieldOrder();
@@ -163,18 +171,16 @@ Item {
     ListModel {
         id: addressFields
         Component.onCompleted: {
-            if(!hasRestoredData){
-                var pairs = {"street": streetAddress,
-                             "locale": localeAddress,
-                             "region": regionAddress,
-                             "zip": postcodeAddress,
-                             "country": countryAddress};
+            var pairs = {"street": streetAddress,
+                "locale": localeAddress,
+                "region": regionAddress,
+                "zip": postcodeAddress,
+                "country": countryAddress};
 
-                var fieldOrder = localeUtils.getAddressFieldOrder();
-                for (var i = 0; i < fieldOrder.length; i++) {
-                    var field = fieldOrder[i];
-                    addressFields.append({"field": field, "dText": pairs[field]});
-                }
+            var fieldOrder = localeUtils.getAddressFieldOrder();
+            for (var i = 0; i < fieldOrder.length; i++) {
+                var field = fieldOrder[i];
+                addressFields.append({"field": field, "dText": pairs[field]});
             }
         }
     }
@@ -249,13 +255,6 @@ Item {
         title: (updateMode) ? newDetailsModel.get(rIndex).type : contextHome
         selectedIndex: (updateMode) ? getIndexVal(newDetailsModel.get(rIndex).type) : 0
         replaceDropDownTitle: true
-
-        Component.onCompleted: {
-            if(!updateMode){
-                addressComboBox.title           = (restoredAddressTypeIndex != -1 ? addressComboBox.model[restoredAddressTypeIndex] : contextHome)
-                addressComboBox.selectedIndex   = (restoredAddressTypeIndex != -1 ? restoredAddressTypeIndex : 1)
-            }
-        }
     }
 
     Column {
