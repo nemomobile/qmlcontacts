@@ -163,7 +163,7 @@ Item {
                     }
                     Image{
                         id: slider
-                        source: "image://theme/contacts/slider_alphabetical"
+                        source: "image://themedimage/widgets/apps/contacts/contacts-alpabar-letter-background"
                         anchors { horizontalCenter: letter.horizontalCenter}
                         y: -75
                         visible: false

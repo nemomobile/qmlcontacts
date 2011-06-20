@@ -138,7 +138,7 @@ Column {
         
             Image {
                 id: delete_button
-                source: "image://theme/contacts/icn_trash"
+                source: "image://themedimage/icon/internal/contact-information-delete"
                 width: 36
                 height: 36
                 anchors {top: parent.top; right: parent.right; 
@@ -148,7 +148,7 @@ Column {
                     id: mouse_delete
                     anchors.fill: parent
                     onPressed: {
-                        delete_button.source = "image://theme/contacts/icn_trash_dn";
+                        delete_button.source = "image://themedimage/icon/internal/contact-information-delete-active"
                     }
                     onClicked: {
                         if (detailsRepeater.count == 1) {
@@ -159,7 +159,7 @@ Column {
                             detailsRepeater.model.remove(index);
                         }
 
-                        delete_button.source = "image://theme/contacts/icn_trash";
+                        delete_button.source = "image://themedimage/icon/internal/contact-information-delete"
                         //REVISIT: Should use states for this
                         detailsColumn.height -= oldDLoader.item.height
                     }
@@ -216,7 +216,7 @@ Column {
                         anchors.leftMargin: 10
                         anchors.verticalCenter: parent.verticalCenter
                         fillMode: Image.PreserveAspectFit
-                        source: "image://theme/contacts/icn_add"
+                        source: "image://themedimage/icons/internal/contact-information-add"
                     }
                     Text {
                         id: text_box
@@ -232,12 +232,12 @@ Column {
 
                 onExpandingChanged: {
                     if (expanded) {
-                        add_button.source = "image://theme/contacts/icn_add_dn";
+                        add_button.source = "image://themedimage/icons/internal/contact-information-add-active"
                         detailsColumn.height = (initialHeight + detailsItem.height);
                     }
 
                     else {
-                        add_button.source = "image://theme/contacts/icn_add";
+                        add_button.source = "image://themedimage/icons/internal/contact-information-add";
                         detailsColumn.height = initialHeight;
                     }
                 }

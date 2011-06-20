@@ -61,7 +61,7 @@ Item {
 
     Image {
         id: contactWithNoAvatar
-        source: "image://theme/contacts/contact_noface"
+        source: "image://themedimage/widgets/common/avatar/avatar-default"
         visible: avatar.status != Image.Ready
     }
 
