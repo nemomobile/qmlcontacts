@@ -204,7 +204,8 @@ Item {
 
         Button{
             id: buttonLeft
-            width: 146
+            minWidth: 146
+            maxWidth: Math.round(parent.width/2)
             text: getButtonTitleText()[0]
             bgSourceUp: "image://themedimage/widgets/common/button/button"
             bgSourceActive: "image://themedimage/widgets/common/button/button"
@@ -220,7 +221,8 @@ Item {
 
         Button{
             id: buttonRight
-            width: 146
+            minWidth: 146
+            maxWidth: Math.round(parent.width/2)
             text: getButtonTitleText()[1]
             bgSourceUp: "image://themedimage/widgets/common/button/button"
             bgSourceActive: "image://themedimage/widgets/common/button/button"
