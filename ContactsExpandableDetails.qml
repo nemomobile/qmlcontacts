@@ -149,7 +149,6 @@ Column {
     }
 
     function appendIntoDetailsModel(){
-        console.log("appendIntoDetailsModel()")
         if(headerLabel == detailsColumn.parent.parent.parent.phoneLabel){
             detailsModel.append({"phone" : "", "type" : ""})
         }else if(headerLabel == detailsColumn.parent.parent.parent.addressLabel){
