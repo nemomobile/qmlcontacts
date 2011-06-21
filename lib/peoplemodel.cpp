@@ -299,8 +299,10 @@ QVariant PeopleModel::data(int row, int role) const
     {
         QStringList list;
         foreach (const QContactEmailAddress& email,
-                 contact.details<QContactEmailAddress>())
+                 contact.details<QContactEmailAddress>()) {
+            if (email.contexts().count() > 0)
                 list << email.contexts().at(0);
+        }
         return list;
     }
     case PhoneNumberRole:
@@ -317,8 +319,10 @@ QVariant PeopleModel::data(int row, int role) const
     {
         QStringList list;
         foreach (const QContactPhoneNumber& phone,
-                 contact.details<QContactPhoneNumber>())
+                 contact.details<QContactPhoneNumber>()) {
+            if (phone.contexts().count() > 0)
                 list << phone.contexts().at(0);
+        }
         return list;
     }
     case AddressRole:
@@ -420,8 +424,10 @@ QVariant PeopleModel::data(int row, int role) const
     {
         QStringList list;
         foreach (const QContactAddress& address,
-                 contact.details<QContactAddress>())
+                 contact.details<QContactAddress>()) {
+            if (address.contexts().count() > 0)
                 list << address.contexts().at(0);
+        }
         return list;
     }
     case PresenceRole:
