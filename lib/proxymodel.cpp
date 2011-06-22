@@ -14,6 +14,7 @@
 #include "proxymodel.h"
 #include "settingsdatastore.h"
 #include "localeutils.h"
+#include "meegolocale.h"
 
 class ProxyModelPriv
 {
@@ -221,11 +222,13 @@ bool ProxyModel::lessThan(const QModelIndex& left,
     if (!priv->localeHelper->checkForAlphaChar(rStr))
         return true;
 
-    if (priv->localeHelper->compare(lStr, rStr) == 0) {
+    meego::Locale locale;
+
+    if (locale.comparePhoneBook(lStr, rStr) == 0) {
         lStr += findString(leftRow, model, ProxyModel::Secondary);
         rStr += findString(rightRow, model, ProxyModel::Secondary);
-        return priv->localeHelper->isLessThan(lStr, rStr);
+        return locale.lessThanPhoneBook(lStr, rStr);
     }
             
-    return priv->localeHelper->isLessThan(lStr, rStr);
+    return locale.lessThanPhoneBook(lStr, rStr);
 }
