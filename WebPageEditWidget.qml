@@ -26,11 +26,12 @@ Item {
     property string restoredWeb: ""
     property int restoredWebTypeIndex: -1
     property string prefixSaveRestore: ""
+    property bool canSave: false
 
     SaveRestoreState {
         id: srsWebPage
         onSaveRequired: {
-            if(!updateMode){
+            if(!updateMode && webRect.canSave){
                 // Save the phone number that is currently being edited
                 setValue(prefixSaveRestore + ".web.address", data_url.text)
                 setValue(prefixSaveRestore + ".web.typeIndex", urlComboBox.selectedIndex)
@@ -49,6 +50,8 @@ Item {
             urlComboBox.title = (restoredWebTypeIndex != -1 ? urlComboBox.model[restoredWebTypeIndex] : bookmarkWeb)
             urlComboBox.selectedIndex = (restoredWebTypeIndex != -1 ? restoredWebTypeIndex : 0)
         }
+
+        webRect.canSave = true
     }
 
 

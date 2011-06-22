@@ -33,11 +33,12 @@ Item{
     property string restoredPhoneNumber: ""
     property int restoredPhoneTypeIndex: -1
     property string prefixSaveRestore: ""
+    property bool canSave: false
 
     SaveRestoreState {
         id: srsPhone
         onSaveRequired: {
-            if(!updateMode){
+            if(!updateMode && phonesRect.canSave){
                 // Save the phone number that is currently being edited
                 setValue(prefixSaveRestore + ".phone.number", data_phone.text)
                 setValue(prefixSaveRestore + ".phone.typeIndex", phoneComboBox.selectedIndex)
@@ -55,6 +56,7 @@ Item{
             phoneComboBox.title = (restoredPhoneTypeIndex != -1 ? phoneComboBox.model[restoredPhoneTypeIndex] : mobileContext)
             phoneComboBox.selectedIndex = (restoredPhoneTypeIndex != -1 ? restoredPhoneTypeIndex : 0)
         }
+        phonesRect.canSave = true
     }
 
     function parseDetailsModel(existingDetailsModel, contextModel) {

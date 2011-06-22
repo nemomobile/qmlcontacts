@@ -198,7 +198,7 @@ Flickable {
                     height: (data_first_p.visible ? childrenRect.height : data_first.height)
                     TextEntry{
                         id: data_first
-                        text: editViewPortrait.restoredFirstName != "" ? editViewPortrait.restoredFirstName : dataModel.data(index, PeopleModel.FirstNameRole)
+                        text: editViewPortrait.restoredFirstName != "" ? editViewPortrait.restoredFirstName : (dataModel.data(index, PeopleModel.FirstNameRole) ? dataModel.data(index, PeopleModel.FirstNameRole) : "")
                         defaultText: defaultFirstName
                         width: (parent.width-avatar.width)
                         anchors {top: parent.top;
@@ -236,7 +236,7 @@ Flickable {
                     height: (data_last_p.visible ? childrenRect.height : data_last.height)
                     TextEntry{
                         id: data_last
-                        text: editViewPortrait.restoredLastName != "" ? editViewPortrait.restoredLastName : dataModel.data(index, PeopleModel.LastNameRole)
+                        text: editViewPortrait.restoredLastName != "" ? editViewPortrait.restoredLastName : (dataModel.data(index, PeopleModel.LastNameRole) ? dataModel.data(index, PeopleModel.LastNameRole) : "")
                         defaultText: defaultLastName
                         width:(parent.width-avatar.width)
                         anchors {top: parent.top;
@@ -260,7 +260,7 @@ Flickable {
                     height: childrenRect.height
                     TextEntry{
                         id: data_company
-                        text: editViewPortrait.restoredCompany != "" ? editViewPortrait.restoredCompany : dataModel.data(index, PeopleModel.CompanyNameRole)
+                        text: editViewPortrait.restoredCompany != "" ? editViewPortrait.restoredCompany : (dataModel.data(index, PeopleModel.CompanyNameRole) ? dataModel.data(index, PeopleModel.CompanyNameRole) : "")
                         defaultText: defaultCompany
                         width:(parent.width-avatar.width)
                         anchors{ top: parent.top; topMargin: 10; left: parent.left; leftMargin: 20; right: parent.right; rightMargin: 10;}

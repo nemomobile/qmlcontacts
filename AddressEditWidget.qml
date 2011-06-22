@@ -30,17 +30,20 @@ Item {
 
     property int restoredAddressTypeIndex: -1
     property string prefixSaveRestore: ""
+    property bool canSave: false
 
     SaveRestoreState {
         id: srsAddress
         onSaveRequired: {
-            if(!updateMode){
+            if(!updateMode && addressRect.canSave){
                 if(addressFieldRepeater){
                     for(var i = 0; i < addressFieldRepeater.itemCount; i++){
                         var tempItem = addressFieldRepeater.itemList[i]
                         if(tempItem){
                             if(tempItem.fieldVal == "street"){
                                 setValue(prefixSaveRestore + ".address.street", tempItem.text);
+                            }else if(tempItem.fieldVal == "street2"){
+                                setValue(prefixSaveRestore + ".address.street2", tempItem.text);
                             }else if(tempItem.fieldVal == "locale"){
                                 setValue(prefixSaveRestore + ".address.locale", tempItem.text);
                             }else if(tempItem.fieldVal == "region"){
@@ -64,11 +67,12 @@ Item {
 
     function restoreData() {
         if(srsAddress.restoreRequired && !updateMode){
-            var restoredAddress = srsAddress.restoreOnce(prefixSaveRestore + ".address.street", streetAddress);
-            var restoredLocale  = srsAddress.restoreOnce(prefixSaveRestore + ".address.locale", localeAddress);
-            var restoredRegion  = srsAddress.restoreOnce(prefixSaveRestore + ".address.region", regionAddress);
-            var restoredZip     = srsAddress.restoreOnce(prefixSaveRestore + ".address.zip", postcodeAddress);
-            var restoredCountry = srsAddress.restoreOnce(prefixSaveRestore + ".address.country", countryAddress);
+            var restoredAddress     = srsAddress.restoreOnce(prefixSaveRestore + ".address.street", streetAddress);
+            var restoredAddress2    = srsAddress.restoreOnce(prefixSaveRestore + ".address.street2", streetAddress);
+            var restoredLocale      = srsAddress.restoreOnce(prefixSaveRestore + ".address.locale", localeAddress);
+            var restoredRegion      = srsAddress.restoreOnce(prefixSaveRestore + ".address.region", regionAddress);
+            var restoredZip         = srsAddress.restoreOnce(prefixSaveRestore + ".address.zip", postcodeAddress);
+            var restoredCountry     = srsAddress.restoreOnce(prefixSaveRestore + ".address.country", countryAddress);
 
             if(addressFieldRepeater){
                 for(var i = 0; i < addressFieldRepeater.itemCount; i++){
@@ -76,6 +80,8 @@ Item {
                     if(tempItem){
                         if(tempItem.fieldVal == "street"){
                             tempItem.text = restoredAddress
+                        }else if(tempItem.fieldVal == "street2"){
+                            tempItem.text = restoredAddress2
                         }else if(tempItem.fieldVal == "locale"){
                             tempItem.text = restoredLocale
                         }else if(tempItem.fieldVal == "region"){
@@ -93,6 +99,8 @@ Item {
             addressComboBox.title           = (restoredAddressTypeIndex != -1 ? addressComboBox.model[restoredAddressTypeIndex] : contextHome)
             addressComboBox.selectedIndex   = (restoredAddressTypeIndex != -1 ? restoredAddressTypeIndex : 0)
         }
+
+        addressRect.canSave = true
     }
 
 
@@ -234,6 +242,8 @@ Item {
                     if(tempItem){
                         if(tempItem.fieldVal == "street"){
                             tempItem.text = newDetailsModel.get(rIndex).street
+                        }else if(tempItem.fieldVal == "street2"){
+                            tempItem.text = newDetailsModel.get(rIndex).street2
                         }else if(tempItem.fieldVal == "locale"){
                             tempItem.text = newDetailsModel.get(rIndex).locale
                         }else if(tempItem.fieldVal == "region"){

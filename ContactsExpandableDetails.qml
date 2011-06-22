@@ -26,17 +26,19 @@ Column {
     property string expandingBoxTitle
     property Component newDetailsComponent: null
     property Component existingDetailsComponent: null
+    property Item newDetailsActualItem: null
 
     property string addLabel: qsTr("Add")
     property string cancelLabel: qsTr("Cancel")
 
-    property alias expanded: detailsBox.expanded
+    property bool newDetailsExpanded: false
     property alias itemCount: detailsRepeater.itemCount
     property alias repeaterItemList: detailsRepeater.itemList
 
     property bool initializedData: false
     property string parentTitle: detailsColumn.parent.parent.parent.parentTitle
     property string prefixSaveRestore: detailsColumn.parent.parent.parent.parentTitle + "." + headerLabel + ".expandableDetails"
+    property bool expandedFromRestore: false
 
     SaveRestoreState {
         id: srsExpandableDetails
@@ -50,7 +52,7 @@ Column {
                 // Header
                 var detailId = headerLabel + "."
 
-                setValue(prefixSaveRestore + ".expanded", expanded)
+                setValue(prefixSaveRestore + ".expanded", newDetailsExpanded)
                 setValue(prefixSaveRestore + ".itemCount", detailsRepeater.itemCount)
 
                 // Repeater data
@@ -79,12 +81,6 @@ Column {
             sync()
         }
     }
-
-    Component.onCompleted: {
-        if(srsExpandableDetails.restoreRequired){
-            expanded = srsExpandableDetails.restoreOnce(prefixSaveRestore + ".expanded", false)
-        }
-	}
 
     function loadExpandingBox() {
         expandingLoader.sourceComponent = expandingComponent;
@@ -115,6 +111,10 @@ Column {
     function restoreData(){
         if(!initializedData){
             if(srsExpandableDetails.restoreRequired){
+                var expandData = srsExpandableDetails.restoreOnce(prefixSaveRestore + ".expanded", false);
+                if(expandData)
+                    expandedFromRestore = true
+                detailsColumn.newDetailsExpanded = expandData
 
                 // I. Restore data for the model items
                 var detailId = headerLabel + "."
@@ -140,22 +140,23 @@ Column {
                     }
                 }
 
-                // II. Restore data in the newFieldItem
-                if(newFieldItem)
-                    newFieldItem.restoreData()
+                // II. Restore data in the expandingLoader
+                if(newDetailsActualItem){
+                    newDetailsActualItem.restoreData()
+                }
 
                 srsExpandableDetails.setValue(prefixSaveRestore + ".valid", false);
                 srsExpandableDetails.sync()
-                initializedData = true
             }
         }
+        initializedData = true
     }
 
     function appendIntoDetailsModel(){
         if(headerLabel == detailsColumn.parent.parent.parent.phoneLabel){
             detailsModel.append({"phone" : "", "type" : ""})
         }else if(headerLabel == detailsColumn.parent.parent.parent.addressLabel){
-            detailsModel.append({"street" : "", "locale" : "", "region" : "", "zip" : "", "country" : "", "type" : ""})
+            detailsModel.append({"street" : "", "street2" : "", "locale" : "", "region" : "", "zip" : "", "country" : "", "type" : ""})
         }else if(headerLabel == detailsColumn.parent.parent.parent.imLabel){
             detailsModel.append({"im" : "", "account" : "", "type" : ""})
         }else if(headerLabel == detailsColumn.parent.parent.parent.emailLabel){
@@ -320,12 +321,15 @@ Column {
     }
 
     Component {
-        id: expandingComponent 
+        id: expandingComponent
         Item {
             id: expandingItem
             parent: addBar
 
             property alias expanded: detailsBox.expanded
+
+            Binding {target: expandingItem; property: 'expanded'; value: true; when: detailsColumn.newDetailsExpanded == true}
+            Binding {target: expandingItem; property: 'expanded'; value: false; when: detailsColumn.newDetailsExpanded == false}
 
             ExpandingBox {
                 id: detailsBox
@@ -362,6 +366,7 @@ Column {
                 detailsComponent: fieldDetailComponent
 
                 onExpandingChanged: {
+                    detailsColumn.newDetailsExpanded = detailsBox.expanded
                     if (expanded) {
                         add_button.source = "image://themedimage/icons/internal/contact-information-add-active"
                         detailsColumn.height = (initialHeight + detailsItem.height);
@@ -371,6 +376,9 @@ Column {
                         add_button.source = "image://themedimage/icons/internal/contact-information-add";
                         detailsColumn.height = initialHeight;
                     }
+
+                    if(newDetailsActualItem && !expandedFromRestore)
+                        newDetailsActualItem.canSave = true
                 }
             }
         }
@@ -396,6 +404,7 @@ Column {
                 Component.onCompleted: {
                     newDLoader.item.newDetailsModel = detailsModel;
                     newDLoader.item.rIndex = detailsModel.count;
+                    detailsColumn.newDetailsActualItem = newDLoader.item
                 }
             }
 

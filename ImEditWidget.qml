@@ -39,11 +39,12 @@ Item {
     property string restoredImAccount: ""
     property int restoredImAccountTypeIndex: 0
     property string prefixSaveRestore: ""
+    property bool canSave: false
 
     SaveRestoreState {
         id: srsIM
         onSaveRequired: {
-            if(newDetailsModel != null && !updateMode){
+            if(newDetailsModel != null && !updateMode && imsRect.canSave){
                 if(newDetailsModel.count > 0){
                     setValue(prefixSaveRestore + ".im.count", newDetailsModel.count)
                     for (var i = 0; i < newDetailsModel.count; i++){
@@ -66,6 +67,7 @@ Item {
                 }
             }
         }
+        imsRect.canSave = true
     }
 
     function parseDetailsModel(existingDetailsModel, contextModel) {

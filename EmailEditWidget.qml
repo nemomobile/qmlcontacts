@@ -27,11 +27,12 @@ Item {
     property string restoredEmail: ""
     property int restoredEmailTypeIndex: -1
     property string prefixSaveRestore: ""
+    property bool canSave: false
 
     SaveRestoreState {
         id: srsMail
         onSaveRequired: {
-            if(!updateMode){
+            if(!updateMode && emailRect.canSave){
                 // Save the phone number that is currently being edited
                 setValue(prefixSaveRestore + ".email.address", data_email.text)
                 setValue(prefixSaveRestore + ".email.typeIndex", emailComboBox.selectedIndex)
@@ -50,6 +51,7 @@ Item {
             emailComboBox.title = (restoredEmailTypeIndex != -1 ? emailComboBox.model[restoredEmailTypeIndex] : contextHome)
             emailComboBox.selectedIndex = (restoredEmailTypeIndex != -1 ? restoredEmailTypeIndex : 0)
         }
+        emailRect.canSave = true
     }
 
     function parseDetailsModel(existingDetailsModel, contextModel) {
