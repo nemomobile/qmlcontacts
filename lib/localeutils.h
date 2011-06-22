@@ -31,9 +31,12 @@ public:
     Q_INVOKABLE QString getExemplarForString(QString str);
     QString getBinForString(QString str);
     QLocale::Country getCountry() const;
+    int defaultSortVal() const;
+    int defaultDisplayVal() const;
 
 protected:
     QString getLanguage() const;
+    int defaultValues(QString type) const;
 
 private:
     static LocaleUtils *mSelf;

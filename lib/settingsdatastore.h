@@ -20,6 +20,7 @@ public:
     explicit SettingsDataStore(QObject *parent = 0);
 
     static SettingsDataStore *self();
+    void setDefaults();
     QString getSettingsStoreFileName();
     void syncDataStore();
 
@@ -27,6 +28,8 @@ public:
     Q_INVOKABLE void setSortOrder(int orderType);
     Q_INVOKABLE int getDisplayOrder() const;
     Q_INVOKABLE void setDisplayOrder(int orderType);
+    int getSavedCountry() const;
+    void setCountry(int country);
 
 Q_SIGNALS:
     void sortOrderChanged(int orderType);

@@ -13,6 +13,7 @@
 
 #include "localeutils.h"
 #include "meegolocale.h"
+#include "peoplemodel.h"
 
 LocaleUtils *LocaleUtils::mSelf = 0;
 
@@ -42,6 +43,39 @@ QString LocaleUtils::getLanguage() const
 QLocale::Country LocaleUtils::getCountry() const
 {
     return QLocale::system().country();
+}
+
+int LocaleUtils::defaultValues(QString type) const
+{
+    Q_UNUSED(type);
+    QLocale::Country country = getCountry();
+
+    //REVISIT: Right now, all supported lanaguages
+    //use the same setting for sort and display
+    switch(country) {
+        case QLocale::Japan:
+        case QLocale::China:
+        case QLocale::Taiwan:
+        case QLocale::RepublicOfKorea:
+        case QLocale::DemocraticRepublicOfKorea:
+        case QLocale::Sweden:
+        case QLocale::Norway:
+        case QLocale::Hungary:
+        case QLocale::France:
+            return PeopleModel::LastNameRole;
+        default:
+            return PeopleModel::FirstNameRole;
+    }
+}
+
+int LocaleUtils::defaultSortVal() const
+{
+    return defaultValues("sort");
+}
+
+int LocaleUtils::defaultDisplayVal() const
+{
+    return defaultValues("display");
 }
 
 QStringList LocaleUtils::getAddressFieldOrder() const

@@ -7,7 +7,8 @@
  */
 
 #include "settingsdatastore.h"
-#include "proxymodel.h"
+#include "peoplemodel.h"
+#include "localeutils.h"
 
 SettingsDataStore *SettingsDataStore::mSelf = 0;
 
@@ -22,7 +23,27 @@ SettingsDataStore *SettingsDataStore::self()
         mSelf = new SettingsDataStore();
     }
 
+    mSelf->setDefaults();
+
     return mSelf;
+}
+
+void SettingsDataStore::setDefaults()
+{
+    LocaleUtils localeUtils;
+
+    //Save the country value the first time through
+    if (getSavedCountry() == QLocale::AnyCountry)
+        setCountry(localeUtils.getCountry());
+
+    //We don't want to set the country defaults each time the
+    //application loads - just when the country has changed
+    //Check the current country against the stored value
+    if (getSavedCountry() != localeUtils.getCountry()) {
+        setSortOrder(localeUtils.defaultSortVal());
+        setDisplayOrder(localeUtils.defaultDisplayVal());
+        setCountry(localeUtils.getCountry());
+    }
 }
 
 QString SettingsDataStore::getSettingsStoreFileName()
@@ -55,5 +76,15 @@ void SettingsDataStore::setDisplayOrder(int orderType)
 {
     mSettings.setValue("DisplayOrder", orderType);
     emit displayOrderChanged(orderType);
+}
+
+int SettingsDataStore::getSavedCountry() const
+{
+    return mSettings.value("Country", QLocale::AnyCountry).toInt();
+}
+
+void SettingsDataStore::setCountry(int country)
+{
+    mSettings.setValue("Country", country);
 }
 
