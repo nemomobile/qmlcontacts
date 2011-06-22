@@ -124,10 +124,14 @@ Item {
         var count = 0;
 
         for (var i = 0; i < newDetailsModel.count; i++) {
-            if (newDetailsModel.get(i).street != "" || newDetailsModel.get(i).locale != "" 
-                || newDetailsModel.get(i).region != "" || newDetailsModel.get(i).zip != "" 
-                || newDetailsModel.get(i).country != "") {
-                streetList[count] = newDetailsModel.get(i).street;
+            if (newDetailsModel.get(i).street != "" ||
+                newDetailsModel.get(i).street2 != "" ||
+                newDetailsModel.get(i).locale != "" ||
+                newDetailsModel.get(i).region != "" ||
+                newDetailsModel.get(i).zip != ""  ||
+                newDetailsModel.get(i).country != "") {
+                streetList[count] = newDetailsModel.get(i).street + "\n"
+                                    + newDetailsModel.get(i).street2;
                 localeList[count] = newDetailsModel.get(i).locale;
                 regionList[count] = newDetailsModel.get(i).region;
                 zipList[count] = newDetailsModel.get(i).zip;
@@ -137,23 +141,25 @@ Item {
             }
         }
 
-        return {"streets": streetList, "locales": localeList, "regions": regionList, 
-                "zips": zipList, "countries": countryList, "types": addressTypeList};
+        return {"streets": streetList, "locales": localeList,
+                "regions": regionList, "zips": zipList,
+                "countries": countryList, "types": addressTypeList};
     }
 
     function getDetails(reset) {
         var data = new Array();
-        for (var i = 0; i < addressFieldRepeater.itemCount; i++) {
-            var key = addressFieldRepeater.itemList[i].fieldVal;
-            data[key] = addressFieldRepeater.itemList[i].text;
+        for (var i = 0; i < addressColumn.children.length - 1; i++) {
+            var key = addressColumn.children[i].fieldVal;
+            data[key] = addressColumn.children[i].text;
         }
-
-        var arr = {"street": data["street"],
-            "locale": data["locale"],
-            "region": data["region"],
-            "zip": data["zip"],
-            "country": data["country"],
-            "type": addressComboBox.model[addressComboBox.selectedIndex]};
+ 
+        var arr = {"street": data["street"], 
+                   "street2": data["street2"],
+                   "locale": data["locale"], 
+                   "region": data["region"],
+                   "zip": data["zip"], 
+                   "country": data["country"], 
+                   "type": addressComboBox.model[addressComboBox.selectedIndex]};
 
         if (reset)
             resetFields();
@@ -172,10 +178,11 @@ Item {
         id: addressFields
         Component.onCompleted: {
             var pairs = {"street": streetAddress,
-                "locale": localeAddress,
-                "region": regionAddress,
-                "zip": postcodeAddress,
-                "country": countryAddress};
+                         "street2": streetAddress,
+                         "locale": localeAddress,
+                         "region": regionAddress,
+                         "zip": postcodeAddress,
+                         "country": countryAddress};
 
             var fieldOrder = localeUtils.getAddressFieldOrder();
             for (var i = 0; i < fieldOrder.length; i++) {
@@ -189,6 +196,8 @@ Item {
         switch(field) {
             case "street":
                 return newDetailsModel.get(rIndex).street;
+            case "street2":
+                return newDetailsModel.get(rIndex).street2;
             case "locale":
                 return newDetailsModel.get(rIndex).locale;
             case "region":

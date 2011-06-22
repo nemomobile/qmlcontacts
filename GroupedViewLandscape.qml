@@ -26,14 +26,6 @@ Item {
         id: emptyOrCardListView
         anchors.fill: parent
 
-        EmptyContacts {
-            id: emptyListView
-            anchors.fill: parent
-            onClicked: {
-                groupedViewLandscape.addNewContact();
-            }
-        }
-
         ListOfGridsView {
             id: cardListView
             anchors.fill: parent
@@ -67,7 +59,7 @@ Item {
                     id: sectionBackground
                     property string etcSymbol: qsTr("#")
                     property string section
-                    source: "image://theme/contacts/contact_title_bg_l"
+                    source: "image://themedimage/widgets/common/list/list-dividerbar"
                     fillMode: Image.Stretch
                     Text {
                         id: headerTitle
@@ -80,10 +72,21 @@ Item {
                     }
                 }
             }
+
+            EmptyContacts {
+                id: emptyListView
+                anchors.top: parent.bottom
+                onClicked: {
+                    groupedViewLandscape.addNewContact();
+                }
+            }
+
+            Binding {target: emptyListView;
+                     property: "visible"; value: cardListView.count == 1 }
         }
 
-        Binding{target: emptyListView; property: "visible"; value: cardListView.count == 1 }
-        Binding{target: cardListView; property: "visible"; value: cardListView.count > 0 }
+        Binding {target: cardListView;
+                 property: "visible"; value: cardListView.count > 0 }
     }
 
     onPressAndHold: {

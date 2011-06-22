@@ -22,7 +22,7 @@ Item {
 
     Image {
         id: avatar
-        source: "image://theme/contacts/icn_contacts"
+        source: "image://themedimage/icons/oobe/contacts-unavailable"
         opacity: 1
         anchors{ horizontalCenter: parent.horizontalCenter;  bottom: parent.bottom; bottomMargin: parent.height/2; }
     } 
@@ -39,8 +39,8 @@ Item {
     Button {
         id: button
         text: addContact
-        bgSourceUp: "image://theme/btn_blue_up"
-        bgSourceDn: "image://theme/btn_blue_dn"
+        bgSourceUp: "image://themedimage/widgets/common/button/button-default"
+        bgSourceDn: "image://themedimage/widgets/common/button/button-default-pressed"
         enabled: true
         anchors{ top: no_contacts.bottom; topMargin: 30; horizontalCenter: no_contacts.horizontalCenter;}
         maxWidth: Math.round(parent.width/2)

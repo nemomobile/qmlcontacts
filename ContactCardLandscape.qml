@@ -61,7 +61,7 @@ Item {
 
     Image {
         id: contactWithNoAvatar
-        source: "image://theme/contacts/contact_noface"
+        source: "image://themedimage/widgets/common/avatar/avatar-default"
         visible: avatar.status != Image.Ready
     }
 
@@ -97,9 +97,9 @@ Item {
             var imStatus = getOnlineStatus();
             var icon = "";
             if (imStatus == TelepathyTypes.ConnectionPresenceTypeAvailable)
-                icon = "image://theme/contacts/status_available_sml";
+                icon = "image://themedimage/contacts/status_available_sml";
             else if (imStatus == TelepathyTypes.ConnectionPresenceTypeBusy)
-                icon = "image://theme/contacts/status_busy_sml";
+                icon = "image://themedimage/contacts/status_busy_sml";
             // else: no icon
             return icon;
         }
@@ -109,7 +109,7 @@ Item {
         id: favoriteIcon
         height: 17; width: 17 // TODO this is temporary until a properly sized asset is added to the theme
         anchors { right: parent.right; rightMargin: width + (2*iconsMargin); top: parent.top; topMargin: iconsMargin }
-        source: "image://theme/contacts/icn_fav_star_dn"
+        source: "image://themedimage/icons/actionbar/favorite-selected"
         visible: dataFavorite
     }
 

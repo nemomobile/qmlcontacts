@@ -45,16 +45,24 @@ Flickable {
     property string headerNote: qsTr("Note")
 
     property string favoriteValue: "Favorite"
-    property string favoriteTranslated: qsTr("Favorite")
     property string unfavoriteValue: "Unfavorite"
+
+    //: Add favorite flag / add contact to favorites list
+    property string favoriteTranslated: qsTr("Favorite", "Verb")
+
+    //: Remove favorite flag / remove contact from favorites list
     property string unfavoriteTranslated: qsTr("Unfavorite")
 
     property string phoneLabel: qsTr("Phone numbers")
     property string addPhones: qsTr("Add number")
+
+    //: Instant Messaging Accounts for this contact
     property string imLabel: qsTr("Instant messaging")
     property string addIms: qsTr("Add account")
     property string emailLabel: qsTr("Email")
     property string addEmails: qsTr("Add email address")
+
+    //: The header for the section that shows the web sites for this contact
     property string urlLabel: qsTr("Web")
     property string addUrls: qsTr("Add web page")
     property string addressLabel: qsTr("Address")
@@ -85,6 +93,14 @@ Flickable {
 	}
     }
 
+    function finishPageLoad() {
+        phones.loadExpandingBox();
+        ims.loadExpandingBox();
+        emails.loadExpandingBox();
+        urls.loadExpandingBox();
+        addys.loadExpandingBox();
+    }
+
     function contactSave(contactId){
         var newPhones = phones.getNewDetails();
         var newIms = ims.getNewDetails();
@@ -92,7 +108,7 @@ Flickable {
         var newWebs = urls.getNewDetails();
         var addresses = addys.getNewDetails();
 
-        if (avatar_img.source == "image://theme/contacts/img_blankavatar")
+        if (avatar_img.source == "image://themedimage/icons/internal/contacts-avatar-add")
             avatar_img.source = "";
             
                 peopleModel.editPersonModel(contactId, avatar_img.source,
@@ -118,7 +134,7 @@ Flickable {
             id: editHeader
             width: parent.width
             height: (data_first_p.visible ? 175 : 150)
-            source: "image://theme/contacts/active_row"
+            source: "image://themedimage/widgets/common/header/header-inverted-small"
             opacity:  (dataModel.data(index, PeopleModel.IsSelfRole) ? .5 : 1)
             Item{
                 id: avatar
@@ -129,7 +145,7 @@ Flickable {
                 Image{
                     id: avatar_img
                     //REVISIT: Instead of using the URI from AvatarRole, need to use thumbnail URI
-                    source: restoredPhoto != "" ? restoredPhoto : (dataModel.data(index, PeopleModel.AvatarRole) ? dataModel.data(index, PeopleModel.AvatarRole) : "image://theme/contacts/img_blankavatar")
+                    source: restoredPhoto != "" ? restoredPhoto : (dataModel.data(index, PeopleModel.AvatarRole) ? dataModel.data(index, PeopleModel.AvatarRole) : "image://themedimage/icons/internal/contacts-avatar-add")
                     anchors.centerIn: avatar
                     opacity: 1
                     signal clicked
@@ -148,7 +164,7 @@ Flickable {
                         }
                         onPressed: {
                             avatar.opacity = .5;
-                            avatar_img.source = (avatar_img.source == "image://theme/contacts/img_blankavatar" ? "image://theme/contacts/img_blankavatar_dn" : avatar_img.source)
+                            avatar_img.source = (avatar_img.source == "image://themedimage/icons/internal/contacts-avatar-add" ? "image://themedimage/icons/internal/contacts-avatar-add-selected" : avatar_img.source)
                         }
                     }
                 }
@@ -260,7 +276,7 @@ Flickable {
                         height: childrenRect.height
                         Image {
                             id: icn_faves
-                            source: (dataModel.data(index, PeopleModel.FavoriteRole) ? "image://theme/contacts/icn_fav_star_dn" : "image://theme/contacts/icn_fav_star" )
+                            source: (dataModel.data(index, PeopleModel.FavoriteRole) ? "image://themedimage/icons/actionbar/favorite-selected" : "image://themedimage/icons/actionbar/favorite" )
                             opacity: (dataModel.data(index, PeopleModel.IsSelfRole) ? 0 : 1)
 
                             state: restoredFavorite == "" ? (dataModel.data(index, PeopleModel.FavoriteRole) ? favoriteValue : unfavoriteValue) : restoredFavorite
@@ -269,11 +285,11 @@ Flickable {
                             states: [
                                 State{ name: favoriteValue
                                     PropertyChanges{target: icn_faves; favoriteText: favoriteTranslated}
-                                    PropertyChanges{target: icn_faves; source: "image://theme/contacts/icn_fav_star_dn"}
+                                    PropertyChanges{target: icn_faves; source: "image://themedimage/icons/actionbar/favorite-selected"}
                                 },
                                 State{ name: unfavoriteValue
                                     PropertyChanges{target: icn_faves; favoriteText: unfavoriteTranslated}
-                                    PropertyChanges{target: icn_faves; source: "image://theme/contacts/icn_fav_star"}
+                                    PropertyChanges{target: icn_faves; source: "image://themedimage/icons/actionbar/favorite"}
                                 }
                             ]
                         }
@@ -282,7 +298,7 @@ Flickable {
                         id: fav
                         anchors.fill: parent
                         onClicked: {
-                            icn_faves.state = (icn_faves.source != "image://theme/contacts/icn_fav_star_dn" ? favoriteValue : unfavoriteValue)
+                            icn_faves.state = (icn_faves.source != "image://themedimage/icons/actionbar/favorite-selected" ? favoriteValue : unfavoriteValue)
                         }
                     }
                 }
@@ -384,7 +400,7 @@ Flickable {
             id: birthday
             width: parent.width
             height: 80
-            source: "image://theme/contacts/active_row"
+            source: "image://themedimage/widgets/common/header/header-inverted-small"
             TextEntry{
                 id: data_birthday
                 text: datePicker.selectedBirthday != "" ? datePicker.selectedBirthday : dataModel.data(index, PeopleModel.BirthdayRole) ? dataModel.data(index, PeopleModel.BirthdayRole) : ""
@@ -401,7 +417,7 @@ Flickable {
             }
             Image {
                 id: delete_button
-                source: "image://theme/contacts/icn_trash"
+                source: "image://themedimage/icon/internal/contact-information-delete"
                 width: 36
                 height: 36
                 anchors {verticalCenter: birthday.verticalCenter; right: parent.right; rightMargin: 10}
@@ -410,7 +426,7 @@ Flickable {
                     id: mouse_delete
                     anchors.fill: parent
                     onPressed: {
-                        delete_button.source = "image://theme/contacts/icn_trash_dn";
+                        delete_button.source = "image://themedimage/icon/internal/contact-information-delete-active"
                     }
                     onClicked: {
                         data_birthday.text = "";
@@ -463,7 +479,7 @@ Flickable {
             id: notesBar
             width: parent.width
             height: 340
-            source: "image://theme/contacts/active_row"
+            source: "image://themedimage/widgets/common/header/header-inverted-small"
             anchors.bottomMargin: 1
             TextField{
                 id: data_notes

@@ -29,6 +29,11 @@ public:
         FilterFavorites,
     };
 
+    enum StringType {
+        Primary,
+        Secondary,
+    };
+
     Q_INVOKABLE virtual void setFilter(FilterType filter);
     Q_INVOKABLE virtual void setSortType(PeopleModel::PeopleRoles sortType);
     Q_INVOKABLE virtual void setDisplayType(PeopleModel::PeopleRoles displayType);
@@ -41,7 +46,7 @@ protected:
 
 private slots:
     void readSettings();
-    QString findString(int row, PeopleModel *model) const;
+    QString findString(int row, PeopleModel *model, ProxyModel::StringType) const;
 
 private:
     ProxyModelPriv *priv;

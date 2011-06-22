@@ -120,7 +120,8 @@ bool ProxyModel::filterAcceptsRow(int source_row,
     }
 }
 
-QString ProxyModel::findString(int row, PeopleModel *model) const {
+QString ProxyModel::findString(int row, PeopleModel *model,
+                               ProxyModel::StringType strType = ProxyModel::Primary) const {
     QString lStr = QString("");
 
     if ((priv->sortType != PeopleModel::FirstNameRole)
@@ -145,6 +146,7 @@ QString ProxyModel::findString(int row, PeopleModel *model) const {
         }
     }
 
+    bool primaryFound = false;
     QList<int> roleOrder;
     roleOrder << searchRole << secondaryRole
               << PeopleModel::CompanyNameRole
@@ -156,8 +158,12 @@ QString ProxyModel::findString(int row, PeopleModel *model) const {
     for (int i = 0; i < roleOrder.size(); ++i) {
         lStr = model->data(row, roleOrder.at(i)).toString();
 
-        if (!lStr.isEmpty())
-            return lStr;
+        if (!lStr.isEmpty()) {
+            if ((strType == ProxyModel::Secondary) && (!primaryFound))
+                primaryFound = true;
+            else
+                return lStr;
+        }
 
         if (priv->localeHelper->needPronounciationFields()) {
             if (roleOrder.at(i) == PeopleModel::FirstNameProRole)
@@ -165,8 +171,12 @@ QString ProxyModel::findString(int row, PeopleModel *model) const {
             else if (roleOrder.at(i) == PeopleModel::LastNameProRole)
                 lStr = model->data(row, PeopleModel::LastNameRole).toString();
 
-            if (!lStr.isEmpty())
-                return lStr;
+            if (!lStr.isEmpty()) {
+                if ((strType == ProxyModel::Secondary) && (!primaryFound))
+                    primaryFound = true;
+                else
+                    return lStr;
+            }
         }
 
     }
@@ -211,5 +221,11 @@ bool ProxyModel::lessThan(const QModelIndex& left,
     if (!priv->localeHelper->checkForAlphaChar(rStr))
         return true;
 
+    if (priv->localeHelper->compare(lStr, rStr) == 0) {
+        lStr += findString(leftRow, model, ProxyModel::Secondary);
+        rStr += findString(rightRow, model, ProxyModel::Secondary);
+        return priv->localeHelper->isLessThan(lStr, rStr);
+    }
+            
     return priv->localeHelper->isLessThan(lStr, rStr);
 }

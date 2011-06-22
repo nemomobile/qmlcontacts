@@ -120,7 +120,7 @@ void PeopleModel::createMeCard()
     qWarning() << Q_FUNC_INFO << "failed to save guid in mecard contact";
 
   QContactAvatar avatar;
-  avatar.setImageUrl(QUrl("image://theme/contacts/img_blankavatar"));
+  avatar.setImageUrl(QUrl("image://themedimage/widgets/common/avatar/avatar-default"));
   if (!contact.saveDetail(&avatar))
       qWarning() << Q_FUNC_INFO << "failed to save avatar in mecard contact";
 
@@ -299,8 +299,10 @@ QVariant PeopleModel::data(int row, int role) const
     {
         QStringList list;
         foreach (const QContactEmailAddress& email,
-                 contact.details<QContactEmailAddress>())
+                 contact.details<QContactEmailAddress>()) {
+            if (email.contexts().count() > 0)
                 list << email.contexts().at(0);
+        }
         return list;
     }
     case PhoneNumberRole:
@@ -317,8 +319,10 @@ QVariant PeopleModel::data(int row, int role) const
     {
         QStringList list;
         foreach (const QContactPhoneNumber& phone,
-                 contact.details<QContactPhoneNumber>())
+                 contact.details<QContactPhoneNumber>()) {
+            if (phone.contexts().count() > 0)
                 list << phone.contexts().at(0);
+        }
         return list;
     }
     case AddressRole:
@@ -330,11 +334,20 @@ QVariant PeopleModel::data(int row, int role) const
                  contact.details<QContactAddress>()) {
             QString aStr;
             QString temp;
+            QString addy = address.street();
+            QStringList streetList = addy.split("\n");
 
             for (int i = 0; i < fieldOrder.size(); ++i) {
                 temp = "";
-                if (fieldOrder.at(i) == "street")
-                    temp += address.street();
+                if (fieldOrder.at(i) == "street") {
+                    if (streetList.count() == 2)
+                        temp += streetList.at(0);
+                    else
+                        temp += addy;
+                } else if (fieldOrder.at(i) == "street2") {
+                    if (streetList.count() == 2)
+                        temp += streetList.at(1);
+                }
                 else if (fieldOrder.at(i) == "locale")
                     temp += address.locality();
                 else if (fieldOrder.at(i) == "region")
@@ -343,12 +356,11 @@ QVariant PeopleModel::data(int row, int role) const
                     temp += address.postcode();
                 else if (fieldOrder.at(i) == "country")
                     temp += address.country();
-                if(temp.trimmed() != ""){
-                    if (i > 0)
-                          aStr += "\n"+temp;
-                    else
-                        aStr += temp;
-                }
+
+                if (i > 0)
+                    aStr += "\n" + temp.trimmed();
+                else
+                    aStr += temp.trimmed();
             }
 
             if (aStr == "")
@@ -412,8 +424,10 @@ QVariant PeopleModel::data(int row, int role) const
     {
         QStringList list;
         foreach (const QContactAddress& address,
-                 contact.details<QContactAddress>())
+                 contact.details<QContactAddress>()) {
+            if (address.contexts().count() > 0)
                 list << address.contexts().at(0);
+        }
         return list;
     }
     case PresenceRole:

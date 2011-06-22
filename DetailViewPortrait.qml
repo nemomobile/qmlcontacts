@@ -37,19 +37,29 @@ Flickable {
     property string contextWork: qsTr("Work")
     property string contextOther: qsTr("Other")
     property string contextMobile: qsTr("Mobile")
-    property string contextBookmark: qsTr("Bookmark")
-    property string contextFavorite: qsTr("Favorite")
+
+    //: Denotes whether the web page for this contact is just a bookmark
+    property string contextBookmark: qsTr("Bookmark", "Noun")
+
+    //: Denotes whether the web page for this contact is a favorite bookmark
+    property string contextFavorite: qsTr("Favorite", "Noun")
 
     property string defaultFirstName: qsTr("First name")
     property string defaultLastName: qsTr("Last name")
     property string defaultCompany: qsTr("Company")
     property string defaultNote: qsTr("Enter note")
     property string defaultBirthday: qsTr("Enter birthday")
+
+    //: Default website - the user should enter a URL in this field
     property string defaultWeb : qsTr("Site")
 
     property string headerPhone: qsTr("Phone numbers")
+
+    //: Instant Messaging Accounts for this contact
     property string headerIm: qsTr("Instant messaging")
     property string headerEmail: qsTr("Email")
+
+    //: The header for the section that shows the web sites for this contact
     property string headerWeb: qsTr("Web")
     property string headerAddress : qsTr("Address")
     property string headerBirthday: qsTr("Birthday")
@@ -64,7 +74,10 @@ Flickable {
     property string gtalkTr : qsTr("Google Talk")
     property string imTr : qsTr("IM")
 
-    property string favoriteTranslated: qsTr("Favorite")
+    //: Add favorite flag / add contact to favorites list
+    property string favoriteTranslated: qsTr("Favorite", "Verb")
+
+    //: Remove favorite flag / remove contact from favorites list
     property string unfavoriteTranslated: qsTr("Unfavorite")
 
     //do not internationalize
@@ -82,7 +95,10 @@ Flickable {
     property string facebookValue : "im-google-talk"
     property string gtalkValue : "im-yahoo"
 
+    //: Load the details for the selected contact
     property string viewUrl: qsTr("View")
+
+    //: Truncate string - used when a string is too long for the display area
     property string stringTruncater: qsTr("...")
 
     function getTruncatedString(valueStr, stringLen) {
@@ -127,6 +143,25 @@ Flickable {
         return presence;
     }
 
+    //Strip out any empty fields in the address - must do this on the
+    //QML side, as the "\n" are needed in the EditView to denote the
+    //different fields
+    function getAddressDisplayVal(modelData) {
+        var addy = getTruncatedString(modelData, 25);
+        var res = addy.split("\n");
+        addy = "";
+
+        for (var i = 0; i < res.length; i++) {
+            if (res[i] != "") {
+                if (i > 0)
+                    addy += "\n" + res[i];
+                else
+                    addy += res[i];
+            }
+        }
+        return addy;
+    }
+
     Column{
         id: detailsList
         spacing: 1
@@ -135,12 +170,12 @@ Flickable {
             id: detailHeader
             width: parent.width
             height: (firstname_p.visible ? 175 : 150)
-            source: "image://theme/contacts/active_row"
+            source: "image://themedimage/widgets/common/header/header-inverted-small"
             opacity: (detailModel.data(indexOfPerson, PeopleModel.IsSelfRole) ? .5 : 1)
             Image{
                 id: avatar_image
                 //REVISIT: Instead of using the URI from AvatarRole, need to use thumbnail URI
-                source: (detailModel.data(indexOfPerson, PeopleModel.AvatarRole) ? detailModel.data(indexOfPerson, PeopleModel.AvatarRole): "image://theme/contacts/blank_avatar")
+                source: (detailModel.data(indexOfPerson, PeopleModel.AvatarRole) ? detailModel.data(indexOfPerson, PeopleModel.AvatarRole): "image://themedimage/widgets/common/avatar/avatar-default")
                 anchors {top: detailHeader.top; left: parent.left; }
                 opacity: 1
                 signal clicked
@@ -150,7 +185,7 @@ Flickable {
                 clip: true
                 fillMode: Image.PreserveAspectCrop
                 //Image.Error
-                Binding{target: avatar_image; property: "source"; value:"image://theme/contacts/img_blankavatar"; when: avatar_image.status == Image.Error }
+                Binding{target: avatar_image; property: "source"; value:"image://themedimage/widgets/common/avatar/avatar-default"; when: avatar_image.status == Image.Error }
             }
             Grid{
                 id: headerGrid
@@ -212,21 +247,21 @@ Flickable {
                                 var icon = "";
                                 switch(imStatus) {
                                 case TelepathyTypes.ConnectionPresenceTypeAvailable:
-                                    icon = "image://theme/contacts/status_available_sml";
+                                    icon = "image://themedimage/icons/status/status-available"
                                     break;
                                 case TelepathyTypes.ConnectionPresenceTypeBusy:
-                                    icon = "image://theme/contacts/status_busy_sml";
+                                    icon = "image://themedimage/icons/status/status-busy"
                                     break;
                                 case TelepathyTypes.ConnectionPresenceTypeAway:
                                 case TelepathyTypes.ConnectionPresenceTypeExtendedAway:
-                                    icon = "image://theme/contacts/status_idle_sml";
+                                    icon = "image://themedimage/icons/status/status-idle"
                                     break;
                                 case TelepathyTypes.ConnectionPresenceTypeHidden:
                                 case TelepathyTypes.ConnectionPresenceTypeUnknown:
                                 case TelepathyTypes.ConnectionPresenceTypeUnknown:
                                 case TelepathyTypes.ConnectionPresenceTypeOffline:
                                 default:
-                                    icon = "image://theme/contacts/status_idle_sml";
+                                    icon = "image://themedimage/icons/status/status-idle"
                                 }
                                 return icon;
                             }
@@ -296,7 +331,7 @@ Flickable {
                         Image {
                             id: icon_favorite
                             anchors{right: parent.left;  rightMargin: 10}
-                            source: (detailModel.data(indexOfPerson, PeopleModel.FavoriteRole) ? "image://theme/contacts/icn_fav_star_dn" : "image://theme/contacts/icn_fav_star" )
+                            source: (detailModel.data(indexOfPerson, PeopleModel.FavoriteRole) ? "image://themedimage/icons/actionbar/favorite-selected" : "image://themedimage/icons/actionbar/favorite" )
                             opacity: (detailModel.data(indexOfPerson, PeopleModel.IsSelfRole) ? 0 : 1)
                         }
                     }
@@ -334,7 +369,7 @@ Flickable {
                 height: 80
                 Image{
                     id: phoneBar
-                    source: "image://theme/contacts/active_row"
+                    source: "image://themedimage/widgets/common/header/header-inverted-small"
                     anchors.fill:  parent
                     Text{
                         id: label
@@ -401,7 +436,7 @@ Flickable {
 
                 Image{
                     id: imBar
-                    source: "image://theme/contacts/active_row"
+                    source: "image://themedimage/widgets/common/header/header-inverted-small"
                     anchors.fill: parent
 
                     Text{
@@ -464,7 +499,7 @@ Flickable {
 
                 Image{
                     id: emailBar
-                    source: "image://theme/contacts/active_row"
+                    source: "image://themedimage/widgets/common/header/header-inverted-small"
                     anchors.fill: parent
                     Text{
                         id: email_txt
@@ -528,7 +563,7 @@ Flickable {
 
                 Image{
                     id: webBar
-                    source: "image://meegotheme/widgets/common/list/list-single-selected"
+                    source: "image://themedimage/widgets/common/list/list-single-selected"
                     anchors.fill: parent
 
                     Text{
@@ -603,7 +638,7 @@ Flickable {
 
                 Image{
                     id: addyBar
-                    source: "image://theme/contacts/active_row"
+                    source: "image://themedimage/widgets/common/header/header-inverted-small"
                     anchors.fill: parent
 
                     Text{
@@ -638,7 +673,7 @@ Flickable {
                             Text{
                                 id: data_street
                                 anchors.verticalCenter: address_rect.verticalCenter
-                                text: getTruncatedString(modelData, 25)
+                                text: getAddressDisplayVal(modelData);
                                 color: theme_fontColorNormal
                                 font.pixelSize: theme_fontPixelSizeLarge
                                 smooth: true
@@ -676,7 +711,7 @@ Flickable {
             height: 80
             Image{
                 id: bdayBar
-                source: "image://theme/contacts/active_row"
+                source: "image://themedimage/widgets/common/header/header-inverted-small"
                 anchors.fill: parent
 
                 Text{
@@ -724,7 +759,7 @@ Flickable {
             opacity:  notesHeader.opacity
             Image{
                 id: noteBar
-                source: "image://theme/contacts/active_row"
+                source: "image://themedimage/widgets/common/toolbar-item/toolbar-item-background-selected"
                 anchors.fill:  parent
 
                 Text{

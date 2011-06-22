@@ -38,6 +38,7 @@ public:
     Q_INVOKABLE QStringList getIndexBarChars();
 
     bool initCollator(int collType = 0, QString locale = QString());
+    int compare(QString lStr, QString rStr); 
     bool isLessThan(QString lStr, QString rStr); 
     bool checkForAlphaChar(QString str);
     Q_INVOKABLE QString getExemplarForString(QString str);

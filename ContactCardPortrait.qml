@@ -64,18 +64,24 @@ Image {
     //REVISIT: Instead of using the URI from AvatarRole, need to use thumbnail URI
     property string dataAvatar: dataPeople.data(sourceIndex, PeopleModel.AvatarRole)
 
+    //: Remove favorite flag / remove contact from favorites list
     property string unfavoriteTranslated: qsTr("Unfavorite")
-    property string favoriteTranslated: qsTr("Favorite")
+
+    //: Add favorite flag / add contact to favorites list
+    property string favoriteTranslated: qsTr("Favorite", "Verb")
+
     property string statusIdle: qsTr("Idle")
     property string statusBusy: qsTr("Busy")
     property string statusOnline: qsTr("Online")
     property string statusOffline: qsTr("Offline")
+
+    //: Truncate string - used when a string is too long for the display area
     property string ellipse: qsTr("(...)")
 
     signal clicked
     signal pressAndHold(int mouseX, int mouseY, string uuid, string name)
 
-    source: "image://theme/contacts/contact_bg_portrait";
+    source: "image://themedimage/widgets/common/avatar/avatar-inactive-overlay";
     opacity: (dataPeople.data(sourceIndex, PeopleModel.IsSelfRole) ? .3 : 1)
 
     Image{
@@ -84,11 +90,11 @@ Image {
         smooth: true
         width: 100
         height: 100
-        source: (dataAvatar ? dataAvatar :"image://theme/contacts/blank_avatar")
+        source: (dataAvatar ? dataAvatar :"image://themedimage/widgets/common/avatar/avatar-default")
         anchors {left: contactCardPortrait.left}
         onStatusChanged: {
             if(photo.status == Image.Error || photo.status == Image.Null){
-                photo.source = "image://theme/contacts/blank_avatar";
+                photo.source = "image://themedimage/widgets/common/avatar/avatar-default";
             }
         }
     }
@@ -99,10 +105,10 @@ Image {
             if((dataFirst != "") || (dataLast != "")) {
                 if (settingsDataStore.getDisplayOrder() == PeopleModel.LastNameRole) {
                     //: %1 is last name, %2 is first name
-                    return qsTr("%1 %2").arg(getTruncatedString(dataLast, 25)).arg(getTruncatedString(dataFirst, 25));
+                    return qsTr("%1 %2", "LastFirstName").arg(getTruncatedString(dataLast, 25)).arg(getTruncatedString(dataFirst, 25));
                 } else {
                     //: %1 is first name, %2 is last name
-                    return qsTr("%1 %2").arg(getTruncatedString(dataFirst, 25)).arg(getTruncatedString(dataLast, 25));
+                    return qsTr("%1 %2", "FirstLastName").arg(getTruncatedString(dataFirst, 25)).arg(getTruncatedString(dataLast, 25));
                 }
             }
             else if(dataPeople.data(sourceIndex, PeopleModel.CompanyNameRole) != "")
@@ -133,7 +139,7 @@ Image {
 
     Image {
         id: favorite
-        source: (dataPeople.data(sourceIndex, PeopleModel.FavoriteRole) ? "image://theme/contacts/icn_fav_star_dn" : "image://theme/contacts/icn_fav_star" )
+        source: (dataPeople.data(sourceIndex, PeopleModel.FavoriteRole) ? "image://themedimage/icons/actionbar/favorite-selected" : "image://themedimage/icons/actionbar/favorite-selected" )
         opacity: (dataMeCard ? 0 : 1)
         anchors {right: contactCardPortrait.right; top: nameFirst.top; rightMargin: photo.height/8;}
     }
@@ -145,21 +151,21 @@ Image {
             var icon = "";
             switch(imStatus) {
             case TelepathyTypes.ConnectionPresenceTypeAvailable:
-                icon = "image://theme/contacts/status_available_sml";
+                icon = "image://themedimage/icons/status/status-available"
                 break;
             case TelepathyTypes.ConnectionPresenceTypeBusy:
-                icon = "image://theme/contacts/status_busy_sml";
+                icon = "image://themedimage/icons/status/status-busy"
                 break;
             case TelepathyTypes.ConnectionPresenceTypeAway:
             case TelepathyTypes.ConnectionPresenceTypeExtendedAway:
-                icon = "image://theme/contacts/status_idle_sml";
+                icon = "image://themedimage/icons/status/status-idle";
                 break;
             case TelepathyTypes.ConnectionPresenceTypeHidden:
             case TelepathyTypes.ConnectionPresenceTypeUnknown:
             case TelepathyTypes.ConnectionPresenceTypeUnknown:
             case TelepathyTypes.ConnectionPresenceTypeOffline:
             default:
-                icon = "image://theme/contacts/status_idle_sml";
+                icon = "image://themedimage/icons/status/status-idle";
             }
             return icon;
         }
@@ -199,7 +205,7 @@ Image {
 
     Image{
         id: contactDivider
-        source: "image://theme/contacts/contact_divider"
+        source: "image://themedimage/widgets/common/dividers/divider-horizontal-double"
         anchors {right: contactCardPortrait.right; bottom: contactCardPortrait.bottom; left: contactCardPortrait.left}
     }
 

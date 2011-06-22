@@ -36,6 +36,7 @@ Item {
     EmptyContacts{
         id: emptyListView
         opacity: 1
+        anchors.top: cardListView.bottom
         onClicked: {
             groupedViewPortrait.addNewContact();
         }

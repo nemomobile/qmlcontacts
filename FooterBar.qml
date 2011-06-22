@@ -64,7 +64,8 @@ Item {
 
     Image {
         id: footer_bar
-        source: "image://theme/contacts/contact_btmbar_landscape"
+        //source: "image://themedimage/widgets/common/statusbar/statusbar-background"
+        source: "image://themedimage/widgets/common/toolbar/toolbar-background"
         anchors {bottom: parent.bottom; left: parent.left; right: parent.right;}
         opacity: 1
 
@@ -72,7 +73,7 @@ Item {
             id: settingsIcon
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
-            source: "image://meegotheme/icons/actionbar/show-settings"
+            source: "image://themedimage/icons/actionbar/show-settings"
             NumberAnimation on rotation {
                 id: imageRotation
                 running: false
@@ -84,10 +85,10 @@ Item {
             MouseArea {
                 anchors.fill: parent
                 onPressed : {
-                    settingsIcon.source = "image://meegotheme/icons/actionbar/show-settings"
+                    settingsIcon.source = "image://themedimage/icons/actionbar/show-settings"
                 }
                 onReleased: {
-                    settingsIcon.source = "image://meegotheme/icons/actionbar/show-settings-active"
+                    settingsIcon.source = "image://themedimage/icons/actionbar/show-settings-active"
                 }
                 onClicked: {
                     var cmd = "/usr/bin/meego-qml-launcher --app meego-ux-settings --opengl --fullscreen --cmd showPage --cdata \"Contacts\"";  //i18n ok
@@ -101,7 +102,7 @@ Item {
             anchors.left: settingsIcon.right
             anchors.verticalCenter: parent.verticalCenter
             height: parent.height
-            source: "image://theme/email/div"
+            source: "image://themedimage/widgets/common/dividers/divider-vertical-double"
         }
 
         Item {
@@ -162,7 +163,7 @@ Item {
                     }
                     Image{
                         id: slider
-                        source: "image://theme/contacts/slider_alphabetical"
+                        source: "image://themedimage/widgets/apps/contacts/contacts-alpabar-letter-background"
                         anchors { horizontalCenter: letter.horizontalCenter}
                         y: -75
                         visible: false
@@ -203,11 +204,12 @@ Item {
 
         Button{
             id: buttonLeft
-            width: 146
+            minWidth: 146
+            maxWidth: Math.round(parent.width/2)
             text: getButtonTitleText()[0]
-            bgSourceUp: "image://theme/btn_grey_up"
-            bgSourceActive: "image://theme/btn_grey_up"
-            bgSourceDn: "image://theme/btn_grey_dn"
+            bgSourceUp: "image://themedimage/widgets/common/button/button"
+            bgSourceActive: "image://themedimage/widgets/common/button/button"
+            bgSourceDn: "image://themedimage/widgets/common/button/button-pressed"
             visible: (buttonLeft.text == "" ? 0 : 1)
             enabled: getActiveState(buttonLeft.text)
             anchors {top: parent.top; topMargin: 3; 
@@ -219,11 +221,12 @@ Item {
 
         Button{
             id: buttonRight
-            width: 146
+            minWidth: 146
+            maxWidth: Math.round(parent.width/2)
             text: getButtonTitleText()[1]
-            bgSourceUp: "image://theme/btn_grey_up"
-            bgSourceActive: "image://theme/btn_grey_up"
-            bgSourceDn: "image://theme/btn_grey_dn"
+            bgSourceUp: "image://themedimage/widgets/common/button/button"
+            bgSourceActive: "image://themedimage/widgets/common/button/button"
+            bgSourceDn: "image://themedimage/widgets/common/button/button-pressed"
             visible: (buttonRight.text == "" ? 0 : 1)
             active: getActiveState(buttonRight.text)
             anchors {top: parent.top; topMargin: 3;

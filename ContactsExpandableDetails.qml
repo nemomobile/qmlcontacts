@@ -25,7 +25,6 @@ Column {
     property string headerLabel
     property string expandingBoxTitle
     property Component newDetailsComponent: null
-    property Item newFieldItem: null
     property Component existingDetailsComponent: null
 
     property string addLabel: qsTr("Add")
@@ -85,6 +84,10 @@ Column {
         if(srsExpandableDetails.restoreRequired){
             expanded = srsExpandableDetails.restoreOnce(prefixSaveRestore + ".expanded", false)
         }
+	}
+
+    function loadExpandingBox() {
+        expandingLoader.sourceComponent = expandingComponent;
     }
 
     function getNewDetails() {
@@ -174,16 +177,17 @@ Column {
     }
 
     ListModel{
-        id: detailsModel
-
-        Component.onCompleted: {
-            if (existingDetailsModel) {
+        id: detailsModel 
+        Component.onCompleted:{
+            if ((existingDetailsModel) && (existingDetailsModel != "")) {
+                var newFieldItem = existingDetailsComponent.createObject(detailsColumn);
                 var tmpArr = newFieldItem.parseDetailsModel(existingDetailsModel, contextModel);
                 for (var i = 0; i < tmpArr.length; i++) {
                     appendIntoDetailsModel()
                     for (var key in tmpArr[i])
                          detailsModel.setProperty(i, key, tmpArr[i][key]);
                 }
+                newFieldItem.destroy();
             }
         }
     }
@@ -229,49 +233,42 @@ Column {
 
         delegate: Image {
             id: imageBar
-            source: "image://theme/contacts/active_row"
+            source: "image://themedimage/widgets/common/header/header-inverted-small"
             parent: detailsRepeater
             width: parent.width
 
-            property Item existingFieldItem: null
+            Loader {
+                id: oldDLoader
 
-            Item {
-                id: existingContentArea
-
-                anchors {top: parent.top; bottom: parent.bottom;
+                anchors {top: parent.top; bottom: parent.bottom; 
                          margins: itemMargins;}
-            }
 
-            //REVISIT: Should use a loader for this?
-            Component.onCompleted: {
-                if (existingDetailsComponent) {
-                    if (existingFieldItem) existingFieldItem.destroy();
-                    existingFieldItem = existingDetailsComponent.createObject(existingContentArea)
+                sourceComponent: existingDetailsComponent
 
-                    //REVISIT: Pass in these values to createObject once it
-                    //has support for passing in properties - QtQuick 1.1
-                    existingFieldItem.newDetailsModel = detailsRepeater.model;
-                    existingFieldItem.rIndex = index;
-                    existingFieldItem.updateMode = true;
+                Component.onCompleted: {
+                    oldDLoader.item.newDetailsModel = detailsRepeater.model;
+                    oldDLoader.item.rIndex = index;
+                    oldDLoader.item.updateMode = true;
 
                     //REVISIT: Better way to calculate? Use a state?
                     //We need to grow the parent based on the height
                     //of the children we're stuffing in
-                    imageBar.height = existingFieldItem.height + (itemMargins * 2)
-                    detailsColumn.height += imageBar.height
+                    imageBar.height = oldDLoader.item.childrenRect.height
+                                      + (itemMargins * 2);
+                    detailsColumn.height += imageBar.height;
 
                     //REVISIT: We can replace this with the itemAt() Repeater
                     //function once its available - QtQuick 1.1
                     detailsRepeater.itemCount += 1;
                     var items = detailsRepeater.itemList;
-                    items.push(existingFieldItem);
+                    items.push(oldDLoader.item);
                     detailsRepeater.itemList = items;
                 }
             }
-
+        
             Image {
                 id: delete_button
-                source: "image://theme/contacts/icn_trash"
+                source: "image://themedimage/icon/internal/contact-information-delete"
                 width: 36
                 height: 36
                 anchors {top: parent.top; right: parent.right;
@@ -281,26 +278,24 @@ Column {
                     id: mouse_delete
                     anchors.fill: parent
                     onPressed: {
-                        delete_button.source = "image://theme/contacts/icn_trash_dn";
+                        delete_button.source = "image://themedimage/icon/internal/contact-information-delete-active"
                     }
                     onClicked: {
                         if (detailsRepeater.count == 1) {
-                            existingFieldItem.resetFields();
-                        }
+                            oldDLoader.item.resetFields();
+                        } 
                         else if (detailsRepeater.count != 1) {
                             removeItemFromList(index);
                             detailsRepeater.model.remove(index);
                         }
-                        else
-                            newFieldItem.resetFields();
 
-                        delete_button.source = "image://theme/contacts/icn_trash";
+                        delete_button.source = "image://themedimage/icon/internal/contact-information-delete"
                         //REVISIT: Should use states for this
-                        detailsColumn.height -= existingFieldItem.height
+                        detailsColumn.height -= oldDLoader.item.height
                     }
                 }
-                Binding{target: delete_button; property: "visible"; value: false; when: !existingFieldItem.validInput}
-                Binding{target: delete_button; property: "visible"; value: true; when: existingFieldItem.validInput}
+                Binding{target: delete_button; property: "visible"; value: false; when: !oldDLoader.item.validInput}
+                Binding{target: delete_button; property: "visible"; value: true; when: oldDLoader.item.validInput}
             }
         }
     }
@@ -315,101 +310,135 @@ Column {
 
         Image {
             id: addBar
-            source: "image://theme/contacts/active_row"
+            source: "image://themedimage/widgets/common/header/header-inverted-small"
             anchors {fill: parent; bottomMargin: 1}
+
+            Loader {
+                id: expandingLoader
+            }
+        }
+    }
+
+    Component {
+        id: expandingComponent 
+        Item {
+            id: expandingItem
+            parent: addBar
+
+            property alias expanded: detailsBox.expanded
 
             ExpandingBox {
                 id: detailsBox
 
                 property int boxHeight
 
-                anchors {top: addBar.top; leftMargin: itemMargins}
-                width: parent.width
-                titleText: expandingBoxTitle
-                titleTextColor: theme_fontColorNormal
+                lazyCreation: true
+                parent: addBar
+                anchors {top: parent.top; right: parent.right;
+                         left: parent.left; leftMargin: itemMargins}
+ 
+                headerContent: Item {
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.fill: parent
 
-                iconRow: [
                     Image {
                         id: add_button
-                        source: "image://theme/contacts/icn_add"
-                        anchors { verticalCenter: parent.verticalCenter; }
+                        anchors.left: parent.left
+                        anchors.leftMargin: 10
+                        anchors.verticalCenter: parent.verticalCenter
                         fillMode: Image.PreserveAspectFit
-                        opacity: 1
+                        source: "image://themedimage/icons/internal/contact-information-add"
                     }
-                ]
+                    Text {
+                        id: text_box
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.left: add_button.right
+                        anchors.leftMargin: 10
+                        text: expandingBoxTitle
+                        font.pixelSize: theme_fontPixelSizeLarge
+                    }
+                }
 
                 detailsComponent: fieldDetailComponent
 
                 onExpandingChanged: {
-                    add_button.source = expanded ? "image://theme/contacts/icn_add_dn" : "image://theme/contacts/icn_add";
-                    detailsColumn.height = expanded ? (initialHeight + detailsItem.height) : initialHeight;
-                }
-            }
-
-            Component {
-                id: fieldDetailComponent
-                Item {
-                    id: fieldDetailItem
-                    height: childrenRect.height + itemMargins*2
-                    width: parent.width
-                    anchors {left:parent.left; top: parent.top; margins: itemMargins;}
-
-                    Component.onCompleted: {
-                        if (newDetailsComponent) {
-                            if (newFieldItem) newFieldItem.destroy();
-                            newFieldItem = newDetailsComponent.createObject(newContentArea);
-                            newFieldItem.newDetailsModel = detailsModel;
-                            newFieldItem.rIndex = detailsModel.count;
-                        }
+                    if (expanded) {
+                        add_button.source = "image://themedimage/icons/internal/contact-information-add-active"
+                        detailsColumn.height = (initialHeight + detailsItem.height);
                     }
 
-                    Item {
-                        id: newContentArea
-
-                        height: childrenRect.height
-                        width: parent.width
-                    }
-
-                    Button {
-                        id: addButton
-
-                        width: 100
-                        height: 36
-                        text: addLabel
-                        font.pixelSize: theme_fontPixelSizeMediumLarge
-                        bgSourceUp: "image://theme/btn_blue_up"
-                        bgSourceDn: "image://theme/btn_blue_dn"
-                        anchors {right: cancelButton.left; rightMargin: itemMargins;
-                                 top: newContentArea.bottom; topMargin: itemMargins;}
-                        enabled: newFieldItem.validInput
-                        onClicked: {
-                            detailsBox.expanded = false;
-                            var arr = newFieldItem.getDetails(true);
-                            appendIntoDetailsModel()
-                            for (var key in arr){
-                                detailsModel.setProperty(detailsModel.count - 1, key, arr[key]);
-                            }
-
-                            updateModelDisplayedData()
-                        }
-                    }
-
-                    Button {
-                        id: cancelButton
-
-                        width: 100
-                        height: 36
-                        text: cancelLabel
-                        font.pixelSize: theme_fontPixelSizeMediumLarge
-                        anchors {right: newContentArea.right; rightMargin: itemMargins;
-                                 top: newContentArea.bottom; topMargin: itemMargins;}
-                        onClicked: {
-                            detailsBox.expanded = false;
-                            newFieldItem.resetFields();
-                        }
+                    else {
+                        add_button.source = "image://themedimage/icons/internal/contact-information-add";
+                        detailsColumn.height = initialHeight;
                     }
                 }
             }
         }
     }
+
+    Component {
+        id: fieldDetailComponent
+
+        Item {
+            id: fieldDetailItem
+            height: childrenRect.height + itemMargins*2
+            width: parent.width
+            anchors {left:parent.left; top: parent.top; margins: itemMargins;}
+
+            Loader {
+                id: newDLoader
+
+                height: childrenRect.height
+                width: parent.width
+
+                sourceComponent: newDetailsComponent
+
+                Component.onCompleted: {
+                    newDLoader.item.newDetailsModel = detailsModel;
+                    newDLoader.item.rIndex = detailsModel.count;
+                }
+            }
+
+            Button {
+                id: addButton
+
+                minWidth: 100
+                maxWidth: Math.round(parent.width/3)
+                height: 36
+                text: addLabel
+                font.pixelSize: theme_fontPixelSizeMediumLarge
+                bgSourceUp: "image://themedimage/widgets/common/button/button-default"
+                bgSourceDn: "image://themedimage/widgets/common/button/button-default-pressed"
+                anchors {right: cancelButton.left; rightMargin: itemMargins;
+                         top: newDLoader.bottom; topMargin: itemMargins;}
+                enabled: (newDLoader.item) ? newDLoader.item.validInput : false
+                onClicked: {
+                    expandingLoader.item.expanded = false;
+                    var arr = newDLoader.item.getDetails(true);
+                    appendIntoDetailsModel()
+                    for (var key in arr)
+                        detailsModel.setProperty(detailsModel.count - 1, key, arr[key]);
+
+                    updateModelDisplayedData()
+                }
+            }
+
+            Button {
+                id: cancelButton
+
+                minWidth: 100
+                maxWidth: Math.round(parent.width/3)
+                height: 36
+                text: cancelLabel
+                font.pixelSize: theme_fontPixelSizeMediumLarge
+                anchors {right: newDLoader.right; rightMargin: itemMargins;
+                         top: newDLoader.bottom; topMargin: itemMargins;}
+                onClicked: {
+                    expandingLoader.item.expanded = false;
+                    newDLoader.item.resetFields();
+                }
+            }
+        }
+    }
 }
+

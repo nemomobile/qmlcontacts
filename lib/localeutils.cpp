@@ -59,14 +59,14 @@ QStringList LocaleUtils::getAddressFieldOrder() const
     QLocale::Country country = getCountry();
 
     if ((country == QLocale::China) || (country == QLocale::Taiwan))
-        fieldOrder << "country" << "region" << "locale" << "street" << "zip";
+        fieldOrder << "country" << "region" << "locale" << "street" << "street2" << "zip";
     else if (country == QLocale::Japan)
-        fieldOrder << "country" << "zip" << "region" << "locale" << "street";
+        fieldOrder << "country" << "zip" << "region" << "locale" << "street" << "street2";
     else if ((country == QLocale::DemocraticRepublicOfKorea) ||
              (country == QLocale::RepublicOfKorea))
-        fieldOrder << "country" << "region" << "locale" << "street" << "zip";
+        fieldOrder << "country" << "region" << "locale" << "street" << "street2" << "zip";
     else
-        fieldOrder << "street" << "locale" << "region" << "zip" << "country";
+        fieldOrder << "street" << "street2" << "locale" << "region" << "zip" << "country";
 
     return fieldOrder;
 }
@@ -143,7 +143,7 @@ bool LocaleUtils::initCollator(int collType, QString locale)
     return false;
 }
 
-bool LocaleUtils::isLessThan(QString lStr, QString rStr)
+int LocaleUtils::compare(QString lStr, QString rStr)
 {
     if (lStr == "#") {
         return false;
@@ -165,6 +165,20 @@ bool LocaleUtils::isLessThan(QString lStr, QString rStr)
 
     Collator::EComparisonResult res = mColl->compare(lUniStr, rUniStr);
     if (res == Collator::LESS)
+        return -1;
+
+    if (res == Collator::GREATER)
+        return 1;
+
+    return 0;
+}
+
+bool LocaleUtils::isLessThan(QString lStr, QString rStr)
+{
+    int ret;
+
+    ret = compare(lStr, rStr);
+    if (ret == -1) 
         return true;
 
     return false;
