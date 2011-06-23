@@ -102,7 +102,6 @@ public:
                                      QStringList urllinks,  QStringList urlcontexts, QDate birthday, QString notetext);
 
     Q_INVOKABLE QMap<QString, QString> availableAccounts() const;
-    Q_INVOKABLE QStringList availableContacts(QString accountId) const;
 
     Q_INVOKABLE void launch (QString cmd) {
         QProcess::startDetached (cmd);
