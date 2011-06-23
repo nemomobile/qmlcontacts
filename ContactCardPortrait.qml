@@ -14,7 +14,7 @@ import TelepathyQML 0.1
 Image {
     id: contactCardPortrait
 
-    height: photo.height
+    height: photo.height + itemMargins
     width: parent.width
     anchors.right: parent.right
 
@@ -22,6 +22,7 @@ Image {
     property ProxyModel sortPeople : sortModel
     property int sourceIndex: sortPeople.getSourceRow(index)
     property string stringTruncater: qsTr("...")
+    property int itemMargins: 10
 
     function getTruncatedString(valueStr, stringLen) {
         var MAX_STR_LEN = stringLen;
@@ -81,17 +82,18 @@ Image {
     signal clicked
     signal pressAndHold(int mouseX, int mouseY, string uuid, string name)
 
-    source: "image://themedimage/widgets/common/avatar/avatar-inactive-overlay";
+    source: "image://themedimage/widgets/common/list/list"
     opacity: (dataPeople.data(sourceIndex, PeopleModel.IsSelfRole) ? .3 : 1)
 
     Image{
         id: photo
         fillMode: Image.PreserveAspectFit
         smooth: true
-        width: 100
-        height: 100
+        width: theme_listBackgroundPixelHeightTwo
+        height: theme_listBackgroundPixelHeightTwo
         source: (dataAvatar ? dataAvatar :"image://themedimage/widgets/common/avatar/avatar-default")
-        anchors {left: contactCardPortrait.left}
+        anchors {left: contactCardPortrait.left;
+                 top: parent.top; topMargin: itemMargins}
         onStatusChanged: {
             if(photo.status == Image.Error || photo.status == Image.Null){
                 photo.source = "image://themedimage/widgets/common/avatar/avatar-default";

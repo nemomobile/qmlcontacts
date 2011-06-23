@@ -388,7 +388,7 @@ Flickable {
             }
             Image {
                 id: delete_button
-                source: "image://themedimage/icon/internal/contact-information-delete"
+                source: "image://themedimage/icons/internal/contact-information-delete"
                 width: 36
                 height: 36
                 anchors {verticalCenter: birthday.verticalCenter; right: parent.right; rightMargin: 10}
@@ -397,7 +397,7 @@ Flickable {
                     id: mouse_delete
                     anchors.fill: parent
                     onPressed: {
-                        delete_button.source = "image://themedimage/icon/internal/contact-information-delete-active"
+                        delete_button.source = "image://themedimage/icons/internal/contact-information-delete-active"
                     }
                     onClicked: {
                         data_birthday.text = "";
