@@ -15,10 +15,12 @@
 class SettingsDataStore: public QObject
 {
     Q_OBJECT
+    Q_DISABLE_COPY(SettingsDataStore)
 
-public:
+private:
     explicit SettingsDataStore(QObject *parent = 0);
 
+public:
     static SettingsDataStore *self();
     void setDefaults();
     QString getSettingsStoreFileName();
