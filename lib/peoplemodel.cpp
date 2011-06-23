@@ -320,6 +320,8 @@ QVariant PeopleModel::data(int row, int role) const
                  contact.details<QContactPhoneNumber>()) {
             if (phone.contexts().count() > 0)
                 list << phone.contexts().at(0);
+            else if (phone.subTypes().count() > 0)
+                list << phone.subTypes().at(0);
         }
         return list;
     }
@@ -850,7 +852,12 @@ bool PeopleModel::createPersonModel(QString avatarUrl, QString thumbUrl, QString
 
     for(int i=0; i < phonenumbers.size(); i++){
         QContactPhoneNumber phone;
-        phone.setContexts(phonecontexts.at(i));
+        QString context = phonecontexts.at(i);
+        // Mobile is a subType for QContact, not a context
+        if(context == QContactPhoneNumber::SubTypeMobile)
+          phone.setSubTypes(context);
+        else
+          phone.setContexts(context);
         phone.setNumber(phonenumbers.at(i));
         contact.saveDetail(&phone);
     }
@@ -991,7 +998,12 @@ void PeopleModel::editPersonModel(QString uuid, QString avatarUrl, QString first
 
     for(int i=0; i < phonenumbers.size(); i++){
         QContactPhoneNumber phone;
-        phone.setContexts(phonecontexts.at(i));
+        QString context = phonecontexts.at(i);
+        // Mobile is a subType for QContact, not a context
+        if(context == QContactPhoneNumber::SubTypeMobile)
+          phone.setSubTypes(context);
+        else
+          phone.setContexts(context);
         phone.setNumber(phonenumbers.at(i));
         contact.saveDetail(&phone);
     }
