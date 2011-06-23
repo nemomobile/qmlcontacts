@@ -65,21 +65,17 @@ PeopleModel::PeopleModel(QObject *parent)
     //MeCard feature not added yet
     if (priv->manager->hasFeature(QContactManager::SelfContact, QContactType::TypeContact)) {
         // self contact supported by manager - let's try fetch the me card
-        QContactManager::Error error(QContactManager::NoError);
         const QContactLocalId meCardId(priv->manager->selfContactId());
 
         //if we have a valid selfId
-        if ((error == QContactManager::NoError) && (meCardId != 0)) {
-            qDebug() << Q_FUNC_INFO << "valid selfId, error" << error << "id " << meCardId;
-            //check if contact with selfId exists
-            QContactLocalIdFilter idListFilter;
-            idListFilter.setIds(QList<QContactLocalId>() << meCardId);
-
-            QContactFetchRequest *meFetchRequest = new QContactFetchRequest(this);
+        if (meCardId != 0) {
+            qDebug() << Q_FUNC_INFO << "valid selfId, id " << meCardId;
+            // Fetch self contact to check it
+            QContactFetchByIdRequest *meFetchRequest = new QContactFetchByIdRequest(this);
             connect(meFetchRequest,
                     SIGNAL(stateChanged(QContactAbstractRequest::State)),
                     SLOT(onMeFetchRequestStateChanged(QContactAbstractRequest::State)));
-            meFetchRequest->setFilter(idListFilter);
+            meFetchRequest->setLocalIds(QList<QContactLocalId>() << meCardId);
             meFetchRequest->setManager(priv->manager);
             meFetchRequest->start();
         } else {
@@ -105,34 +101,31 @@ PeopleModel::PeopleModel(QObject *parent)
 }
 
 // for Me card support
-void PeopleModel::createMeCard()
+void PeopleModel::createMeCard(QContact me)
 {
-  QContact contact;
-  QContactId contactId;
-  contactId.setLocalId(priv->manager->selfContactId());
+  qDebug() << Q_FUNC_INFO << me;
 
-  qDebug() << Q_FUNC_INFO << "self contact does not exist, creating";
-  contact.setId(contactId);
-
-  QContactGuid guid;
-  guid.setGuid(QUuid::createUuid().toString());
-  if (!contact.saveDetail(&guid))
-    qWarning() << Q_FUNC_INFO << "failed to save guid in mecard contact";
+  QContactGuid guid = me.detail<QContactGuid>();
+  if (guid.isEmpty()) {
+    guid.setGuid(QUuid::createUuid().toString());
+    if (!me.saveDetail(&guid))
+      qWarning() << Q_FUNC_INFO << "failed to save guid in mecard contact";
+  }
 
   QContactAvatar avatar;
   avatar.setImageUrl(QUrl("image://themedimage/widgets/common/avatar/avatar-default"));
-  if (!contact.saveDetail(&avatar))
+  if (!me.saveDetail(&avatar))
       qWarning() << Q_FUNC_INFO << "failed to save avatar in mecard contact";
 
   QContactName name;
   name.setFirstName(QObject::tr(" Me","Default string to describe self if no self contact information found, default created with [Me] as firstname"));
   name.setLastName("");
-  if (!contact.saveDetail(&name))
+  if (!me.saveDetail(&name))
     qWarning() << Q_FUNC_INFO << "failed to save mecard name";
 
     QContactFavorite fav;
     fav.setFavorite(false);
-    if (!contact.saveDetail(&fav))
+    if (!me.saveDetail(&fav))
         qWarning() << "[PeopleModel] failed to save mecard favorite to " << fav.isFavorite();
 
   bool isSelf = true;
@@ -142,7 +135,7 @@ void PeopleModel::createMeCard()
     priv->settings->setValue(key, isSelf);
   }
 
-  queueContactSave(contact);
+  queueContactSave(me);
 }
 
 PeopleModel::~PeopleModel()
@@ -584,8 +577,11 @@ void PeopleModel::addContacts(const QList<QContact> contactsList,
         qDebug() << Q_FUNC_INFO << "Adding contact " << contact.id() << " local " << contact.localId();
         QContactLocalId id = contact.localId();
 
-        priv->contactIds.push_back(id);
-        priv->idToIndex.insert(id, size++);
+        // Make sure we don't duplicate contacts
+        if (!priv->idToIndex.contains(id)) {
+          priv->contactIds.push_back(id);
+          priv->idToIndex.insert(id, size++);
+        }
         priv->idToContact.insert(id, contact);
 
         QContactGuid guid = contact.detail<QContactGuid>();
@@ -1400,26 +1396,22 @@ void PeopleModel::onRemoveStateChanged(QContactAbstractRequest::State requestSta
 // For Me card support
 void PeopleModel::onMeFetchRequestStateChanged(QContactAbstractRequest::State requestState)
 {
-    QContactFetchRequest *fetchRequest = checkRequest<QContactFetchRequest>(sender(), requestState);
+    QContactFetchByIdRequest *fetchRequest = checkRequest<QContactFetchByIdRequest>(sender(), requestState);
     if (!fetchRequest)
         return;
 
     // Check if we need to save Me contact again
-    bool saveMe = false;
-
     if (fetchRequest->contacts().size() == 0) {
         qDebug() << Q_FUNC_INFO << "No Me contact, saving one";
-        saveMe = true;
+        createMeCard();
     } else {
-        const QContactName &name = fetchRequest->contacts()[0].detail<QContactName>();
-        if (name.firstName().isEmpty() || name.firstName().isNull()) {
-            qDebug() << Q_FUNC_INFO << "Empty value for Me contact; saving again";
-            saveMe = true;
+        QContact &me = fetchRequest->contacts().first();
+        QContactName name = me.detail<QContactName>();
+        if (name.firstName().isEmpty()) {
+            qDebug() << Q_FUNC_INFO << "Empty first name for Me contact; updating it";
+            createMeCard(me);
         }
     }
-
-    if (saveMe)
-        createMeCard();
 
     fetchRequest->deleteLater();
 }

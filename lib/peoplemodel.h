@@ -142,7 +142,7 @@ private slots:
     void contactsRemoved(const QList<QContactLocalId>& contactIds);
     void dataReset();
     void savePendingContacts();
-    void createMeCard();
+    void createMeCard(QContact me = QContact());
     void vCardFinished(QVersitWriter::State state);
 
 private:
