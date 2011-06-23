@@ -269,13 +269,11 @@ QVariant PeopleModel::data(int row, int role) const
     }
     case OnlineServiceProviderRole:
     {
-        //REVISIT: We should use ServiceProvider, but this isn't supported
-        //BUG: https://bugs.meego.com/show_bug.cgi?id=13454
         QStringList list;
         foreach (const QContactOnlineAccount& account,
                  contact.details<QContactOnlineAccount>()){
-            if(account.subTypes().size() > 0)
-                list << account.subTypes().at(0);
+            if(!account.serviceProvider().isNull())
+                list << account.serviceProvider();
         }
         return list;
     }
@@ -864,12 +862,7 @@ bool PeopleModel::createPersonModel(QString avatarUrl, QString thumbUrl, QString
     for(int i =0; i < accounturis.size(); i++){
         QContactOnlineAccount account;
         account.setAccountUri(accounturis.at(i));
-
-        //REVISIT: We should use setServiceProvider, but this isn't supported
-        //setProtocol() would be a better choice, but it also isn't working as expected
-        //BUG: https://bugs.meego.com/show_bug.cgi?id=13454
-        //account.setServiceProvider(serviceproviders.at(i));
-        account.setSubTypes(serviceproviders.at(i));
+        account.setServiceProvider(serviceproviders.at(i));
 
         contact.saveDetail(&account);
     }
@@ -1017,12 +1010,7 @@ void PeopleModel::editPersonModel(QString uuid, QString avatarUrl, QString first
     for (int i =0; i < accounturis.size(); i++){
         QContactOnlineAccount account;
         account.setAccountUri(accounturis.at(i));
-
-        //REVISIT: We should use setServiceProvider, but this isn't supported
-        //setProtocol() would be a better choice, but it also isn't working as expected
-        //BUG: https://bugs.meego.com/show_bug.cgi?id=13454
-        //account.setServiceProvider(serviceproviders.at(i));
-        account.setSubTypes(serviceproviders.at(i));
+        account.setServiceProvider(serviceproviders.at(i));
 
         contact.saveDetail(&account);
     }
