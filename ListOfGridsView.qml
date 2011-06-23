@@ -109,6 +109,9 @@ Flickable {
     Connections {
         target: sortPeople
         onModelReset: createItems()
+        onDataChanged: createItems()
+        onRowsInserted: createItems()
+        onRowsRemoved: createItems()
     }
 
     Connections {
