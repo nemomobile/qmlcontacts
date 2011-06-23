@@ -80,7 +80,7 @@ Flickable {
 	    restoredLastName = restoreOnce("contact.lastName", "")
 	    restoredCompany = restoreOnce("contact.company", "")
 	    restoredNotes = restoreOnce("contact.notes", "")
-	    restoredBirthday = restoreOnce("contact.birthday", "2011-01-01")
+	    restoredBirthday = restoreOnce("contact.birthday", "")
 	}
     }
 
@@ -413,7 +413,6 @@ Flickable {
             id:datePicker
             parent: editViewPortrait
 
-            selectedDate: editViewPortrait.restoredBirthday
             property date datePicked
             property string selectedBirthday: useRestoredBirthday(editViewPortrait.restoredBirthday) ? Qt.formatDate(editViewPortrait.restoredBirthday, window.dateFormat) : ""
 
@@ -429,6 +428,11 @@ Flickable {
                 datePicked = selectedDate;
                 data_birthday.text = Qt.formatDate(selectedDate, window.dateFormat);
                 data_birthday.state = (data_birthday.state == "default" ? "edit" : data_birthday.state)
+            }
+
+            Component.onCompleted: {
+                if (newContactPage.restoredBirthday != "")
+                    selectedDate: newContactPage.restoredBirthday
             }
         }
 
