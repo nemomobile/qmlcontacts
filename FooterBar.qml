@@ -158,7 +158,7 @@ Item {
                         id: letter
                         text: dletter
                         font.pixelSize: theme_fontPixelSizeLargest2
-                        color: theme_fontColorInactive
+                        color: theme_fontColorContactAZBAR
 
                     }
                     Image{
@@ -187,7 +187,7 @@ Item {
                     name: "pressed"; when: mouseArea.pressed == true
                     PropertyChanges {
                         target: letter
-                        color: theme_fontColorSelected
+                        color: theme_fontColorContactAZBARHighlight
                     }
                     PropertyChanges {
                         target: slider

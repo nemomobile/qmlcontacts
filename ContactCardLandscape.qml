@@ -35,7 +35,7 @@ Item {
 
     Image {
         id: contactWithAvatar
-        width: 104
+        width: theme_listBackgroundPixelHeightTwo + itemMargins
         height: width
         anchors.centerIn: parent
         asynchronous: true

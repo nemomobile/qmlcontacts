@@ -87,8 +87,9 @@ Image {
 
     Image{
         id: photo
-        fillMode: Image.PreserveAspectFit
+        fillMode: Image.PreserveAspectCrop
         smooth: true
+        clip: true
         width: theme_listBackgroundPixelHeightTwo
         height: theme_listBackgroundPixelHeightTwo
         source: (dataAvatar ? dataAvatar :"image://themedimage/widgets/common/avatar/avatar-default")
