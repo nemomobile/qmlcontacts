@@ -27,40 +27,67 @@ Item {
     property bool dataFavorite: dataPeople.data(sourceIndex, PeopleModel.FavoriteRole)
     property string dataUuid: dataPeople.data(sourceIndex, PeopleModel.UuidRole);
     property int iconsMargin: 6
+    property int borderMargins: 3 
+    property int itemMargins: 15
 
     signal clicked
     signal pressAndHold(int mouseX, int mouseY, string uuid, string name)
 
-    Item {
+    Image {
         id: contactWithAvatar
-        anchors.fill: parent
+        width: 104
+        height: width
+        anchors.centerIn: parent
+        asynchronous: true
         visible: avatar.status == Image.Ready
-        clip: true
 
-        Image {
-            id: avatar
-            smooth: true
+        BorderImage {
+            id: borderImg
+            anchors.fill:parent
+            z: -10
             asynchronous: true
-            anchors { fill: parent; centerIn: parent }
-            fillMode: Image.PreserveAspectCrop
-            source: dataAvatar
-        }
+            source: "image://themedimage/widgets/apps/media/photo-border"
+            border.top: borderMargins
+            border.bottom: borderMargins
+            border.left: borderMargins
+            border.right: borderMargins
 
-        Image {
-            id: nameOverlay
-            anchors.bottom: parent.bottom
-            anchors.horizontalCenter: parent.horizontalCenter
-            source: "image://theme/contacts/contact_thumb_bg"
-        }
+            Item {
+                id: wrapper
+                anchors.fill: parent
+                anchors.topMargin: borderImg.border.top
+                anchors.bottomMargin: borderImg.border.bottom
+                anchors.leftMargin: borderImg.border.left
+                anchors.rightMargin: borderImg.border.right
 
-        Image {
-            id: border
-            source: "image://theme/contacts/contact_thumb"
+                Image {
+                    id: avatar
+                    smooth: true
+                    asynchronous: true
+                    anchors { fill: parent; }
+                    fillMode: Image.PreserveAspectCrop
+                    source: dataAvatar
+                    clip: true
+                    z: 0
+                }
+
+                Image {
+                    id: nameOverlay
+                    width: parent.width
+                    anchors.bottom: parent.bottom
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    source: "image://theme/contacts/contact_thumb_bg"
+                    fillMode: Image.PreserveAspectCrop
+                    clip: true
+                }
+            }
         }
     }
 
     Image {
         id: contactWithNoAvatar
+        width: theme_listBackgroundPixelHeightTwo + itemMargins
+        height: theme_listBackgroundPixelHeightTwo + itemMargins
         source: "image://themedimage/widgets/common/avatar/avatar-default"
         visible: avatar.status != Image.Ready
     }
@@ -76,7 +103,7 @@ Item {
             bottomMargin: 9
         }
         elide: Text.ElideRight
-        font.pixelSize: theme_fontPixelSizeLargest2
+        font.pixelSize: theme_fontPixelSizeLargest
         color: theme_fontColorMediaHighlight;
         smooth: true
         text: {
