@@ -16,7 +16,7 @@ OBJECTS_DIR = .obj
 MOC_DIR = .moc
 
 # For building within the tree
-INCLUDEPATH += ../lib
+INCLUDEPATH += ../lib /usr/include/mlite
 LIBS += -L../lib -lmeegocontacts
 
 # Input
