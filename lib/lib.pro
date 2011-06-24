@@ -11,11 +11,12 @@ CONFIG += qt \
         link_pkconfig
 
 
-PKGCONFIG += QtContacts QtVersit icu-uc icu-i18n meegolab-ux-components
+PKGCONFIG += QtContacts QtVersit icu-uc icu-i18n meegolocale mlite
 
 OBJECTS_DIR = .obj
 MOC_DIR = .moc
-LIBS += -licuuc -licui18n -lmeegolocale
+LIBS += -licuuc -licui18n
+INCLUDEPATH += /usr/include/mlite
 
 MOBILITY = contacts versit
 
