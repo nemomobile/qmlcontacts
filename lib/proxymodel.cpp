@@ -25,6 +25,7 @@ public:
     SettingsDataStore *settings;
     LocaleUtils *localeHelper;
     QFileSystemWatcher *settingsFileWatcher;
+    meego::Locale *locale;
 };
 
 ProxyModel::ProxyModel(QObject *parent)
@@ -34,6 +35,7 @@ ProxyModel::ProxyModel(QObject *parent)
     priv->filterType = FilterAll;
     priv->settings = SettingsDataStore::self();
     priv->localeHelper = LocaleUtils::self();
+    priv->locale = new meego::Locale();
     setDynamicSortFilter(true);
     setFilterKeyColumn(-1);
 
@@ -222,13 +224,11 @@ bool ProxyModel::lessThan(const QModelIndex& left,
     if (!priv->localeHelper->checkForAlphaChar(rStr))
         return true;
 
-    meego::Locale locale;
-
-    if (locale.comparePhoneBook(lStr, rStr) == 0) {
+    if (priv->locale->comparePhoneBook(lStr, rStr) == 0) {
         lStr += findString(leftRow, model, ProxyModel::Secondary);
         rStr += findString(rightRow, model, ProxyModel::Secondary);
-        return locale.lessThanPhoneBook(lStr, rStr);
+        return priv->locale->lessThanPhoneBook(lStr, rStr);
     }
             
-    return locale.lessThanPhoneBook(lStr, rStr);
+    return priv->locale->lessThanPhoneBook(lStr, rStr);
 }

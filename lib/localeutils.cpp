@@ -12,7 +12,6 @@
 #include <unicode/uchriter.h>
 
 #include "localeutils.h"
-#include "meegolocale.h"
 #include "peoplemodel.h"
 
 LocaleUtils *LocaleUtils::mSelf = 0;
@@ -20,10 +19,12 @@ LocaleUtils *LocaleUtils::mSelf = 0;
 LocaleUtils::LocaleUtils(QObject *parent) :
     QObject(parent)
 {
+    locale = new meego::Locale();
 }
 
 LocaleUtils::~LocaleUtils()
 {
+    delete locale;
 }
 
 LocaleUtils *LocaleUtils::self()
@@ -118,10 +119,9 @@ QString LocaleUtils::getExemplarForString(QString str)
 {
     QStringList indexes = getIndexBarChars();
     int i = 0;
-    meego::Locale locale;
 
     for (; i < indexes.size(); i++) {
-        if (locale.lessThanPhoneBook(str, indexes.at(i))) {
+        if (locale->lessThanPhoneBook(str, indexes.at(i))) {
             if (i == 0) {
                 return str;
             }
