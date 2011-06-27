@@ -20,6 +20,14 @@ Item {
     signal addNewContact
     signal pressAndHold(int x, int y)
 
+    EmptyContacts {
+        id: emptyListView
+        anchors.verticalCenter: groupedViewLandscape.verticalCenter
+        onClicked: {
+            groupedViewLandscape.addNewContact();
+        }
+    }
+
     Item {
         id: emptyOrCardListView
         anchors.fill: parent
@@ -70,22 +78,17 @@ Item {
                     }
                 }
             }
-
-            EmptyContacts {
-                id: emptyListView
-                anchors.top: parent.bottom
-                onClicked: {
-                    groupedViewLandscape.addNewContact();
-                }
-            }
-
-            Binding {target: emptyListView;
-                     property: "visible"; value: cardListView.count == 1 }
         }
-
-        Binding {target: cardListView;
-                 property: "visible"; value: cardListView.count > 0 }
     }
+
+    Binding {target: emptyListView;
+             property: "visible";
+             value: (((cardListView.count == 1) &&
+                    (peopleModel.isSelfContact(cardListView.cUuid))) ? 1 : 0);}
+
+    Binding {target: cardListView;
+             property: "visible";
+             value: ((cardListView.count > 0) ? 1 : 0);}
 
     onPressAndHold: {
         objectMenu.setPosition(x, y)
