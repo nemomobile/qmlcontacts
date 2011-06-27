@@ -29,6 +29,7 @@ public:
     Q_INVOKABLE bool needPronounciationFields() const;
     Q_INVOKABLE QStringList getIndexBarChars();
 
+    bool isLessThan(QString lStr, QString rStr);
     bool checkForAlphaChar(QString str);
     Q_INVOKABLE QString getExemplarForString(QString str);
     QString getBinForString(QString str);

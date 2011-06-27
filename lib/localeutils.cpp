@@ -106,6 +106,16 @@ bool LocaleUtils::needPronounciationFields() const {
     return false;
 }
 
+bool LocaleUtils::isLessThan(QString lStr, QString rStr)
+{
+    if (lStr == "#")
+        return false;
+    if (rStr == "#")
+        return true;
+
+    return locale->lessThanPhoneBook(lStr, rStr);
+}
+
 bool LocaleUtils::checkForAlphaChar(QString str)
 {
     const ushort *strShort = str.utf16();
@@ -121,10 +131,14 @@ QString LocaleUtils::getExemplarForString(QString str)
     int i = 0;
 
     for (; i < indexes.size(); i++) {
-        if (locale->lessThanPhoneBook(str, indexes.at(i))) {
-            if (i == 0) {
+        if (locale->comparePhoneBook(str, indexes.at(i)) == 0)
+            return indexes.at(i);
+
+        if (isLessThan(str, indexes.at(i))) {
+            if (i == 0)
                 return str;
-            }
+            if (i == indexes.size() - 1)
+                return indexes.at(i);
             return indexes.at(i-1);
         }
     }
