@@ -142,7 +142,7 @@ Image {
 
     Image {
         id: favorite
-        source: (dataPeople.data(sourceIndex, PeopleModel.FavoriteRole) ? "image://themedimage/icons/actionbar/favorite-selected" : "image://themedimage/icons/actionbar/favorite-selected" )
+        source: (dataPeople.data(sourceIndex, PeopleModel.FavoriteRole) ? "image://themedimage/icons/actionbar/favorite-selected" : "image://themedimage/icons/actionbar/favorite" )
         opacity: (dataMeCard ? 0 : 1)
         anchors {right: contactCardPortrait.right; top: nameFirst.top; rightMargin: photo.height/8;}
     }

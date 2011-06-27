@@ -19,7 +19,6 @@ Released (Code released in image)
 Verified (Code verified by QA on valid image)
 
 2.==Opens==
-NEED FONT COLORS FOR INDEX BAR!
 Contact Picker needs index bar/search bar
 Ringtones flow? - Done need branch to merge
 Need smaller graphic for smaller devices for landscape view landing screen
@@ -62,21 +61,13 @@ SMS/Call from details view
 Unable to find SMS, Call options in contextual menu of contact
 Allow user random input to add email in contact edit page
 Allow user input non number to add phone number
-Can't set language/region/locale in settings
-Change collator when locale / language settings change
 
 5.==Filed Bugs== 
 Bug 	Owner	Type	Priority	Description                                      				DueDate
 Dbus call to import vCard 
-15914   Kaitlin TBUG    MED	 GLS - i18n  Asian langs -should be default settings				1.2.2
 15434	Connie	TBUG	MED	 Thumbnail for the avatar needs to be used instead of full size image	        1.2.2      
-18851  nor  Hig  IA  connie.berardi@intel.com  NEW  ---  Long and inconsistent loading time (4-7 sec) to add new contact  
-15914  maj  Hig  IA  kaitlin.rupert@linux.intel.com  ASSIGNED  ---  GLS - i18n - Contacts: Asian langs - "last name first" display order and "sorting by last names" should be default settings  
 18184  enh  Med  IA  daewon.park@windriver.com  ASSIGNED  ---  Adding multiple contacts in one instance from email address field  
 15434  nor  Med  IA  geoff@linux.intel.com  ASSIGNED  ---  Thumbnail needs to be used instead of avatar to reduce memory footprint  
-18580  nor  Und  ---  kaitlin.rupert@linux.intel.com  ASSIGNED  ---  [L10N] Missing comments  
-18718  nor  Und  ---  kaitlin.rupert@linux.intel.com  ASSIGNED  ---  [I18N] Please add disambiguation to ContactCardPortrait:102 and :105  
-18886  nor  Und  ---  kaitlin.rupert@linux.intel.com  ASSIGNED  ---  Add a contact image should display below the meCard, not under it  
  [SEC]  nor  Med  IA  nicholas.e.richards@intel.com  NEW  ---  Platform : Contacts: Email ids with improper format are accepted by “Email Field”  
  [SEC]  nor  Med  IA  nicholas.e.richards@intel.com  NEW  ---  Platform : Alphabetic and special characters are accepted by the “mobile number field”  
  [SEC]  maj  Med  IA  kaitlin.rupert@linux.intel.com  ASSIGNED  ---  Platform : Contacts: Unable to view the online contacts alone using "online view" mode in contacts  

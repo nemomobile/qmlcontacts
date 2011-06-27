@@ -135,7 +135,7 @@ Item {
     Image {
         id: favoriteIcon
         height: 17; width: 17 // TODO this is temporary until a properly sized asset is added to the theme
-        anchors { right: parent.right; rightMargin: width + (2*iconsMargin); top: parent.top; topMargin: iconsMargin }
+        anchors { right: parent.right; rightMargin: iconsMargin; top: parent.top; topMargin: iconsMargin }
         source: "image://themedimage/icons/actionbar/favorite-selected"
         visible: dataFavorite
     }
