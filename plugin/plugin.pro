@@ -8,7 +8,7 @@ CONFIG += qt \
         link_pkgconfig \
         mobility
 
-PKGCONFIG += QtContacts QtVersit
+PKGCONFIG += QtContacts QtVersit meegolocale
 
 TARGET = $$qtLibraryTarget($$TARGET)
 DESTDIR = $$TARGET
@@ -17,7 +17,7 @@ MOC_DIR = .moc
 
 # For building within the tree
 INCLUDEPATH += ../lib /usr/include/mlite
-LIBS += -L../lib -lmeegocontacts
+LIBS += -L../lib -lmeegocontacts -lmeegolocale
 
 # Input
 SOURCES += \
