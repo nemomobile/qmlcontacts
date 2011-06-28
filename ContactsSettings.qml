@@ -84,7 +84,6 @@ AppPage {
     Column {
         id: contents
         width: parent.width
-        spacing: 2
 
         Repeater {
             model: settingsList
@@ -99,7 +98,7 @@ AppPage {
 
         Image {
             id: sortSettingItem
-            source: "image://themedimage/images/settings/btn_settingentry_up"
+            source: "image://themedimage/images/pulldown_box"
             width: parent.width
 
             Text {
