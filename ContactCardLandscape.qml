@@ -33,6 +33,58 @@ Item {
     signal clicked
     signal pressAndHold(int mouseX, int mouseY, string uuid, string name)
 
+    function getOnlineStatusIcon(presence) {
+        var icon = "";
+        switch (presence) {
+            case TelepathyTypes.ConnectionPresenceTypeAvailable:
+                icon = "image://themedimage/icons/status/status-available"
+                break;
+            case TelepathyTypes.ConnectionPresenceTypeBusy:
+                icon = "image://themedimage/icons/status/status-busy"
+                break;
+            case TelepathyTypes.ConnectionPresenceTypeAway:
+            case TelepathyTypes.ConnectionPresenceTypeExtendedAway:
+                icon = "image://themedimage/icons/status/status-idle";
+                break;
+            case TelepathyTypes.ConnectionPresenceTypeHidden:
+            case TelepathyTypes.ConnectionPresenceTypeUnknown:
+            case TelepathyTypes.ConnectionPresenceTypeError:
+            case TelepathyTypes.ConnectionPresenceTypeOffline:
+            default:
+                icon = "image://themedimage/icons/status/status-idle";
+        }
+        return icon;
+    }
+
+    Connections {
+        target: accountsModel
+        ignoreUnknownSignals: true
+        onComponentsLoaded: {
+            var uri = dataPeople.data(sourceIndex,
+                                      PeopleModel.OnlineAccountUriRole);
+            var provider = dataPeople.data(sourceIndex,
+                                           PeopleModel.OnlineServiceProviderRole);
+
+            if ((uri.length < 1) || (provider.length < 1))
+               return;
+
+            var account = provider[0].split("\n");
+            if (account.length != 2)
+                return;
+            account = account[1];
+
+            var buddy = uri[0].split(") ");
+            if (buddy.length != 2)
+                return;
+            buddy = buddy[1];
+
+            var contactItem = accountsModel.contactItemForId(account, buddy);
+            var presence = contactItem.data(AccountsModel.PresenceTypeRole);
+
+            statusIcon.source = getOnlineStatusIcon(presence);
+        }
+    }
+
     Image {
         id: contactWithAvatar
         width: theme_listBackgroundPixelHeightTwo + itemMargins
@@ -120,22 +172,13 @@ Item {
     Image {
         id: statusIcon
         anchors { right: parent.right; top: parent.top; rightMargin: iconsMargin; topMargin: iconsMargin }
-        source: {
-            var imStatus = getOnlineStatus();
-            var icon = "";
-            if (imStatus == TelepathyTypes.ConnectionPresenceTypeAvailable)
-                icon = "image://themedimage/contacts/status_available_sml";
-            else if (imStatus == TelepathyTypes.ConnectionPresenceTypeBusy)
-                icon = "image://themedimage/contacts/status_busy_sml";
-            // else: no icon
-            return icon;
-        }
+        source: "image://themedimage/icons/status/status-idle"
     }
 
     Image {
         id: favoriteIcon
         height: 17; width: 17 // TODO this is temporary until a properly sized asset is added to the theme
-        anchors { right: parent.right; rightMargin: iconsMargin; top: parent.top; topMargin: iconsMargin }
+        anchors { right: parent.right; rightMargin: width + (2*iconsMargin); top: parent.top; topMargin: iconsMargin }
         source: "image://themedimage/icons/actionbar/favorite-selected"
         visible: dataFavorite
     }
@@ -161,26 +204,6 @@ Item {
                 contactCardLandscape.pressAndHold(map.x, map.y, dataUuid, "");
             }
         }
-    }
-
-    function getOnlineStatus() {
-        if ((dataPeople.data(sourceIndex, PeopleModel.OnlineAccountUriRole).length < 1)
-                || (dataPeople.data(sourceIndex, PeopleModel.OnlineServiceProviderRole).length < 1))
-            return "";
-
-        var account = dataPeople.data(sourceIndex, PeopleModel.OnlineServiceProviderRole)[0].split("\n");
-        if (account.length != 2)
-            return "";
-        account = account[1];
-
-        var buddy = dataPeople.data(sourceIndex, PeopleModel.OnlineAccountUriRole)[0].split(") ");
-        if (buddy.length != 2)
-            return "";
-        buddy = buddy[1];
-
-        var contactItem = accountsModel.contactItemForId(account, buddy);
-        var presence = contactItem.data(AccountsModel.PresenceTypeRole);
-        return presence;
     }
 
     function getTruncatedString(valueStr, stringLen) {
