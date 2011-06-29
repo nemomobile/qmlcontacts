@@ -12,12 +12,13 @@ import MeeGo.Components 0.1
 Item {
     id: emailRect
     height: childrenRect.height
-    width:  parent.width
+    width: parent.width
 
     property variant newDetailsModel: null
     property int rIndex: -1
     property bool updateMode: false 
     property bool validInput: false 
+    property int itemMargins: 10
 
     property string contextHome : qsTr("Home")
     property string contextWork : qsTr("Work")
@@ -103,12 +104,12 @@ Item {
     DropDown {
         id: emailComboBox
 
-        anchors {left: parent.left; leftMargin: 10;}
+        anchors {left: parent.left; leftMargin: itemMargins;}
         titleColor: theme_fontColorNormal
 
-        width: 250
+        width: Math.round(parent.width/2) - 4*anchors.leftMargin
         minWidth: width
-        maxWidth: width + 50
+        maxWidth: width
 
         model: [contextHome, contextWork, contextOther]
 
@@ -121,8 +122,8 @@ Item {
         id: data_email
         text: (updateMode) ? newDetailsModel.get(rIndex).email : ""
         defaultText: defaultEmail
-        width: 400
-        anchors {left:emailComboBox.right; leftMargin: 10;}
+        width: Math.round(parent.width/2) - 4*anchors.leftMargin
+        anchors {left:emailComboBox.right; leftMargin: itemMargins;}
         inputMethodHints: Qt.ImhEmailCharactersOnly
     }
 

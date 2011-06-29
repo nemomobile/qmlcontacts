@@ -12,12 +12,13 @@ import MeeGo.Components 0.1
 Item {
     id: webRect
     height: childrenRect.height
-    width:  parent.width
+    width: parent.width
 
     property variant newDetailsModel: null 
     property int rIndex: -1
     property bool updateMode: false 
     property bool validInput: false 
+    property int itemMargins: 10
 
     property string defaultWeb : qsTr("Site")
     property string bookmarkWeb : qsTr("Bookmark", "Noun")
@@ -102,12 +103,12 @@ Item {
     DropDown {
         id: urlComboBox
 
-        anchors {left: parent.left; leftMargin: 10;}
+        anchors {left: parent.left; leftMargin: itemMargins;}
         titleColor: theme_fontColorNormal
 
-        width: 250
+        width: Math.round(parent.width/2) - 4*anchors.leftMargin
         minWidth: width
-        maxWidth: width + 50
+        maxWidth: width
 
         model: [favoriteWeb, bookmarkWeb]
 
@@ -120,8 +121,8 @@ Item {
         id: data_url
         text: (updateMode) ? newDetailsModel.get(rIndex).web : ""
         defaultText: defaultWeb
-        width: 400
-        anchors {left:urlComboBox.right; leftMargin: 10;}
+        width: Math.round(parent.width/2) - 4*anchors.leftMargin
+        anchors {left:urlComboBox.right; leftMargin: itemMargins;}
         inputMethodHints: Qt.ImhUrlCharactersOnly
     }
 

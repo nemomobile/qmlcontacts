@@ -20,6 +20,7 @@ Item {
     property int rIndex: -1
     property bool updateMode: false 
     property bool validInput: false
+    property int itemMargins: 10
 
     //: Instant Messaging Accounts for this contact
     property string imLabel : qsTr("Instant messaging")
@@ -167,12 +168,12 @@ Item {
     DropDown {
         id: imComboBox
  
-        anchors {left: parent.left; leftMargin: 36}
+        anchors {left: parent.left; leftMargin: itemMargins}
         titleColor: theme_fontColorNormal
  
-        width: 250
-        minWidth: width
-        maxWidth: width + 50
+        width: Math.round(parent.width/2) - 4*anchors.leftMargin
+        minWidth: width 
+        maxWidth: width
  
         model: getAvailableAccountTypes()
 
@@ -184,12 +185,12 @@ Item {
     DropDown {
         id: imComboBox2
  
-        anchors {left:imComboBox.right; leftMargin: 10;}
+        anchors {left:imComboBox.right; leftMargin: itemMargins;}
         titleColor: theme_fontColorNormal
  
-        width: 450
-        minWidth: width
-        maxWidth: width + 50
+        width: Math.round(parent.width/2) - 4*anchors.leftMargin
+        minWidth: width 
+        maxWidth: width
  
         model: getAvailableBuddies(imComboBox.selectedTitle)
  

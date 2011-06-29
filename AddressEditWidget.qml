@@ -18,6 +18,7 @@ Item {
     property int rIndex: -1
     property bool updateMode: false 
     property bool validInput: false 
+    property int itemMargins: 10
 
     property string homeContext: qsTr("Home")
     property string workContext: qsTr("Work")
@@ -191,12 +192,12 @@ Item {
     DropDown {
         id: addressComboBox
 
-        anchors {left: parent.left; leftMargin: 10;}
+        anchors {left: parent.left; leftMargin: itemMargins;}
         titleColor: theme_fontColorNormal
 
-        width: 250
+        width: Math.round(parent.width/2) - 4*anchors.leftMargin
         minWidth: width
-        maxWidth: width + 50
+        maxWidth: width
 
         model: [contextHome, contextWork, contextOther]
 
@@ -209,14 +210,14 @@ Item {
         id: addressColumn
         spacing: 10
         anchors {left: addressComboBox.right; right: parent.right;
-                 leftMargin: 10}
+                 leftMargin: itemMargins}
         width: parent.width - addressComboBox.width
         height: childrenRect.height
 
         Repeater {
             id: addressFieldRepeater
 
-            width: parent.width
+            width: parent.width 
             height: childrenRect.height
 
             model: addressFields
@@ -227,7 +228,7 @@ Item {
                 id: addressTextField
                 text: (updateMode) ? getTextValue(field) : ""
                 defaultText: dText
-                width: 400
+                width: Math.round(addressRect.width/2) - 4*anchors.leftMargin
                 parent: addressFieldRepeater
 
                 property string fieldVal: field
