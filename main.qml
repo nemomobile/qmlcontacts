@@ -105,7 +105,9 @@ Window {
         ModalDialog {
             id:confirmDelete
             cancelButtonText: contextCancel
+            showCancelButton: true
             acceptButtonText: contextDelete
+            showAcceptButton: true
             title:  deleteConfirmation
             acceptButtonImage: "image://themedimage/widgets/common/button/button-negative"
             acceptButtonImagePressed: "image://themedimage/widgets/common/button/button-negative-pressed"

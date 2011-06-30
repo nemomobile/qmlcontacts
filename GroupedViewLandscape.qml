@@ -17,6 +17,21 @@ Item {
     property ProxyModel sortModel: proxyModel
     property alias cards: cardListView
 
+    function getActionMenuModel()
+    {
+        if (dataModel.data(sortModel.getSourceRow(window.currentContactIndex),
+                           PeopleModel.IsSelfRole))
+            return [contextView, contextShare, contextEdit];
+
+        if (dataModel.data(sortModel.getSourceRow(window.currentContactIndex),
+                           PeopleModel.FavoriteRole))
+            return [contextView, contextShare, contextEdit,
+                    contextUnFavorite, contextDelete];
+
+       return [contextView, contextShare, contextEdit,
+               contextFavorite, contextDelete];
+    }
+
     signal addNewContact
     signal pressAndHold(int x, int y)
 
@@ -95,6 +110,10 @@ Item {
         objectMenu.menuX = x
         objectMenu.menuY = y
         objectMenu.show()
+
+        //Set actionMenu model on each click because we need
+        //to check to see if the contact has been favorited
+        objectMenu.actionMenu.model = getActionMenuModel()
     }
 
     ModalContextMenu {
@@ -102,13 +121,11 @@ Item {
         property int menuX
         property int menuY
 
+        property alias actionMenu: actionObjectMenu
+
         content: ActionMenu {
             id: actionObjectMenu
-            model: (dataModel.data(sortModel.getSourceRow(window.currentContactIndex), PeopleModel.IsSelfRole) == true) ?
-                [contextView, contextShare, contextEdit] :
-                    ((dataModel.data(sortModel.getSourceRow(window.currentContactIndex), PeopleModel.FavoriteRole)) ?
-                        [contextView, contextShare, contextEdit, contextUnFavorite, contextDelete] :
-                        [contextView, contextShare, contextEdit, contextFavorite, contextDelete])
+            model: getActionMenuModel()
 
             onTriggered: {
                 if(index == 0) { window.addPage(myAppDetails); }
