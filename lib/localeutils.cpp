@@ -43,7 +43,7 @@ QString LocaleUtils::getLanguage() const
 
 QLocale::Country LocaleUtils::getCountry() const
 {
-    return QLocale::system().country();
+    return locale->country();
 }
 
 int LocaleUtils::defaultValues(QString type) const
@@ -106,6 +106,29 @@ bool LocaleUtils::needPronounciationFields() const {
     return false;
 }
 
+bool LocaleUtils::usePhoneBookCol() const
+{
+    //Need to use the default collator for Japanese and
+    //Korean as the PhoneBook collator is not valid for them 
+    //REVISIT: Should this go in the local library?
+    QLocale::Country country = getCountry();
+
+    if ((country == QLocale::DemocraticRepublicOfKorea) ||
+       (country == QLocale::RepublicOfKorea) ||
+       (country == QLocale::Japan))
+        return false;
+
+    return true;
+}
+
+int LocaleUtils::compare(QString lStr, QString rStr)
+{
+    if (usePhoneBookCol())
+        return locale->comparePhoneBook(lStr, rStr);
+    else
+        return locale->compare(lStr, rStr);
+}
+
 bool LocaleUtils::isLessThan(QString lStr, QString rStr)
 {
     if (lStr == "#")
@@ -113,7 +136,10 @@ bool LocaleUtils::isLessThan(QString lStr, QString rStr)
     if (rStr == "#")
         return true;
 
-    return locale->lessThanPhoneBook(lStr, rStr);
+    if (usePhoneBookCol())
+        return locale->lessThanPhoneBook(lStr, rStr);
+    else
+        return locale->lessThan(lStr, rStr);
 }
 
 bool LocaleUtils::checkForAlphaChar(QString str)
@@ -131,7 +157,7 @@ QString LocaleUtils::getExemplarForString(QString str)
     int i = 0;
 
     for (; i < indexes.size(); i++) {
-        if (locale->comparePhoneBook(str, indexes.at(i)) == 0)
+        if (compare(str, indexes.at(i)) == 0)
             return indexes.at(i);
 
         if (isLessThan(str, indexes.at(i))) {

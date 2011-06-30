@@ -35,7 +35,6 @@ ProxyModel::ProxyModel(QObject *parent)
     priv->filterType = FilterAll;
     priv->settings = SettingsDataStore::self();
     priv->localeHelper = LocaleUtils::self();
-    priv->locale = new meego::Locale();
     setDynamicSortFilter(true);
     setFilterKeyColumn(-1);
 
@@ -224,11 +223,12 @@ bool ProxyModel::lessThan(const QModelIndex& left,
     if (!priv->localeHelper->checkForAlphaChar(rStr))
         return true;
 
-    if (priv->locale->comparePhoneBook(lStr, rStr) == 0) {
+    if (priv->localeHelper->compare(lStr, rStr) == 0) {
         lStr += findString(leftRow, model, ProxyModel::Secondary);
         rStr += findString(rightRow, model, ProxyModel::Secondary);
-        return priv->locale->lessThanPhoneBook(lStr, rStr);
+        return priv->localeHelper->isLessThan(lStr, rStr);
     }
-            
-    return priv->locale->lessThanPhoneBook(lStr, rStr);
+
+    return priv->localeHelper->isLessThan(lStr, rStr);
 }
+

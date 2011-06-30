@@ -44,7 +44,7 @@ Flickable {
 
         if (topLevel)
         {
-            topLevel.destroy()
+            topLevel.destroy(1)
         }
 
         topLevel = itemComponent.createObject(listOfGridsView.contentItem)
