@@ -119,6 +119,7 @@ Column {
                     oldDLoader.item.newDetailsModel = detailsRepeater.model;
                     oldDLoader.item.rIndex = index;
                     oldDLoader.item.updateMode = true;
+                    oldDLoader.item.parent = imageBar;
 
                     //REVISIT: Better way to calculate? Use a state?
                     //We need to grow the parent based on the height
