@@ -170,6 +170,9 @@ PeopleModel::setData(const QModelIndex &index, const QVariant &value, int role)
 
 QVariant PeopleModel::data(int row, int role) const
 {
+    if (row < 0 || row >= priv->contactIds.count())
+        return QVariant();
+
     QContactLocalId id = priv->contactIds[row];
     QContact &contact = priv->idToContact[id];
 
