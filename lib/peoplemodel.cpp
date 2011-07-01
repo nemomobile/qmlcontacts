@@ -1178,7 +1178,7 @@ void PeopleModel::setFilter(int role, bool dataResetNeeded){
     {
         QContactDetailFilter favFilter;
         favFilter.setDetailDefinitionName(QContactFavorite::DefinitionName, QContactFavorite::FieldFavorite);
-        favFilter.setValue("true");
+        favFilter.setValue(true);
         priv->currentFilter = favFilter;
         break;
     }
