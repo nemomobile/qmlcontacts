@@ -10,6 +10,7 @@ import Qt 4.7
 import MeeGo.Components 0.1
 import MeeGo.Labs.Components 0.1 as Labs
 import MeeGo.App.Contacts 0.1
+import TelepathyQML 0.1
 
 Window {
     id: window 
@@ -171,26 +172,30 @@ Window {
 
     function getOnlinePeople() {
         var onlinePeoples = [];
-        for(var sourceIndex = 0; sourceIndex < peopleModel.rowCount(); sourceIndex++){
-            if ((peopleModel.data(sourceIndex, PeopleModel.OnlineAccountUriRole).length >= 1)
-                    || (peopleModel.data(sourceIndex, PeopleModel.OnlineServiceProviderRole).length >= 1)){
+        for (var sourceIndex = 0; sourceIndex < peopleModel.rowCount(); sourceIndex++) {
+            var uri = peopleModel.data(sourceIndex,
+                                       PeopleModel.OnlineAccountUriRole);
+            var provider = peopleModel.data(sourceIndex,
+                                            PeopleModel.OnlineServiceProviderRole);
 
-            var account = peopleModel.data(sourceIndex, PeopleModel.OnlineServiceProviderRole)[0].split("\n");
-            if (account.length == 2){
-                account = account[1];
+            if ((uri.length < 1) || (provider.length < 1))
+                continue;
 
-                var buddy = peopleModel.data(sourceIndex, PeopleModel.OnlineAccountUriRole)[0].split(") ");
-                if (buddy.length == 2){
-                    buddy = buddy[1];
+            var account = provider[0].split("\n");
+            if (account.length != 2)
+                continue;
+            account = account[1];
 
-                    var contactItem = accountsModel.contactItemForId(account, buddy);
+            var buddy = uri[0].split(") ");
+            if (buddy.length != 2)
+                continue;
+            buddy = buddy[1];
 
-                    var presence = contactItem.data(AccountsModel.PresenceTypeRole);
-                    if(presence == TelepathyTypes.ConnectionPresenceTypeAvailable)
-                            onlinePeoples.push(peopleModel.data(sourceIndex, PeopleModel.ContactRole));
-                }
-            }
-            }
+            var contactItem = accountsModel.contactItemForId(account, buddy);
+            var presence = contactItem.data(AccountsModel.PresenceTypeRole);
+
+            if (presence == TelepathyTypes.ConnectionPresenceTypeAvailable)
+                onlinePeoples.push(peopleModel.data(sourceIndex, PeopleModel.ContactRole));
         }
         return onlinePeoples;
     }
