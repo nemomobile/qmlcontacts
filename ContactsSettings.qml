@@ -13,6 +13,7 @@ import MeeGo.App.Contacts 0.1
 
 AppPage {
     id: settingsPage
+    width: parent.width
     property string titleStr: qsTr("Contacts Settings")
     property string sortPreferenceStr: qsTr("Sort Order:")
 
@@ -96,10 +97,11 @@ AppPage {
     Component {
         id: settingsComponent
 
-        Image {
+        Item {
             id: sortSettingItem
-            source: "image://themedimage/images/pulldown_box"
             width: parent.width
+            height: theme_listBackgroundPixelHeightOne
+            parent: settingsPage
 
             Text {
                 id: settingsText
@@ -117,7 +119,7 @@ AppPage {
                          left: settingsText.right;
                          leftMargin: itemMargins;
                          right: parent.right
-                         rightMargin: 10 }
+                         rightMargin: itemMargins }
                 DropDown {
                     anchors {verticalCenter: parent.verticalCenter;}
                     selectedIndex: getCurrentVal(modelData)
@@ -126,13 +128,24 @@ AppPage {
 
                     model: getDataList(modelData)
 
-                    maxWidth: (parent.width <= 0) ? 400 : Math.round(parent.width/2)
+                    width: Math.round(settingsPage.width/2) - 2*itemMargins
+                    minWidth: width
+                    maxWidth: width
 
                     onTriggered: {
                         handleSelectionChanged(modelData, selectedIndex, model);
                     }
                 } //DropDown
             } //Item
-        }  //Image
+
+        Item {
+            width: parent.width
+            height: theme_listBackgroundPixelHeightOne
+            visible: (index >= 1) //Don't show separator for first item
+
+            ListSeparator {} 
+        }
+
+        }  //Item
     }  //Component
 }
