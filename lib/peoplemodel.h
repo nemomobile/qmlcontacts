@@ -102,7 +102,6 @@ public:
                                      QStringList urllinks,  QStringList urlcontexts, QDate birthday, QString notetext);
 
     Q_INVOKABLE QMap<QString, QString> availableAccounts() const;
-    Q_INVOKABLE QStringList availableContacts(QString accountId) const;
 
     Q_INVOKABLE void launch (QString cmd) {
         QProcess::startDetached (cmd);
@@ -142,7 +141,7 @@ private slots:
     void contactsRemoved(const QList<QContactLocalId>& contactIds);
     void dataReset();
     void savePendingContacts();
-    void createMeCard();
+    void createMeCard(QContact me = QContact());
     void vCardFinished(QVersitWriter::State state);
 
 private:

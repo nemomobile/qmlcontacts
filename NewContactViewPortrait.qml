@@ -417,7 +417,7 @@ Flickable{
             }
             Image {
                 id: delete_button
-                source: "image://themedimage/icon/internal/contact-information-delete"
+                source: "image://themedimage/icons/internal/contact-information-delete"
                 width: 36
                 height: 36
                 anchors {verticalCenter: birthday.verticalCenter; right: parent.right; rightMargin: 10}
@@ -426,7 +426,7 @@ Flickable{
                     id: mouse_delete
                     anchors.fill: parent
                     onPressed: {
-                        delete_button.source = "image://themedimage/icon/internal/contact-information-delete-active"
+                        delete_button.source = "image://themedimage/icons/internal/contact-information-delete-active"
                     }
                     onClicked: {
                         data_birthday.text = "";
@@ -441,7 +441,6 @@ Flickable{
             id:datePicker
             parent: newContactPage
 
-            selectedDate: newContactPage.restoredBirthday
             property date datePicked
             property string selectedBirthday: Qt.formatDate(newContactPage.restoredBirthday, window.dateFormat)
 
@@ -449,6 +448,11 @@ Flickable{
                 datePicked = selectedDate;
                 selectedBirthday = Qt.formatDate(selectedDate, window.dateFormat);
                 data_birthday.state = (data_birthday.state == "default" ? "edit" : data_birthday.state)
+            }
+
+            Component.onCompleted: {
+                if (newContactPage.restoredBirthday != "")
+                    selectedDate: newContactPage.restoredBirthday
             }
         }
 

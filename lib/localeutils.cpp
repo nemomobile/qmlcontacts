@@ -8,30 +8,23 @@
 
 #include <QDebug>
 #include <string.h>
-#include <unicode/unistr.h>
-#include <unicode/locid.h>
-#include <unicode/coll.h>
-#include <unicode/uchar.h>
 #include <unicode/ulocdata.h>
-#include <unicode/ustring.h>
 #include <unicode/uchriter.h>
 
 #include "localeutils.h"
+#include "peoplemodel.h"
 
 LocaleUtils *LocaleUtils::mSelf = 0;
 
 LocaleUtils::LocaleUtils(QObject *parent) :
     QObject(parent)
 {
-    int collType = LocaleUtils::Default;
-    if (getCountry() == QLocale::Germany)
-        collType = LocaleUtils::PhoneBook;
-
-    initCollator(collType);
+    locale = new meego::Locale();
 }
 
 LocaleUtils::~LocaleUtils()
 {
+    delete locale;
 }
 
 LocaleUtils *LocaleUtils::self()
@@ -50,7 +43,40 @@ QString LocaleUtils::getLanguage() const
 
 QLocale::Country LocaleUtils::getCountry() const
 {
-    return QLocale::system().country();
+    return locale->country();
+}
+
+int LocaleUtils::defaultValues(QString type) const
+{
+    Q_UNUSED(type);
+    QLocale::Country country = getCountry();
+
+    //REVISIT: Right now, all supported lanaguages
+    //use the same setting for sort and display
+    switch(country) {
+        case QLocale::Japan:
+        case QLocale::China:
+        case QLocale::Taiwan:
+        case QLocale::RepublicOfKorea:
+        case QLocale::DemocraticRepublicOfKorea:
+        case QLocale::Sweden:
+        case QLocale::Norway:
+        case QLocale::Hungary:
+        case QLocale::France:
+            return PeopleModel::LastNameRole;
+        default:
+            return PeopleModel::FirstNameRole;
+    }
+}
+
+int LocaleUtils::defaultSortVal() const
+{
+    return defaultValues("sort");
+}
+
+int LocaleUtils::defaultDisplayVal() const
+{
+    return defaultValues("display");
 }
 
 QStringList LocaleUtils::getAddressFieldOrder() const
@@ -80,6 +106,42 @@ bool LocaleUtils::needPronounciationFields() const {
     return false;
 }
 
+bool LocaleUtils::usePhoneBookCol() const
+{
+    //Need to use the default collator for Japanese and
+    //Korean as the PhoneBook collator is not valid for them 
+    //REVISIT: Should this go in the local library?
+    QLocale::Country country = getCountry();
+
+    if ((country == QLocale::DemocraticRepublicOfKorea) ||
+       (country == QLocale::RepublicOfKorea) ||
+       (country == QLocale::Japan))
+        return false;
+
+    return true;
+}
+
+int LocaleUtils::compare(QString lStr, QString rStr)
+{
+    if (usePhoneBookCol())
+        return locale->comparePhoneBook(lStr, rStr);
+    else
+        return locale->compare(lStr, rStr);
+}
+
+bool LocaleUtils::isLessThan(QString lStr, QString rStr)
+{
+    if (lStr == "#")
+        return false;
+    if (rStr == "#")
+        return true;
+
+    if (usePhoneBookCol())
+        return locale->lessThanPhoneBook(lStr, rStr);
+    else
+        return locale->lessThan(lStr, rStr);
+}
+
 bool LocaleUtils::checkForAlphaChar(QString str)
 {
     const ushort *strShort = str.utf16();
@@ -89,111 +151,20 @@ bool LocaleUtils::checkForAlphaChar(QString str)
     return u_hasBinaryProperty(uniStr.char32At(0), UCHAR_ALPHABETIC);
 }
 
-bool LocaleUtils::initCollator(int collType, QString locale)
-{
-    //Get the locale in a ICU supported format
-    if (locale == "")
-        locale = getLanguage();
-   
-    switch (collType) {
-        case PhoneBook:
-            locale += "@collation=phonebook";
-            break;
-        case Pinyin:
-            locale += "@collation=pinyin";
-            break;
-        case Traditional:
-            locale += "@collation=traditional";
-            break;
-        case Stroke:
-            locale += "@collation=stroke";
-            break;
-        case Direct:
-            locale += "@collation=direct";
-            break;
-        default:
-            locale += "@collation=default";
-    }
-
-    const char *name = locale.toLatin1().constData();
-    Locale localeName = Locale(name);
-
-    UErrorCode status = U_ZERO_ERROR;
-    mColl = (RuleBasedCollator *)Collator::createInstance(localeName, status);
-    if (!U_SUCCESS(status))
-        return false;
-
-    QLocale::Country country = getCountry();
-    if ((country == QLocale::DemocraticRepublicOfKorea) ||
-        (country == QLocale::RepublicOfKorea) || (country == QLocale::Japan)) {
-
-        //ASCII characters should be sorted after
-        //non-ASCII characters for some languages
-        UnicodeString rules = mColl->getRules();
-        rules += "< a,A< b,B< c,C< d,D< e,E< f,F< g,G< h,H< i,I< j,J < k,K"
-                 "< l,L< m,M< n,N< o,O< p,P< q,Q< r,R< s,S< t,T < u,U< v,V"
-                 "< w,W< x,X< y,Y< z,Z";
-        mColl = new RuleBasedCollator(rules, status);
-        if (!U_SUCCESS(status))
-            mColl = (RuleBasedCollator *)Collator::createInstance(localeName, status);
-    }
-
-    if (U_SUCCESS(status))
-        return true;
-    return false;
-}
-
-int LocaleUtils::compare(QString lStr, QString rStr)
-{
-    if (lStr == "#") {
-        return false;
-    }
-    if (rStr == "#") {
-        return true;
-    }
-
-    //Convert strings to UnicodeStrings
-    const ushort *lShort = lStr.utf16();
-    UnicodeString lUniStr = UnicodeString(static_cast<const UChar *>(lShort));
-    const ushort *rShort = rStr.utf16();
-    UnicodeString rUniStr = UnicodeString(static_cast<const UChar *>(rShort));
-
-    if (!mColl) {
-        //No collator set, use fall back
-        return QString::localeAwareCompare(lStr, rStr) < 0;
-    }
-
-    Collator::EComparisonResult res = mColl->compare(lUniStr, rUniStr);
-    if (res == Collator::LESS)
-        return -1;
-
-    if (res == Collator::GREATER)
-        return 1;
-
-    return 0;
-}
-
-bool LocaleUtils::isLessThan(QString lStr, QString rStr)
-{
-    int ret;
-
-    ret = compare(lStr, rStr);
-    if (ret == -1) 
-        return true;
-
-    return false;
-}
-
 QString LocaleUtils::getExemplarForString(QString str)
 {
     QStringList indexes = getIndexBarChars();
     int i = 0;
 
     for (; i < indexes.size(); i++) {
+        if (compare(str, indexes.at(i)) == 0)
+            return indexes.at(i);
+
         if (isLessThan(str, indexes.at(i))) {
-            if (i == 0) {
+            if (i == 0)
                 return str;
-            }
+            if (i == indexes.size() - 1)
+                return indexes.at(i);
             return indexes.at(i-1);
         }
     }

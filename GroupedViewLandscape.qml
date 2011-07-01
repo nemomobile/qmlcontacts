@@ -19,8 +19,31 @@ Item {
     property ProxyModel sortModel: proxyModel
     property alias cards: cardListView
 
+    function getActionMenuModel()
+    {
+        if (dataModel.data(sortModel.getSourceRow(window.currentContactIndex),
+                           PeopleModel.IsSelfRole))
+            return [contextView, contextShare, contextEdit];
+
+        if (dataModel.data(sortModel.getSourceRow(window.currentContactIndex),
+                           PeopleModel.FavoriteRole))
+            return [contextView, contextShare, contextEdit,
+                    contextUnFavorite, contextDelete];
+
+       return [contextView, contextShare, contextEdit,
+               contextFavorite, contextDelete];
+    }
+
     signal addNewContact
     signal pressAndHold(int x, int y)
+
+    EmptyContacts {
+        id: emptyListView
+        anchors.verticalCenter: groupedViewLandscape.verticalCenter
+        onClicked: {
+            groupedViewLandscape.addNewContact();
+        }
+    }
 
     Item {
         id: emptyOrCardListView
@@ -72,28 +95,27 @@ Item {
                     }
                 }
             }
-
-            EmptyContacts {
-                id: emptyListView
-                anchors.top: parent.bottom
-                onClicked: {
-                    groupedViewLandscape.addNewContact();
-                }
-            }
-
-            Binding {target: emptyListView;
-                     property: "visible"; value: cardListView.count == 1 }
         }
-
-        Binding {target: cardListView;
-                 property: "visible"; value: cardListView.count > 0 }
     }
+
+    Binding {target: emptyListView;
+             property: "visible";
+             value: (((cardListView.count == 1) &&
+                    (peopleModel.isSelfContact(cardListView.cUuid))) ? 1 : 0);}
+
+    Binding {target: cardListView;
+             property: "visible";
+             value: ((cardListView.count > 0) ? 1 : 0);}
 
     onPressAndHold: {
         objectMenu.setPosition(x, y)
         objectMenu.menuX = x
         objectMenu.menuY = y
         objectMenu.show()
+
+        //Set actionMenu model on each click because we need
+        //to check to see if the contact has been favorited
+        objectMenu.actionMenu.model = getActionMenuModel()
     }
 
     ModalContextMenu {
@@ -101,13 +123,11 @@ Item {
         property int menuX
         property int menuY
 
+        property alias actionMenu: actionObjectMenu
+
         content: ActionMenu {
             id: actionObjectMenu
-            model: (dataModel.data(sortModel.getSourceRow(window.currentContactIndex), PeopleModel.IsSelfRole) == true) ?
-                [contextView, contextShare, contextEdit] :
-                    ((dataModel.data(sortModel.getSourceRow(window.currentContactIndex), PeopleModel.FavoriteRole)) ?
-                        [contextView, contextShare, contextEdit, contextUnFavorite, contextDelete] :
-                        [contextView, contextShare, contextEdit, contextFavorite, contextDelete])
+            model: getActionMenuModel()
 
             onTriggered: {
                 if(index == 0) { window.addPage(myAppDetails); }
@@ -117,6 +137,30 @@ Item {
                 if(index == 2) { window.addPage(myAppEdit); }
                 if(index == 4) { confirmDelete.show(); }
                 objectMenu.hide();
+            }
+        }
+    }
+
+    ModalContextMenu {
+        id: shareMenu
+
+        content: ActionMenu {
+            id: actionShareMenu
+
+            model: [contextEmail]
+
+            onTriggered: {
+                if(index == 0) {
+                    var filename = currentContactName.replace(" ", "_");
+                    //REVISIT: Non-ASCII characters are corrupted when calling
+                    //meego-qml-launcher via the command-line.
+                    //peopleModel.exportContact(window.currentContactId,  "/tmp/vcard_"+filename+".vcf");
+                    peopleModel.exportContact(window.currentContactId,  "/tmp/vcard.vcf");
+                    shareMenu.visible = false;
+                    //var cmd = "/usr/bin/meego-qml-launcher --app meego-app-email --fullscreen --cmd openComposer --cdata \"file:///tmp/vcard_"+filename+".vcf\"";
+                    var cmd = "/usr/bin/meego-qml-launcher --app meego-app-email --fullscreen --cmd openComposer --cdata \"file:///tmp/vcard.vcf\"";
+                    appModel.launch(cmd);
+                }
             }
         }
     }

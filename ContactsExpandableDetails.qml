@@ -250,6 +250,7 @@ Column {
                     oldDLoader.item.newDetailsModel = detailsRepeater.model;
                     oldDLoader.item.rIndex = index;
                     oldDLoader.item.updateMode = true;
+                    oldDLoader.item.parent = imageBar;
 
                     //REVISIT: Better way to calculate? Use a state?
                     //We need to grow the parent based on the height
@@ -269,7 +270,7 @@ Column {
         
             Image {
                 id: delete_button
-                source: "image://themedimage/icon/internal/contact-information-delete"
+                source: "image://themedimage/icons/internal/contact-information-delete"
                 width: 36
                 height: 36
                 anchors {top: parent.top; right: parent.right;
@@ -279,7 +280,7 @@ Column {
                     id: mouse_delete
                     anchors.fill: parent
                     onPressed: {
-                        delete_button.source = "image://themedimage/icon/internal/contact-information-delete-active"
+                        delete_button.source = "image://themedimage/icons/internal/contact-information-delete-active"
                     }
                     onClicked: {
                         if (detailsRepeater.count == 1) {
@@ -290,7 +291,7 @@ Column {
                             detailsRepeater.model.remove(index);
                         }
 
-                        delete_button.source = "image://themedimage/icon/internal/contact-information-delete"
+                        delete_button.source = "image://themedimage/icons/internal/contact-information-delete"
                         //REVISIT: Should use states for this
                         detailsColumn.height -= oldDLoader.item.height
                     }

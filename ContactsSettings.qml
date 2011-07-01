@@ -15,7 +15,7 @@ AppPage {
     id: settingsPage
     property string titleStr: qsTr("Contacts Settings")
     property string sortPreferenceStr: qsTr("Sort Order:")
-  
+
     //: How contacts will be displayed to the user - last first or first last
     property string displayPreferenceStr: qsTr("Display Order:")
     property string sortByFirst: qsTr("Sort by first name")
@@ -30,6 +30,7 @@ AppPage {
 
     Translator { catalog: "meego-app-contacts" }
     pageTitle: titleStr
+    height: contents.height
     anchors.fill: parent
 
     function getSettingText(type) {
@@ -80,39 +81,28 @@ AppPage {
         ListElement { type: "display" }
     }
 
-    Item {
-        anchors.fill: parent
+    Column {
+        id: contents
+        width: parent.width
 
-        Flickable {
-            contentHeight: contents.height
-            anchors.fill: parent
-            clip: true
-
-            Column {
-                id: contents
-                width: parent.width
-
-                Repeater {
-                    model: settingsList
-                    width: parent.width
-                    height: childrenRect.height
-                    delegate: settingsComponent
-                }
-            } //Column
-        } //Flickable
-    } //Item
+        Repeater {
+            model: settingsList
+            width: parent.width
+            height: childrenRect.height
+            delegate: settingsComponent
+        }
+    } //Column
 
     Component {
         id: settingsComponent
 
         Image {
             id: sortSettingItem
-            source: "image://themedimage/pulldown_box"
+            source: "image://themedimage/images/pulldown_box"
             width: parent.width
 
             Text {
                 id: settingsText
-                anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.leftMargin: itemMargins
                 text: getSettingText(modelData)

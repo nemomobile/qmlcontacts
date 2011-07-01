@@ -76,7 +76,7 @@ void Load_Vcard::addNewContacts()
     QList<QContact> contacts;
     QString res = QString("1"); 
 
-    QContactManager *cm = new QContactManager("tracker");
+    QContactManager *cm = new QContactManager();
     QContactSaveRequest *m_contactSaveRequest = new QContactSaveRequest();
     m_contactSaveRequest->setManager(cm);
     //connect(&m_contactSaveRequest, SIGNAL(resultsAvailable()), this,

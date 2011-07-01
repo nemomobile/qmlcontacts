@@ -12,14 +12,15 @@ import MeeGo.Components 0.1
 Item{
     id: phonesRect
     height: childrenRect.height
-    width:  parent.width
+    width: parent.width
+    anchors {left: parent.left; right: parent.right}
 
     property variant newDetailsModel: null
     property int rIndex: -1
     property bool updateMode: false 
-    property bool validInput: false
+    property bool validInput: false 
+    property int itemMargins: 10
 
-    property string addressLabel: qsTr("Address")
     property string homeContext: qsTr("Home")
     property string workContext: qsTr("Work")
     property string otherContext: qsTr("Other")
@@ -117,12 +118,12 @@ Item{
     DropDown {
         id: phoneComboBox
 
-        anchors {left: parent.left; leftMargin: 10;}
+        anchors {left: parent.left; leftMargin: itemMargins;}
         titleColor: theme_fontColorNormal
 
-        width: 250
+        width: Math.round(parent.width/2) - 4*anchors.leftMargin
         minWidth: width
-        maxWidth: width + 50
+        maxWidth: width
 
         model: [mobileContext, homeContext, workContext, otherContext]
 
@@ -135,8 +136,8 @@ Item{
         id: data_phone
         text: (updateMode) ? (newDetailsModel ? newDetailsModel.get(rIndex).phone : "") : ""
         defaultText: defaultPhone
-        width: 400
-        anchors {left:phoneComboBox.right; leftMargin: 10;}
+        width: Math.round(parent.width/2) - 4*anchors.leftMargin
+        anchors {left:phoneComboBox.right; leftMargin: itemMargins;}
         inputMethodHints: Qt.ImhDialableCharactersOnly
     }
 

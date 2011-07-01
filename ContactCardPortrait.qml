@@ -14,7 +14,7 @@ import TelepathyQML 0.1
 Image {
     id: contactCardPortrait
 
-    height: photo.height
+    height: photo.height + itemMargins
     width: parent.width
     anchors.right: parent.right
 
@@ -22,6 +22,7 @@ Image {
     property ProxyModel sortPeople : sortModel
     property int sourceIndex: sortPeople.getSourceRow(index)
     property string stringTruncater: qsTr("...")
+    property int itemMargins: 10
 
     function getTruncatedString(valueStr, stringLen) {
         var MAX_STR_LEN = stringLen;
@@ -34,25 +35,33 @@ Image {
         return valueStr;
     }
 
-    function getOnlineStatus() {
-        if ((dataPeople.data(sourceIndex, PeopleModel.OnlineAccountUriRole).length < 1)
-                || (dataPeople.data(sourceIndex, PeopleModel.OnlineServiceProviderRole).length < 1))
-            return "";
+    function getOnlineStatus(presence) {
+        var icon = "";
+        var text = "";
 
-        var account = dataPeople.data(sourceIndex, PeopleModel.OnlineServiceProviderRole)[0].split("\n");
-        if (account.length != 2)
-            return "";
-        account = account[1];
-
-        var buddy = dataPeople.data(sourceIndex, PeopleModel.OnlineAccountUriRole)[0].split(") ");
-        if (buddy.length != 2)
-            return "";
-        buddy = buddy[1];
-
-        var contactItem = accountsModel.contactItemForId(account, buddy);
-        
-        var presence = contactItem.data(AccountsModel.PresenceTypeRole);
-        return presence;
+        switch (presence) {
+            case TelepathyTypes.ConnectionPresenceTypeAvailable:
+                icon = "image://themedimage/icons/status/status-available"
+                text = statusOnline;
+                break;
+            case TelepathyTypes.ConnectionPresenceTypeBusy:
+                icon = "image://themedimage/icons/status/status-busy"
+                text = statusBusy;
+                break;
+            case TelepathyTypes.ConnectionPresenceTypeAway:
+            case TelepathyTypes.ConnectionPresenceTypeExtendedAway:
+                icon = "image://themedimage/icons/status/status-idle";
+                text = statusIdle;
+                break;
+            case TelepathyTypes.ConnectionPresenceTypeHidden:
+            case TelepathyTypes.ConnectionPresenceTypeUnknown:
+            case TelepathyTypes.ConnectionPresenceTypeError:
+            case TelepathyTypes.ConnectionPresenceTypeOffline:
+            default:
+                icon = "image://themedimage/icons/status/status-idle";
+                text = statusOffline;
+        }
+        return [icon, text];
     }
 
     property string dataFirst: dataPeople.data(sourceIndex, PeopleModel.FirstNameRole)
@@ -81,17 +90,49 @@ Image {
     signal clicked
     signal pressAndHold(int mouseX, int mouseY, string uuid, string name)
 
-    source: "image://themedimage/widgets/common/avatar/avatar-inactive-overlay";
+    source: "image://themedimage/widgets/common/list/list"
     opacity: (dataPeople.data(sourceIndex, PeopleModel.IsSelfRole) ? .3 : 1)
+
+    Connections {
+        target: accountsModel
+        ignoreUnknownSignals: true
+        onComponentsLoaded: {
+            var uri = dataPeople.data(sourceIndex,
+                                      PeopleModel.OnlineAccountUriRole);
+            var provider = dataPeople.data(sourceIndex,
+                                           PeopleModel.OnlineServiceProviderRole);
+
+            if ((uri.length < 1) || (provider.length < 1))
+               return;
+
+            var account = provider[0].split("\n");
+            if (account.length != 2)
+                return;
+            account = account[1];
+
+            var buddy = uri[0].split(") ");
+            if (buddy.length != 2)
+                return;
+            buddy = buddy[1];
+
+            var contactItem = accountsModel.contactItemForId(account, buddy);
+            var presence = contactItem.data(AccountsModel.PresenceTypeRole);
+
+            statusIcon.source = getOnlineStatus(presence)[0];
+            statusText.text = getOnlineStatus(presence)[1];
+        }
+    }
 
     Image{
         id: photo
-        fillMode: Image.PreserveAspectFit
+        fillMode: Image.PreserveAspectCrop
         smooth: true
-        width: 100
-        height: 100
+        clip: true
+        width: theme_listBackgroundPixelHeightTwo
+        height: theme_listBackgroundPixelHeightTwo
         source: (dataAvatar ? dataAvatar :"image://themedimage/widgets/common/avatar/avatar-default")
-        anchors {left: contactCardPortrait.left}
+        anchors {left: contactCardPortrait.left;
+                 top: parent.top; topMargin: itemMargins}
         onStatusChanged: {
             if(photo.status == Image.Error || photo.status == Image.Null){
                 photo.source = "image://themedimage/widgets/common/avatar/avatar-default";
@@ -139,36 +180,14 @@ Image {
 
     Image {
         id: favorite
-        source: (dataPeople.data(sourceIndex, PeopleModel.FavoriteRole) ? "image://themedimage/icons/actionbar/favorite-selected" : "image://themedimage/icons/actionbar/favorite-selected" )
+        source: (dataPeople.data(sourceIndex, PeopleModel.FavoriteRole) ? "image://themedimage/icons/actionbar/favorite-selected" : "image://themedimage/icons/actionbar/favorite" )
         opacity: (dataMeCard ? 0 : 1)
         anchors {right: contactCardPortrait.right; top: nameFirst.top; rightMargin: photo.height/8;}
     }
 
     Image {
         id: statusIcon
-        source: {
-            var imStatus = getOnlineStatus();
-            var icon = "";
-            switch(imStatus) {
-            case TelepathyTypes.ConnectionPresenceTypeAvailable:
-                icon = "image://themedimage/icons/status/status-available"
-                break;
-            case TelepathyTypes.ConnectionPresenceTypeBusy:
-                icon = "image://themedimage/icons/status/status-busy"
-                break;
-            case TelepathyTypes.ConnectionPresenceTypeAway:
-            case TelepathyTypes.ConnectionPresenceTypeExtendedAway:
-                icon = "image://themedimage/icons/status/status-idle";
-                break;
-            case TelepathyTypes.ConnectionPresenceTypeHidden:
-            case TelepathyTypes.ConnectionPresenceTypeUnknown:
-            case TelepathyTypes.ConnectionPresenceTypeUnknown:
-            case TelepathyTypes.ConnectionPresenceTypeOffline:
-            default:
-                icon = "image://themedimage/icons/status/status-idle";
-            }
-            return icon;
-        }
+        source: "image://themedimage/icons/status/status-idle"
         anchors {horizontalCenter: favorite.horizontalCenter; verticalCenter: statusText.verticalCenter  }
     }
 
@@ -178,29 +197,7 @@ Image {
         font.pixelSize: theme_fontPixelSizeLarge
         smooth: true
         anchors { left: nameFirst.left; bottom: photo.bottom; bottomMargin: photo.height/8}
-        text: {
-            var imStatus = getOnlineStatus();
-            var text = "";
-            switch(imStatus) {
-            case TelepathyTypes.ConnectionPresenceTypeAvailable:
-                text = statusOnline;
-                break;
-            case TelepathyTypes.ConnectionPresenceTypeBusy:
-                text = statusBusy;
-                break;
-            case TelepathyTypes.ConnectionPresenceTypeAway:
-            case TelepathyTypes.ConnectionPresenceTypeExtendedAway:
-                text = statusIdle;
-                break;
-            case TelepathyTypes.ConnectionPresenceTypeHidden:
-            case TelepathyTypes.ConnectionPresenceTypeUnknown:
-            case TelepathyTypes.ConnectionPresenceTypeError:
-            case TelepathyTypes.ConnectionPresenceTypeOffline:
-            default:
-                text = statusOffline;
-            }
-            return text;
-        }
+        text: statusOffline
     }
 
     Image{

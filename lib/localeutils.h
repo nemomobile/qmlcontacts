@@ -12,7 +12,8 @@
 #include <QObject>
 #include <QStringList>
 #include <QLocale>
-#include <unicode/tblcoll.h>
+
+#include "meegolocale.h"
 
 class LocaleUtils: public QObject
 {
@@ -22,35 +23,29 @@ public:
     explicit LocaleUtils(QObject *parent = 0);
     virtual ~LocaleUtils();
 
-    enum CollationTypes {
-        Default = 0,
-        PhoneBook,
-        Pinyin,
-        Traditional, 
-        Stroke,
-        Direct
-    };
-
     static LocaleUtils *self();
 
     Q_INVOKABLE QStringList getAddressFieldOrder() const;
     Q_INVOKABLE bool needPronounciationFields() const;
     Q_INVOKABLE QStringList getIndexBarChars();
 
-    bool initCollator(int collType = 0, QString locale = QString());
-    int compare(QString lStr, QString rStr); 
-    bool isLessThan(QString lStr, QString rStr); 
+    int compare(QString lStr, QString rStr);
+    bool isLessThan(QString lStr, QString rStr);
     bool checkForAlphaChar(QString str);
     Q_INVOKABLE QString getExemplarForString(QString str);
     QString getBinForString(QString str);
     QLocale::Country getCountry() const;
+    int defaultSortVal() const;
+    int defaultDisplayVal() const;
 
 protected:
     QString getLanguage() const;
+    bool usePhoneBookCol() const;
+    int defaultValues(QString type) const;
 
 private:
     static LocaleUtils *mSelf;
-    RuleBasedCollator *mColl;
+    meego::Locale *locale;
 };
 
 #endif // LOCALEUTILS_H

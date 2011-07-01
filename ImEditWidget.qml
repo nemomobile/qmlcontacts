@@ -20,6 +20,7 @@ Item {
     property int rIndex: -1
     property bool updateMode: false 
     property bool validInput: false
+    property int itemMargins: 10
 
     //: Instant Messaging Accounts for this contact
     property string imLabel : qsTr("Instant messaging")
@@ -96,8 +97,10 @@ Item {
     }
 
     function getDetails(reset) {
-        var arr = {"im": imComboBox2.selectedTitle,
-                   "type": im.model[imComboBox.selectedIndex]};
+        var type = imComboBox.model[imComboBox.selectedIndex];
+        var arr = {"im": imComboBox2.model[imComboBox2.selectedIndex],
+                   "type": type,
+                   "account": getAccountByType(type)}
 
         if (reset)
             resetFields();
@@ -106,8 +109,16 @@ Item {
     }
 
     function resetFields() {
-       imComboBox.Index = 0;
-       imComboBox2.selectedTitle = defaultIm;
+        imComboBox.selectedIndex = 0;
+        imComboBox2.selectedIndex = 0;
+    }
+
+    function getAccountByType(type) {
+        for (var i = 0; i < imContexts.count; i++) {
+            if (type == imContexts.get(i).accountType)
+                return imContexts.get(i).account;
+        }
+        return "";
     }
 
     function getAvailableAccountTypes() {
@@ -152,75 +163,78 @@ Item {
         }
     }
 
-    function getIndexVal(type) {
-        if (updateMode) {
-            for (var i = 0; i < imComboBox.model.length; i++) {
-                if (imComboBox.model[i] == newDetailsModel.get(rIndex).type)
-                    return i;
-            }
-        }
-        return 0;
-    }
+    function getIndexVal(model, value) {
+        for (var i = 0; i < model.length; i++) {
+            if (model[i] == value)
+                return i;
+         }
+         return 0;
+     }
 
     DropDown {
         id: imComboBox
  
-        anchors {left: parent.left; leftMargin: 36}
+        anchors {left: parent.left; leftMargin: itemMargins}
         titleColor: theme_fontColorNormal
  
-        width: 250
-        minWidth: width
-        maxWidth: width + 50
+        width: Math.round(parent.width/2) - 4*anchors.leftMargin
+        minWidth: width 
+        maxWidth: width
  
         model: getAvailableAccountTypes()
 
         title: (updateMode) ? newDetailsModel.get(rIndex).type : defaultAccount 
-        selectedIndex: (updateMode) ? getIndexVal(newDetailsModel.get(rIndex).type) : 0
+        selectedIndex: (updateMode) ? getIndexVal(imComboBox.model, newDetailsModel.get(rIndex).type) : 0
         replaceDropDownTitle: true
     }
 
     DropDown {
         id: imComboBox2
  
-        anchors {left:imComboBox.right; leftMargin: 10;}
+        anchors {left:imComboBox.right; leftMargin: itemMargins;}
         titleColor: theme_fontColorNormal
  
-        width: 450
-        minWidth: width
-        maxWidth: width + 50
+        width: Math.round(parent.width/2) - 4*anchors.leftMargin
+        minWidth: width 
+        maxWidth: width
  
-        model: (imComboBox.selectedIndex) ? getAvailableBuddies(imComboBox.selectedTitle) : [noBuddies]
+        model: getAvailableBuddies(imComboBox.selectedTitle)
  
         state: "notInUpdateMode"
  
         states: [
             State {
                 name: "inUpdateMode"; when: (imsRect.updateMode == true)
-                PropertyChanges{target: imComboBox2;
-                                title: newDetailsModel.get(rIndex).im}
-                PropertyChanges{target: imComboBox2;
-                                selectedTitle: newDetailsModel.get(rIndex).im}
+                PropertyChanges {
+                    target: imComboBox2;
+                    selectedIndex: getIndexVal(imComboBox2.model,
+                                               newDetailsModel.get(rIndex).im)
+                }
             },
             State {
                 name: "notInUpdateMode"; when: (imsRect.updateMode == false)
-                PropertyChanges{target: imComboBox2; title: defaultIm}
-                PropertyChanges{target: imComboBox2; selectedTitle: defaultIm}
+                PropertyChanges {
+                    target: imComboBox2;
+                    selectedIndex: getIndexVal(imComboBox2.model, defaultIm)
+                }
             }
         ]
     }
 
-    Binding {target: imsRect; property: "validInput"; value: true; 
-             when: ((imComboBox.selectedTitle != defaultAccount) &&
-                    (imComboBox.selectedTitle != noAccount) &&
-                    (imComboBox2.selectedTitle != defaultIm) &&
-                    (imComboBox2.selectedTitle != noBuddies))
-            }
+    Binding {
+        target: imsRect; property: "validInput"; value: true;
+        when: ((imComboBox.model[imComboBox.selectedIndex] != defaultAccount) &&
+              (imComboBox.model[imComboBox.selectedIndex] != noAccount) &&
+              (imComboBox2.model[imComboBox2.selectedIndex] != defaultIm) &&
+              (imComboBox2.model[imComboBox2.selectedIndex] != noBuddies))
+    }
 
-    Binding {target: imsRect; property: "validInput"; value: false; 
-             when: ((imComboBox.selectedTitle == defaultAccount) || 
-                    (imComboBox.selectedTitle == noAccount) || 
-                    (imComboBox2.selectedTitle == defaultIm) || 
-                    (imComboBox2.selectedTitle == noBuddies))
-            }
+    Binding {
+        target: imsRect; property: "validInput"; value: false; 
+        when: ((imComboBox.model[imComboBox.selectedIndex] == defaultAccount) &&
+              (imComboBox.model[imComboBox.selectedIndex] == noAccount) &&
+              (imComboBox2.model[imComboBox2.selectedIndex] == defaultIm) &&
+              (imComboBox2.model[imComboBox2.selectedIndex] == noBuddies))
+    }
 }
 

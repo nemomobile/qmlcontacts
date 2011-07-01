@@ -19,6 +19,7 @@ Flickable {
     property int itemSpacing: 25
     property int count: 0
     property variant headerCharacterToYMap: null
+    property string cUuid: ""
 
     flickableDirection: Flickable.VerticalFlick
 
@@ -43,7 +44,7 @@ Flickable {
 
         if (topLevel)
         {
-            topLevel.destroy()
+            topLevel.destroy(1)
         }
 
         topLevel = itemComponent.createObject(listOfGridsView.contentItem)
@@ -102,6 +103,8 @@ Flickable {
 
         headerCharacterToYMap = localHeaderCharacterToYMap
         listOfGridsView.contentHeight = currentY + currentGrid.height + (2*itemSpacing)
+        listOfGridsView.cUuid = dataPeople.data(sortModel.getSourceRow(0),
+                                                PeopleModel.UuidRole);
     }
 
     onDataPeopleChanged: createItems()
@@ -109,6 +112,9 @@ Flickable {
     Connections {
         target: sortPeople
         onModelReset: createItems()
+        onDataChanged: createItems()
+        onRowsInserted: createItems()
+        onRowsRemoved: createItems()
     }
 
     Connections {
