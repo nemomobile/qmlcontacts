@@ -88,7 +88,7 @@ Flickable {
                 restoredNotes       = restoreOnce(parentTitle + ".contact.notes", "")
                 restoredPhoto       = restoreOnce(parentTitle + ".contact.photo", "")
                 restoredFavorite    = restoreOnce(parentTitle + ".contact.favorite", "")
-                restoredBirthday    = restoreOnce(parentTitle + ".contact.birthday", "2011-01-01")
+                restoredBirthday    = restoreOnce(parentTitle + ".contact.birthday", "")
             }
 	}
     }
@@ -446,7 +446,7 @@ Flickable {
             property string selectedBirthday: useRestoredBirthday(editViewPortrait.restoredBirthday) ? Qt.formatDate(editViewPortrait.restoredBirthday, window.dateFormat) : ""
 
 	    function useRestoredBirthday(restoredBDay) {
-		var defaultDate = "2011-01-01"
+                var defaultDate = ""
                 var retval = (Qt.formatDate(restoredBDay) != Qt.formatDate(defaultDate))
 		return retval
 	    }

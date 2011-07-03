@@ -83,7 +83,7 @@ Flickable{
             restoredNotes           = justRestore.restoreOnce(parentTitle + ".contact.notes", "")
             restoredPhoto           = justRestore.restoreOnce(parentTitle + ".contact.photo", "")
             restoredFavorite        = justRestore.restoreOnce(parentTitle + ".contact.favorite", "")
-            restoredBirthday        = justRestore.restoreOnce(parentTitle + ".contact.birthday", "2011-01-01")
+            restoredBirthday        = justRestore.restoreOnce(parentTitle + ".contact.birthday", "")
         }
     }
 
