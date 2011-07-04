@@ -90,11 +90,9 @@ void ProxyModel::setModel(PeopleModel *model)
     readSettings();
 }
 
-int ProxyModel::getSourceRow(int row, const QString &s)
+int ProxyModel::getSourceRow(int row)
 {
-    int retval =  mapToSource(index(row, 0)).row();
-    qDebug() << "MAIN.QML PROXYMODEL.CPP" << row << retval << s;
-    return retval;
+    return mapToSource(index(row, 0)).row();
 }
 
 bool ProxyModel::filterAcceptsRow(int source_row,
