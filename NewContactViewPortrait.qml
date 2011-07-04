@@ -177,8 +177,8 @@ Flickable{
 
                 albumSelectionMode: false
                 onPhotoSelected: {
-                    selectedPhoto = uris ? uris[0] : ""
-                    selectedPhotoThumb = (thumbUris ? thumbUris[0] : selectedPhoto);
+                    selectedPhoto = uri
+                    selectedPhotoThumb = (thumbUri ? thumbUri : selectedPhoto);
                     newContactPage.validInput = true;
                     if (selectedPhoto)
                     {
