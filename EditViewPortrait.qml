@@ -98,6 +98,21 @@ Flickable {
         addys.loadExpandingBox();
     }
 
+    SaveRestoreState {
+        id: srsMainView
+        onSaveRequired: {
+            var parentTitle = window.pageStack.currentPage.pageTitle;
+            setValue(parentTitle + ".contact.firstName", data_first.text)
+            setValue(parentTitle + ".contact.lastName", data_last.text)
+            setValue(parentTitle + ".contact.company",data_company.text)
+            setValue(parentTitle + ".contact.photo", avatar_img.source)
+            setValue(parentTitle + ".contact.birthday", datePicker.selectedDate)
+            setValue(parentTitle + ".contact.favorite",icn_faves.state)
+            setValue(parentTitle + ".contact.notes",data_notes.text)
+            sync()
+        }
+    }
+
     function contactSave(contactId){
         var newPhones = phones.getNewDetails();
         var newIms = ims.getNewDetails();
@@ -212,21 +227,6 @@ Flickable {
                                  right: parent.right; rightMargin: 10}
                         visible: localeUtils.needPronounciationFields()
                     }
-
-		    SaveRestoreState {
-			id: srsMainView
-			onSaveRequired: {
-                            var parentTitle = window.pageStack.currentPage.pageTitle;
-                            setValue(parentTitle + ".contact.firstName", data_first.text)
-                            setValue(parentTitle + ".contact.lastName", data_last.text)
-                            setValue(parentTitle + ".contact.company",data_company.text)
-                            setValue(parentTitle + ".contact.photo", avatar_img.source)
-                            setValue(parentTitle + ".contact.birthday", datePicker.selectedDate)
-                            setValue(parentTitle + ".contact.favorite",icn_faves.state)
-                            setValue(parentTitle + ".contact.notes",data_notes.text)
-			    sync()
-			}
-		    }
                 }
                 Item{
                     id: quad2
