@@ -25,7 +25,6 @@ Item {
     property string contextOther : qsTr("Other")
     property string defaultEmail : qsTr("Email address")
 
-    property string prefixSaveRestore: ""
     property bool canSave: false
 
     SaveRestoreState {
@@ -33,8 +32,9 @@ Item {
         onSaveRequired: {
             if(!updateMode && emailRect.canSave){
                 // Save the phone number that is currently being edited
-                setValue(prefixSaveRestore + ".email.address", data_email.text)
-                setValue(prefixSaveRestore + ".email.typeIndex", emailComboBox.selectedIndex)
+                var pageTitle = window.pageStack.currentPage.pageTitle;
+                setValue(pageTitle + ".email.address", data_email.text)
+                setValue(pageTitle + ".email.typeIndex", emailComboBox.selectedIndex)
             }
 
             sync()
@@ -43,8 +43,9 @@ Item {
 
     function restoreData() {
         if(srsMail.restoreRequired && !updateMode){
-            var restoredEmail = srsMail.restoreOnce(prefixSaveRestore + ".email.address", "")
-            var index = srsMail.restoreOnce(prefixSaveRestore + ".email.typeIndex", -1)
+            var pageTitle = window.pageStack.currentPage.pageTitle;
+            var restoredEmail = srsMail.restoreOnce(pageTitle + ".email.address", "")
+            var index = srsMail.restoreOnce(pageTitle + ".email.typeIndex", -1)
 
             data_email.text = restoredEmail;
 

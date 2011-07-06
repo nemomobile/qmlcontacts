@@ -37,7 +37,6 @@ Item {
     property string noAccount: qsTr("No IM accounts are configured")
     property string noBuddies : qsTr("No buddies for this account")
 
-    property string prefixSaveRestore: ""
     property bool canSave: false
 
     SaveRestoreState {
@@ -45,10 +44,11 @@ Item {
         onSaveRequired: {
             if(newDetailsModel != null && !updateMode && imsRect.canSave){
                 if(newDetailsModel.count > 0){
-                    setValue(prefixSaveRestore + ".im.count", newDetailsModel.count)
+                    var pageTitle = window.pageStack.currentPage.pageTitle;
+                    setValue(pageTitle + ".im.count", newDetailsModel.count)
                     for (var i = 0; i < newDetailsModel.count; i++){
-                        setValue(prefixSaveRestore + ".im.account" + i, newDetailsModel.get(i).im)
-                        setValue(prefixSaveRestore + ".im.type" + i, newDetailsModel.get(i).type)
+                        setValue(pageTitle + ".im.account" + i, newDetailsModel.get(i).im)
+                        setValue(pageTitle + ".im.type" + i, newDetailsModel.get(i).type)
                     }
                 }
             }
@@ -58,11 +58,12 @@ Item {
 
     function restoreData() {
         if(srsIM.restoreRequired && !updateMode){
-            var imCount = srsIM.value(prefixSaveRestore + ".im.count", 0)
+            var pageTitle = window.pageStack.currentPage.pageTitle;
+            var imCount = srsIM.value(pageTitle + ".im.count", 0)
             if(imCount > 0){
                 for(var i = 0; i < imCount; i++){
-                    newDetailsModel.set(i, {"im": srsIM.restoreOnce(prefixSaveRestore + ".im.account" + i, "")})
-                    newDetailsModel.set(i, {"type": srsIM.restoreOnce(prefixSaveRestore + ".im.type" + i, "")})
+                    newDetailsModel.set(i, {"im": srsIM.restoreOnce(pageTitle + ".im.account" + i, "")})
+                    newDetailsModel.set(i, {"type": srsIM.restoreOnce(pageTitle + ".im.type" + i, "")})
                 }
             }
         }

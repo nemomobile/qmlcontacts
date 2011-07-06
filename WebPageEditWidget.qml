@@ -24,7 +24,6 @@ Item {
     property string bookmarkWeb : qsTr("Bookmark", "Noun")
     property string favoriteWeb : qsTr("Favorite", "Noun")
 
-    property string prefixSaveRestore: ""
     property bool canSave: false
 
     SaveRestoreState {
@@ -32,8 +31,9 @@ Item {
         onSaveRequired: {
             if(!updateMode && webRect.canSave){
                 // Save the phone number that is currently being edited
-                setValue(prefixSaveRestore + ".web.address", data_url.text)
-                setValue(prefixSaveRestore + ".web.typeIndex", urlComboBox.selectedIndex)
+                var pageTitle = window.pageStack.currentPage.pageTitle;
+                setValue(pageTitle + ".web.address", data_url.text)
+                setValue(pageTitle + ".web.typeIndex", urlComboBox.selectedIndex)
             }
 
             sync()
@@ -42,8 +42,9 @@ Item {
 
     function restoreData() {
         if(srsWebPage.restoreRequired && !updateMode){
-            var restoredWeb = srsWebPage.restoreOnce(prefixSaveRestore + ".web.address", "")
-            var index = srsWebPage.restoreOnce(prefixSaveRestore + ".web.typeIndex", -1)
+            var pageTitle = window.pageStack.currentPage.pageTitle;
+            var restoredWeb = srsWebPage.restoreOnce(pageTitle + ".web.address", "")
+            var index = srsWebPage.restoreOnce(pageTitle + ".web.typeIndex", -1)
 
             data_url.text = restoredWeb;
 

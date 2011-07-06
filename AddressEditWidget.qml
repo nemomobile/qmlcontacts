@@ -29,7 +29,6 @@ Item {
     property string countryAddress:  qsTr("Country")
     property string postcodeAddress:  qsTr("Postcode / Zip")
 
-    property string prefixSaveRestore: ""
     property bool canSave: false
 
     SaveRestoreState {
@@ -40,24 +39,25 @@ Item {
                     for(var i = 0; i < addressFieldRepeater.itemCount; i++){
                         var tempItem = addressFieldRepeater.itemList[i]
                         if(tempItem){
+                            var pageTitle = window.pageStack.currentPage.pageTitle;
                             if(tempItem.fieldVal == "street"){
-                                setValue(prefixSaveRestore + ".address.street", tempItem.text);
+                                setValue(pageTitle + ".address.street", tempItem.text);
                             }else if(tempItem.fieldVal == "street2"){
-                                setValue(prefixSaveRestore + ".address.street2", tempItem.text);
+                                setValue(pageTitle + ".address.street2", tempItem.text);
                             }else if(tempItem.fieldVal == "locale"){
-                                setValue(prefixSaveRestore + ".address.locale", tempItem.text);
+                                setValue(pageTitle + ".address.locale", tempItem.text);
                             }else if(tempItem.fieldVal == "region"){
-                                setValue(prefixSaveRestore + ".address.region", tempItem.text);
+                                setValue(pageTitle + ".address.region", tempItem.text);
                             }else if(tempItem.fieldVal == "zip"){
-                                setValue(prefixSaveRestore + ".address.zip", tempItem.text);
+                                setValue(pageTitle + ".address.zip", tempItem.text);
                             }else if(tempItem.fieldVal == "country"){
-                                setValue(prefixSaveRestore + ".address.country", tempItem.text);
+                                setValue(pageTitle + ".address.country", tempItem.text);
                             }
                         }
                     }
                 }
 
-                setValue(prefixSaveRestore + ".address.typeIndex", addressComboBox.selectedIndex);
+                setValue(pageTitle + ".address.typeIndex", addressComboBox.selectedIndex);
 
             }
 
@@ -67,12 +67,13 @@ Item {
 
     function restoreData() {
         if(srsAddress.restoreRequired && !updateMode){
-            var restoredAddress     = srsAddress.restoreOnce(prefixSaveRestore + ".address.street", streetAddress);
-            var restoredAddress2    = srsAddress.restoreOnce(prefixSaveRestore + ".address.street2", streetAddress);
-            var restoredLocale      = srsAddress.restoreOnce(prefixSaveRestore + ".address.locale", localeAddress);
-            var restoredRegion      = srsAddress.restoreOnce(prefixSaveRestore + ".address.region", regionAddress);
-            var restoredZip         = srsAddress.restoreOnce(prefixSaveRestore + ".address.zip", postcodeAddress);
-            var restoredCountry     = srsAddress.restoreOnce(prefixSaveRestore + ".address.country", countryAddress);
+            var pageTitle = window.pageStack.currentPage.pageTitle;
+            var restoredAddress     = srsAddress.restoreOnce(pageTitle + ".address.street", streetAddress);
+            var restoredAddress2    = srsAddress.restoreOnce(pageTitle + ".address.street2", streetAddress);
+            var restoredLocale      = srsAddress.restoreOnce(pageTitle + ".address.locale", localeAddress);
+            var restoredRegion      = srsAddress.restoreOnce(pageTitle + ".address.region", regionAddress);
+            var restoredZip         = srsAddress.restoreOnce(pageTitle + ".address.zip", postcodeAddress);
+            var restoredCountry     = srsAddress.restoreOnce(pageTitle + ".address.country", countryAddress);
 
             if(addressFieldRepeater){
                 for(var i = 0; i < addressFieldRepeater.itemCount; i++){
@@ -95,7 +96,7 @@ Item {
                 }
             }
 
-            var index = srsAddress.restoreOnce(prefixSaveRestore + ".address.typeIndex", -1);
+            var index = srsAddress.restoreOnce(pageTitle + ".address.typeIndex", -1);
 
             if (index != -1) {
                 addressComboBox.title = addressComboBox.model[index];

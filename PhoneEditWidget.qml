@@ -31,7 +31,6 @@ Item{
     property string cancelLabel: qsTr("Cancel")
     property string addLabel: qsTr("Add")
 
-    property string prefixSaveRestore: ""
     property bool canSave: false
 
     SaveRestoreState {
@@ -39,8 +38,9 @@ Item{
         onSaveRequired: {
             if(!updateMode && phonesRect.canSave){
                 // Save the phone number that is currently being edited
-                setValue(prefixSaveRestore + ".phone.number", data_phone.text)
-                setValue(prefixSaveRestore + ".phone.typeIndex", phoneComboBox.selectedIndex)
+                var pageTitle = window.pageStack.currentPage.pageTitle;
+                setValue(pageTitle + ".phone.number", data_phone.text)
+                setValue(pageTitle + ".phone.typeIndex", phoneComboBox.selectedIndex)
             }
             sync()
         }
@@ -48,8 +48,9 @@ Item{
 
     function restoreData() {
         if(srsPhone.restoreRequired && !updateMode){
-            var restoredPhoneNumber = srsPhone.restoreOnce(prefixSaveRestore + ".phone.number", "")
-            var index = srsPhone.restoreOnce(prefixSaveRestore + ".phone.typeIndex", -1)
+            var pageTitle = window.pageStack.currentPage.pageTitle;
+            var restoredPhoneNumber = srsPhone.restoreOnce(pageTitle + ".phone.number", "")
+            var index = srsPhone.restoreOnce(pageTitle + ".phone.typeIndex", -1)
 
             data_phone.text = restoredPhoneNumber;
 
