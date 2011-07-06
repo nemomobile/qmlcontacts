@@ -24,8 +24,6 @@ Flickable{
     interactive: true
     opacity:  1
 
-    property string parentTitle: parent.pageTitle ? parent.pageTitle : ""
-
     property PeopleModel dataModel: newContactModel
 
     property string contextHome: qsTr("Home")
@@ -75,20 +73,18 @@ Flickable{
         onSaveRequired: sync()
     }
 
-    Component.onCompleted: {
-        if(justRestore.restoreRequired){
-            restoredFirstName       = justRestore.restoreOnce(parentTitle + ".contact.firstName", "")
-            restoredLastName        = justRestore.restoreOnce(parentTitle + ".contact.lastName", "")
-            restoredCompany         = justRestore.restoreOnce(parentTitle + ".contact.company", "")
-            restoredNotes           = justRestore.restoreOnce(parentTitle + ".contact.notes", "")
-            restoredPhoto           = justRestore.restoreOnce(parentTitle + ".contact.photo", "")
-            restoredFavorite        = justRestore.restoreOnce(parentTitle + ".contact.favorite", "")
-            restoredBirthday        = justRestore.restoreOnce(parentTitle + ".contact.birthday", "")
-        }
-    }
-
-
     function finishPageLoad() {
+        if (justRestore.restoreRequired) {
+            var parentTitle = window.pageStack.currentPage.pageTitle;
+            restoredFirstName = justRestore.restoreOnce(parentTitle + ".contact.firstName", "")
+            restoredLastName = justRestore.restoreOnce(parentTitle + ".contact.lastName", "")
+            restoredCompany = justRestore.restoreOnce(parentTitle + ".contact.company", "")
+            restoredNotes = justRestore.restoreOnce(parentTitle + ".contact.notes", "")
+            restoredPhoto = justRestore.restoreOnce(parentTitle + ".contact.photo", "")
+            restoredFavorite = justRestore.restoreOnce(parentTitle + ".contact.favorite", "")
+            restoredBirthday = justRestore.restoreOnce(parentTitle + ".contact.birthday", "")
+        }
+
         phones.loadExpandingBox();
         ims.loadExpandingBox();
         emails.loadExpandingBox();
@@ -219,6 +215,7 @@ Flickable{
 		    SaveRestoreState {
 			id: srsMainView
 			onSaveRequired: {
+                            var parentTitle = window.pageStack.currentPage.pageTitle;
                             setValue(parentTitle + ".contact.firstName", data_first.text)
                             setValue(parentTitle + ".contact.lastName", data_last.text)
                             setValue(parentTitle + ".contact.company",data_company.text)
@@ -309,12 +306,8 @@ Flickable{
 
             headerLabel: phoneLabel
             expandingBoxTitle: addPhones
-            newDetailsComponent: PhoneEditWidget{
-                prefixSaveRestore: parentTitle
-            }
-            existingDetailsComponent: PhoneEditWidget{
-                prefixSaveRestore: parentTitle
-            }
+            newDetailsComponent: PhoneEditWidget{}
+            existingDetailsComponent: PhoneEditWidget{}
         }
 
         ContactsExpandableDetails {
@@ -322,12 +315,8 @@ Flickable{
 
             headerLabel: imLabel
             expandingBoxTitle: addIms
-            newDetailsComponent: ImEditWidget{
-                prefixSaveRestore: parentTitle
-            }
-            existingDetailsComponent: ImEditWidget{
-                prefixSaveRestore: parentTitle
-            }
+            newDetailsComponent: ImEditWidget{}
+            existingDetailsComponent: ImEditWidget{}
         }
 
         ContactsExpandableDetails {
@@ -335,12 +324,8 @@ Flickable{
 
             headerLabel: emailLabel
             expandingBoxTitle: addEmails
-            newDetailsComponent: EmailEditWidget{
-                prefixSaveRestore: parentTitle
-            }
-            existingDetailsComponent: EmailEditWidget{
-                prefixSaveRestore: parentTitle
-            }
+            newDetailsComponent: EmailEditWidget{}
+            existingDetailsComponent: EmailEditWidget{}
         }
 
         ContactsExpandableDetails {
@@ -348,12 +333,8 @@ Flickable{
 
             headerLabel: urlLabel
             expandingBoxTitle: addUrls
-            newDetailsComponent: WebPageEditWidget{
-                prefixSaveRestore: parentTitle
-            }
-            existingDetailsComponent: WebPageEditWidget{
-                prefixSaveRestore: parentTitle
-            }
+            newDetailsComponent: WebPageEditWidget{}
+            existingDetailsComponent: WebPageEditWidget{}
         }
 
         ContactsExpandableDetails {
@@ -361,12 +342,8 @@ Flickable{
 
             headerLabel: addressLabel
             expandingBoxTitle: addAddress
-            newDetailsComponent: AddressEditWidget{
-                prefixSaveRestore: parentTitle
-            }
-            existingDetailsComponent: AddressEditWidget{
-                prefixSaveRestore: parentTitle
-            }
+            newDetailsComponent: AddressEditWidget{}
+            existingDetailsComponent: AddressEditWidget{}
         }
 
         Item{

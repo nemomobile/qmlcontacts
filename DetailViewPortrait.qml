@@ -23,8 +23,6 @@ Flickable {
     clip: true;
     opacity: 1
 
-    property string parentTitle: ""
-
     property PeopleModel detailModel: contactModel
     property int indexOfPerson: personRow
 

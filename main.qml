@@ -284,7 +284,6 @@ Window {
                         window.addPage(myAppNewContact);
                     }
                     visible: (window.orientation == 0 || window.orientation == 2) // portrait
-                    parentTitle: pageTitle
                 }
 
                 GroupedViewLandscape {
@@ -296,7 +295,6 @@ Window {
                         window.addPage(myAppNewContact);
                     }
                     visible: (window.orientation == 1 || window.orientation == 3) // landscape
-                    parentTitle: pageTitle
                 }
             }
 
@@ -352,7 +350,6 @@ Window {
                 anchors.fill:  parent
                 detailModel: peopleModel
                 indexOfPerson: proxyModel.getSourceRow(window.currentContactIndex)
-                parentTitle: pageTitle
             }
             FooterBar { 
                 id: detailsFooter 
@@ -392,7 +389,6 @@ Window {
                 dataModel: peopleModel
                 index: proxyModel.getSourceRow(window.currentContactIndex, "editviewportrait")
                 anchors.fill: parent
-                parentTitle: pageTitle
             }
             FooterBar { 
                 id: editFooter 
@@ -436,7 +432,6 @@ Window {
             NewContactViewPortrait{
                 id: newContact
                 dataModel: peopleModel
-                parentTitle: pageTitle
             }
             FooterBar { 
                 id: newFooter 

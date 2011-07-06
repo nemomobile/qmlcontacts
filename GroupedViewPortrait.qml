@@ -13,8 +13,6 @@ import MeeGo.App.Contacts 0.1
 Item {
     id: groupedViewPortrait
 
-    property string parentTitle: ""
-
     signal addNewContact
     signal pressAndHold(int x, int y)
 

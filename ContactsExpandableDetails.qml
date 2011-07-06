@@ -36,8 +36,7 @@ Column {
     property alias repeaterItemList: detailsRepeater.itemList
 
     property bool initializedData: false
-    property string parentTitle: detailsColumn.parent.parent.parent.parentTitle
-    property string prefixSaveRestore: detailsColumn.parent.parent.parent.parentTitle + "." + headerLabel + ".expandableDetails"
+    property string prefixSaveRestore: window.pageStack.currentPage.pageTitle + "." + headerLabel + ".expandableDetails"
     property bool expandedFromRestore: false
 
     SaveRestoreState {

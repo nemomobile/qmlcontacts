@@ -25,8 +25,6 @@ Flickable {
     interactive: true
     opacity: 1
 
-    property string parentTitle: ""
-
     property PeopleModel dataModel: contactModel
     property int index: personRow
     property bool validInput: false
@@ -79,21 +77,20 @@ Flickable {
     SaveRestoreState {
 	id: justRestore
 	onSaveRequired: sync()
-
-	Component.onCompleted: {
-            if(justRestore.restoreRequired){
-                restoredFirstName   = restoreOnce(parentTitle + ".contact.firstName", "")
-                restoredLastName    = restoreOnce(parentTitle + ".contact.lastName", "")
-                restoredCompany     = restoreOnce(parentTitle + ".contact.company", "")
-                restoredNotes       = restoreOnce(parentTitle + ".contact.notes", "")
-                restoredPhoto       = restoreOnce(parentTitle + ".contact.photo", "")
-                restoredFavorite    = restoreOnce(parentTitle + ".contact.favorite", "")
-                restoredBirthday    = restoreOnce(parentTitle + ".contact.birthday", "")
-            }
-	}
     }
 
     function finishPageLoad() {
+        if (justRestore.restoreRequired) {
+            var parentTitle = window.pageStack.currentPage.pageTitle;
+            restoredFirstName = restoreOnce(parentTitle + ".contact.firstName", "")
+            restoredLastName = restoreOnce(parentTitle + ".contact.lastName", "")
+            restoredCompany = restoreOnce(parentTitle + ".contact.company", "")
+            restoredNotes = restoreOnce(parentTitle + ".contact.notes", "")
+            restoredPhoto = restoreOnce(parentTitle + ".contact.photo", "")
+            restoredFavorite = restoreOnce(parentTitle + ".contact.favorite", "")
+            restoredBirthday = restoreOnce(parentTitle + ".contact.birthday", "")
+        }
+
         phones.loadExpandingBox();
         ims.loadExpandingBox();
         emails.loadExpandingBox();
@@ -219,6 +216,7 @@ Flickable {
 		    SaveRestoreState {
 			id: srsMainView
 			onSaveRequired: {
+                            var parentTitle = window.pageStack.currentPage.pageTitle;
                             setValue(parentTitle + ".contact.firstName", data_first.text)
                             setValue(parentTitle + ".contact.lastName", data_last.text)
                             setValue(parentTitle + ".contact.company",data_company.text)
@@ -310,12 +308,8 @@ Flickable {
 
             headerLabel: phoneLabel
             expandingBoxTitle: addPhones
-            newDetailsComponent: PhoneEditWidget{
-                prefixSaveRestore: parentTitle
-            }
-            existingDetailsComponent: PhoneEditWidget{
-                prefixSaveRestore: parentTitle
-            }
+            newDetailsComponent: PhoneEditWidget{}
+            existingDetailsComponent: PhoneEditWidget{}
             existingDetailsModel: dataModel.data(index, PeopleModel.PhoneNumberRole)
             contextModel: dataModel.data(index, PeopleModel.PhoneContextRole)
         }
@@ -325,12 +319,8 @@ Flickable {
 
             headerLabel: imLabel
             expandingBoxTitle: addIms
-            newDetailsComponent: ImEditWidget{
-                prefixSaveRestore: parentTitle
-            }
-            existingDetailsComponent: ImEditWidget{
-                prefixSaveRestore: parentTitle
-            }
+            newDetailsComponent: ImEditWidget{}
+            existingDetailsComponent: ImEditWidget{}
             existingDetailsModel: dataModel.data(index, PeopleModel.OnlineAccountUriRole)
             contextModel: dataModel.data(index, PeopleModel.OnlineServiceProviderRole)
         }
@@ -340,12 +330,8 @@ Flickable {
 
             headerLabel: emailLabel
             expandingBoxTitle: addEmails
-            newDetailsComponent: EmailEditWidget{
-                prefixSaveRestore: parentTitle
-            }
-            existingDetailsComponent: EmailEditWidget{
-                prefixSaveRestore: parentTitle
-            }
+            newDetailsComponent: EmailEditWidget{}
+            existingDetailsComponent: EmailEditWidget{}
             existingDetailsModel: dataModel.data(index, PeopleModel.EmailAddressRole)
             contextModel: dataModel.data(index, PeopleModel.EmailContextRole)
         }
@@ -355,12 +341,8 @@ Flickable {
 
             headerLabel: urlLabel
             expandingBoxTitle: addUrls
-            newDetailsComponent: WebPageEditWidget{
-                prefixSaveRestore: parentTitle
-            }
-            existingDetailsComponent: WebPageEditWidget{
-                prefixSaveRestore: parentTitle
-            }
+            newDetailsComponent: WebPageEditWidget{}
+            existingDetailsComponent: WebPageEditWidget{}
             existingDetailsModel: dataModel.data(index, PeopleModel.WebUrlRole)
             contextModel: dataModel.data(index, PeopleModel.WebContextRole)
         }
@@ -370,12 +352,8 @@ Flickable {
 
             headerLabel: addressLabel
             expandingBoxTitle: addAddress
-            newDetailsComponent: AddressEditWidget{
-                prefixSaveRestore: parentTitle
-            }
-            existingDetailsComponent: AddressEditWidget{
-                prefixSaveRestore: parentTitle
-            }
+            newDetailsComponent: AddressEditWidget{}
+            existingDetailsComponent: AddressEditWidget{}
             existingDetailsModel: dataModel.data(index, PeopleModel.AddressRole)
             contextModel: dataModel.data(index, PeopleModel.AddressContextRole)
         }
