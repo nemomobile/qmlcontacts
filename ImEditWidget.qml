@@ -37,15 +37,20 @@ Item {
     property string noAccount: qsTr("No IM accounts are configured")
     property string noBuddies : qsTr("No buddies for this account")
 
+    property string restoredImAccount: ""
+    property int restoredImAccountTypeIndex: 0
+    property string prefixSaveRestore: ""
+    property bool canSave: false
+
     SaveRestoreState {
         id: srsIM
         onSaveRequired: {
-            if(newDetailsModel != null){
+            if(newDetailsModel != null && !updateMode && imsRect.canSave){
                 if(newDetailsModel.count > 0){
-                    setValue("im.count", newDetailsModel.count)
+                    setValue(prefixSaveRestore + ".im.count", newDetailsModel.count)
                     for (var i = 0; i < newDetailsModel.count; i++){
-                        setValue("im.account" + i, newDetailsModel.get(i).im)
-                        setValue("im.type" + i, newDetailsModel.get(i).type)
+                        setValue(prefixSaveRestore + ".im.account" + i, newDetailsModel.get(i).im)
+                        setValue(prefixSaveRestore + ".im.type" + i, newDetailsModel.get(i).type)
                     }
                 }
             }
@@ -53,16 +58,17 @@ Item {
         }
     }
 
-    Component.onCompleted: {
-        if (srsIM.restoreRequired) {
-            var imCount = srsIM.value("im.count", 0)
+    function restoreData() {
+        if(srsIM.restoreRequired && !updateMode){
+            var imCount = srsIM.value(prefixSaveRestore + ".im.count", 0)
             if(imCount > 0){
                 for(var i = 0; i < imCount; i++){
-                    newDetailsModel.set(i, {"im": srsIM.restoreOnce("im.account" + i, "")})
-                    newDetailsModel.set(i, {"type": srsIM.restoreOnce("im.type" + i, "")})
+                    newDetailsModel.set(i, {"im": srsIM.restoreOnce(prefixSaveRestore + ".im.account" + i, "")})
+                    newDetailsModel.set(i, {"type": srsIM.restoreOnce(prefixSaveRestore + ".im.type" + i, "")})
                 }
             }
         }
+        imsRect.canSave = true
     }
 
     function parseDetailsModel(existingDetailsModel, contextModel) {

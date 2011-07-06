@@ -31,36 +31,37 @@ Item{
     property string cancelLabel: qsTr("Cancel")
     property string addLabel: qsTr("Add")
 
+    property string restoredPhoneNumber: ""
+    property int restoredPhoneTypeIndex: -1
+    property string prefixSaveRestore: ""
+    property bool canSave: false
+
     SaveRestoreState {
         id: srsPhone
         onSaveRequired: {
-            if(newDetailsModel != null){
-                if(newDetailsModel.count > 0){
-                    setValue("phone.count", newDetailsModel.count)
-                    for (var i = 0; i < newDetailsModel.count; i++){
-                        setValue("phone.number" + i, newDetailsModel.get(i).phone)
-                        setValue("phone.type" + i, newDetailsModel.get(i).type)
-                    }
-                }
+            if(!updateMode && phonesRect.canSave){
+                // Save the phone number that is currently being edited
+                setValue(prefixSaveRestore + ".phone.number", data_phone.text)
+                setValue(prefixSaveRestore + ".phone.typeIndex", phoneComboBox.selectedIndex)
             }
             sync()
         }
     }
 
-    Component.onCompleted: {
-        if (srsPhone.restoreRequired) {
-            var phoneCount = srsPhone.value("phone.count", 0)
-            if(phoneCount > 0){
-                for(var i = 0; i < phoneCount; i++){
-                    newDetailsModel.set(i, {"phone": srsPhone.restoreOnce("phone.number" + i, "")})
-                    newDetailsModel.set(i, {"type": srsPhone.restoreOnce("phone.type" + i, "")})
-                }
-            }
+    function restoreData() {
+        if(srsPhone.restoreRequired && !updateMode){
+            restoredPhoneNumber = srsPhone.restoreOnce(prefixSaveRestore + ".phone.number", "")
+            restoredPhoneTypeIndex  = srsPhone.restoreOnce(prefixSaveRestore + ".phone.typeIndex", -1)
+
+            data_phone.text = restoredPhoneNumber;
+            phoneComboBox.title = (restoredPhoneTypeIndex != -1 ? phoneComboBox.model[restoredPhoneTypeIndex] : mobileContext)
+            phoneComboBox.selectedIndex = (restoredPhoneTypeIndex != -1 ? restoredPhoneTypeIndex : 0)
         }
+        phonesRect.canSave = true
     }
 
     function parseDetailsModel(existingDetailsModel, contextModel) {
-        var arr = new Array(); 
+        var arr = new Array();
         for (var i = 0; i < existingDetailsModel.length; i++)
             arr[i] = {"phone": existingDetailsModel[i], "type": contextModel[i]};
 
@@ -78,6 +79,7 @@ Item{
                 count = count + 1;
             }
         }
+
         return {"numbers": phoneNumList, "types": phoneTypeList};
     }
 
@@ -106,6 +108,13 @@ Item{
         return 0;
     }
 
+    function updateDisplayedData(){
+        if(updateMode){
+            phoneComboBox.title = (updateMode) ? newDetailsModel.get(rIndex).type : mobileContext
+            phoneComboBox.selectedIndex = (updateMode) ? getIndexVal(newDetailsModel.get(rIndex).type) : 0
+        }
+    }
+
     DropDown {
         id: phoneComboBox
 
@@ -125,7 +134,7 @@ Item{
 
     TextEntry {
         id: data_phone
-        text: (updateMode) ? newDetailsModel.get(rIndex).phone : ""
+        text: (updateMode) ? (newDetailsModel ? newDetailsModel.get(rIndex).phone : "") : ""
         defaultText: defaultPhone
         width: Math.round(parent.width/2) - 4*anchors.leftMargin
         anchors {left:phoneComboBox.right; leftMargin: itemMargins;}

@@ -24,33 +24,37 @@ Item {
     property string bookmarkWeb : qsTr("Bookmark", "Noun")
     property string favoriteWeb : qsTr("Favorite", "Noun")
 
+    property string restoredWeb: ""
+    property int restoredWebTypeIndex: -1
+    property string prefixSaveRestore: ""
+    property bool canSave: false
+
     SaveRestoreState {
         id: srsWebPage
         onSaveRequired: {
-            if(newDetailsModel != null){
-                if(newDetailsModel.count > 0){
-                    setValue("web.count", newDetailsModel.count)
-                    for (var i = 0; i < newDetailsModel.count; i++){
-                        setValue("web.address" + i, newDetailsModel.get(i).web)
-                        setValue("web.type" + i, newDetailsModel.get(i).type)
-                    }
-                }
+            if(!updateMode && webRect.canSave){
+                // Save the phone number that is currently being edited
+                setValue(prefixSaveRestore + ".web.address", data_url.text)
+                setValue(prefixSaveRestore + ".web.typeIndex", urlComboBox.selectedIndex)
             }
+
             sync()
         }
     }
 
-    Component.onCompleted: {
-        if (srsWebPage.restoreRequired) {
-            var webCount = srsWebPage.value("web.count", 0)
-            if(webCount > 0){
-                for(var i = 0; i < webCount; i++){
-                    newDetailsModel.set(i, {"web": srsWebPage.restoreOnce("web.address" + i, "")})
-                    newDetailsModel.set(i, {"type": srsWebPage.restoreOnce("web.type" + i, "")})
-                }
-            }
+    function restoreData() {
+        if(srsWebPage.restoreRequired && !updateMode){
+            restoredWeb           = srsWebPage.restoreOnce(prefixSaveRestore + ".web.address", "")
+            restoredWebTypeIndex  = srsWebPage.restoreOnce(prefixSaveRestore + ".web.typeIndex", -1)
+
+            data_url.text = restoredWeb;
+            urlComboBox.title = (restoredWebTypeIndex != -1 ? urlComboBox.model[restoredWebTypeIndex] : bookmarkWeb)
+            urlComboBox.selectedIndex = (restoredWebTypeIndex != -1 ? restoredWebTypeIndex : 0)
         }
+
+        webRect.canSave = true
     }
+
 
     function parseDetailsModel(existingDetailsModel, contextModel) {
         var arr = new Array(); 
@@ -112,7 +116,7 @@ Item {
 
         model: [favoriteWeb, bookmarkWeb]
 
-        title: (updateMode) ? newDetailsModel.get(rIndex).type : bookmarkWeb 
+        title: (updateMode) ? newDetailsModel.get(rIndex).type : bookmarkWeb
         selectedIndex: (updateMode) ? getIndexVal(newDetailsModel.get(rIndex).type) : 1
         replaceDropDownTitle: true
     }

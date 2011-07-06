@@ -26,9 +26,61 @@ Column {
     property string expandingBoxTitle
     property Component newDetailsComponent: null
     property Component existingDetailsComponent: null
+    property Item newDetailsActualItem: null
 
     property string addLabel: qsTr("Add")
     property string cancelLabel: qsTr("Cancel")
+
+    property bool newDetailsExpanded: false
+    property alias itemCount: detailsRepeater.itemCount
+    property alias repeaterItemList: detailsRepeater.itemList
+
+    property bool initializedData: false
+    property string parentTitle: detailsColumn.parent.parent.parent.parentTitle
+    property string prefixSaveRestore: detailsColumn.parent.parent.parent.parentTitle + "." + headerLabel + ".expandableDetails"
+    property bool expandedFromRestore: false
+
+    SaveRestoreState {
+        id: srsExpandableDetails
+        onSaveRequired: {
+
+            var canSave = true
+            if(!initializedData)
+                canSave = srsExpandableDetails.value(prefixSaveRestore + ".valid", true);
+
+            if(initializedData && canSave){
+                // Header
+                var detailId = headerLabel + "."
+
+                setValue(prefixSaveRestore + ".expanded", newDetailsExpanded)
+                setValue(prefixSaveRestore + ".itemCount", detailsRepeater.itemCount)
+
+                // Repeater data
+                if(detailsRepeater.model.count > 0){
+                    var propIndex = 0;
+
+                    for(var i = 0; i < detailsRepeater.count; i++){
+                        var entryName = prefixSaveRestore + ".items." + i + "."
+
+                        var arr = repeaterItemList[i].getDetails(false);
+                        propIndex = 0;
+                        for (var key in arr){
+                            var keyName     = entryName + "property." + propIndex + ".name";
+                            var keyValue    = entryName + "property." + propIndex + ".value";
+
+                            setValue(keyName, key)
+                            setValue(keyValue, arr[key])
+                            propIndex++
+                        }
+                    }
+
+                    setValue(prefixSaveRestore + ".items.property.count", propIndex)
+                }
+            }
+
+            sync()
+        }
+    }
 
     function loadExpandingBox() {
         expandingLoader.sourceComponent = expandingComponent;
@@ -56,6 +108,75 @@ Column {
         detailsRepeater.itemCount -= 1;
     }
 
+    function restoreData(){
+        if(!initializedData){
+            if(srsExpandableDetails.restoreRequired){
+                var expandData = srsExpandableDetails.restoreOnce(prefixSaveRestore + ".expanded", false);
+                if(expandData)
+                    expandedFromRestore = true
+                detailsColumn.newDetailsExpanded = expandData
+
+                // I. Restore data for the model items
+                var detailId = headerLabel + "."
+                var itemCount = srsExpandableDetails.value(prefixSaveRestore + ".itemCount", 0)
+
+                if(itemCount > 0){
+                    var entryNameHeader = prefixSaveRestore + ".items."
+                    var propertyCount = srsExpandableDetails.restoreOnce(prefixSaveRestore + ".items.property.count", 0)
+
+                    for(var i = 0; i < itemCount; i++){
+                        var entryName = entryNameHeader + i + ".property."
+
+                        appendIntoDetailsModel()
+
+                        for(var j = 0; j < propertyCount; j++){
+                            var key     = srsExpandableDetails.restoreOnce(entryName + j + ".name", "")
+                            var value   = srsExpandableDetails.restoreOnce(entryName + j + ".value", "")
+
+                            detailsModel.setProperty(i, key, value);
+                        }
+
+                        updateModelDisplayedData()
+                    }
+                }
+
+                // II. Restore data in the expandingLoader
+                if(newDetailsActualItem){
+                    newDetailsActualItem.restoreData()
+                }
+
+                srsExpandableDetails.setValue(prefixSaveRestore + ".valid", false);
+                srsExpandableDetails.sync()
+            }
+        }
+        initializedData = true
+    }
+
+    function appendIntoDetailsModel(){
+        if(headerLabel == detailsColumn.parent.parent.parent.phoneLabel){
+            detailsModel.append({"phone" : "", "type" : ""})
+        }else if(headerLabel == detailsColumn.parent.parent.parent.addressLabel){
+            detailsModel.append({"street" : "", "street2" : "", "locale" : "", "region" : "", "zip" : "", "country" : "", "type" : ""})
+        }else if(headerLabel == detailsColumn.parent.parent.parent.imLabel){
+            detailsModel.append({"im" : "", "account" : "", "type" : ""})
+        }else if(headerLabel == detailsColumn.parent.parent.parent.emailLabel){
+            detailsModel.append({"email" : "", "type" : ""})
+        }else if(headerLabel == detailsColumn.parent.parent.parent.urlLabel){
+            detailsModel.append({"web" : "", "type" : ""})
+        }
+    }
+
+    function updateModelDisplayedData(){
+        if( headerLabel == detailsColumn.parent.parent.parent.phoneLabel
+            || headerLabel == detailsColumn.parent.parent.parent.emailLabel
+            || headerLabel == detailsColumn.parent.parent.parent.addressLabel){
+            if(detailsRepeater){
+                if(detailsRepeater.itemCount > 0)
+                    detailsRepeater.itemList[detailsRepeater.itemCount - 1].updateDisplayedData()
+            }
+        }
+    }
+
     ListModel{
         id: detailsModel 
         Component.onCompleted:{
@@ -63,7 +184,7 @@ Column {
                 var newFieldItem = existingDetailsComponent.createObject(detailsColumn);
                 var tmpArr = newFieldItem.parseDetailsModel(existingDetailsModel, contextModel);
                 for (var i = 0; i < tmpArr.length; i++) {
-                    detailsModel.append({"type" : ""});
+                    appendIntoDetailsModel()
                     for (var key in tmpArr[i])
                          detailsModel.setProperty(i, key, tmpArr[i][key]);
                 }
@@ -87,6 +208,16 @@ Column {
             smooth: true
             anchors {bottom: detailsHeader.bottom; bottomMargin: itemMargins;
                      left: detailsHeader.left; leftMargin: 30}
+        }
+    }
+
+    Timer {
+        interval: 2000
+        running: true
+        repeat: false
+
+        onTriggered: {
+            restoreData()
         }
     }
 
@@ -142,7 +273,7 @@ Column {
                 source: "image://themedimage/icons/internal/contact-information-delete"
                 width: 36
                 height: 36
-                anchors {top: parent.top; right: parent.right; 
+                anchors {top: parent.top; right: parent.right;
                          margins: itemMargins;}
                 opacity: 1
                 MouseArea {
@@ -170,6 +301,7 @@ Column {
             }
         }
     }
+
     Binding {target: detailsColumn; property: "validInput"; value: true; when: detailsRepeater.count > 0}
     Binding {target: detailsColumn; property: "validInput"; value: false; when: detailsRepeater.count <= 0}
 
@@ -190,12 +322,15 @@ Column {
     }
 
     Component {
-        id: expandingComponent 
+        id: expandingComponent
         Item {
             id: expandingItem
             parent: addBar
 
             property alias expanded: detailsBox.expanded
+
+            Binding {target: expandingItem; property: 'expanded'; value: true; when: detailsColumn.newDetailsExpanded == true}
+            Binding {target: expandingItem; property: 'expanded'; value: false; when: detailsColumn.newDetailsExpanded == false}
 
             ExpandingBox {
                 id: detailsBox
@@ -232,6 +367,7 @@ Column {
                 detailsComponent: fieldDetailComponent
 
                 onExpandingChanged: {
+                    detailsColumn.newDetailsExpanded = detailsBox.expanded
                     if (expanded) {
                         add_button.source = "image://themedimage/icons/internal/contact-information-add-active"
                         detailsColumn.height = (initialHeight + detailsItem.height);
@@ -241,6 +377,9 @@ Column {
                         add_button.source = "image://themedimage/icons/internal/contact-information-add";
                         detailsColumn.height = initialHeight;
                     }
+
+                    if(newDetailsActualItem && !expandedFromRestore)
+                        newDetailsActualItem.canSave = true
                 }
             }
         }
@@ -266,6 +405,7 @@ Column {
                 Component.onCompleted: {
                     newDLoader.item.newDetailsModel = detailsModel;
                     newDLoader.item.rIndex = detailsModel.count;
+                    detailsColumn.newDetailsActualItem = newDLoader.item
                 }
             }
 
@@ -285,9 +425,11 @@ Column {
                 onClicked: {
                     expandingLoader.item.expanded = false;
                     var arr = newDLoader.item.getDetails(true);
-                    detailsModel.append({"type" : ""});
+                    appendIntoDetailsModel()
                     for (var key in arr)
                         detailsModel.setProperty(detailsModel.count - 1, key, arr[key]);
+
+                    updateModelDisplayedData()
                 }
             }
 

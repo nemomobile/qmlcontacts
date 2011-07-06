@@ -13,6 +13,8 @@ import MeeGo.App.Contacts 0.1
 Item {
     id: groupedViewLandscape
 
+    property string parentTitle: ""
+
     property PeopleModel dataModel: contactModel
     property ProxyModel sortModel: proxyModel
     property alias cards: cardListView

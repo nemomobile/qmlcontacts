@@ -25,32 +25,34 @@ Item {
     property string contextOther : qsTr("Other")
     property string defaultEmail : qsTr("Email address")
 
+    property string restoredEmail: ""
+    property int restoredEmailTypeIndex: -1
+    property string prefixSaveRestore: ""
+    property bool canSave: false
+
     SaveRestoreState {
         id: srsMail
         onSaveRequired: {
-            if(newDetailsModel != null){
-                if(newDetailsModel.count > 0){
-                    setValue("mail.count", newDetailsModel.count)
-                    for (var i = 0; i < newDetailsModel.count; i++){
-                        setValue("mail.address" + i, newDetailsModel.get(i).email)
-                        setValue("mail.type" + i, newDetailsModel.get(i).type)
-                    }
-                }
+            if(!updateMode && emailRect.canSave){
+                // Save the phone number that is currently being edited
+                setValue(prefixSaveRestore + ".email.address", data_email.text)
+                setValue(prefixSaveRestore + ".email.typeIndex", emailComboBox.selectedIndex)
             }
+
             sync()
         }
     }
 
-    Component.onCompleted: {
-        if (srsMail.restoreRequired) {
-            var mailCount = srsMail.value("mail.count", 0)
-            if(mailCount > 0){
-                for(var i = 0; i < mailCount; i++){
-                    newDetailsModel.set(i, {"email": srsMail.restoreOnce("mail.address" + i, "")})
-                    newDetailsModel.set(i, {"type": srsMail.restoreOnce("mail.type" + i, "")})
-                }
-            }
+    function restoreData() {
+        if(srsMail.restoreRequired && !updateMode){
+            restoredEmail           = srsMail.restoreOnce(prefixSaveRestore + ".email.address", "")
+            restoredEmailTypeIndex  = srsMail.restoreOnce(prefixSaveRestore + ".email.typeIndex", -1)
+
+            data_email.text = restoredEmail;
+            emailComboBox.title = (restoredEmailTypeIndex != -1 ? emailComboBox.model[restoredEmailTypeIndex] : contextHome)
+            emailComboBox.selectedIndex = (restoredEmailTypeIndex != -1 ? restoredEmailTypeIndex : 0)
         }
+        emailRect.canSave = true
     }
 
     function parseDetailsModel(existingDetailsModel, contextModel) {
@@ -99,6 +101,13 @@ Item {
             }
         }
         return 0;
+    }
+
+    function updateDisplayedData(){
+        if(updateMode){
+            emailComboBox.title = (updateMode) ? newDetailsModel.get(rIndex).type : contextHome
+            emailComboBox.selectedIndex = (updateMode) ? getIndexVal(newDetailsModel.get(rIndex).type) : 0
+        }
     }
 
     DropDown {

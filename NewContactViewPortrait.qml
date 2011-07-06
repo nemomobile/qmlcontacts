@@ -24,6 +24,8 @@ Flickable{
     interactive: true
     opacity:  1
 
+    property string parentTitle: parent.pageTitle ? parent.pageTitle : ""
+
     property PeopleModel dataModel: newContactModel
 
     property string contextHome: qsTr("Home")
@@ -64,19 +66,27 @@ Flickable{
     property string restoredLastName: ""
     property string restoredCompany: ""
     property string restoredNotes: ""
+    property string restoredPhoto: ""
+    property string restoredFavorite: ""
     property date restoredBirthday
 
     SaveRestoreState {
-	id: justRestore
-	onSaveRequired: sync()
-	Component.onCompleted: {
-	    restoredFirstName = restoreOnce("newContact.firstName", "")
-	    restoredLastName = restoreOnce("newContact.lastName", "")
-	    restoredCompany = restoreOnce("newContact.company", "")
-	    restoredNotes = restoreOnce("newContact.notes", "")
-	    restoredBirthday = restoreOnce("newContact.birthday", "")
-	}
+        id: justRestore
+        onSaveRequired: sync()
     }
+
+    Component.onCompleted: {
+        if(justRestore.restoreRequired){
+            restoredFirstName       = justRestore.restoreOnce(parentTitle + ".contact.firstName", "")
+            restoredLastName        = justRestore.restoreOnce(parentTitle + ".contact.lastName", "")
+            restoredCompany         = justRestore.restoreOnce(parentTitle + ".contact.company", "")
+            restoredNotes           = justRestore.restoreOnce(parentTitle + ".contact.notes", "")
+            restoredPhoto           = justRestore.restoreOnce(parentTitle + ".contact.photo", "")
+            restoredFavorite        = justRestore.restoreOnce(parentTitle + ".contact.favorite", "")
+            restoredBirthday        = justRestore.restoreOnce(parentTitle + ".contact.birthday", "")
+        }
+    }
+
 
     function finishPageLoad() {
         phones.loadExpandingBox();
@@ -113,6 +123,10 @@ Flickable{
             console.log("[contactSave] Unable to create new contact due to missing info");
     }
 
+    function restoreData(){
+        phones.restoreData()
+    }
+
     Column{
         id: detailsList
         spacing: 1
@@ -132,7 +146,7 @@ Flickable{
 
                 Image{
                     id: avatar_img
-                    source: "image://themedimage/icons/internal/contacts-avatar-add"
+                    source: restoredPhoto != "" ? restoredPhoto : "image://themedimage/icons/internal/contacts-avatar-add"
                     anchors.centerIn: avatar
                     opacity: 1
                     signal clicked
@@ -164,7 +178,7 @@ Flickable{
                 albumSelectionMode: false
                 onPhotoSelected: {
                     selectedPhoto = uri
-                    selectedPhotoThumb = (thumbUri ? thumbUri : uri);
+                    selectedPhotoThumb = (thumbUri ? thumbUri : selectedPhoto);
                     newContactPage.validInput = true;
                     if (selectedPhoto)
                     {
@@ -205,12 +219,13 @@ Flickable{
 		    SaveRestoreState {
 			id: srsMainView
 			onSaveRequired: {
-			    setValue("newContact.firstName", data_first.text)
-			    setValue("newContact.lastName", data_last.text)
-			    setValue("newContact.company",data_company.text)
-			    setValue("newContact.photo", avatar_img.source)
-			    setValue("newContact.birthday", datePicker.selectedDate)
-			    setValue("newContact.notes",data_notes.text)
+                            setValue(parentTitle + ".contact.firstName", data_first.text)
+                            setValue(parentTitle + ".contact.lastName", data_last.text)
+                            setValue(parentTitle + ".contact.company",data_company.text)
+                            setValue(parentTitle + ".contact.photo", avatar_img.source)
+                            setValue(parentTitle + ".contact.birthday", datePicker.selectedDate)
+                            setValue(parentTitle + ".contact.notes",data_notes.text)
+                            setValue(parentTitle + ".contact.favorite",icn_faves.state)
 			    sync()
 			}
 		    }
@@ -263,7 +278,7 @@ Flickable{
                             id: icn_faves
                             source: "image://themedimage/icons/actionbar/favorite-selected"
                             opacity: 1
-                            state: unfavoriteValue
+                            state: restoredFavorite == "" ? unfavoriteValue : restoredFavorite
 
                             property string favoriteText: unfavoriteTranslated
                             states: [
@@ -290,12 +305,16 @@ Flickable{
         }
 
         ContactsExpandableDetails {
-            id: phones 
+            id: phones
 
             headerLabel: phoneLabel
             expandingBoxTitle: addPhones
-            newDetailsComponent: PhoneEditWidget{}
-            existingDetailsComponent: PhoneEditWidget{}
+            newDetailsComponent: PhoneEditWidget{
+                prefixSaveRestore: parentTitle
+            }
+            existingDetailsComponent: PhoneEditWidget{
+                prefixSaveRestore: parentTitle
+            }
         }
 
         ContactsExpandableDetails {
@@ -303,8 +322,12 @@ Flickable{
 
             headerLabel: imLabel
             expandingBoxTitle: addIms
-            newDetailsComponent: ImEditWidget{}
-            existingDetailsComponent: ImEditWidget{}
+            newDetailsComponent: ImEditWidget{
+                prefixSaveRestore: parentTitle
+            }
+            existingDetailsComponent: ImEditWidget{
+                prefixSaveRestore: parentTitle
+            }
         }
 
         ContactsExpandableDetails {
@@ -312,8 +335,12 @@ Flickable{
 
             headerLabel: emailLabel
             expandingBoxTitle: addEmails
-            newDetailsComponent: EmailEditWidget{}
-            existingDetailsComponent: EmailEditWidget{}
+            newDetailsComponent: EmailEditWidget{
+                prefixSaveRestore: parentTitle
+            }
+            existingDetailsComponent: EmailEditWidget{
+                prefixSaveRestore: parentTitle
+            }
         }
 
         ContactsExpandableDetails {
@@ -321,8 +348,12 @@ Flickable{
 
             headerLabel: urlLabel
             expandingBoxTitle: addUrls
-            newDetailsComponent: WebPageEditWidget{}
-            existingDetailsComponent: WebPageEditWidget{}
+            newDetailsComponent: WebPageEditWidget{
+                prefixSaveRestore: parentTitle
+            }
+            existingDetailsComponent: WebPageEditWidget{
+                prefixSaveRestore: parentTitle
+            }
         }
 
         ContactsExpandableDetails {
@@ -330,8 +361,12 @@ Flickable{
 
             headerLabel: addressLabel
             expandingBoxTitle: addAddress
-            newDetailsComponent: AddressEditWidget{}
-            existingDetailsComponent: AddressEditWidget{}
+            newDetailsComponent: AddressEditWidget{
+                prefixSaveRestore: parentTitle
+            }
+            existingDetailsComponent: AddressEditWidget{
+                prefixSaveRestore: parentTitle
+            }
         }
 
         Item{

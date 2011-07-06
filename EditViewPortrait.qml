@@ -25,6 +25,8 @@ Flickable {
     interactive: true
     opacity: 1
 
+    property string parentTitle: ""
+
     property PeopleModel dataModel: contactModel
     property int index: personRow
     property bool validInput: false
@@ -70,17 +72,24 @@ Flickable {
     property string restoredLastName: ""
     property string restoredCompany: ""
     property string restoredNotes: ""
+    property string restoredPhoto: ""
+    property string restoredFavorite: ""
     property date restoredBirthday
 
     SaveRestoreState {
 	id: justRestore
 	onSaveRequired: sync()
+
 	Component.onCompleted: {
-	    restoredFirstName = restoreOnce("contact.firstName", "")
-	    restoredLastName = restoreOnce("contact.lastName", "")
-	    restoredCompany = restoreOnce("contact.company", "")
-	    restoredNotes = restoreOnce("contact.notes", "")
-	    restoredBirthday = restoreOnce("contact.birthday", "")
+            if(justRestore.restoreRequired){
+                restoredFirstName   = restoreOnce(parentTitle + ".contact.firstName", "")
+                restoredLastName    = restoreOnce(parentTitle + ".contact.lastName", "")
+                restoredCompany     = restoreOnce(parentTitle + ".contact.company", "")
+                restoredNotes       = restoreOnce(parentTitle + ".contact.notes", "")
+                restoredPhoto       = restoreOnce(parentTitle + ".contact.photo", "")
+                restoredFavorite    = restoreOnce(parentTitle + ".contact.favorite", "")
+                restoredBirthday    = restoreOnce(parentTitle + ".contact.birthday", "")
+            }
 	}
     }
 
@@ -136,7 +145,7 @@ Flickable {
                 Image{
                     id: avatar_img
                     //REVISIT: Instead of using the URI from AvatarRole, need to use thumbnail URI
-                    source: (dataModel.data(index, PeopleModel.AvatarRole) ? dataModel.data(index, PeopleModel.AvatarRole) : "image://themedimage/icons/internal/contacts-avatar-add")
+                    source: restoredPhoto != "" ? restoredPhoto : (dataModel.data(index, PeopleModel.AvatarRole) ? dataModel.data(index, PeopleModel.AvatarRole) : "image://themedimage/icons/internal/contacts-avatar-add")
                     anchors.centerIn: avatar
                     opacity: 1
                     signal clicked
@@ -189,7 +198,7 @@ Flickable {
                     height: (data_first_p.visible ? childrenRect.height : data_first.height)
                     TextEntry{
                         id: data_first
-                        text: editViewPortrait.restoredFirstName != "" ? editViewPortrait.restoredFirstName : dataModel.data(index, PeopleModel.FirstNameRole)
+                        text: editViewPortrait.restoredFirstName != "" ? editViewPortrait.restoredFirstName : (dataModel.data(index, PeopleModel.FirstNameRole) ? dataModel.data(index, PeopleModel.FirstNameRole) : "")
                         defaultText: defaultFirstName
                         width: (parent.width-avatar.width)
                         anchors {top: parent.top;
@@ -198,7 +207,7 @@ Flickable {
                     }
                     TextEntry{
                         id: data_first_p
-                        text: dataModel.data(index, PeopleModel.FirstNameProRole)
+                        text: dataModel.data(index, PeopleModel.FirstNameProRole) ? dataModel.data(index, PeopleModel.FirstNameProRole) : ""
                         defaultText: defaultPronounciation
                         width: (parent.width - avatar.width)
                         anchors {top: data_first.bottom; topMargin: 10;
@@ -210,13 +219,13 @@ Flickable {
 		    SaveRestoreState {
 			id: srsMainView
 			onSaveRequired: {
-			    console.log("MAIN.QML saving firstName and lastName: ")
-			    setValue("contact.firstName", data_first.text)
-			    setValue("contact.lastName", data_last.text)
-			    setValue("contact.company",data_company.text)
-			    setValue("contact.photo", avatar_img.source)
-			    setValue("contact.birthday", datePicker.selectedDate)
-			    setValue("contact.notes",data_notes.text)
+                            setValue(parentTitle + ".contact.firstName", data_first.text)
+                            setValue(parentTitle + ".contact.lastName", data_last.text)
+                            setValue(parentTitle + ".contact.company",data_company.text)
+                            setValue(parentTitle + ".contact.photo", avatar_img.source)
+                            setValue(parentTitle + ".contact.birthday", datePicker.selectedDate)
+                            setValue(parentTitle + ".contact.favorite",icn_faves.state)
+                            setValue(parentTitle + ".contact.notes",data_notes.text)
 			    sync()
 			}
 		    }
@@ -227,7 +236,7 @@ Flickable {
                     height: (data_last_p.visible ? childrenRect.height : data_last.height)
                     TextEntry{
                         id: data_last
-                        text: editViewPortrait.restoredLastName != "" ? editViewPortrait.restoredLastName : dataModel.data(index, PeopleModel.LastNameRole)
+                        text: editViewPortrait.restoredLastName != "" ? editViewPortrait.restoredLastName : (dataModel.data(index, PeopleModel.LastNameRole) ? dataModel.data(index, PeopleModel.LastNameRole) : "")
                         defaultText: defaultLastName
                         width:(parent.width-avatar.width)
                         anchors {top: parent.top;
@@ -236,7 +245,7 @@ Flickable {
                     }
                     TextEntry{
                         id: data_last_p
-                        text: dataModel.data(index, PeopleModel.LastNameProRole)
+                        text: dataModel.data(index, PeopleModel.LastNameProRole) ? dataModel.data(index, PeopleModel.LastNameProRole) : ""
                         defaultText: defaultPronounciation
                         width: (parent.width-avatar.width)
                         anchors {top: data_last.bottom; topMargin: 10;
@@ -251,7 +260,7 @@ Flickable {
                     height: childrenRect.height
                     TextEntry{
                         id: data_company
-                        text: editViewPortrait.restoredCompany != "" ? editViewPortrait.restoredCompany : dataModel.data(index, PeopleModel.CompanyNameRole)
+                        text: editViewPortrait.restoredCompany != "" ? editViewPortrait.restoredCompany : (dataModel.data(index, PeopleModel.CompanyNameRole) ? dataModel.data(index, PeopleModel.CompanyNameRole) : "")
                         defaultText: defaultCompany
                         width:(parent.width-avatar.width)
                         anchors{ top: parent.top; topMargin: 10; left: parent.left; leftMargin: 20; right: parent.right; rightMargin: 10;}
@@ -270,7 +279,7 @@ Flickable {
                             source: (dataModel.data(index, PeopleModel.FavoriteRole) ? "image://themedimage/icons/actionbar/favorite-selected" : "image://themedimage/icons/actionbar/favorite" )
                             opacity: (dataModel.data(index, PeopleModel.IsSelfRole) ? 0 : 1)
 
-                            state: (dataModel.data(index, PeopleModel.FavoriteRole) ? favoriteValue : unfavoriteValue)
+                            state: restoredFavorite == "" ? (dataModel.data(index, PeopleModel.FavoriteRole) ? favoriteValue : unfavoriteValue) : restoredFavorite
                             property string favoriteText: unfavoriteTranslated
 
                             states: [
@@ -301,8 +310,12 @@ Flickable {
 
             headerLabel: phoneLabel
             expandingBoxTitle: addPhones
-            newDetailsComponent: PhoneEditWidget{}
-            existingDetailsComponent: PhoneEditWidget{}
+            newDetailsComponent: PhoneEditWidget{
+                prefixSaveRestore: parentTitle
+            }
+            existingDetailsComponent: PhoneEditWidget{
+                prefixSaveRestore: parentTitle
+            }
             existingDetailsModel: dataModel.data(index, PeopleModel.PhoneNumberRole)
             contextModel: dataModel.data(index, PeopleModel.PhoneContextRole)
         }
@@ -312,8 +325,12 @@ Flickable {
 
             headerLabel: imLabel
             expandingBoxTitle: addIms
-            newDetailsComponent: ImEditWidget{}
-            existingDetailsComponent: ImEditWidget{}
+            newDetailsComponent: ImEditWidget{
+                prefixSaveRestore: parentTitle
+            }
+            existingDetailsComponent: ImEditWidget{
+                prefixSaveRestore: parentTitle
+            }
             existingDetailsModel: dataModel.data(index, PeopleModel.OnlineAccountUriRole)
             contextModel: dataModel.data(index, PeopleModel.OnlineServiceProviderRole)
         }
@@ -323,8 +340,12 @@ Flickable {
 
             headerLabel: emailLabel
             expandingBoxTitle: addEmails
-            newDetailsComponent: EmailEditWidget{}
-            existingDetailsComponent: EmailEditWidget{}
+            newDetailsComponent: EmailEditWidget{
+                prefixSaveRestore: parentTitle
+            }
+            existingDetailsComponent: EmailEditWidget{
+                prefixSaveRestore: parentTitle
+            }
             existingDetailsModel: dataModel.data(index, PeopleModel.EmailAddressRole)
             contextModel: dataModel.data(index, PeopleModel.EmailContextRole)
         }
@@ -334,8 +355,12 @@ Flickable {
 
             headerLabel: urlLabel
             expandingBoxTitle: addUrls
-            newDetailsComponent: WebPageEditWidget{}
-            existingDetailsComponent: WebPageEditWidget{}
+            newDetailsComponent: WebPageEditWidget{
+                prefixSaveRestore: parentTitle
+            }
+            existingDetailsComponent: WebPageEditWidget{
+                prefixSaveRestore: parentTitle
+            }
             existingDetailsModel: dataModel.data(index, PeopleModel.WebUrlRole)
             contextModel: dataModel.data(index, PeopleModel.WebContextRole)
         }
@@ -345,8 +370,12 @@ Flickable {
 
             headerLabel: addressLabel
             expandingBoxTitle: addAddress
-            newDetailsComponent: AddressEditWidget{}
-            existingDetailsComponent: AddressEditWidget{}
+            newDetailsComponent: AddressEditWidget{
+                prefixSaveRestore: parentTitle
+            }
+            existingDetailsComponent: AddressEditWidget{
+                prefixSaveRestore: parentTitle
+            }
             existingDetailsModel: dataModel.data(index, PeopleModel.AddressRole)
             contextModel: dataModel.data(index, PeopleModel.AddressContextRole)
         }
@@ -374,7 +403,7 @@ Flickable {
             source: "image://themedimage/widgets/common/header/header-inverted-small"
             TextEntry{
                 id: data_birthday
-                text: datePicker.selectedBirthday != "" ? datePicker.selectedBirthday : dataModel.data(index, PeopleModel.BirthdayRole)
+                text: datePicker.selectedBirthday != "" ? datePicker.selectedBirthday : dataModel.data(index, PeopleModel.BirthdayRole) ? dataModel.data(index, PeopleModel.BirthdayRole) : ""
                 defaultText: defaultBirthday
                 anchors {verticalCenter: birthday.verticalCenter; left: parent.left; topMargin: 30; leftMargin: 30; right: delete_button.left; rightMargin: 30}
                 MouseArea{
@@ -417,10 +446,8 @@ Flickable {
             property string selectedBirthday: useRestoredBirthday(editViewPortrait.restoredBirthday) ? Qt.formatDate(editViewPortrait.restoredBirthday, window.dateFormat) : ""
 
 	    function useRestoredBirthday(restoredBDay) {
-		var defaultDate = "2011-01-01"
-		var retval = (Qt.formatDate(restoredBDay) != Qt.formatDate(defaultDate))
-		console.log("MAIN useRestoredBirthday returns " + retval)
-		console.log("MAIN after comparing "  +Qt.formatDate(restoredBDay) + " != " + Qt.formatDate(defaultDate))
+                var defaultDate = ""
+                var retval = (Qt.formatDate(restoredBDay) != Qt.formatDate(defaultDate))
 		return retval
 	    }
 	    
@@ -460,7 +487,7 @@ Flickable {
             anchors.bottomMargin: 1
             TextField{
                 id: data_notes
-                text: editViewPortrait.restoredNotes != "" ? editViewPortrait.restoredNotes : dataModel.data(index, PeopleModel.NotesRole)
+                text: restoredNotes != "" ? restoredNotes : (dataModel.data(index, PeopleModel.NotesRole) ? dataModel.data(index, PeopleModel.NotesRole) : "")
                 defaultText: defaultNote
                 height: 300
                 anchors {top: parent.top; left: parent.left; right: parent.right; rightMargin: 30; topMargin: 20; leftMargin: 30}
