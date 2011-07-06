@@ -66,8 +66,6 @@ Window {
         id: srsUnsavedContact
         onSaveRequired: {
             var currentlyActivePage = 0
-           console.log("MAIN.QML: pageStack.currentPage == " + window.pageStack.currentPage)
-           console.log("MAIN.QML: pageStack.currentPage.pageTitle == " + window.pageStack.currentPage.pageTitle)
             switch(window.pageStack.currentPage.pageTitle){
             case filterFavorites:
                 currentlyActivePage = 1
@@ -89,7 +87,6 @@ Window {
                 break;
             }
 
-	    console.log("MAIN.QML saving now, currentContactIndex == " + window.currentContactIndex)
             setValue("contacts.currentlyActivePage", currentlyActivePage)
             setValue("contacts.currentContactIndex", window.currentContactIndex)
             setValue("contacts.currentContactId", window.currentContactId)
@@ -377,7 +374,6 @@ Window {
     Component {
         id: myAppEdit
 	AppPage {
-            property int needSave: 1
             id: editViewPage
             pageTitle: labelEditView
             Component.onCompleted : {
@@ -402,15 +398,12 @@ Window {
                 if(actionMenuModel[selectedItem] == contextSave) {
                     window.switchBook(myAppAllContacts);
                     editContact.contactSave(window.currentContactId);
-                    editViewPage.needSave = 0
                 }
                 else if(actionMenuModel[selectedItem] == contextCancel) {
                     window.switchBook(myAppAllContacts);
-                    editViewPage.needSave = 0
                 }
                 else if(actionMenuModel[selectedItem] == contextDelete) {
                     confirmDelete.show();
-                    editViewPage.needSave = 0
                 }
             }
             onActivated: {
