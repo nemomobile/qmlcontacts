@@ -29,7 +29,6 @@ Item {
     property string countryAddress:  qsTr("Country")
     property string postcodeAddress:  qsTr("Postcode / Zip")
 
-    property int restoredAddressTypeIndex: -1
     property string prefixSaveRestore: ""
     property bool canSave: false
 
@@ -96,9 +95,16 @@ Item {
                 }
             }
 
-            restoredAddressTypeIndex        = srsAddress.restoreOnce(prefixSaveRestore + ".address.typeIndex", -1);
-            addressComboBox.title           = (restoredAddressTypeIndex != -1 ? addressComboBox.model[restoredAddressTypeIndex] : contextHome)
-            addressComboBox.selectedIndex   = (restoredAddressTypeIndex != -1 ? restoredAddressTypeIndex : 0)
+            var index = srsAddress.restoreOnce(prefixSaveRestore + ".address.typeIndex", -1);
+
+            if (index != -1) {
+                addressComboBox.title = addressComboBox.model[index];
+                addressComboBox.selectedIndex = index;
+            }
+            else {
+                addressComboBox.title = contextHome;
+                addressComboBox.selectedIndex = 0;
+            }
         }
 
         addressRect.canSave = true

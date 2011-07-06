@@ -24,8 +24,6 @@ Item {
     property string bookmarkWeb : qsTr("Bookmark", "Noun")
     property string favoriteWeb : qsTr("Favorite", "Noun")
 
-    property string restoredWeb: ""
-    property int restoredWebTypeIndex: -1
     property string prefixSaveRestore: ""
     property bool canSave: false
 
@@ -44,12 +42,19 @@ Item {
 
     function restoreData() {
         if(srsWebPage.restoreRequired && !updateMode){
-            restoredWeb           = srsWebPage.restoreOnce(prefixSaveRestore + ".web.address", "")
-            restoredWebTypeIndex  = srsWebPage.restoreOnce(prefixSaveRestore + ".web.typeIndex", -1)
+            var restoredWeb = srsWebPage.restoreOnce(prefixSaveRestore + ".web.address", "")
+            var index = srsWebPage.restoreOnce(prefixSaveRestore + ".web.typeIndex", -1)
 
             data_url.text = restoredWeb;
-            urlComboBox.title = (restoredWebTypeIndex != -1 ? urlComboBox.model[restoredWebTypeIndex] : bookmarkWeb)
-            urlComboBox.selectedIndex = (restoredWebTypeIndex != -1 ? restoredWebTypeIndex : 0)
+
+            if (index != -1) {
+                urlComboBox.title = urlComboBox.model[index];
+                urlComboBox.selectedIndex = index;
+            }
+            else {
+                urlComboBox.title = bookmarkWeb;
+                urlComboBox.selectedIndex = 0;
+            }
         }
 
         webRect.canSave = true

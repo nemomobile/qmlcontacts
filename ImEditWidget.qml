@@ -37,8 +37,6 @@ Item {
     property string noAccount: qsTr("No IM accounts are configured")
     property string noBuddies : qsTr("No buddies for this account")
 
-    property string restoredImAccount: ""
-    property int restoredImAccountTypeIndex: 0
     property string prefixSaveRestore: ""
     property bool canSave: false
 

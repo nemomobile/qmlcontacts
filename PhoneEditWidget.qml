@@ -31,8 +31,6 @@ Item{
     property string cancelLabel: qsTr("Cancel")
     property string addLabel: qsTr("Add")
 
-    property string restoredPhoneNumber: ""
-    property int restoredPhoneTypeIndex: -1
     property string prefixSaveRestore: ""
     property bool canSave: false
 
@@ -50,12 +48,19 @@ Item{
 
     function restoreData() {
         if(srsPhone.restoreRequired && !updateMode){
-            restoredPhoneNumber = srsPhone.restoreOnce(prefixSaveRestore + ".phone.number", "")
-            restoredPhoneTypeIndex  = srsPhone.restoreOnce(prefixSaveRestore + ".phone.typeIndex", -1)
+            var restoredPhoneNumber = srsPhone.restoreOnce(prefixSaveRestore + ".phone.number", "")
+            var index = srsPhone.restoreOnce(prefixSaveRestore + ".phone.typeIndex", -1)
 
             data_phone.text = restoredPhoneNumber;
-            phoneComboBox.title = (restoredPhoneTypeIndex != -1 ? phoneComboBox.model[restoredPhoneTypeIndex] : mobileContext)
-            phoneComboBox.selectedIndex = (restoredPhoneTypeIndex != -1 ? restoredPhoneTypeIndex : 0)
+
+            if (index != -1) {
+                phoneComboBox.title = phoneComboBox.model[index];
+                phoneComboBox.selectedIndex = index;
+            }
+            else {
+                phoneComboBox.title = mobileContext;
+                phoneComboBox.selectedIndex = 0;
+            }
         }
         phonesRect.canSave = true
     }

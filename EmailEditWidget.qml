@@ -25,8 +25,6 @@ Item {
     property string contextOther : qsTr("Other")
     property string defaultEmail : qsTr("Email address")
 
-    property string restoredEmail: ""
-    property int restoredEmailTypeIndex: -1
     property string prefixSaveRestore: ""
     property bool canSave: false
 
@@ -45,12 +43,19 @@ Item {
 
     function restoreData() {
         if(srsMail.restoreRequired && !updateMode){
-            restoredEmail           = srsMail.restoreOnce(prefixSaveRestore + ".email.address", "")
-            restoredEmailTypeIndex  = srsMail.restoreOnce(prefixSaveRestore + ".email.typeIndex", -1)
+            var restoredEmail = srsMail.restoreOnce(prefixSaveRestore + ".email.address", "")
+            var index = srsMail.restoreOnce(prefixSaveRestore + ".email.typeIndex", -1)
 
             data_email.text = restoredEmail;
-            emailComboBox.title = (restoredEmailTypeIndex != -1 ? emailComboBox.model[restoredEmailTypeIndex] : contextHome)
-            emailComboBox.selectedIndex = (restoredEmailTypeIndex != -1 ? restoredEmailTypeIndex : 0)
+
+            if (index != -1) {
+                emailComboBox.title = emailComboBox.model[index];
+                emailComboBox.selectedIndex = index;
+            }
+            else {
+                emailComboBox.title = contextHome;
+                emailComboBox.selectedIndex = 0;
+            }
         }
         emailRect.canSave = true
     }
