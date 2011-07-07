@@ -14,8 +14,8 @@
 
 void contacts::registerTypes(const char *uri)
 {
-    qmlRegisterType<PeopleModel>(uri, 0, 0, "PeopleModel");
-    qmlRegisterType<ProxyModel>(uri, 0, 0, "ProxyModel");
+    qmlRegisterType<PeopleModel>(uri, 0, 1, "PeopleModel");
+    qmlRegisterType<ProxyModel>(uri, 0, 1, "ProxyModel");
 }
 
 void contacts::initializeEngine(QDeclarativeEngine *engine, const char *uri)
