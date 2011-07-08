@@ -155,13 +155,10 @@ Column {
     }
 
     function updateModelDisplayedData(){
-        if( headerLabel == detailsColumn.parent.parent.parent.phoneLabel
-            || headerLabel == detailsColumn.parent.parent.parent.emailLabel
-            || headerLabel == detailsColumn.parent.parent.parent.addressLabel){
-            if(detailsRepeater){
-                if(detailsRepeater.itemCount > 0)
-                    detailsRepeater.itemList[detailsRepeater.itemCount - 1].updateDisplayedData()
-            }
+        if (detailsRepeater) {
+            var cnt = detailsRepeater.itemCount;
+            if (cnt > 0)
+                detailsRepeater.itemList[cnt - 1].updateDisplayedData();
         }
     }
 

@@ -114,6 +114,13 @@ Item {
         return 0;
     }
 
+    function updateDisplayedData() {
+        if (updateMode) {
+            urlComboBox.title = newDetailsModel.get(rIndex).type;
+            urlComboBox.selectedIndex = getIndexVal(newDetailsModel.get(rIndex).type);
+        }
+    }
+
     DropDown {
         id: urlComboBox
 
