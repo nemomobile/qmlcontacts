@@ -74,6 +74,10 @@ Item{
         return arr;
     }
 
+    function getInitFields() {
+        return {"phone" : "", "type" : ""};
+    }
+
     function getNewDetailValues() {
         var phoneNumList = new Array();
         var phoneTypeList = new Array();

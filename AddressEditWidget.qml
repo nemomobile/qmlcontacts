@@ -130,6 +130,11 @@ Item {
         return arr;
     }
 
+    function getInitFields() {
+        return {"street" : "", "street2" : "", "locale" : "", "region" : "",
+                "zip" : "", "country" : "", "type" : ""};
+    }
+
     function getNewDetailValues() {
         var streetList = new Array();
         var localeList = new Array();

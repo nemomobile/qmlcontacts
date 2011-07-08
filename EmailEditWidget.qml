@@ -69,6 +69,10 @@ Item {
         return arr;
     }
 
+    function getInitFields() {
+        return {"email" : "", "type" : ""};
+    }
+
     function getNewDetailValues() {
         var emailAddyList = new Array();
         var emailTypeList = new Array();

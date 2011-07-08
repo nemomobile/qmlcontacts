@@ -80,6 +80,10 @@ Item {
         return arr;
     }
 
+    function getInitFields() {
+        return {"im" : "", "account" : "", "type" : ""};
+    }
+
     function getNewDetailValues() {
         var imList = new Array();
         var imTypeList = new Array();

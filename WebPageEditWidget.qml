@@ -70,6 +70,10 @@ Item {
         return arr;
     }
 
+    function getInitFields() {
+        return {"web" : "", "type" : ""};
+    }
+
     function getNewDetailValues() {
         var webUrlList = new Array();
         var webTypeList = new Array();

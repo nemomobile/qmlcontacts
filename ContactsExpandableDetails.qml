@@ -148,17 +148,10 @@ Column {
     }
 
     function appendIntoDetailsModel(){
-        if(headerLabel == detailsColumn.parent.parent.parent.phoneLabel){
-            detailsModel.append({"phone" : "", "type" : ""})
-        }else if(headerLabel == detailsColumn.parent.parent.parent.addressLabel){
-            detailsModel.append({"street" : "", "street2" : "", "locale" : "", "region" : "", "zip" : "", "country" : "", "type" : ""})
-        }else if(headerLabel == detailsColumn.parent.parent.parent.imLabel){
-            detailsModel.append({"im" : "", "account" : "", "type" : ""})
-        }else if(headerLabel == detailsColumn.parent.parent.parent.emailLabel){
-            detailsModel.append({"email" : "", "type" : ""})
-        }else if(headerLabel == detailsColumn.parent.parent.parent.urlLabel){
-            detailsModel.append({"web" : "", "type" : ""})
-        }
+        var newFieldItem = existingDetailsComponent.createObject(detailsColumn);
+        var tmpFields = newFieldItem.getInitFields();
+        detailsModel.append(tmpFields);
+        newFieldItem.destroy();
     }
 
     function updateModelDisplayedData(){
