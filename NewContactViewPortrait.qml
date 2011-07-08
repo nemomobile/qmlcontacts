@@ -134,10 +134,6 @@ Flickable{
             console.log("[contactSave] Unable to create new contact due to missing info");
     }
 
-    function restoreData(){
-        phones.restoreData()
-    }
-
     Column{
         id: detailsList
         spacing: 1

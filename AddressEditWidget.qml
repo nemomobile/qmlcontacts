@@ -241,8 +241,8 @@ Item {
 
     function updateDisplayedData(){
         if(updateMode){
-            addressComboBox.title           = (updateMode) ? newDetailsModel.get(rIndex).type : contextHome
-            addressComboBox.selectedIndex   = (updateMode) ? getIndexVal(newDetailsModel.get(rIndex).type) : 0
+            addressComboBox.title = newDetailsModel.get(rIndex).type;
+            addressComboBox.selectedIndex = getIndexVal(newDetailsModel.get(rIndex).type);
 
             if(addressFieldRepeater){
                 for(var i = 0; i < addressFieldRepeater.itemCount; i++){

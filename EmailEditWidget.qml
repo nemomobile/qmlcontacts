@@ -111,8 +111,8 @@ Item {
 
     function updateDisplayedData(){
         if(updateMode){
-            emailComboBox.title = (updateMode) ? newDetailsModel.get(rIndex).type : contextHome
-            emailComboBox.selectedIndex = (updateMode) ? getIndexVal(newDetailsModel.get(rIndex).type) : 0
+            emailComboBox.title = newDetailsModel.get(rIndex).type;
+            emailComboBox.selectedIndex = getIndexVal(newDetailsModel.get(rIndex).type);
         }
     }
 

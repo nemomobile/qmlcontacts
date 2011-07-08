@@ -116,8 +116,8 @@ Item{
 
     function updateDisplayedData(){
         if(updateMode){
-            phoneComboBox.title = (updateMode) ? newDetailsModel.get(rIndex).type : mobileContext
-            phoneComboBox.selectedIndex = (updateMode) ? getIndexVal(newDetailsModel.get(rIndex).type) : 0
+            phoneComboBox.title = newDetailsModel.get(rIndex).type;
+            phoneComboBox.selectedIndex = getIndexVal(newDetailsModel.get(rIndex).type);
         }
     }
 
