@@ -82,6 +82,46 @@ Column {
     }
 
     function loadExpandingBox() {
+        if (!initializedData) {
+            if (srsExpandableDetails.restoreRequired) {
+                var expandData = srsExpandableDetails.restoreOnce(prefixSaveRestore + ".expanded", false);
+                if(expandData)
+                    expandedFromRestore = true
+                detailsColumn.newDetailsExpanded = expandData
+
+                // I. Restore data for the model items
+                var detailId = headerLabel + "."
+                var itemCount = srsExpandableDetails.value(prefixSaveRestore + ".itemCount", 0)
+
+                var entryNameHeader = prefixSaveRestore + ".items."
+                var propertyCount = srsExpandableDetails.restoreOnce(prefixSaveRestore + ".items.property.count", 0)
+
+                for (var i = 0; i < itemCount; i++) {
+                    var entryName = entryNameHeader + i + ".property."
+
+                    appendIntoDetailsModel()
+
+                    for (var j = 0; j < propertyCount; j++) {
+                        var key = srsExpandableDetails.restoreOnce(entryName + j + ".name", "")
+                        var value = srsExpandableDetails.restoreOnce(entryName + j + ".value", "")
+
+                        detailsModel.setProperty(i, key, value);
+                    }
+
+                    updateModelDisplayedData()
+                }
+
+                // II. Restore data in the expandingLoader
+                if(newDetailsActualItem){
+                    newDetailsActualItem.restoreData()
+                }
+
+                srsExpandableDetails.setValue(prefixSaveRestore + ".valid", false);
+                srsExpandableDetails.sync()
+            }
+        }
+        initializedData = true
+
         expandingLoader.sourceComponent = expandingComponent;
     }
 
@@ -105,50 +145,6 @@ Column {
         var results = items.splice(index, 1);
         detailsRepeater.itemList = items;
         detailsRepeater.itemCount -= 1;
-    }
-
-    function restoreData(){
-        if(!initializedData){
-            if(srsExpandableDetails.restoreRequired){
-                var expandData = srsExpandableDetails.restoreOnce(prefixSaveRestore + ".expanded", false);
-                if(expandData)
-                    expandedFromRestore = true
-                detailsColumn.newDetailsExpanded = expandData
-
-                // I. Restore data for the model items
-                var detailId = headerLabel + "."
-                var itemCount = srsExpandableDetails.value(prefixSaveRestore + ".itemCount", 0)
-
-                if(itemCount > 0){
-                    var entryNameHeader = prefixSaveRestore + ".items."
-                    var propertyCount = srsExpandableDetails.restoreOnce(prefixSaveRestore + ".items.property.count", 0)
-
-                    for(var i = 0; i < itemCount; i++){
-                        var entryName = entryNameHeader + i + ".property."
-
-                        appendIntoDetailsModel()
-
-                        for(var j = 0; j < propertyCount; j++){
-                            var key     = srsExpandableDetails.restoreOnce(entryName + j + ".name", "")
-                            var value   = srsExpandableDetails.restoreOnce(entryName + j + ".value", "")
-
-                            detailsModel.setProperty(i, key, value);
-                        }
-
-                        updateModelDisplayedData()
-                    }
-                }
-
-                // II. Restore data in the expandingLoader
-                if(newDetailsActualItem){
-                    newDetailsActualItem.restoreData()
-                }
-
-                srsExpandableDetails.setValue(prefixSaveRestore + ".valid", false);
-                srsExpandableDetails.sync()
-            }
-        }
-        initializedData = true
     }
 
     function appendIntoDetailsModel(){
@@ -210,22 +206,12 @@ Column {
         }
     }
 
-    Timer {
-        interval: 2000
-        running: true
-        repeat: false
-
-        onTriggered: {
-            restoreData()
-        }
-    }
-
     Repeater {
         id: detailsRepeater
 
         model: detailsModel
         width: parent.width
-        opacity: (model.count > 0 ? 1  : 0)
+        opacity: 1
         clip: true
 
         property int itemCount 
