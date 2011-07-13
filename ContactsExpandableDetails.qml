@@ -19,9 +19,6 @@ Column {
     property bool validInput: false
     property int itemMargins: 10
 
-    property variant existingDetailsModel: null
-    property variant contextModel: null
-
     property string headerLabel
     property string expandingBoxTitle
     property Component newDetailsComponent: null
@@ -30,8 +27,22 @@ Column {
     property string addLabel: qsTr("Add")
     property string cancelLabel: qsTr("Cancel")
 
-    function loadExpandingBox() {
+    function loadExpandingBox(detailData, contextData) {
         expandingLoader.sourceComponent = expandingComponent;
+
+        if (detailData == null)
+            return;
+
+        var newFieldItem = existingDetailsComponent.createObject(detailsColumn);
+        var tmpArr = newFieldItem.parseDetailsModel(detailData, contextData);
+        var tmpFields = newFieldItem.getInitFields();
+
+        for (var i = 0; i < tmpArr.length; i++) {
+            detailsModel.append(tmpFields);
+            for (var key in tmpArr[i])
+                detailsModel.setProperty(i, key, tmpArr[i][key]);
+        }
+        newFieldItem.destroy();
     }
 
     function getNewDetails() {
@@ -73,18 +84,6 @@ Column {
 
     ListModel{
         id: detailsModel 
-        Component.onCompleted:{
-            if ((existingDetailsModel) && (existingDetailsModel != "")) {
-                var newFieldItem = existingDetailsComponent.createObject(detailsColumn);
-                var tmpArr = newFieldItem.parseDetailsModel(existingDetailsModel, contextModel);
-                for (var i = 0; i < tmpArr.length; i++) {
-                    appendIntoDetailsModel()
-                    for (var key in tmpArr[i])
-                         detailsModel.setProperty(i, key, tmpArr[i][key]);
-                }
-                newFieldItem.destroy();
-            }
-        }
     }
 
     Item {

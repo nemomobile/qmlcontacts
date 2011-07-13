@@ -82,14 +82,16 @@ Flickable{
             restoredNotes = justRestore.restoreOnce(parentTitle + ".contact.notes", "")
             restoredPhoto = justRestore.restoreOnce(parentTitle + ".contact.photo", "")
             restoredFavorite = justRestore.restoreOnce(parentTitle + ".contact.favorite", "")
-            restoredBirthday = justRestore.restoreOnce(parentTitle + ".contact.birthday", "")
+            var tmpStr = justRestore.restoreOnce(parentTitle + ".contact.birthday", "")
+            if (tmpStr != "")
+                restoredBirthday;
         }
 
-        phones.loadExpandingBox();
-        ims.loadExpandingBox();
-        emails.loadExpandingBox();
-        urls.loadExpandingBox();
-        addys.loadExpandingBox();
+        phones.loadExpandingBox(null, null);
+        ims.loadExpandingBox(null, null);
+        emails.loadExpandingBox(null, null);
+        urls.loadExpandingBox(null, null);
+        addys.loadExpandingBox(null, null);
     }
 
     SaveRestoreState {

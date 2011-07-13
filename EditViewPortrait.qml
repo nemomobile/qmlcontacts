@@ -88,14 +88,30 @@ Flickable {
             restoredNotes = justRestore.restoreOnce(parentTitle + ".contact.notes", "")
             restoredPhoto = justRestore.restoreOnce(parentTitle + ".contact.photo", "")
             restoredFavorite = justRestore.restoreOnce(parentTitle + ".contact.favorite", "")
-            restoredBirthday = justRestore.restoreOnce(parentTitle + ".contact.birthday", "")
+            var tmpStr = justRestore.restoreOnce(parentTitle + ".contact.birthday", "")
+            if (tmpStr != "")
+                restoredBirthday = tmpStr;
         }
 
-        phones.loadExpandingBox();
-        ims.loadExpandingBox();
-        emails.loadExpandingBox();
-        urls.loadExpandingBox();
-        addys.loadExpandingBox();
+        var detailData = dataModel.data(index, PeopleModel.PhoneNumberRole);
+        var contextData = dataModel.data(index, PeopleModel.PhoneContextRole);
+        phones.loadExpandingBox(detailData, contextData);
+
+        detailData = dataModel.data(index, PeopleModel.OnlineAccountUriRole);
+        contextData = dataModel.data(index, PeopleModel.OnlineServiceProviderRole);
+        ims.loadExpandingBox(detailData, contextData);
+
+        detailData = dataModel.data(index, PeopleModel.EmailAddressRole);
+        contextData = dataModel.data(index, PeopleModel.EmailContextRole);
+        emails.loadExpandingBox(detailData, contextData);
+
+        detailData = dataModel.data(index, PeopleModel.WebUrlRole);
+        contextData = dataModel.data(index, PeopleModel.WebContextRole);
+        urls.loadExpandingBox(detailData, contextData);
+
+        detailData = dataModel.data(index, PeopleModel.AddressRole);
+        contextData = dataModel.data(index, PeopleModel.AddressContextRole);
+        addys.loadExpandingBox(detailData, contextData);
     }
 
     SaveRestoreState {
@@ -310,8 +326,6 @@ Flickable {
             expandingBoxTitle: addPhones
             newDetailsComponent: PhoneEditWidget{}
             existingDetailsComponent: PhoneEditWidget{}
-            existingDetailsModel: dataModel.data(index, PeopleModel.PhoneNumberRole)
-            contextModel: dataModel.data(index, PeopleModel.PhoneContextRole)
         }
 
         ContactsExpandableDetails {
@@ -321,8 +335,6 @@ Flickable {
             expandingBoxTitle: addIms
             newDetailsComponent: ImEditWidget{}
             existingDetailsComponent: ImEditWidget{}
-            existingDetailsModel: dataModel.data(index, PeopleModel.OnlineAccountUriRole)
-            contextModel: dataModel.data(index, PeopleModel.OnlineServiceProviderRole)
         }
 
         ContactsExpandableDetails {
@@ -332,8 +344,6 @@ Flickable {
             expandingBoxTitle: addEmails
             newDetailsComponent: EmailEditWidget{}
             existingDetailsComponent: EmailEditWidget{}
-            existingDetailsModel: dataModel.data(index, PeopleModel.EmailAddressRole)
-            contextModel: dataModel.data(index, PeopleModel.EmailContextRole)
         }
 
         ContactsExpandableDetails {
@@ -343,8 +353,6 @@ Flickable {
             expandingBoxTitle: addUrls
             newDetailsComponent: WebPageEditWidget{}
             existingDetailsComponent: WebPageEditWidget{}
-            existingDetailsModel: dataModel.data(index, PeopleModel.WebUrlRole)
-            contextModel: dataModel.data(index, PeopleModel.WebContextRole)
         }
 
         ContactsExpandableDetails {
@@ -354,8 +362,6 @@ Flickable {
             expandingBoxTitle: addAddress
             newDetailsComponent: AddressEditWidget{}
             existingDetailsComponent: AddressEditWidget{}
-            existingDetailsModel: dataModel.data(index, PeopleModel.AddressRole)
-            contextModel: dataModel.data(index, PeopleModel.AddressContextRole)
         }
 
         Item{
