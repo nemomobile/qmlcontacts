@@ -24,44 +24,6 @@ Item {
     property string bookmarkWeb : qsTr("Bookmark", "Noun")
     property string favoriteWeb : qsTr("Favorite", "Noun")
 
-    property bool canSave: false
-
-    SaveRestoreState {
-        id: srsWebPage
-        onSaveRequired: {
-            if(!updateMode && webRect.canSave){
-                // Save the phone number that is currently being edited
-                var pageTitle = window.pageStack.currentPage.pageTitle;
-                setValue(pageTitle + ".web.address", data_url.text)
-                setValue(pageTitle + ".web.typeIndex", urlComboBox.selectedIndex)
-            }
-
-            sync()
-        }
-    }
-
-    function restoreData() {
-        if(srsWebPage.restoreRequired && !updateMode){
-            var pageTitle = window.pageStack.currentPage.pageTitle;
-            var restoredWeb = srsWebPage.restoreOnce(pageTitle + ".web.address", "")
-            var index = srsWebPage.restoreOnce(pageTitle + ".web.typeIndex", -1)
-
-            data_url.text = restoredWeb;
-
-            if (index != -1) {
-                urlComboBox.title = urlComboBox.model[index];
-                urlComboBox.selectedIndex = index;
-            }
-            else {
-                urlComboBox.title = bookmarkWeb;
-                urlComboBox.selectedIndex = 0;
-            }
-        }
-
-        webRect.canSave = true
-    }
-
-
     function parseDetailsModel(existingDetailsModel, contextModel) {
         var arr = new Array(); 
         for (var i = 0; i < existingDetailsModel.length; i++)
@@ -112,13 +74,6 @@ Item {
             }
         }
         return 0;
-    }
-
-    function updateDisplayedData() {
-        if (updateMode) {
-            urlComboBox.title = newDetailsModel.get(rIndex).type;
-            urlComboBox.selectedIndex = getIndexVal(newDetailsModel.get(rIndex).type);
-        }
     }
 
     DropDown {

@@ -29,90 +29,6 @@ Item {
     property string countryAddress:  qsTr("Country")
     property string postcodeAddress:  qsTr("Postcode / Zip")
 
-    property bool canSave: false
-
-    SaveRestoreState {
-        id: srsAddress
-        onSaveRequired: {
-            if(!updateMode && addressRect.canSave){
-                if(addressFieldRepeater){
-                    for(var i = 0; i < addressFieldRepeater.itemCount; i++){
-                        var tempItem = addressFieldRepeater.itemList[i]
-                        if(tempItem){
-                            var pageTitle = window.pageStack.currentPage.pageTitle;
-                            if(tempItem.fieldVal == "street"){
-                                setValue(pageTitle + ".address.street", tempItem.text);
-                            }else if(tempItem.fieldVal == "street2"){
-                                setValue(pageTitle + ".address.street2", tempItem.text);
-                            }else if(tempItem.fieldVal == "locale"){
-                                setValue(pageTitle + ".address.locale", tempItem.text);
-                            }else if(tempItem.fieldVal == "region"){
-                                setValue(pageTitle + ".address.region", tempItem.text);
-                            }else if(tempItem.fieldVal == "zip"){
-                                setValue(pageTitle + ".address.zip", tempItem.text);
-                            }else if(tempItem.fieldVal == "country"){
-                                setValue(pageTitle + ".address.country", tempItem.text);
-                            }
-                        }
-                    }
-                }
-
-                setValue(pageTitle + ".address.typeIndex", addressComboBox.selectedIndex);
-
-            }
-
-            sync()
-        }
-    }
-
-    function restoreData() {
-        if(srsAddress.restoreRequired && !updateMode){
-            var pageTitle = window.pageStack.currentPage.pageTitle;
-            var restoredAddress     = srsAddress.restoreOnce(pageTitle + ".address.street", streetAddress);
-            var restoredAddress2    = srsAddress.restoreOnce(pageTitle + ".address.street2", streetAddress);
-            var restoredLocale      = srsAddress.restoreOnce(pageTitle + ".address.locale", localeAddress);
-            var restoredRegion      = srsAddress.restoreOnce(pageTitle + ".address.region", regionAddress);
-            var restoredZip         = srsAddress.restoreOnce(pageTitle + ".address.zip", postcodeAddress);
-            var restoredCountry     = srsAddress.restoreOnce(pageTitle + ".address.country", countryAddress);
-
-            if(addressFieldRepeater){
-                for(var i = 0; i < addressFieldRepeater.itemCount; i++){
-                    var tempItem = addressFieldRepeater.itemList[i]
-                    if(tempItem){
-                        if(tempItem.fieldVal == "street"){
-                            tempItem.text = restoredAddress
-                        }else if(tempItem.fieldVal == "street2"){
-                            tempItem.text = restoredAddress2
-                        }else if(tempItem.fieldVal == "locale"){
-                            tempItem.text = restoredLocale
-                        }else if(tempItem.fieldVal == "region"){
-                            tempItem.text = restoredRegion
-                        }else if(tempItem.fieldVal == "zip"){
-                            tempItem.text = restoredZip
-                        }else if(tempItem.fieldVal == "country"){
-                            tempItem.text = restoredCountry
-                        }
-                    }
-                }
-            }
-
-            var index = srsAddress.restoreOnce(pageTitle + ".address.typeIndex", -1);
-
-            if (index != -1) {
-                addressComboBox.title = addressComboBox.model[index];
-                addressComboBox.selectedIndex = index;
-            }
-            else {
-                addressComboBox.title = contextHome;
-                addressComboBox.selectedIndex = 0;
-            }
-        }
-
-        addressRect.canSave = true
-    }
-
-
-
     function parseDetailsModel(existingDetailsModel, contextModel) {
         var fieldOrder = localeUtils.getAddressFieldOrder();
         var arr = new Array(); 
@@ -244,34 +160,6 @@ Item {
         return 0;
     }
 
-    function updateDisplayedData(){
-        if(updateMode){
-            addressComboBox.title = newDetailsModel.get(rIndex).type;
-            addressComboBox.selectedIndex = getIndexVal(newDetailsModel.get(rIndex).type);
-
-            if(addressFieldRepeater){
-                for(var i = 0; i < addressFieldRepeater.itemCount; i++){
-                    var tempItem = addressFieldRepeater.itemList[i]
-                    if(tempItem){
-                        if(tempItem.fieldVal == "street"){
-                            tempItem.text = newDetailsModel.get(rIndex).street
-                        }else if(tempItem.fieldVal == "street2"){
-                            tempItem.text = newDetailsModel.get(rIndex).street2
-                        }else if(tempItem.fieldVal == "locale"){
-                            tempItem.text = newDetailsModel.get(rIndex).locale
-                        }else if(tempItem.fieldVal == "region"){
-                            tempItem.text = newDetailsModel.get(rIndex).region
-                        }else if(tempItem.fieldVal == "zip"){
-                            tempItem.text = newDetailsModel.get(rIndex).zip
-                        }else if(tempItem.fieldVal == "country"){
-                            tempItem.text = newDetailsModel.get(rIndex).country
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     DropDown {
         id: addressComboBox
 
@@ -307,9 +195,6 @@ Item {
 
             property bool validData: false
 
-            property int itemCount
-            property variant itemList: []
-
             delegate: TextEntry {
                 id: addressTextField
                 text: (updateMode) ? getTextValue(field) : ""
@@ -318,13 +203,6 @@ Item {
                 parent: addressFieldRepeater
 
                 property string fieldVal: field
-
-                Component.onCompleted : {
-                    addressFieldRepeater.itemCount += 1;
-                    var items = addressFieldRepeater.itemList;
-                    items.push(addressTextField);
-                    addressFieldRepeater.itemList = items;
-                }
 
                 Binding {target: addressFieldRepeater; property: "validData";
                          value: true; when: (text != "")}

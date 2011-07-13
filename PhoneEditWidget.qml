@@ -31,41 +31,6 @@ Item{
     property string cancelLabel: qsTr("Cancel")
     property string addLabel: qsTr("Add")
 
-    property bool canSave: false
-
-    SaveRestoreState {
-        id: srsPhone
-        onSaveRequired: {
-            if(!updateMode && phonesRect.canSave){
-                // Save the phone number that is currently being edited
-                var pageTitle = window.pageStack.currentPage.pageTitle;
-                setValue(pageTitle + ".phone.number", data_phone.text)
-                setValue(pageTitle + ".phone.typeIndex", phoneComboBox.selectedIndex)
-            }
-            sync()
-        }
-    }
-
-    function restoreData() {
-        if(srsPhone.restoreRequired && !updateMode){
-            var pageTitle = window.pageStack.currentPage.pageTitle;
-            var restoredPhoneNumber = srsPhone.restoreOnce(pageTitle + ".phone.number", "")
-            var index = srsPhone.restoreOnce(pageTitle + ".phone.typeIndex", -1)
-
-            data_phone.text = restoredPhoneNumber;
-
-            if (index != -1) {
-                phoneComboBox.title = phoneComboBox.model[index];
-                phoneComboBox.selectedIndex = index;
-            }
-            else {
-                phoneComboBox.title = mobileContext;
-                phoneComboBox.selectedIndex = 0;
-            }
-        }
-        phonesRect.canSave = true
-    }
-
     function parseDetailsModel(existingDetailsModel, contextModel) {
         var arr = new Array();
         for (var i = 0; i < existingDetailsModel.length; i++)
@@ -116,13 +81,6 @@ Item{
             }
         }
         return 0;
-    }
-
-    function updateDisplayedData(){
-        if(updateMode){
-            phoneComboBox.title = newDetailsModel.get(rIndex).type;
-            phoneComboBox.selectedIndex = getIndexVal(newDetailsModel.get(rIndex).type);
-        }
     }
 
     DropDown {

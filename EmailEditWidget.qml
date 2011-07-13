@@ -25,42 +25,6 @@ Item {
     property string contextOther : qsTr("Other")
     property string defaultEmail : qsTr("Email address")
 
-    property bool canSave: false
-
-    SaveRestoreState {
-        id: srsMail
-        onSaveRequired: {
-            if(!updateMode && emailRect.canSave){
-                // Save the phone number that is currently being edited
-                var pageTitle = window.pageStack.currentPage.pageTitle;
-                setValue(pageTitle + ".email.address", data_email.text)
-                setValue(pageTitle + ".email.typeIndex", emailComboBox.selectedIndex)
-            }
-
-            sync()
-        }
-    }
-
-    function restoreData() {
-        if(srsMail.restoreRequired && !updateMode){
-            var pageTitle = window.pageStack.currentPage.pageTitle;
-            var restoredEmail = srsMail.restoreOnce(pageTitle + ".email.address", "")
-            var index = srsMail.restoreOnce(pageTitle + ".email.typeIndex", -1)
-
-            data_email.text = restoredEmail;
-
-            if (index != -1) {
-                emailComboBox.title = emailComboBox.model[index];
-                emailComboBox.selectedIndex = index;
-            }
-            else {
-                emailComboBox.title = contextHome;
-                emailComboBox.selectedIndex = 0;
-            }
-        }
-        emailRect.canSave = true
-    }
-
     function parseDetailsModel(existingDetailsModel, contextModel) {
         var arr = new Array(); 
         for (var i = 0; i < existingDetailsModel.length; i++)
@@ -111,13 +75,6 @@ Item {
             }
         }
         return 0;
-    }
-
-    function updateDisplayedData(){
-        if(updateMode){
-            emailComboBox.title = newDetailsModel.get(rIndex).type;
-            emailComboBox.selectedIndex = getIndexVal(newDetailsModel.get(rIndex).type);
-        }
     }
 
     DropDown {
