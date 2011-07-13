@@ -571,7 +571,7 @@ void PeopleModel::addContacts(const QList<QContact> contactsList,
                               int size)
 {
     foreach (const QContact &contact, contactsList) {
-        qDebug() << Q_FUNC_INFO << "Adding contact " << contact.id() << " local " << contact.localId();
+        //qDebug() << Q_FUNC_INFO << "Adding contact " << contact.id() << " local " << contact.localId();
         QContactLocalId id = contact.localId();
 
         // Make sure we don't duplicate contacts

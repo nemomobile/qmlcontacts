@@ -82,13 +82,13 @@ Flickable {
     function finishPageLoad() {
         if (justRestore.restoreRequired) {
             var parentTitle = window.pageStack.currentPage.pageTitle;
-            restoredFirstName = restoreOnce(parentTitle + ".contact.firstName", "")
-            restoredLastName = restoreOnce(parentTitle + ".contact.lastName", "")
-            restoredCompany = restoreOnce(parentTitle + ".contact.company", "")
-            restoredNotes = restoreOnce(parentTitle + ".contact.notes", "")
-            restoredPhoto = restoreOnce(parentTitle + ".contact.photo", "")
-            restoredFavorite = restoreOnce(parentTitle + ".contact.favorite", "")
-            restoredBirthday = restoreOnce(parentTitle + ".contact.birthday", "")
+            restoredFirstName = justRestore.restoreOnce(parentTitle + ".contact.firstName", "")
+            restoredLastName = justRestore.restoreOnce(parentTitle + ".contact.lastName", "")
+            restoredCompany = justRestore.restoreOnce(parentTitle + ".contact.company", "")
+            restoredNotes = justRestore.restoreOnce(parentTitle + ".contact.notes", "")
+            restoredPhoto = justRestore.restoreOnce(parentTitle + ".contact.photo", "")
+            restoredFavorite = justRestore.restoreOnce(parentTitle + ".contact.favorite", "")
+            restoredBirthday = justRestore.restoreOnce(parentTitle + ".contact.birthday", "")
         }
 
         phones.loadExpandingBox();
@@ -436,8 +436,8 @@ Flickable {
             }
 
             Component.onCompleted: {
-                if (newContactPage.restoredBirthday != "")
-                    selectedDate: newContactPage.restoredBirthday
+                if (editViewPortrait.restoredBirthday != "")
+                    selectedDate: editViewPortrait.restoredBirthday
             }
         }
 

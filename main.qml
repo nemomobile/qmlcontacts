@@ -368,6 +368,9 @@ Window {
                         window.addPage(myAppEdit);
                 }
             }
+            onActivating: {
+                detailViewContact.indexOfPerson = proxyModel.getSourceRow(window.currentContactIndex);
+            }
         }
     }
 
@@ -407,6 +410,7 @@ Window {
                 }
             }
             onActivated: {
+                editContact.index = proxyModel.getSourceRow(window.currentContactIndex);
                 editContact.finishPageLoad();
             }
         }
