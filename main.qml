@@ -368,7 +368,7 @@ Window {
                         window.addPage(myAppEdit);
                 }
             }
-            onActivating: {
+            onActivated: {
                 detailViewContact.indexOfPerson = proxyModel.getSourceRow(window.currentContactIndex);
             }
         }
