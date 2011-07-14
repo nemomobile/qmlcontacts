@@ -168,7 +168,7 @@ Item {
         minWidth: width 
         maxWidth: width
  
-        model: getAvailableBuddies(imComboBox.selectedTitle)
+        model: getAvailableBuddies(imComboBox.selectedIndex)
  
         state: "notInUpdateMode"
  
