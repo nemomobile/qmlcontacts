@@ -74,14 +74,6 @@ Column {
         newFieldItem.destroy();
     }
 
-    function updateModelDisplayedData(){
-        if (detailsRepeater) {
-            var cnt = detailsRepeater.itemCount;
-            if (cnt > 0)
-                detailsRepeater.itemList[cnt - 1].updateDisplayedData();
-        }
-    }
-
     ListModel{
         id: detailsModel 
     }
@@ -172,11 +164,12 @@ Column {
                         else if (detailsRepeater.count != 1) {
                             removeItemFromList(index);
                             detailsRepeater.model.remove(index);
+
+                            //REVISIT: Should use states for this
+                            detailsColumn.height -= oldDLoader.item.height
                         }
 
                         delete_button.source = "image://themedimage/icons/internal/contact-information-delete"
-                        //REVISIT: Should use states for this
-                        detailsColumn.height -= oldDLoader.item.height
                     }
                 }
                 Binding{target: delete_button; property: "visible"; value: false; when: !oldDLoader.item.validInput}
@@ -303,8 +296,6 @@ Column {
                     appendIntoDetailsModel()
                     for (var key in arr)
                         detailsModel.setProperty(detailsModel.count - 1, key, arr[key]);
-
-                    updateModelDisplayedData()
                 }
             }
 

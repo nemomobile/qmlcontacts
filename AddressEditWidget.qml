@@ -199,7 +199,7 @@ Item {
                 id: addressTextField
                 text: (updateMode) ? getTextValue(field) : ""
                 defaultText: dText
-                width: Math.round(addressRect.width/2) - 4*anchors.leftMargin
+                width: Math.round(addressRect.width/2) - 4*parent.anchors.leftMargin
                 parent: addressFieldRepeater
 
                 property string fieldVal: field
