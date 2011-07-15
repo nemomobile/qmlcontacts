@@ -45,8 +45,13 @@ Item {
         }
     }
 
-    Item {
+    Rectangle {
         id: emptyOrCardListView
+
+        width: parent.width
+        height: parent.height
+        color: "white"
+
         anchors.fill: parent
 
         ListOfGridsView {

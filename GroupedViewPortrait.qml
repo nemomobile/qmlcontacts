@@ -10,8 +10,12 @@ import Qt 4.7
 import MeeGo.Components 0.1
 import MeeGo.App.Contacts 0.1
 
-Item {
+Rectangle {
     id: groupedViewPortrait
+
+    width: parent.width
+    height: parent.height
+    color: "white"
 
     signal addNewContact
     signal pressAndHold(int x, int y)

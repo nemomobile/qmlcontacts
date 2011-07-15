@@ -160,6 +160,12 @@ Flickable {
         return addy;
     }
 
+    Rectangle {
+        id: detailsRect
+        width: parent.width
+        height: parent.height
+        color: "white"
+
     Column{
         id: detailsList
         spacing: 1
@@ -772,6 +778,7 @@ Flickable {
                 }
             }
         }
+    }
     }
 }
 

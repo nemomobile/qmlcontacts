@@ -154,6 +154,12 @@ Flickable {
                                             datePicker.datePicked, data_notes.text);
     }
 
+    Rectangle {
+        id: editDetailsRect
+        width: parent.width
+        height: parent.height
+        color: "white"
+
     Column{
         id: editList
         spacing: 1
@@ -477,6 +483,7 @@ Flickable {
                 anchors {top: parent.top; left: parent.left; right: parent.right; rightMargin: 30; topMargin: 20; leftMargin: 30}
             }
         }
+    }
     }
     Binding{ target: editViewPortrait; property: "validInput"; value: true; when: {
             ((data_first.text != "")||(data_last.text != "")||(data_company.text != "")||(phones.validInput)||(ims.validInput)||(emails.validInput)||(urls.validInput)||(addys.validInput)||(data_birthday.text != "")||(data_notes.text != ""))
