@@ -129,6 +129,19 @@ Flickable {
         }
     }
 
+    function getFavoriteState() {
+        if (restoredFavorite == "") {
+            if (dataModel.data(index, PeopleModel.FavoriteRole))
+                return favoriteValue;
+            return unfavoriteValue;
+        }
+
+        if (restoredFavorite)
+            return favoriteValue;
+
+        return unfavoriteValue;
+    }
+
     function contactSave(contactId){
         var newPhones = phones.getNewDetails();
         var newIms = ims.getNewDetails();
@@ -299,7 +312,7 @@ Flickable {
                             source: (dataModel.data(index, PeopleModel.FavoriteRole) ? "image://themedimage/icons/actionbar/favorite-selected" : "image://themedimage/icons/actionbar/favorite" )
                             opacity: (dataModel.data(index, PeopleModel.IsSelfRole) ? 0 : 1)
 
-                            state: restoredFavorite == "" ? (dataModel.data(index, PeopleModel.FavoriteRole) ? favoriteValue : unfavoriteValue) : restoredFavorite
+                            state: getFavoriteState()
                             property string favoriteText: unfavoriteTranslated
 
                             states: [
