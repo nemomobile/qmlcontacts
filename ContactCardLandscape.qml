@@ -15,7 +15,7 @@ Item {
 
     // TODO need clip off rounded edges from avatar image
 
-    height: contactWithNoAvatar.height; width: contactWithNoAvatar.width // size from theme image
+    height: contactWithAvatar.height; width: contactWithAvatar.width // size from theme image
     property PeopleModel dataPeople : theModel
     property ProxyModel sortPeople : sortModel
     property int sourceIndex
@@ -91,7 +91,6 @@ Item {
         height: width
         anchors.centerIn: parent
         asynchronous: true
-        visible: avatar.status == Image.Ready
 
         BorderImage {
             id: borderImg
@@ -118,7 +117,7 @@ Item {
                     asynchronous: true
                     anchors { fill: parent; }
                     fillMode: Image.PreserveAspectCrop
-                    source: dataAvatar
+                    source: (dataAvatar) ? dataAvatar : "image://themedimage/widgets/common/avatar/avatar-default"
                     clip: true
                     z: 0
                 }
@@ -134,14 +133,6 @@ Item {
                 }
             }
         }
-    }
-
-    Image {
-        id: contactWithNoAvatar
-        width: theme_listBackgroundPixelHeightTwo + itemMargins
-        height: theme_listBackgroundPixelHeightTwo + itemMargins
-        source: "image://themedimage/widgets/common/avatar/avatar-default"
-        visible: avatar.status != Image.Ready
     }
 
     Text {
