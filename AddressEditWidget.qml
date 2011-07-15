@@ -163,12 +163,13 @@ Item {
     DropDown {
         id: addressComboBox
 
+        property int marginTotal: 4*anchors.leftMargin
+
         anchors {left: parent.left; leftMargin: itemMargins;}
         titleColor: theme_fontColorNormal
 
-        width: Math.round(parent.width/2) - 4*anchors.leftMargin
-        minWidth: width
-        maxWidth: width
+        width: Math.round(parent.width/2) - marginTotal
+        maxWidth: (width > 0) ? width : Math.round(window.width/2) - marginTotal
 
         model: [contextHome, contextWork, contextOther]
 
