@@ -163,7 +163,7 @@ Flickable {
     Rectangle {
         id: detailsRect
         width: parent.width
-        height: parent.height
+        height: window.height
         color: "white"
 
     Column{

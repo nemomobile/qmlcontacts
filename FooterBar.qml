@@ -11,7 +11,7 @@ import MeeGo.Labs.Components 0.1 as Labs
 import MeeGo.Components 0.1
 import MeeGo.App.Contacts 0.1
 
-Item {
+Rectangle {
     property string type 
     property variant currentView
     property variant pageToLoad
@@ -21,6 +21,7 @@ Item {
 
     width: parent.width
     height: footer_bar.height
+    color: "white"
     anchors {bottom: parent.bottom; left: parent.left; right: parent.right;}
 
     signal directoryCharacterClicked(string character)
