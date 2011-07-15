@@ -91,7 +91,7 @@ Image {
     signal pressAndHold(int mouseX, int mouseY, string uuid, string name)
 
     source: "image://themedimage/widgets/common/list/list"
-    opacity: (dataPeople.data(sourceIndex, PeopleModel.IsSelfRole) ? .3 : 1)
+    opacity: (dataPeople.data(sourceIndex, PeopleModel.IsSelfRole) ? .7 : 1)
 
     Connections {
         target: accountsModel
