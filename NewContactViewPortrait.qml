@@ -159,7 +159,7 @@ Flickable{
                 height: 150
                 anchors {top: detailHeader.top; left: parent.left; }
 
-                Image{
+                LimitedImage{
                     id: avatar_img
                     source: restoredPhoto != "" ? restoredPhoto : "image://themedimage/icons/internal/contacts-avatar-add"
                     anchors.centerIn: avatar

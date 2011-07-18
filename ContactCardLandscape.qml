@@ -111,7 +111,7 @@ Item {
                 anchors.leftMargin: borderImg.border.left
                 anchors.rightMargin: borderImg.border.right
 
-                Image {
+                LimitedImage {
                     id: avatar
                     smooth: true
                     asynchronous: true

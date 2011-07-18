@@ -176,7 +176,7 @@ Flickable {
             height: (firstname_p.visible ? 175 : 150)
             source: "image://themedimage/widgets/common/header/header-inverted-small"
             opacity: (detailModel.data(indexOfPerson, PeopleModel.IsSelfRole) ? .5 : 1)
-            Image{
+            LimitedImage{
                 id: avatar_image
                 //REVISIT: Instead of using the URI from AvatarRole, need to use thumbnail URI
                 source: (detailModel.data(indexOfPerson, PeopleModel.AvatarRole) ? detailModel.data(indexOfPerson, PeopleModel.AvatarRole): "image://themedimage/widgets/common/avatar/avatar-default")

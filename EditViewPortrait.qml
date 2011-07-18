@@ -189,7 +189,7 @@ Flickable {
                 height: 150
                 anchors {top: editHeader.top; left: parent.left; }
 
-                Image{
+                LimitedImage{
                     id: avatar_img
                     //REVISIT: Instead of using the URI from AvatarRole, need to use thumbnail URI
                     source: restoredPhoto != "" ? restoredPhoto : (dataModel.data(index, PeopleModel.AvatarRole) ? dataModel.data(index, PeopleModel.AvatarRole) : "image://themedimage/icons/internal/contacts-avatar-add")

@@ -123,7 +123,7 @@ Image {
         }
     }
 
-    Image{
+    LimitedImage{
         id: photo
         fillMode: Image.PreserveAspectCrop
         smooth: true
