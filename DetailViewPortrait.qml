@@ -120,27 +120,6 @@ Flickable {
         return newStr;
     }
 
-    function getOnlineStatus() {
-        if ((detailModel.data(indexOfPerson, PeopleModel.OnlineAccountUriRole).length < 1)
-                || (detailModel.data(indexOfPerson, PeopleModel.OnlineServiceProviderRole).length < 1))
-            return "";
-
-        var account = detailModel.data(indexOfPerson, PeopleModel.OnlineServiceProviderRole)[0].split("\n");
-        if (account.length != 2)
-            return "";
-        account = account[1];
-
-        var buddy = detailModel.data(indexOfPerson, PeopleModel.OnlineAccountUriRole)[0].split(") ");
-        if (buddy.length != 2)
-            return "";
-        buddy = buddy[1];
-
-        var contactItem = accountsModel.contactItemForId(account, buddy);
-
-        var presence = contactItem.data(AccountsModel.PresenceTypeRole);
-        return presence;
-    }
-
     //Strip out any empty fields in the address - must do this on the
     //QML side, as the "\n" are needed in the EditView to denote the
     //different fields
@@ -247,27 +226,8 @@ Flickable {
                         Image {
                             id:  icon_status
                             source: {
-                                var imStatus = getOnlineStatus();
-                                var icon = "";
-                                switch(imStatus) {
-                                case TelepathyTypes.ConnectionPresenceTypeAvailable:
-                                    icon = "image://themedimage/icons/status/status-available"
-                                    break;
-                                case TelepathyTypes.ConnectionPresenceTypeBusy:
-                                    icon = "image://themedimage/icons/status/status-busy"
-                                    break;
-                                case TelepathyTypes.ConnectionPresenceTypeAway:
-                                case TelepathyTypes.ConnectionPresenceTypeExtendedAway:
-                                    icon = "image://themedimage/icons/status/status-idle"
-                                    break;
-                                case TelepathyTypes.ConnectionPresenceTypeHidden:
-                                case TelepathyTypes.ConnectionPresenceTypeUnknown:
-                                case TelepathyTypes.ConnectionPresenceTypeUnknown:
-                                case TelepathyTypes.ConnectionPresenceTypeOffline:
-                                default:
-                                    icon = "image://themedimage/icons/status/status-idle"
-                                }
-                                return icon;
+                                var imStatus = window.getOnlinePresence(indexOfPerson);
+                                return window.getOnlineStatusIcon(imStatus);
                             }
 
                             anchors{right: label_status.left;  rightMargin: 10}
@@ -276,7 +236,8 @@ Flickable {
                         Text{
                             id: label_status
                             text: {
-                                var imStatus = getOnlineStatus();
+                                var imStatus = window.getOnlinePresence(indexOfPerson);
+
                                 var text = "";
                                 switch(imStatus) {
                                 case TelepathyTypes.ConnectionPresenceTypeAvailable:

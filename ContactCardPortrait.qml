@@ -35,22 +35,20 @@ Image {
         return valueStr;
     }
 
+    //REVISIT: This should be moved into main, but doing so will
+    //break string freeze.  Move this at a later time
     function getOnlineStatus(presence) {
-        var icon = "";
         var text = "";
 
         switch (presence) {
             case TelepathyTypes.ConnectionPresenceTypeAvailable:
-                icon = "image://themedimage/icons/status/status-available"
                 text = statusOnline;
                 break;
             case TelepathyTypes.ConnectionPresenceTypeBusy:
-                icon = "image://themedimage/icons/status/status-busy"
                 text = statusBusy;
                 break;
             case TelepathyTypes.ConnectionPresenceTypeAway:
             case TelepathyTypes.ConnectionPresenceTypeExtendedAway:
-                icon = "image://themedimage/icons/status/status-idle";
                 text = statusIdle;
                 break;
             case TelepathyTypes.ConnectionPresenceTypeHidden:
@@ -58,10 +56,9 @@ Image {
             case TelepathyTypes.ConnectionPresenceTypeError:
             case TelepathyTypes.ConnectionPresenceTypeOffline:
             default:
-                icon = "image://themedimage/icons/status/status-idle";
                 text = statusOffline;
         }
-        return [icon, text];
+        return text;
     }
 
     property string dataFirst: dataPeople.data(sourceIndex, PeopleModel.FirstNameRole)
@@ -92,36 +89,6 @@ Image {
 
     source: "image://themedimage/widgets/common/list/list"
     opacity: (dataPeople.data(sourceIndex, PeopleModel.IsSelfRole) ? .7 : 1)
-
-    Connections {
-        target: accountsModel
-        ignoreUnknownSignals: true
-        onComponentsLoaded: {
-            var uri = dataPeople.data(sourceIndex,
-                                      PeopleModel.OnlineAccountUriRole);
-            var provider = dataPeople.data(sourceIndex,
-                                           PeopleModel.OnlineServiceProviderRole);
-
-            if ((uri.length < 1) || (provider.length < 1))
-               return;
-
-            var account = provider[0].split("\n");
-            if (account.length != 2)
-                return;
-            account = account[1];
-
-            var buddy = uri[0].split(") ");
-            if (buddy.length != 2)
-                return;
-            buddy = buddy[1];
-
-            var contactItem = accountsModel.contactItemForId(account, buddy);
-            var presence = contactItem.data(AccountsModel.PresenceTypeRole);
-
-            statusIcon.source = getOnlineStatus(presence)[0];
-            statusText.text = getOnlineStatus(presence)[1];
-        }
-    }
 
     LimitedImage{
         id: photo
@@ -187,7 +154,10 @@ Image {
 
     Image {
         id: statusIcon
-        source: "image://themedimage/icons/status/status-idle"
+        source: {
+            var presence = window.getOnlinePresence(sourceIndex);
+            return window.getOnlineStatusIcon(presence);
+        }
         anchors {horizontalCenter: favorite.horizontalCenter; verticalCenter: statusText.verticalCenter  }
     }
 
@@ -197,7 +167,10 @@ Image {
         font.pixelSize: theme_fontPixelSizeLarge
         smooth: true
         anchors { left: nameFirst.left; bottom: photo.bottom; bottomMargin: photo.height/8}
-        text: statusOffline
+        text: {
+            var presence = window.getOnlinePresence(sourceIndex);
+            return getOnlineStatus(presence);
+        }
     }
 
     Image{
@@ -235,3 +208,4 @@ Image {
     }
 
 }
+

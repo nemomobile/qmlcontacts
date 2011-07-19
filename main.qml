@@ -10,6 +10,7 @@ import Qt 4.7
 import MeeGo.Components 0.1
 import MeeGo.Labs.Components 0.1 as Labs
 import MeeGo.App.Contacts 0.1
+import MeeGo.App.IM 0.1
 import TelepathyQML 0.1
 
 Window {
@@ -22,6 +23,7 @@ Window {
     property int currentContactIndex: 0
     property string currentContactName: ""
     property bool callFromRemote: false
+    property bool telepathyReady: false
 
     property string filterNew: qsTr("New contact")
     property string filterAll: qsTr("All")
@@ -167,29 +169,68 @@ Window {
         }
     }
 
+    function getOnlineStatusIcon(presence) {
+        var icon = "";
+        switch (presence) {
+            case TelepathyTypes.ConnectionPresenceTypeAvailable:
+                icon = "image://themedimage/icons/status/status-available"
+                break;
+            case TelepathyTypes.ConnectionPresenceTypeBusy:
+                icon = "image://themedimage/icons/status/status-busy"
+                break;
+            case TelepathyTypes.ConnectionPresenceTypeAway:
+            case TelepathyTypes.ConnectionPresenceTypeExtendedAway:
+                icon = "image://themedimage/icons/status/status-idle";
+                break;
+            case TelepathyTypes.ConnectionPresenceTypeHidden:
+            case TelepathyTypes.ConnectionPresenceTypeUnknown:
+            case TelepathyTypes.ConnectionPresenceTypeError:
+            case TelepathyTypes.ConnectionPresenceTypeOffline:
+            default:
+                icon = "image://themedimage/icons/status/status-idle";
+        }
+        return icon;
+    }
+
+    function getOnlinePresence(index) {
+        var presence = -1;
+
+        if (!telepathyReady)
+            return presence;
+
+        var uri = peopleModel.data(index, PeopleModel.OnlineAccountUriRole);
+        var provider = peopleModel.data(index, PeopleModel.OnlineServiceProviderRole);
+
+        if ((uri.length < 1) || (provider.length < 1))
+            return presence;
+
+        var account = provider[0].split("\n");
+        if (account.length != 2)
+            return presence;
+        account = account[1];
+
+        var buddy = uri[0].split(") ");
+        if (buddy.length != 2)
+            return presence;
+        buddy = buddy[1];
+
+        var contactItem = accountsModel.contactItemForId(account, buddy);
+        if (contactItem == null)
+            return presence;
+
+        presence = contactItem.data(AccountsModel.PresenceTypeRole);
+
+        return presence;
+    }
+
     function getOnlinePeople() {
         var onlinePeoples = [];
+
+        if (!telepathyReady)
+            return onlinePeoples;
+
         for (var sourceIndex = 0; sourceIndex < peopleModel.rowCount(); sourceIndex++) {
-            var uri = peopleModel.data(sourceIndex,
-                                       PeopleModel.OnlineAccountUriRole);
-            var provider = peopleModel.data(sourceIndex,
-                                            PeopleModel.OnlineServiceProviderRole);
-
-            if ((uri.length < 1) || (provider.length < 1))
-                continue;
-
-            var account = provider[0].split("\n");
-            if (account.length != 2)
-                continue;
-            account = account[1];
-
-            var buddy = uri[0].split(") ");
-            if (buddy.length != 2)
-                continue;
-            buddy = buddy[1];
-
-            var contactItem = accountsModel.contactItemForId(account, buddy);
-            var presence = contactItem.data(AccountsModel.PresenceTypeRole);
+            var presence = getOnlinePresence(sourceIndex);
 
             if (presence == TelepathyTypes.ConnectionPresenceTypeAvailable)
                 onlinePeoples.push(peopleModel.data(sourceIndex, PeopleModel.ContactRole));
@@ -216,6 +257,15 @@ Window {
                     window.currentContactIndex = contactId;
                 window.addPage(myAppDetails);
             }
+        }
+    }
+
+    Connections {
+        target: accountsModel
+        ignoreUnknownSignals: true
+        onComponentsLoaded: {
+            telepathyReady = true;
+            peopleModel.setFilter(PeopleModel.AllFilter);
         }
     }
 
