@@ -90,6 +90,15 @@ Image {
     source: "image://themedimage/widgets/common/list/list"
     opacity: (dataPeople.data(sourceIndex, PeopleModel.IsSelfRole) ? .7 : 1)
 
+    Connections {
+        target: window
+        onOnlineStatusReady: {
+            var presence = window.getOnlinePresence(sourceIndex);
+            statusIcon.source = window.getOnlineStatusIcon(presence);
+            statusText.text = getOnlineStatus(presence);
+        }
+    }
+
     LimitedImage{
         id: photo
         fillMode: Image.PreserveAspectCrop

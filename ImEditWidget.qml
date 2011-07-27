@@ -133,6 +133,18 @@ Item {
         }
     }
 
+    Connections {
+        target: window.accountItem
+
+        onChanged: {
+            var contactListState = window.accountItem.data(AccountsModel.ContactListStateRole);
+            var currentAccountName = window.accountItem.data(AccountsModel.DisplayNameRole);
+            if ((contactListState == TelepathyTypes.ContactListStateSuccess) &&
+                (currentAccountName == imComboBox.model[imComboBox.selectedIndex]))
+                imComboBox2.model = getAvailableBuddies(imComboBox.selectedIndex);
+        }
+    }
+
     function getIndexVal(model, value) {
         for (var i = 0; i < model.length; i++) {
             if (model[i] == value)

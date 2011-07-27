@@ -22,8 +22,9 @@ Window {
     property string currentContactId: ""
     property int currentContactIndex: 0
     property string currentContactName: ""
-    property bool callFromRemote: false
     property bool telepathyReady: false
+    property string currentFilter: PeopleModel.AllFilter
+    property variant accountItem
 
     property string filterNew: qsTr("New contact")
     property string filterAll: qsTr("All")
@@ -61,6 +62,8 @@ Window {
 
     property int animationDuration: 250
 
+    signal onlineStatusReady()
+
     bookMenuModel: [filterAll, filterFavorites, filterWhosOnline];
     bookMenuPayload: [myAppAllContacts, myAppFavContacts, myAppOnlineContacts];
 
@@ -93,6 +96,7 @@ Window {
             setValue("contacts.currentContactIndex", window.currentContactIndex)
             setValue("contacts.currentContactId", window.currentContactId)
             setValue("contacts.currentContactName", window.currentContactName)
+            setValue("contacts.currentFilter", window.currentFilter)
 
             sync()
         }
@@ -139,16 +143,14 @@ Window {
             var contactIndex = srsUnsavedContact.restoreOnce("contacts.currentContactIndex", window.currentContactIndex)
             var contactId = srsUnsavedContact.restoreOnce("contacts.currentContactId", "")
             var contactName = srsUnsavedContact.restoreOnce("contacts.currentContactName", "")
+            var filter = srsUnsavedContact.restoreOnce("contacts.currentFilter", "")
             window.currentContactId = contactId
             window.currentContactIndex = contactIndex
             window.currentContactName = contactName
-	    
+            window.currentFilter = filter 
+
             // // Adding first the "main" page
-            if (currentlyActivePage == 1) {
-                addPage(myAppFavContacts)
-            } else if (currentlyActivePage == 2) {
-                addPage(myAppOnlineContacts)
-            } else if (currentlyActivePage == 4
+            if (currentlyActivePage == 4
                        || currentlyActivePage == 5
                        || currentlyActivePage == 6) {
                 addPage(myAppAllContacts)
@@ -245,7 +247,6 @@ Window {
             //var data = parameters[1]; //data: one of 234-2342 or joe@gmail.com
             //var type = parameters[2]; //type: one of email or phone
 
-            //callFromRemote = true;
             if (cmd == "launchNewContact") {
                 //REVISIT: need to pass data and type to NewContactPage
                 window.addPage(myAppNewContact);
@@ -260,12 +261,38 @@ Window {
         }
     }
 
+    function setAllFilter(reload, setFilter) {
+        window.pageStack.currentPage.pageTitle = labelGroupedView;
+        peopleModel.setFilter(PeopleModel.AllFilter, reload);
+
+        if (setFilter)
+            window.currentFilter = PeopleModel.AllFilter;
+    }
+
+    function setFavoritesFilter() {
+        peopleModel.setFilter(PeopleModel.FavoritesFilter);
+        window.currentFilter = PeopleModel.FavoritesFilter;
+        window.pageStack.currentPage.pageTitle = filterFavorites;
+    }
+
+    function setOnlineFilter() {
+        window.pageStack.currentPage.pageTitle = filterWhosOnline;
+        var onlineIds = getOnlinePeople();
+        peopleModel.fetchOnlineOnly(onlineIds);
+        window.currentFilter = PeopleModel.OnlineFilter;
+    }
+
     Connections {
         target: accountsModel
         ignoreUnknownSignals: true
-        onComponentsLoaded: {
+        onNewAccountItem: {
             telepathyReady = true;
-            peopleModel.setFilter(PeopleModel.AllFilter);
+
+            window.accountItem = accountsModel.accountItemForId(accountId);
+            onlineStatusReady();
+
+            if (window.currentFilter == PeopleModel.OnlineFilter)
+                setOnlineFilter();
         }
     }
 
@@ -276,12 +303,11 @@ Window {
 
     onBookMenuTriggered: {
         if (bookMenuModel[index] == filterAll) {
-            peopleModel.setFilter(PeopleModel.AllFilter);
+            setAllFilter(true, true);
         } else if (bookMenuModel[index] == filterFavorites) {
-            peopleModel.setFilter(PeopleModel.FavoritesFilter);
+            setFavoritesFilter();
         } else if (bookMenuModel[index] == filterWhosOnline) {
-            var onlineIds = getOnlinePeople();
-            peopleModel.fetchOnlineOnly(onlineIds);
+            setOnlineFilter();
         }
     }
 
@@ -378,7 +404,10 @@ Window {
                 }
             }
             onActivating: {
-                peopleModel.setFilter(PeopleModel.AllFilter, false);
+                setAllFilter(false, false);
+
+                if (window.currentFilter == PeopleModel.FavoritesFilter)
+                    setFavoritesFilter();
             }
         }
     }

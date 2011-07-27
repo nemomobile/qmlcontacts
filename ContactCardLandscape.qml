@@ -32,6 +32,14 @@ Item {
     signal clicked
     signal pressAndHold(int mouseX, int mouseY, string uuid, string name)
 
+    Connections {
+        target: window
+        onOnlineStatusReady: {
+            var presence = window.getOnlinePresence(sourceIndex);
+            statusIcon.source = window.getOnlineStatusIcon(presence);
+        }
+    }
+
     Image {
         id: contactWithAvatar
         width: theme_listBackgroundPixelHeightTwo + itemMargins
