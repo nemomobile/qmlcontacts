@@ -75,7 +75,7 @@ Rectangle {
             //not the index of the contact in the ProxyModel
             var srcIndex = sortModel.getSourceRow(index);
             window.currentContactId = dataPeople.data(srcIndex, PeopleModel.UuidRole);
-            window.addPage(myAppDetails);
+            pageStack.push(myAppDetails);
         }
         onPressAndHold: {
             cardListView.currentIndex = index;
