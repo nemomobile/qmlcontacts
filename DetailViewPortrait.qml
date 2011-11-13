@@ -178,16 +178,12 @@ Flickable {
                             id: firstname
                             width: parent.width/2
                             text: (detailModel.data(indexOfPerson, PeopleModel.FirstNameRole)? detailModel.data(indexOfPerson, PeopleModel.FirstNameRole) : "")
-                            color: theme_fontColorNormal
-                            font.pixelSize: theme_fontPixelSizeLarge
                             elide: Text.ElideRight
                             smooth: true
                         }
                         Text{
                             id: firstname_p
                             text: (detailModel.data(indexOfPerson, PeopleModel.FirstNameProRole)? getTruncatedString(detailModel.data(indexOfPerson, PeopleModel.FirstNameProRole), 25) : "")
-                            color: theme_fontColorNormal
-                            font.pixelSize: theme_fontPixelSizeLarge
                             smooth: true
                             visible: localeUtils.needPronounciationFields()
                             anchors {top: firstname.bottom; topMargin: 10;}
@@ -196,8 +192,6 @@ Flickable {
                             id: lastname
                             width: parent.width/2
                             text: (detailModel.data(indexOfPerson, PeopleModel.LastNameRole) ? detailModel.data(indexOfPerson, PeopleModel.LastNameRole) : "")
-                            color: theme_fontColorNormal
-                            font.pixelSize: theme_fontPixelSizeLarge
                             elide: Text.ElideRight
                             smooth: true
                             anchors{left: firstname.right; leftMargin: 15;}
@@ -212,10 +206,7 @@ Flickable {
                         id: company
                         width: parent.width
                         text: (detailModel.data(indexOfPerson, PeopleModel.CompanyNameRole) ? detailModel.data(indexOfPerson, PeopleModel.CompanyNameRole) : "")
-                        color: theme_fontColorNormal
-                        font.pixelSize: theme_fontPixelSizeLarge
                         elide: Text.ElideRight
-                        styleColor: theme_fontColorInactive
                         smooth: true
                         anchors{ verticalCenter: quad3.verticalCenter; left: parent.left; leftMargin: 50}
                     }
@@ -250,9 +241,6 @@ Flickable {
             Text{
                 id: label_phone
                 text: headerPhone
-                color: theme_fontColorNormal
-                font.pixelSize: theme_fontPixelSizeLarge
-                styleColor: theme_fontColorInactive
                 smooth: true
                 anchors {bottom: phoneHeader.bottom; bottomMargin: 10; left: phoneHeader.left; leftMargin: 30}
             }
@@ -287,8 +275,6 @@ Flickable {
                             else
                                 return homeValue;
                         }
-                        color: theme_fontColorNormal
-                        font.pixelSize: theme_fontPixelSizeLarge
                         smooth: true
                         anchors {verticalCenter: phoneBar.verticalCenter; left: phoneBar.left; leftMargin: 20}
                         opacity: 1
@@ -296,8 +282,6 @@ Flickable {
                     Text{
                         id: data_phone
                         text: getTruncatedString(modelData, 25)
-                        color: theme_fontColorNormal
-                        font.pixelSize: theme_fontPixelSizeLarge
                         smooth: true
                         font.bold: true
                         anchors {verticalCenter: phoneBar.verticalCenter; left: phoneBar.left; leftMargin: 145}
@@ -316,9 +300,6 @@ Flickable {
             Text{
                 id: label_email
                 text: headerEmail
-                color: theme_fontColorNormal
-                font.pixelSize: theme_fontPixelSizeLarge
-                styleColor: theme_fontColorInactive
                 smooth: true
                 anchors {bottom: emailHeader.bottom; bottomMargin: 10; left: parent.left; leftMargin: 30}
             }
@@ -353,8 +334,6 @@ Flickable {
                             else
                                 return contextHome;
                         }
-                        color: theme_fontColorNormal
-                        font.pixelSize: theme_fontPixelSizeLarge
                         smooth: true
                         anchors {verticalCenter: emailBar.verticalCenter; left: emailBar.left; leftMargin: 20 }
                         opacity: 1
@@ -362,8 +341,6 @@ Flickable {
                     Text{
                         id: data_email
                         text: getTruncatedString(modelData, 25)
-                        color: theme_fontColorNormal
-                        font.pixelSize: theme_fontPixelSizeLarge
                         smooth: true
                         font.bold: true
                         anchors {verticalCenter: emailBar.verticalCenter; left: emailBar.left; leftMargin: 110 }
@@ -382,9 +359,6 @@ Flickable {
             Text{
                 id: label_web
                 text: headerWeb
-                color: theme_fontColorNormal
-                font.pixelSize: theme_fontPixelSizeLarge
-                styleColor: theme_fontColorInactive
                 smooth: true
                 anchors {bottom: webHeader.bottom; bottomMargin: 10; left: parent.left; topMargin: 10; leftMargin: 30}
             }
@@ -416,8 +390,6 @@ Flickable {
                             else
                                 return contextBookmark;
                         }
-                        color: theme_fontColorNormal
-                        font.pixelSize: theme_fontPixelSizeLarge
                         smooth: true
                         anchors {verticalCenter: webBar.verticalCenter; left: webBar.left; leftMargin: 20 }
                         opacity: 1
@@ -425,8 +397,6 @@ Flickable {
                     Text{
                         id: data_web
                         text: getTruncatedString(modelData, 25)
-                        color: theme_fontColorNormal
-                        font.pixelSize: theme_fontPixelSizeLarge
                         smooth: true
                         font.bold: true
                         anchors {verticalCenter: webBar.verticalCenter; left: webBar.left; leftMargin: 145 }
@@ -455,9 +425,6 @@ Flickable {
             Text{
                 id: label_address
                 text: headerAddress
-                color: theme_fontColorNormal
-                font.pixelSize: theme_fontPixelSizeLarge
-                styleColor: theme_fontColorInactive
                 smooth: true
                 anchors {bottom: addressHeader.bottom; bottomMargin: 10; left: parent.left; topMargin: 0; leftMargin: 30}
             }
@@ -490,8 +457,6 @@ Flickable {
                             else
                                 return contextHome;
                         }
-                        color: theme_fontColorNormal
-                        font.pixelSize: theme_fontPixelSizeLarge
                         smooth: true
                         anchors {verticalCenter: addyBar.verticalCenter; left: addyBar.left; leftMargin: 20 }
                         opacity: 1
@@ -511,8 +476,6 @@ Flickable {
                                 id: data_street
                                 anchors.verticalCenter: address_rect.verticalCenter
                                 text: getAddressDisplayVal(modelData);
-                                color: theme_fontColorNormal
-                                font.pixelSize: theme_fontPixelSizeLarge
                                 smooth: true
                                 font.bold: true
                                 opacity: 1
@@ -533,9 +496,6 @@ Flickable {
             Text{
                 id: label_birthday
                 text: headerBirthday
-                color: theme_fontColorNormal
-                font.pixelSize: theme_fontPixelSizeLarge
-                styleColor: theme_fontColorInactive
                 smooth: true
                 anchors {bottom: birthdayHeader.bottom; bottomMargin: 10; left: parent.left; topMargin: 0; leftMargin: 30}
             }
@@ -554,8 +514,6 @@ Flickable {
                 Text{
                     id: button_birthday_txt
                     text: headerDate
-                    color: theme_fontColorNormal
-                    font.pixelSize: theme_fontPixelSizeLarge
                     smooth: true
                     anchors {verticalCenter: bdayBar.verticalCenter; left: bdayBar.left; leftMargin: 20 }
                     opacity: 1
@@ -563,8 +521,6 @@ Flickable {
                 Text{
                     id: data_birthday
                     text: detailModel.data(indexOfPerson, PeopleModel.BirthdayRole)
-                    color: theme_fontColorNormal
-                    font.pixelSize: theme_fontPixelSizeLarge
                     smooth: true
                     font.bold: true
                     anchors {verticalCenter: bdayBar.verticalCenter; left: button_birthday_txt.right; leftMargin: 20 }
@@ -582,9 +538,6 @@ Flickable {
             Text{
                 id: label_notes
                 text: headerNote
-                color: theme_fontColorNormal
-                font.pixelSize: theme_fontPixelSizeLarge
-                styleColor: theme_fontColorInactive
                 smooth: true
                 anchors {bottom: notesHeader.bottom; bottomMargin: 10; left: parent.left; topMargin: 0; leftMargin: 30}
             }
@@ -602,8 +555,6 @@ Flickable {
                 Text{
                     id: data_notes
                     text: getTruncatedString(detailModel.data(indexOfPerson, PeopleModel.NotesRole), 50)
-                    color: theme_fontColorNormal
-                    font.pixelSize: theme_fontPixelSizeLarge
                     smooth: true
                     font.bold: true
                     anchors {top: noteBar.top; left: noteBar.left; leftMargin: 30; topMargin: 30}

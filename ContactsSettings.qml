@@ -100,7 +100,6 @@ AppPage {
         Item {
             id: sortSettingItem
             width: parent.width
-            height: theme_listBackgroundPixelHeightOne
             parent: settingsPage
 
             Text {
@@ -123,7 +122,6 @@ AppPage {
                 DropDown {
                     anchors {verticalCenter: parent.verticalCenter;}
                     selectedIndex: getCurrentVal(modelData)
-                    titleColor: theme_fontColorNormal
                     replaceDropDownTitle: true
 
                     model: getDataList(modelData)
@@ -140,7 +138,6 @@ AppPage {
 
         Item {
             width: parent.width
-            height: theme_listBackgroundPixelHeightOne
             visible: (index >= 1) //Don't show separator for first item
 
             ListSeparator {} 

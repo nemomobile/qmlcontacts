@@ -312,8 +312,6 @@ Flickable {
             Text{
                 id: label_birthday
                 text: defaultBirthday
-                color: theme_fontColorNormal
-                font.pixelSize: theme_fontPixelSizeLarge
                 smooth: true
                 anchors {bottom: birthdayHeader.bottom; bottomMargin: 10; left: parent.left; topMargin: 0; leftMargin: 30}
             }
@@ -368,8 +366,6 @@ Flickable {
             Text{
                 id: label_notes
                 text: headerNote
-                color: theme_fontColorNormal
-                font.pixelSize: theme_fontPixelSizeLarge
                 smooth: true
                 anchors {bottom: notesHeader.bottom; bottomMargin: 10; left: parent.left; topMargin: 0; leftMargin: 30}
             }

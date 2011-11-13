@@ -87,9 +87,6 @@ Column {
         Text {
             id: label_details
             text: headerLabel
-            color: theme_fontColorNormal
-            font.pixelSize: theme_fontPixelSizeLarge
-            styleColor: theme_fontColorInactive
             smooth: true
             anchors {bottom: detailsHeader.bottom; bottomMargin: itemMargins;
                      left: detailsHeader.left; leftMargin: 30}
@@ -235,7 +232,6 @@ Column {
                         anchors.left: add_button.right
                         anchors.leftMargin: 10
                         text: expandingBoxTitle
-                        font.pixelSize: theme_fontPixelSizeLarge
                     }
                 }
 
@@ -285,7 +281,6 @@ Column {
 
                 height: 36
                 text: addLabel
-                font.pixelSize: theme_fontPixelSizeMediumLarge
                 anchors {right: cancelButton.left; rightMargin: itemMargins;
                          top: newDLoader.bottom; topMargin: itemMargins;}
                 enabled: (newDLoader.item) ? newDLoader.item.validInput : false
@@ -303,7 +298,6 @@ Column {
 
                 height: 36
                 text: cancelLabel
-                font.pixelSize: theme_fontPixelSizeMediumLarge
                 anchors {right: newDLoader.right; rightMargin: itemMargins;
                          top: newDLoader.bottom; topMargin: itemMargins;}
                 onClicked: {

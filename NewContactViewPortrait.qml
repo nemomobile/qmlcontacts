@@ -286,9 +286,6 @@ Flickable{
             Text{
                 id: label_birthday
                 text: headerBirthday
-                color: theme_fontColorNormal
-                font.pixelSize: theme_fontPixelSizeLarge
-                styleColor: theme_fontColorInactive
                 smooth: true
                 anchors {bottom: birthdayHeader.bottom; bottomMargin: 10; left: parent.left; topMargin: 0; leftMargin: 30}
             }
@@ -314,11 +311,11 @@ Flickable{
                 states: [
                     State{ name: "default"
                         PropertyChanges{target: data_birthday; text: defaultBirthday}
-                        PropertyChanges{target: data_birthday; color: theme_fontColorInactive}
+                        PropertyChanges{target: data_birthday; }
                     },
                     State{ name: "edit"
                         PropertyChanges{target: data_birthday; text: ""}
-                        PropertyChanges{target: data_birthday; color: theme_fontColorNormal}
+                        PropertyChanges{target: data_birthday; }
                     }
                 ]
             }
@@ -374,9 +371,6 @@ Flickable{
             Text{
                 id: label_notes
                 text: headerNote
-                color: theme_fontColorNormal
-                font.pixelSize: theme_fontPixelSizeLarge
-                styleColor: theme_fontColorInactive
                 smooth: true
                 anchors {bottom: notesHeader.bottom; bottomMargin: 10; left: parent.left; topMargin: 0; leftMargin: 30}
             }

@@ -34,7 +34,7 @@ Item {
 
     Image {
         id: contactWithAvatar
-        width: theme_listBackgroundPixelHeightTwo + itemMargins
+        width: 100 + itemMargins
         height: width
         anchors.centerIn: parent
         asynchronous: true
@@ -93,8 +93,6 @@ Item {
             bottomMargin: 9
         }
         elide: Text.ElideRight
-        font.pixelSize: theme_fontPixelSizeLargest
-        color: theme_fontColorMediaHighlight;
         smooth: true
         text: {
             if ((dataFirst != "") || (dataLast != "")) {

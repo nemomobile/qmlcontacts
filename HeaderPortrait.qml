@@ -20,8 +20,7 @@ Image{
         anchors.verticalCenter: sectionBackground.verticalCenter
         anchors.left: sectionBackground.left
         anchors.leftMargin: 30
-        font.pixelSize: theme_fontPixelSizeLargest
-        color: theme_fontColorNormal; smooth: true
+        smooth: true
     }
 }
 

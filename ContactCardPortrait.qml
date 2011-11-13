@@ -62,8 +62,8 @@ Image {
         fillMode: Image.PreserveAspectCrop
         smooth: true
         clip: true
-        width: theme_listBackgroundPixelHeightTwo
-        height: theme_listBackgroundPixelHeightTwo
+        width: 100
+        height: 100
         source: (dataAvatar ? dataAvatar :"image://themedimage/widgets/common/avatar/avatar-default")
         anchors {left: contactCardPortrait.left;
                  top: parent.top; topMargin: itemMargins}
@@ -100,8 +100,7 @@ Image {
                 return ellipse;
         }
         anchors { left: photo.right; top: photo.top; topMargin: photo.height/8-contactDivider.height; leftMargin: photo.height/8}
-        font.pixelSize: theme_fontPixelSizeLargest
-        color: theme_fontColorNormal; smooth: true
+        smooth: true
     }
 
     //    REVISIT:Text {
