@@ -100,14 +100,11 @@ public:
                                      QStringList zip, QStringList country, QStringList addresscontexts,
                                      QStringList urllinks,  QStringList urlcontexts, QDate birthday, QString notetext);
 
-    Q_INVOKABLE QMap<QString, QString> availableAccounts() const;
-
     Q_INVOKABLE void launch (QString cmd) {
         QProcess::startDetached (cmd);
     }
 
     Q_INVOKABLE void exportContact(QString uuid, QString filename);
-    Q_INVOKABLE void sort(int flags);
 
     Q_INVOKABLE void setCurrentUuid(const QString& uuid);
     QString currentUuid();

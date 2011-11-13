@@ -14,7 +14,6 @@
 #include "proxymodel.h"
 #include "settingsdatastore.h"
 #include "localeutils.h"
-#include "meegolocale.h"
 
 class ProxyModelPriv
 {
@@ -25,7 +24,6 @@ public:
     SettingsDataStore *settings;
     LocaleUtils *localeHelper;
     QFileSystemWatcher *settingsFileWatcher;
-    meego::Locale *locale;
 };
 
 ProxyModel::ProxyModel(QObject *parent)

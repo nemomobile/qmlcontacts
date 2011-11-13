@@ -19,12 +19,10 @@ LocaleUtils *LocaleUtils::mSelf = 0;
 LocaleUtils::LocaleUtils(QObject *parent) :
     QObject(parent)
 {
-    locale = new meego::Locale();
 }
 
 LocaleUtils::~LocaleUtils()
 {
-    delete locale;
 }
 
 LocaleUtils *LocaleUtils::self()
@@ -43,7 +41,8 @@ QString LocaleUtils::getLanguage() const
 
 QLocale::Country LocaleUtils::getCountry() const
 {
-    return locale->country();
+    qDebug() << Q_FUNC_INFO << "FIXME: I may be incorrect";
+    return QLocale::system().country();
 }
 
 int LocaleUtils::defaultValues(QString type) const
@@ -123,10 +122,14 @@ bool LocaleUtils::usePhoneBookCol() const
 
 int LocaleUtils::compare(QString lStr, QString rStr)
 {
+    qDebug() << Q_FUNC_INFO << "FIXME: I may be incorrect";
+    return lStr < rStr;
+#if 0
     if (usePhoneBookCol())
         return locale->comparePhoneBook(lStr, rStr);
     else
         return locale->compare(lStr, rStr);
+#endif
 }
 
 bool LocaleUtils::isLessThan(QString lStr, QString rStr)
@@ -136,10 +139,13 @@ bool LocaleUtils::isLessThan(QString lStr, QString rStr)
     if (rStr == "#")
         return true;
 
+    return lStr < rStr;
+#if 0
     if (usePhoneBookCol())
         return locale->lessThanPhoneBook(lStr, rStr);
     else
         return locale->lessThan(lStr, rStr);
+#endif
 }
 
 bool LocaleUtils::checkForAlphaChar(QString str)

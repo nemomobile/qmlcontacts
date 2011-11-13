@@ -1,6 +1,6 @@
 include(../common.pri)
 TARGET = meegocontacts
-TEMPLATE = lib
+TEMPLATE = app
 
 QT += declarative \
     dbus
@@ -10,12 +10,14 @@ CONFIG += qt \
         mobility \
         link_pkconfig
 
+MOBILITY += contacts versit
 
-PKGCONFIG += QtContacts QtVersit icu-uc icu-i18n meegolocale mlite
+
+PKGCONFIG += icu-uc icu-i18n mlite
 
 OBJECTS_DIR = .obj
 MOC_DIR = .moc
-LIBS += -licuuc -licui18n -lmeegolocale
+LIBS += -licuuc -licui18n
 INCLUDEPATH += /usr/include/mlite
 
 MOBILITY = contacts versit
@@ -24,7 +26,8 @@ SOURCES += \
     peoplemodel.cpp \
     proxymodel.cpp \    
     settingsdatastore.cpp \
-    localeutils.cpp
+    localeutils.cpp \
+    main.cpp
 
 INSTALL_HEADERS += \    
     peoplemodel.h \

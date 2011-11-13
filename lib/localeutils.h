@@ -13,8 +13,6 @@
 #include <QStringList>
 #include <QLocale>
 
-#include "meegolocale.h"
-
 class LocaleUtils: public QObject
 {
     Q_OBJECT
@@ -45,7 +43,6 @@ protected:
 
 private:
     static LocaleUtils *mSelf;
-    meego::Locale *locale;
 };
 
 #endif // LOCALEUTILS_H
