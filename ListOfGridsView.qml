@@ -6,7 +6,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import Qt 4.7
+import QtQuick 1.1
 import MeeGo.App.Contacts 0.1
 
 Flickable {

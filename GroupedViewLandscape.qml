@@ -6,8 +6,8 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import Qt 4.7
-import MeeGo.Components 0.1
+import QtQuick 1.1
+import com.nokia.meego 1.0
 import MeeGo.App.Contacts 0.1
 
 Item {
@@ -123,7 +123,8 @@ Item {
         objectMenu.actionMenu.model = getActionMenuModel()
     }
 
-    ModalContextMenu {
+                    /*
+    ContextMenu {
         id: objectMenu
         property int menuX
         property int menuY
@@ -146,7 +147,7 @@ Item {
         }
     }
 
-    ModalContextMenu {
+    ContextMenu {
         id: shareMenu
 
         content: ActionMenu {
@@ -169,5 +170,6 @@ Item {
             }
         }
     }
+    */
 }
 

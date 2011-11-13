@@ -6,12 +6,9 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import Qt 4.7
-import MeeGo.Components 0.1
+import QtQuick 1.1
+import com.nokia.meego 1.0
 import MeeGo.App.Contacts 0.1
-import MeeGo.Media 0.1
-import MeeGo.App.IM 0.1
-import TelepathyQML 0.1
 
 Flickable {
     id: editViewPortrait
@@ -56,7 +53,6 @@ Flickable {
 
     //: Instant Messaging Accounts for this contact
     property string imLabel: qsTr("Instant messaging")
-    property string addIms: qsTr("Add account")
     property string emailLabel: qsTr("Email")
     property string addEmails: qsTr("Add email address")
 
@@ -66,40 +62,13 @@ Flickable {
     property string addressLabel: qsTr("Address")
     property string addAddress: qsTr("Add address")
 
-    property string restoredFirstName: ""
-    property string restoredLastName: ""
-    property string restoredCompany: ""
-    property string restoredNotes: ""
-    property string restoredPhoto: ""
-    property string restoredFavorite: ""
-    property date restoredBirthday
-
-    SaveRestoreState {
-	id: justRestore
-	onSaveRequired: sync()
-    }
-
     function finishPageLoad() {
-        if (justRestore.restoreRequired) {
-            var parentTitle = window.pageStack.currentPage.pageTitle;
-            restoredFirstName = justRestore.restoreOnce(parentTitle + ".contact.firstName", "")
-            restoredLastName = justRestore.restoreOnce(parentTitle + ".contact.lastName", "")
-            restoredCompany = justRestore.restoreOnce(parentTitle + ".contact.company", "")
-            restoredNotes = justRestore.restoreOnce(parentTitle + ".contact.notes", "")
-            restoredPhoto = justRestore.restoreOnce(parentTitle + ".contact.photo", "")
-            restoredFavorite = justRestore.restoreOnce(parentTitle + ".contact.favorite", "")
-            var tmpStr = justRestore.restoreOnce(parentTitle + ".contact.birthday", "")
-            if (tmpStr != "")
-                restoredBirthday = tmpStr;
-        }
-
         var detailData = dataModel.data(index, PeopleModel.PhoneNumberRole);
         var contextData = dataModel.data(index, PeopleModel.PhoneContextRole);
         phones.loadExpandingBox(detailData, contextData);
 
         detailData = dataModel.data(index, PeopleModel.OnlineAccountUriRole);
         contextData = dataModel.data(index, PeopleModel.OnlineServiceProviderRole);
-        ims.loadExpandingBox(detailData, contextData);
 
         detailData = dataModel.data(index, PeopleModel.EmailAddressRole);
         contextData = dataModel.data(index, PeopleModel.EmailContextRole);
@@ -114,37 +83,14 @@ Flickable {
         addys.loadExpandingBox(detailData, contextData);
     }
 
-    SaveRestoreState {
-        id: srsMainView
-        onSaveRequired: {
-            var parentTitle = window.pageStack.currentPage.pageTitle;
-            setValue(parentTitle + ".contact.firstName", data_first.text)
-            setValue(parentTitle + ".contact.lastName", data_last.text)
-            setValue(parentTitle + ".contact.company",data_company.text)
-            setValue(parentTitle + ".contact.photo", avatar_img.source)
-            setValue(parentTitle + ".contact.birthday", datePicker.selectedDate)
-            setValue(parentTitle + ".contact.favorite",icn_faves.state)
-            setValue(parentTitle + ".contact.notes",data_notes.text)
-            sync()
-        }
-    }
-
     function getFavoriteState() {
-        if (restoredFavorite == "") {
-            if (dataModel.data(index, PeopleModel.FavoriteRole))
-                return favoriteValue;
-            return unfavoriteValue;
-        }
-
-        if (restoredFavorite)
+        if (dataModel.data(index, PeopleModel.FavoriteRole))
             return favoriteValue;
-
         return unfavoriteValue;
     }
 
     function contactSave(contactId){
         var newPhones = phones.getNewDetails();
-        var newIms = ims.getNewDetails();
         var newEmails = emails.getNewDetails();
         var newWebs = urls.getNewDetails();
         var addresses = addys.getNewDetails();
@@ -158,13 +104,13 @@ Flickable {
                                             data_company.text,
                                             newPhones["numbers"], newPhones["types"],
                                             (icn_faves.state == favoriteValue),
-                                            newIms["ims"], newIms["types"],
+                                            "", "",
                                             newEmails["emails"], newEmails["types"],
                                             addresses["streets"], addresses["locales"],
                                             addresses["regions"], addresses["zips"],
                                             addresses["countries"], addresses["types"],
                                             newWebs["urls"], newWebs["types"],
-                                            datePicker.datePicked, data_notes.text);
+                                            "TODO date here", data_notes.text);
     }
 
     Rectangle {
@@ -192,7 +138,7 @@ Flickable {
                 LimitedImage{
                     id: avatar_img
                     //REVISIT: Instead of using the URI from AvatarRole, need to use thumbnail URI
-                    source: restoredPhoto != "" ? restoredPhoto : (dataModel.data(index, PeopleModel.AvatarRole) ? dataModel.data(index, PeopleModel.AvatarRole) : "image://themedimage/icons/internal/contacts-avatar-add")
+                    source: (dataModel.data(index, PeopleModel.AvatarRole) ? dataModel.data(index, PeopleModel.AvatarRole) : "image://themedimage/icons/internal/contacts-avatar-add")
                     anchors.centerIn: avatar
                     opacity: 1
                     signal clicked
@@ -207,29 +153,12 @@ Flickable {
                         id: mouseArea_avatar_img
                         anchors.fill: parent
                         onClicked:{
-                            photoPicker.show();
+                            console.log("no photopicker component written, TODO");
                         }
                         onPressed: {
                             avatar.opacity = .5;
                             avatar_img.source = (avatar_img.source == "image://themedimage/icons/internal/contacts-avatar-add" ? "image://themedimage/icons/internal/contacts-avatar-add-selected" : avatar_img.source)
                         }
-                    }
-                }
-            }
-
-            PhotoPicker {
-                id: photoPicker
-                property string selectedPhoto
-
-                albumSelectionMode: false
-                onPhotoSelected: {
-                    selectedPhoto = uri.split("file://")[1];
-                    editViewPortrait.validInput = true;
-
-                    if (selectedPhoto)
-                    {
-                        avatar_img.source = selectedPhoto;
-                        avatar.opacity = 1;
                     }
                 }
             }
@@ -243,19 +172,19 @@ Flickable {
                     id: quad1
                     width: headerGrid.width/2
                     height: (data_first_p.visible ? childrenRect.height : data_first.height)
-                    TextEntry{
+                    TextField {
                         id: data_first
-                        text: editViewPortrait.restoredFirstName != "" ? editViewPortrait.restoredFirstName : (dataModel.data(index, PeopleModel.FirstNameRole) ? dataModel.data(index, PeopleModel.FirstNameRole) : "")
-                        defaultText: defaultFirstName
+                        text: (dataModel.data(index, PeopleModel.FirstNameRole) ? dataModel.data(index, PeopleModel.FirstNameRole) : "")
+                        placeholderText: defaultFirstName
                         width: (parent.width-avatar.width)
                         anchors {top: parent.top;
                                  left: parent.left; leftMargin: 20;
                                  right: parent.right; rightMargin: 10}
                     }
-                    TextEntry{
+                    TextField {
                         id: data_first_p
                         text: dataModel.data(index, PeopleModel.FirstNameProRole) ? dataModel.data(index, PeopleModel.FirstNameProRole) : ""
-                        defaultText: defaultPronounciation
+                        placeholderText: defaultPronounciation
                         width: (parent.width - avatar.width)
                         anchors {top: data_first.bottom; topMargin: 10;
                                  left: parent.left; leftMargin: 20;
@@ -267,19 +196,19 @@ Flickable {
                     id: quad2
                     width: headerGrid.width/2
                     height: (data_last_p.visible ? childrenRect.height : data_last.height)
-                    TextEntry{
+                    TextField {
                         id: data_last
-                        text: editViewPortrait.restoredLastName != "" ? editViewPortrait.restoredLastName : (dataModel.data(index, PeopleModel.LastNameRole) ? dataModel.data(index, PeopleModel.LastNameRole) : "")
-                        defaultText: defaultLastName
+                        text: (dataModel.data(index, PeopleModel.LastNameRole) ? dataModel.data(index, PeopleModel.LastNameRole) : "")
+                        placeholderText: defaultLastName
                         width:(parent.width-avatar.width)
                         anchors {top: parent.top;
                                  left: parent.left; leftMargin: 10;
                                  right: parent.right; rightMargin: 20}
                     }
-                    TextEntry{
+                    TextField {
                         id: data_last_p
                         text: dataModel.data(index, PeopleModel.LastNameProRole) ? dataModel.data(index, PeopleModel.LastNameProRole) : ""
-                        defaultText: defaultPronounciation
+                        placeholderText: defaultPronounciation
                         width: (parent.width-avatar.width)
                         anchors {top: data_last.bottom; topMargin: 10;
                                  left: parent.left; leftMargin: 10;
@@ -291,10 +220,10 @@ Flickable {
                     id: quad3
                     width: headerGrid.width/2
                     height: childrenRect.height
-                    TextEntry{
+                    TextField {
                         id: data_company
-                        text: editViewPortrait.restoredCompany != "" ? editViewPortrait.restoredCompany : (dataModel.data(index, PeopleModel.CompanyNameRole) ? dataModel.data(index, PeopleModel.CompanyNameRole) : "")
-                        defaultText: defaultCompany
+                        text: (dataModel.data(index, PeopleModel.CompanyNameRole) ? dataModel.data(index, PeopleModel.CompanyNameRole) : "")
+                        placeholderText: defaultCompany
                         width:(parent.width-avatar.width)
                         anchors{ top: parent.top; topMargin: 10; left: parent.left; leftMargin: 20; right: parent.right; rightMargin: 10;}
                     }
@@ -348,15 +277,6 @@ Flickable {
         }
 
         ContactsExpandableDetails {
-            id: ims 
-
-            headerLabel: imLabel
-            expandingBoxTitle: addIms
-            newDetailsComponent: ImEditWidget{}
-            existingDetailsComponent: ImEditWidget{}
-        }
-
-        ContactsExpandableDetails {
             id: emails 
 
             headerLabel: emailLabel
@@ -404,17 +324,16 @@ Flickable {
             width: parent.width
             height: 80
             source: "image://themedimage/widgets/common/header/header-inverted-small"
-            TextEntry{
+            TextField {
                 id: data_birthday
-                text: datePicker.selectedBirthday != "" ? datePicker.selectedBirthday : dataModel.data(index, PeopleModel.BirthdayRole) ? dataModel.data(index, PeopleModel.BirthdayRole) : ""
-                defaultText: defaultBirthday
+                text: dataModel.data(index, PeopleModel.BirthdayRole) ? dataModel.data(index, PeopleModel.BirthdayRole) : ""
+                placeholderText: defaultBirthday
                 anchors {verticalCenter: birthday.verticalCenter; left: parent.left; topMargin: 30; leftMargin: 30; right: delete_button.left; rightMargin: 30}
                 MouseArea{
                     id: mouse_birthday
                     anchors.fill: parent
                     onClicked: {
-                        var map = mapToItem (window.content, mouseX, mouseY);
-                        datePicker.show(map.x, map.y)
+                        console.log("TODO: date picker");
                     }
                 }
             }
@@ -437,32 +356,6 @@ Flickable {
                 }
                 Binding{target: delete_button; property: "visible"; value: true; when: data_birthday.text != ""}
                 Binding{target: delete_button; property: "visible"; value: false; when: data_birthday.text == ""}
-            }
-        }
-
-
-        DatePicker {
-            id:datePicker
-            parent: editViewPortrait
-
-            property date datePicked
-            property string selectedBirthday: useRestoredBirthday(editViewPortrait.restoredBirthday) ? Qt.formatDate(editViewPortrait.restoredBirthday, window.dateFormat) : ""
-
-	    function useRestoredBirthday(restoredBDay) {
-                var defaultDate = ""
-                var retval = (Qt.formatDate(restoredBDay) != Qt.formatDate(defaultDate))
-		return retval
-	    }
-	    
-            onDateSelected: {
-                datePicked = selectedDate;
-                data_birthday.text = Qt.formatDate(selectedDate, window.dateFormat);
-                data_birthday.state = (data_birthday.state == "default" ? "edit" : data_birthday.state)
-            }
-
-            Component.onCompleted: {
-                if (editViewPortrait.restoredBirthday != "")
-                    selectedDate: editViewPortrait.restoredBirthday
             }
         }
 
@@ -490,8 +383,8 @@ Flickable {
             anchors.bottomMargin: 1
             TextField{
                 id: data_notes
-                text: restoredNotes != "" ? restoredNotes : (dataModel.data(index, PeopleModel.NotesRole) ? dataModel.data(index, PeopleModel.NotesRole) : "")
-                defaultText: defaultNote
+                text: (dataModel.data(index, PeopleModel.NotesRole) ? dataModel.data(index, PeopleModel.NotesRole) : "")
+                placeholderText: defaultNote
                 height: 300
                 anchors {top: parent.top; left: parent.left; right: parent.right; rightMargin: 30; topMargin: 20; leftMargin: 30}
             }
@@ -499,11 +392,11 @@ Flickable {
     }
     }
     Binding{ target: editViewPortrait; property: "validInput"; value: true; when: {
-            ((data_first.text != "")||(data_last.text != "")||(data_company.text != "")||(phones.validInput)||(ims.validInput)||(emails.validInput)||(urls.validInput)||(addys.validInput)||(data_birthday.text != "")||(data_notes.text != ""))
+            ((data_first.text != "")||(data_last.text != "")||(data_company.text != "")||(phones.validInput)||(emails.validInput)||(urls.validInput)||(addys.validInput)||(data_birthday.text != "")||(data_notes.text != ""))
         }
     }
     Binding{ target: editViewPortrait; property: "validInput"; value: false; when: {
-            ((data_first.text == "")&&(data_last.text == "")&&(data_company.text == "")&&(!phones.validInput)&&(!ims.validInput)&&(!emails.validInput)&&(!urls.validInput)&&(!addys.validInput)&&(data_birthday.text == "")&&(data_notes.text == ""))
+            ((data_first.text == "")&&(data_last.text == "")&&(data_company.text == "")&&(!phones.validInput)&&(!emails.validInput)&&(!urls.validInput)&&(!addys.validInput)&&(data_birthday.text == "")&&(data_notes.text == ""))
         }
     }
 }

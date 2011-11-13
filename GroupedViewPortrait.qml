@@ -6,8 +6,8 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import Qt 4.7
-import MeeGo.Components 0.1
+import QtQuick 1.1
+import com.nokia.meego 1.0
 import MeeGo.App.Contacts 0.1
 
 Rectangle {
@@ -113,6 +113,7 @@ Binding{target: cardListView; property: "opacity"; value: ((cardListView.count >
         objectMenu.actionMenu.model = getActionMenuModel()
     }
 
+/*
     ModalContextMenu {
         id: objectMenu
 
@@ -161,4 +162,5 @@ Binding{target: cardListView; property: "opacity"; value: ((cardListView.count >
             }
         }
     }
+*/
 }

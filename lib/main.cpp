@@ -24,7 +24,6 @@ int main(int argc, char **argv)
     qmlRegisterType<ProxyModel>("MeeGo.App.Contacts", 0, 1, "ProxyModel");
 
     QDeclarativeView view;
-    view.setSource(QUrl::fromLocalFile("main.qml"));
 
     QDeclarativeContext *rootContext = view.engine()->rootContext();
     Q_ASSERT(rootContext);
@@ -34,6 +33,7 @@ int main(int argc, char **argv)
     rootContext->setContextProperty(QString::fromLatin1("localeUtils"),
                                      LocaleUtils::self());
 
+    view.setSource(QUrl::fromLocalFile("main.qml"));
 
     view.show();
 

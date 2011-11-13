@@ -6,7 +6,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import Qt 4.7
+import QtQuick 1.1
 import MeeGo.App.Contacts 0.1
 
 Item {
@@ -31,14 +31,6 @@ Item {
 
     signal clicked
     signal pressAndHold(int mouseX, int mouseY, string uuid, string name)
-
-    Connections {
-        target: window
-        onOnlineStatusReady: {
-            var presence = window.getOnlinePresence(sourceIndex);
-            statusIcon.source = window.getOnlineStatusIcon(presence);
-        }
-    }
 
     Image {
         id: contactWithAvatar
@@ -112,15 +104,6 @@ Item {
                     return qsTr("%1 %2").arg(dataFirst).arg(dataLast)
             }
             return ""
-        }
-    }
-
-    Image {
-        id: statusIcon
-        anchors { right: parent.right; top: parent.top; rightMargin: iconsMargin; topMargin: iconsMargin }
-        source: {
-            var presence = window.getOnlinePresence(sourceIndex);
-            return window.getOnlineStatusIcon(presence);
         }
     }
 

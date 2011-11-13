@@ -6,10 +6,8 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import Qt 4.7
+import QtQuick 1.1
 import MeeGo.App.Contacts 0.1
-import MeeGo.App.IM 0.1
-import TelepathyQML 0.1
 
 Image {
     id: contactCardPortrait
@@ -35,32 +33,6 @@ Image {
         return valueStr;
     }
 
-    //REVISIT: This should be moved into main, but doing so will
-    //break string freeze.  Move this at a later time
-    function getOnlineStatus(presence) {
-        var text = "";
-
-        switch (presence) {
-            case TelepathyTypes.ConnectionPresenceTypeAvailable:
-                text = statusOnline;
-                break;
-            case TelepathyTypes.ConnectionPresenceTypeBusy:
-                text = statusBusy;
-                break;
-            case TelepathyTypes.ConnectionPresenceTypeAway:
-            case TelepathyTypes.ConnectionPresenceTypeExtendedAway:
-                text = statusIdle;
-                break;
-            case TelepathyTypes.ConnectionPresenceTypeHidden:
-            case TelepathyTypes.ConnectionPresenceTypeUnknown:
-            case TelepathyTypes.ConnectionPresenceTypeError:
-            case TelepathyTypes.ConnectionPresenceTypeOffline:
-            default:
-                text = statusOffline;
-        }
-        return text;
-    }
-
     property string dataFirst: dataPeople.data(sourceIndex, PeopleModel.FirstNameRole)
     property string dataUuid: dataPeople.data(sourceIndex, PeopleModel.UuidRole);
     property string dataLast:  dataPeople.data(sourceIndex, PeopleModel.LastNameRole)
@@ -76,11 +48,6 @@ Image {
     //: Add favorite flag / add contact to favorites list
     property string favoriteTranslated: qsTr("Favorite", "Verb")
 
-    property string statusIdle: qsTr("Idle")
-    property string statusBusy: qsTr("Busy")
-    property string statusOnline: qsTr("Online")
-    property string statusOffline: qsTr("Offline")
-
     //: Truncate string - used when a string is too long for the display area
     property string ellipse: qsTr("(...)")
 
@@ -89,15 +56,6 @@ Image {
 
     source: "image://themedimage/widgets/common/list/list"
     opacity: (dataPeople.data(sourceIndex, PeopleModel.IsSelfRole) ? .7 : 1)
-
-    Connections {
-        target: window
-        onOnlineStatusReady: {
-            var presence = window.getOnlinePresence(sourceIndex);
-            statusIcon.source = window.getOnlineStatusIcon(presence);
-            statusText.text = getOnlineStatus(presence);
-        }
-    }
 
     LimitedImage{
         id: photo
@@ -159,27 +117,6 @@ Image {
         source: (dataPeople.data(sourceIndex, PeopleModel.FavoriteRole) ? "image://themedimage/icons/actionbar/favorite-selected" : "image://themedimage/icons/actionbar/favorite" )
         opacity: (dataMeCard ? 0 : 1)
         anchors {right: contactCardPortrait.right; top: nameFirst.top; rightMargin: photo.height/8;}
-    }
-
-    Image {
-        id: statusIcon
-        source: {
-            var presence = window.getOnlinePresence(sourceIndex);
-            return window.getOnlineStatusIcon(presence);
-        }
-        anchors {horizontalCenter: favorite.horizontalCenter; verticalCenter: statusText.verticalCenter  }
-    }
-
-    Text {
-        id: statusText
-        color: theme_fontColorNormal
-        font.pixelSize: theme_fontPixelSizeLarge
-        smooth: true
-        anchors { left: nameFirst.left; bottom: photo.bottom; bottomMargin: photo.height/8}
-        text: {
-            var presence = window.getOnlinePresence(sourceIndex);
-            return getOnlineStatus(presence);
-        }
     }
 
     Image{

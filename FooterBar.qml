@@ -6,9 +6,8 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import Qt 4.7
-import MeeGo.Labs.Components 0.1 as Labs
-import MeeGo.Components 0.1
+import QtQuick 1.1
+import com.nokia.meego 1.0
 import MeeGo.App.Contacts 0.1
 
 Rectangle {
@@ -25,10 +24,6 @@ Rectangle {
     anchors {bottom: parent.bottom; left: parent.left; right: parent.right;}
 
     signal directoryCharacterClicked(string character)
-
-    Labs.ApplicationsModel {
-        id: appModel
-    }
 
     function getButtonTitleText() {
         if (type == "details")
@@ -48,11 +43,12 @@ Rectangle {
 
     function handleButtonClick(action) {
         if (action == window.contextShare) {
-            people.exportContact(window.currentContactId,  "/tmp/vcard.vcf");
-            var cmd = "/usr/bin/meego-qml-launcher --app meego-app-email --fullscreen --cmd openComposer --cdata \"file:///tmp/vcard.vcf\"";
-            appModel.launch(cmd);
+            console.log("FIXME share in footer, ask Robin")
+//            people.exportContact(window.currentContactId,  "/tmp/vcard.vcf");
+//            var cmd = "/usr/bin/meego-qml-launcher --app meego-app-email --fullscreen --cmd openComposer --cdata \"file:///tmp/vcard.vcf\"";
+//            appModel.launch(cmd);
         } else if (action == window.contextEdit) {
-            window.addPage(pageToLoad);
+//            window.addPage(pageToLoad);
         } else if (action == window.contextSave) {
             if (type == "edit")
                 currentView.contactSave(window.currentContactId);
@@ -92,8 +88,9 @@ Rectangle {
                     settingsIcon.source = "image://themedimage/icons/actionbar/show-settings-active"
                 }
                 onClicked: {
-                    var cmd = "/usr/bin/meego-qml-launcher --app meego-ux-settings --opengl --fullscreen --cmd showPage --cdata \"Contacts\"";  //i18n ok
-                    appModel.launch(cmd);
+                    console.log("FIXME, show settings in footer, ask Robin");
+//                    var cmd = "/usr/bin/meego-qml-launcher --app meego-ux-settings --opengl --fullscreen --cmd showPage --cdata \"Contacts\"";  //i18n ok
+//                    appModel.launch(cmd);
                 }
             }
         }
@@ -158,13 +155,10 @@ Rectangle {
                     Text {
                         id: letter
                         text: dletter
-                        font.pixelSize: theme_fontPixelSizeLargest2
-                        color: theme_fontColorContactAZBAR
-
                     }
                     Image{
                         id: slider
-                        source: "image://themedimage/widgets/apps/contacts/contacts-alpabar-letter-background"
+//                        source: "image://themedimage/widgets/apps/contacts/contacts-alpabar-letter-background"
                         anchors { horizontalCenter: letter.horizontalCenter}
                         y: -75
                         visible: false
@@ -175,9 +169,7 @@ Rectangle {
                         anchors.top: slider.top
                         anchors.topMargin: 5
                         anchors.horizontalCenter: slider.horizontalCenter
-                        font.pixelSize: theme_fontPixelSizeLargest3
                         visible: false
-                        color: theme_fontColorSelected
                     }
                     MouseArea {
                     id: mouseArea
@@ -188,7 +180,6 @@ Rectangle {
                     name: "pressed"; when: mouseArea.pressed == true
                     PropertyChanges {
                         target: letter
-                        color: theme_fontColorContactAZBARHighlight
                     }
                     PropertyChanges {
                         target: slider
@@ -205,12 +196,7 @@ Rectangle {
 
         Button{
             id: buttonLeft
-            minWidth: 146
-            maxWidth: Math.round(parent.width/2)
             text: getButtonTitleText()[0]
-            bgSourceUp: "image://themedimage/widgets/common/button/button"
-            bgSourceActive: "image://themedimage/widgets/common/button/button"
-            bgSourceDn: "image://themedimage/widgets/common/button/button-pressed"
             visible: (buttonLeft.text == "" ? 0 : 1)
             enabled: getActiveState(buttonLeft.text)
             anchors {top: parent.top; topMargin: 3; 
@@ -222,14 +208,9 @@ Rectangle {
 
         Button{
             id: buttonRight
-            minWidth: 146
-            maxWidth: Math.round(parent.width/2)
             text: getButtonTitleText()[1]
-            bgSourceUp: "image://themedimage/widgets/common/button/button"
-            bgSourceActive: "image://themedimage/widgets/common/button/button"
-            bgSourceDn: "image://themedimage/widgets/common/button/button-pressed"
             visible: (buttonRight.text == "" ? 0 : 1)
-            active: getActiveState(buttonRight.text)
+            enabled: getActiveState(buttonRight.text)
             anchors {top: parent.top; topMargin: 3;
                      bottom: parent.bottom; bottomMargin: 3;
                      right: footer_bar.right; rightMargin: 3;}

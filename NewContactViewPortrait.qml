@@ -6,10 +6,9 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import Qt 4.7
-import MeeGo.Components 0.1
+import QtQuick 1.1
+import com.nokia.meego 1.0
 import MeeGo.App.Contacts 0.1
-import MeeGo.Media 0.1
 
 Flickable{
 
@@ -51,7 +50,6 @@ Flickable{
     property string phoneLabel: qsTr("Phone numbers")
     property string addPhones: qsTr("Add number")
     property string imLabel: qsTr("Instant messaging")
-    property string addIms: qsTr("Add account")
     property string emailLabel: qsTr("Email")
     property string addEmails: qsTr("Add email address")
     property string urlLabel: qsTr("Web")
@@ -60,63 +58,21 @@ Flickable{
     property string addAddress: qsTr("Add address")
 
     property bool validInput: false
-    property string restoredFirstName: ""
-    property string restoredLastName: ""
-    property string restoredCompany: ""
-    property string restoredNotes: ""
-    property string restoredPhoto: ""
-    property string restoredFavorite: ""
-    property date restoredBirthday
-
-    SaveRestoreState {
-        id: justRestore
-        onSaveRequired: sync()
-    }
 
     function finishPageLoad() {
-        if (justRestore.restoreRequired) {
-            var parentTitle = window.pageStack.currentPage.pageTitle;
-            restoredFirstName = justRestore.restoreOnce(parentTitle + ".contact.firstName", "")
-            restoredLastName = justRestore.restoreOnce(parentTitle + ".contact.lastName", "")
-            restoredCompany = justRestore.restoreOnce(parentTitle + ".contact.company", "")
-            restoredNotes = justRestore.restoreOnce(parentTitle + ".contact.notes", "")
-            restoredPhoto = justRestore.restoreOnce(parentTitle + ".contact.photo", "")
-            restoredFavorite = justRestore.restoreOnce(parentTitle + ".contact.favorite", "")
-            var tmpStr = justRestore.restoreOnce(parentTitle + ".contact.birthday", "")
-            if (tmpStr != "")
-                restoredBirthday;
-        }
-
         phones.loadExpandingBox(null, null);
-        ims.loadExpandingBox(null, null);
         emails.loadExpandingBox(null, null);
         urls.loadExpandingBox(null, null);
         addys.loadExpandingBox(null, null);
     }
 
-    SaveRestoreState {
-        id: srsMainView
-        onSaveRequired: {
-            var parentTitle = window.pageStack.currentPage.pageTitle;
-            setValue(parentTitle + ".contact.firstName", data_first.text)
-            setValue(parentTitle + ".contact.lastName", data_last.text)
-            setValue(parentTitle + ".contact.company",data_company.text)
-            setValue(parentTitle + ".contact.photo", avatar_img.source)
-            setValue(parentTitle + ".contact.birthday", datePicker.selectedDate)
-            setValue(parentTitle + ".contact.notes",data_notes.text)
-            setValue(parentTitle + ".contact.favorite",icn_faves.state)
-            sync()
-        }
-    }
-
     function contactSave(){
         var newPhones = phones.getNewDetails();
-        var newIms = ims.getNewDetails();
         var newEmails = emails.getNewDetails();
         var newWebs = urls.getNewDetails();
         var addresses = addys.getNewDetails();
-        var avatar = photoPicker.selectedPhoto
-        var thumburi = photoPicker.selectedPhotoThumb
+        var avatar = ""
+        var thumburi = ""
 
         var ret = peopleModel.createPersonModel(avatar, thumburi,
                                                 data_first.text, data_first_p.text,
@@ -124,13 +80,13 @@ Flickable{
                                                 data_company.text,
                                                 newPhones["numbers"], newPhones["types"],
                                                 (icn_faves.state == favoriteValue),
-                                                newIms["ims"], newIms["types"],
+                                                "", "",
                                                 newEmails["emails"], newEmails["types"],
                                                 addresses["streets"], addresses["locales"],
                                                 addresses["regions"], addresses["zips"],
                                                 addresses["countries"], addresses["types"],
                                                 newWebs["urls"], newWebs["types"],
-                                                datePicker.datePicked, data_notes.text);
+                                                "", data_notes.text);
 
         if (!ret) //REVISIT
             console.log("[contactSave] Unable to create new contact due to missing info");
@@ -161,12 +117,12 @@ Flickable{
 
                 LimitedImage{
                     id: avatar_img
-                    source: restoredPhoto != "" ? restoredPhoto : "image://themedimage/icons/internal/contacts-avatar-add"
+                    source: "image://themedimage/icons/internal/contacts-avatar-add"
                     anchors.centerIn: avatar
                     opacity: 1
                     signal clicked
-                    width: (photoPicker.selectedPhoto ? 150 : 100)
-                    height: (photoPicker.selectedPhoto ? 150 : 100)
+                    width: 100
+                    height: 100
                     smooth:  true
                     clip: true
                     state: "default"
@@ -176,29 +132,12 @@ Flickable{
                         id: mouseArea_avatar_img
                         anchors.fill: parent
                         onClicked:{
-                            photoPicker.show();
+                            console.log("photo picker, TODO")
                         }
                         onPressed: {
                             avatar.opacity = .5;
                             avatar_img.source = (avatar_img.source == "image://themedimage/icons/internal/contacts-avatar-add" ? "image://themedimage/icons/internal/contacts-avatar-add-selected" : avatar_img.source)
                         }
-                    }
-                }
-            }
-            PhotoPicker {
-                id: photoPicker
-                property string selectedPhoto
-                property string selectedPhotoThumb
-
-                albumSelectionMode: false
-                onPhotoSelected: {
-                    selectedPhoto = uri
-                    selectedPhotoThumb = (thumbUri ? thumbUri : selectedPhoto);
-                    newContactPage.validInput = true;
-                    if (selectedPhoto)
-                    {
-                        avatar_img.source = selectedPhotoThumb;
-                        avatar.opacity = 1;
                     }
                 }
             }
@@ -211,19 +150,18 @@ Flickable{
                     id: quad1
                     width: headerGrid.width/2
                     height: (data_first_p.visible ? childrenRect.height : data_first.height)
-                    TextEntry{
+                    TextField {
                         id: data_first
-                        text: newContactPage.restoredFirstName
-                        defaultText: defaultFirstName
+                        placeholderText: defaultFirstName
                         width: (parent.width-avatar.width)
                         anchors {top: parent.top;
                                  left: parent.left; leftMargin: 20;
                                  right: parent.right; rightMargin: 10}
                     }
-                    TextEntry{
+                    TextField {
                         id: data_first_p
                         text: ""
-                        defaultText: defaultPronounciation
+                        placeholderText: defaultPronounciation
                         width: (parent.width - avatar.width)
                         anchors {top: data_first.bottom; topMargin: 10;
                                  left: parent.left; leftMargin: 20;
@@ -235,19 +173,18 @@ Flickable{
                     id: quad2
                     width: headerGrid.width/2
                     height: (data_last_p.visible ? childrenRect.height : data_last.height)
-                    TextEntry{
+                    TextField {
                         id: data_last
-                        text: newContactPage.restoredLastName
-                        defaultText: defaultLastName
+                        placeholderText: defaultLastName
                         width:(parent.width-avatar.width)
                         anchors {top: parent.top;
                                  left: parent.left; leftMargin: 10;
                                  right: parent.right; rightMargin: 20}
                     }
-                    TextEntry{
+                    TextField {
                         id: data_last_p
                         text: ""
-                        defaultText: defaultPronounciation
+                        placeholderText: defaultPronounciation
                         width: (parent.width - avatar.width)
                         anchors {top: data_last.bottom; topMargin: 10;
                                  left: parent.left; leftMargin: 10;
@@ -259,10 +196,9 @@ Flickable{
                     id: quad3
                     width: headerGrid.width/2
                     height: childrenRect.height
-                    TextEntry{
+                    TextField {
                         id: data_company
-                        text: newContactPage.restoredCompany
-                        defaultText: defaultCompany
+                        placeholderText: defaultCompany
                         width:(parent.width-avatar.width)
                         anchors{ top: parent.top; topMargin: 10; left: parent.left; leftMargin: 20; right: parent.right; rightMargin: 10;}
                     }
@@ -279,7 +215,7 @@ Flickable{
                             id: icn_faves
                             source: "image://themedimage/icons/actionbar/favorite-selected"
                             opacity: 1
-                            state: restoredFavorite == "" ? unfavoriteValue : restoredFavorite
+                            state: unfavoriteValue
 
                             property string favoriteText: unfavoriteTranslated
                             states: [
@@ -312,15 +248,6 @@ Flickable{
             expandingBoxTitle: addPhones
             newDetailsComponent: PhoneEditWidget{}
             existingDetailsComponent: PhoneEditWidget{}
-        }
-
-        ContactsExpandableDetails {
-            id: ims 
-
-            headerLabel: imLabel
-            expandingBoxTitle: addIms
-            newDetailsComponent: ImEditWidget{}
-            existingDetailsComponent: ImEditWidget{}
         }
 
         ContactsExpandableDetails {
@@ -372,17 +299,16 @@ Flickable{
             width: parent.width
             height: 80
             source: "image://themedimage/widgets/common/header/header-inverted-small"
-            TextEntry{
+            TextField {
                 id: data_birthday
-                text: datePicker.selectedBirthday
-                defaultText: defaultBirthday
+                text: ""
+                placeholderText: defaultBirthday
                 anchors {verticalCenter: birthday.verticalCenter; left: parent.left; topMargin: 30; leftMargin: 30; right: delete_button.left; rightMargin: 30}
                 MouseArea{
                     id: mouse_birthday
                     anchors.fill: parent
                     onClicked: {
-                        var map = mapToItem (window.content, mouseX, mouseY);
-                        datePicker.show(map.x, map.y)
+                        console.log("datepicker, TODO")
                     }
                 }
                 states: [
@@ -391,7 +317,7 @@ Flickable{
                         PropertyChanges{target: data_birthday; color: theme_fontColorInactive}
                     },
                     State{ name: "edit"
-                        PropertyChanges{target: data_birthday; text: datePicker.selectedBirthday}
+                        PropertyChanges{target: data_birthday; text: ""}
                         PropertyChanges{target: data_birthday; color: theme_fontColorNormal}
                     }
                 ]
@@ -418,6 +344,7 @@ Flickable{
             }
         }
 
+        /*
         DatePicker {
             id:datePicker
             parent: newContactPage
@@ -436,6 +363,7 @@ Flickable{
                     selectedDate: newContactPage.restoredBirthday
             }
         }
+        */
 
         Item{
             id: notesHeader
@@ -462,7 +390,7 @@ Flickable{
             TextField{
                 id: data_notes
                 text: newContactPage.restoredNotes
-                defaultText: defaultNote
+                placeholderText: defaultNote
                 width:540
                 height: 300
                 anchors {top: parent.top; left: parent.left; topMargin: 20; leftMargin: 30}
@@ -471,11 +399,11 @@ Flickable{
     }
     }
     Binding{ target: newContactPage; property: "validInput"; value: true; when: {
-            ((data_first.text != "")||(data_last.text != "")||(data_company.text != "")||(phones.validInput)||(ims.validInput)||(emails.validInput)||(urls.validInput)||(addys.validInput)||(data_birthday.text != "")||(data_notes.text != ""))
+            ((data_first.text != "")||(data_last.text != "")||(data_company.text != "")||(phones.validInput)||(emails.validInput)||(urls.validInput)||(addys.validInput)||(data_birthday.text != "")||(data_notes.text != ""))
         }
     }
     Binding{ target: newContactPage; property: "validInput"; value: false; when: {
-            ((data_first.text == "")&&(data_last.text == "")&&(data_company.text == "")&&(!phones.validInput)&&(!ims.validInput)&&(!emails.validInput)&&(!urls.validInput)&&(!addys.validInput)&&(data_birthday.text == "")&&(data_notes.text == ""))
+            ((data_first.text == "")&&(data_last.text == "")&&(data_company.text == "")&&(!phones.validInput)&&(!emails.validInput)&&(!urls.validInput)&&(!addys.validInput)&&(data_birthday.text == "")&&(data_notes.text == ""))
         }
     }
 }

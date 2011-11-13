@@ -6,8 +6,8 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import Qt 4.7
-import MeeGo.Components 0.1
+import QtQuick 1.1
+import com.nokia.meego 1.0
 import MeeGo.App.Contacts 0.1
 
 Column {
@@ -203,18 +203,20 @@ Column {
             id: expandingItem
             parent: addBar
 
-            property alias expanded: detailsBox.expanded
+// TODO            property alias expanded: detailsBox.expanded
+            property bool expanded: false
 
-            ExpandingBox {
+            Rectangle {
                 id: detailsBox
 
                 property int boxHeight
 
-                lazyCreation: true
                 parent: addBar
                 anchors {top: parent.top; right: parent.right;
                          left: parent.left; leftMargin: itemMargins}
  
+/*
+ * TODO: this needs to be figured out
                 headerContent: Item {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.fill: parent
@@ -250,6 +252,7 @@ Column {
                         detailsColumn.height = initialHeight;
                     }
                 }
+*/
             }
         }
     }
@@ -280,13 +283,9 @@ Column {
             Button {
                 id: addButton
 
-                minWidth: 100
-                maxWidth: Math.round(parent.width/3)
                 height: 36
                 text: addLabel
                 font.pixelSize: theme_fontPixelSizeMediumLarge
-                bgSourceUp: "image://themedimage/widgets/common/button/button-default"
-                bgSourceDn: "image://themedimage/widgets/common/button/button-default-pressed"
                 anchors {right: cancelButton.left; rightMargin: itemMargins;
                          top: newDLoader.bottom; topMargin: itemMargins;}
                 enabled: (newDLoader.item) ? newDLoader.item.validInput : false
@@ -302,8 +301,6 @@ Column {
             Button {
                 id: cancelButton
 
-                minWidth: 100
-                maxWidth: Math.round(parent.width/3)
                 height: 36
                 text: cancelLabel
                 font.pixelSize: theme_fontPixelSizeMediumLarge

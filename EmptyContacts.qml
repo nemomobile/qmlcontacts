@@ -6,8 +6,8 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import Qt 4.7
-import MeeGo.Components 0.1
+import QtQuick 1.1
+import com.nokia.meego 1.0
 
 Item {
     id: emptyContactsView
@@ -29,8 +29,6 @@ Item {
     Text {
         id: no_contacts
         text: subText
-        font.pixelSize: theme_fontPixelSizeLarge
-        color: theme_fontColorNormal
         smooth: true
         anchors {top: avatar.bottom; topMargin: 40; horizontalCenter: parent.horizontalCenter;}
         opacity: 1
@@ -39,11 +37,8 @@ Item {
     Button {
         id: button
         text: addContact
-        bgSourceUp: "image://themedimage/widgets/common/button/button-default"
-        bgSourceDn: "image://themedimage/widgets/common/button/button-default-pressed"
         enabled: true
         anchors{ top: no_contacts.bottom; topMargin: 30; horizontalCenter: no_contacts.horizontalCenter;}
-        maxWidth: Math.round(parent.width/2)
         height: 60
         opacity: 1
         onClicked: {

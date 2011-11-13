@@ -6,8 +6,8 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import Qt 4.7
-import MeeGo.Components 0.1
+import QtQuick 1.1
+import com.nokia.meego 1.0
 
 Item {
     id: addressRect
@@ -160,22 +160,13 @@ Item {
         return 0;
     }
 
-    DropDown {
+    SelectionDialog {
         id: addressComboBox
-
-        property int marginTotal: 4*anchors.leftMargin
-
-        anchors {left: parent.left; leftMargin: itemMargins;}
-        titleColor: theme_fontColorNormal
-
-        width: Math.round(parent.width/2) - marginTotal
-        maxWidth: (width > 0) ? width : Math.round(window.width/2) - marginTotal
 
         model: [contextHome, contextWork, contextOther]
 
         title: (updateMode) ? newDetailsModel.get(rIndex).type : contextHome
         selectedIndex: (updateMode) ? getIndexVal(newDetailsModel.get(rIndex).type) : 0
-        replaceDropDownTitle: true
     }
 
     Column {
@@ -196,10 +187,10 @@ Item {
 
             property bool validData: false
 
-            delegate: TextEntry {
+            delegate: TextField {
                 id: addressTextField
                 text: (updateMode) ? getTextValue(field) : ""
-                defaultText: dText
+                placeholderText: dText
                 width: Math.round(addressRect.width/2) - 4*parent.anchors.leftMargin
                 parent: addressFieldRepeater
 

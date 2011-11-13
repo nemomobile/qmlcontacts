@@ -6,11 +6,8 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import Qt 4.7
-import MeeGo.Labs.Components 0.1 as Labs
+import QtQuick 1.1
 import MeeGo.App.Contacts 0.1
-import MeeGo.App.IM 0.1
-import TelepathyQML 0.1
 
 Flickable {
     id: detailViewPortrait
@@ -25,11 +22,6 @@ Flickable {
 
     property PeopleModel detailModel: contactModel
     property int indexOfPerson: personRow
-
-    property string statusIdle: qsTr("Idle")
-    property string statusBusy: qsTr("Busy")
-    property string statusOnline: qsTr("Online")
-    property string statusOffline: qsTr("Offline")
 
     property string contextHome: qsTr("Home")
     property string contextWork: qsTr("Work")
@@ -54,7 +46,6 @@ Flickable {
     property string headerPhone: qsTr("Phone numbers")
 
     //: Instant Messaging Accounts for this contact
-    property string headerIm: qsTr("Instant messaging")
     property string headerEmail: qsTr("Email")
 
     //: The header for the section that shows the web sites for this contact
@@ -214,60 +205,6 @@ Flickable {
                     }
                 }
                 Item{
-                    id: quad2
-                    width: headerGrid.width/3
-                    height: headerGrid.height/2
-                    Item{
-                        anchors.left: parent.left
-                        anchors.leftMargin: 100
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: childrenRect.width
-                        height: childrenRect.height
-                        Image {
-                            id:  icon_status
-                            source: {
-                                var imStatus = window.getOnlinePresence(indexOfPerson);
-                                return window.getOnlineStatusIcon(imStatus);
-                            }
-
-                            anchors{right: label_status.left;  rightMargin: 10}
-                            opacity: 1
-                        }
-                        Text{
-                            id: label_status
-                            text: {
-                                var imStatus = window.getOnlinePresence(indexOfPerson);
-
-                                var text = "";
-                                switch(imStatus) {
-                                case TelepathyTypes.ConnectionPresenceTypeAvailable:
-                                    text = statusOnline;
-                                    break;
-                                case TelepathyTypes.ConnectionPresenceTypeBusy:
-                                    text = statusBusy;
-                                    break;
-                                case TelepathyTypes.ConnectionPresenceTypeAway:
-                                case TelepathyTypes.ConnectionPresenceTypeExtendedAway:
-                                    text = statusIdle;
-                                    break;
-                                case TelepathyTypes.ConnectionPresenceTypeHidden:
-                                case TelepathyTypes.ConnectionPresenceTypeUnknown:
-                                case TelepathyTypes.ConnectionPresenceTypeError:
-                                case TelepathyTypes.ConnectionPresenceTypeOffline:
-                                default:
-                                    text = statusOffline;
-                                }
-                                return text;
-                            }
-                            color: theme_fontColorNormal
-                            font.pixelSize: theme_fontPixelSizeLarge
-                            styleColor: theme_fontColorInactive
-                            smooth: true
-                            anchors{  left: parent.left}
-                        }
-                    }
-                }
-                Item{
                     id: quad3
                     width: headerGrid.width*(2/3)
                     height: headerGrid.height/2
@@ -364,68 +301,6 @@ Flickable {
                         smooth: true
                         font.bold: true
                         anchors {verticalCenter: phoneBar.verticalCenter; left: phoneBar.left; leftMargin: 145}
-                        opacity: 1
-                    }
-                }
-            }
-        }
-
-        Item{
-            id: imHeader
-            width: parent.width-20
-            height: 70
-            opacity: (detailModel.data(indexOfPerson, PeopleModel.OnlineAccountUriRole).length > 0 ? 1: 0)
-
-            Text{
-                id: label_im
-                text: headerIm
-                color: theme_fontColorNormal
-                font.pixelSize: theme_fontPixelSizeLarge
-                styleColor: theme_fontColorInactive
-                smooth: true
-                anchors {bottom: imHeader.bottom; bottomMargin: 10; left: parent.left; leftMargin: 30}
-            }
-        }
-
-        Repeater{
-            id: detailsIm
-            opacity: imHeader.opacity
-            width: parent.width-20
-            height: childrenRect.height
-            model: detailModel.data(indexOfPerson, PeopleModel.OnlineAccountUriRole)
-            property variant imContexts: detailModel.data(indexOfPerson, PeopleModel.OnlineServiceProviderRole)
-            Item{
-                id: delegateim
-                width: parent.width
-                height: 80
-
-                Image{
-                    id: imBar
-                    source: "image://themedimage/widgets/common/header/header-inverted-small"
-                    anchors.fill: parent
-
-                    Text{
-                        id: label_im
-                        text: {
-                            var context = detailsIm.imContexts[index];
-                            context = context.split("\n")[0];
-                            return context;
-                        }
-                        color: theme_fontColorNormal
-                        font.pixelSize: theme_fontPixelSizeLarge
-                        smooth: true
-                        anchors {verticalCenter: imBar.verticalCenter; left: imBar.left; leftMargin: 20 }
-                        opacity: 1
-                    }
-
-                    Text{
-                        id: data_im
-                        text: getTruncatedString(modelData, 25)
-                        color: theme_fontColorNormal
-                        font.pixelSize: theme_fontPixelSizeLarge
-                        smooth: true
-                        font.bold: true
-                        anchors {verticalCenter: imBar.verticalCenter; left:label_im.right; leftMargin: 20}
                         opacity: 1
                     }
                 }
@@ -562,13 +437,10 @@ Flickable {
                         id: mouseArea_url
                         anchors.fill: parent
                         onPressed: {
-                            var cmd = "meego-app-browser " + data_web.text;
-                            appModel.launch(cmd);
+                            console.log("FIXME browser in detail view, ask Robin");
+//                            var cmd = "meego-app-browser " + data_web.text;
+//                            appModel.launch(cmd);
                         }
-                    }
-
-                    Labs.ApplicationsModel{
-                        id: appModel
                     }
                 }
             }
