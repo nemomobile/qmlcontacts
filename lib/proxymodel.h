@@ -39,6 +39,14 @@ public:
     Q_INVOKABLE void setModel(PeopleModel *model);
     Q_INVOKABLE int getSourceRow(int row);
 
+    // for fastscroll support
+    Q_PROPERTY(int count READ count NOTIFY countChanged)
+    int count() const;
+    Q_INVOKABLE QVariantMap get(int row);
+
+signals:
+    void countChanged();
+
 protected:
     virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
     virtual bool lessThan(const QModelIndex& left, const QModelIndex& right) const;

@@ -190,6 +190,10 @@ bool ProxyModel::lessThan(const QModelIndex& left,
     if (!model)
         return true;
 
+    // TODO: this should not be here
+    qDebug("fastscroll: emitting countChanged");
+    emit const_cast<ProxyModel*>(this)->countChanged();
+
     int leftRow = left.row();
     int rightRow = right.row();
 
@@ -227,4 +231,27 @@ bool ProxyModel::lessThan(const QModelIndex& left,
 
     return priv->localeHelper->isLessThan(lStr, rStr);
 }
+
+// needed for fastscroll
+int ProxyModel::count() const
+{
+    return rowCount(QModelIndex());
+}
+
+// needed for fastscroll
+QVariantMap ProxyModel::get(int row)
+{
+    QVariantMap listElement;
+    listElement["firstcharacter"] = "?";
+
+    if (row < 0 || row > count())
+        return listElement;
+
+    listElement["firstcharacter"] = data(index(row, 0),
+            PeopleModel::FirstCharacterRole).toString();
+    qDebug() << "fastscroll: " << listElement;
+//    listElement["section"] = QVariantMap(QString("firstcharacter"), data(index(row, 0)));
+    return listElement;
+}
+
 

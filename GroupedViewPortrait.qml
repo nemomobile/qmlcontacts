@@ -93,7 +93,10 @@ Item {
 
     section.property: "firstcharacter"
     section.criteria: ViewSection.FirstCharacter
-    section.delegate: HeaderPortrait{width: cardListView.width;}
+}
+
+FastScroll {
+    listView: cardListView
 }
 
 Binding{target: emptyListView;

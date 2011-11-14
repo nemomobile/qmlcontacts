@@ -46,6 +46,18 @@ Page {
             }
         }
     }
+
+    tools: ToolBarLayout {
+        ToolItem {
+            iconId: "icon-m-common-add"
+            onClicked: pageStack.push(Qt.resolvedUrl("NewContactPage.qml"))
+        }
+        ToolItem { iconId: "icon-m-toolbar-view-menu" }
+    }
+
+    ToolBar {
+        anchors.bottom: parent.bottom
+    }
 // FIXME
 /*
 //            actionMenuModel: [labelNewContactView]
