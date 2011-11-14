@@ -55,9 +55,6 @@ Page {
         ToolItem { iconId: "icon-m-toolbar-view-menu" }
     }
 
-    ToolBar {
-        anchors.bottom: parent.bottom
-    }
 // FIXME
 /*
 //            actionMenuModel: [labelNewContactView]

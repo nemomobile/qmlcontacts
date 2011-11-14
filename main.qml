@@ -170,13 +170,10 @@ PageStackWindow {
                 detailViewContact.indexOfPerson = proxyModel.getSourceRow(window.currentContactIndex);
             }
 */
-            ToolBar {
-                anchors.bottom: parent.bottom
-                tools: ToolBarLayout {
-                    ToolItem {
-                        iconId: "icon-m-toolbar-back"
-                        onClicked: pageStack.pop()
-                    }
+            tools: ToolBarLayout {
+                ToolItem {
+                    iconId: "icon-m-toolbar-back"
+                    onClicked: pageStack.pop()
                 }
             }
         }
@@ -234,6 +231,10 @@ PageStackWindow {
         Component.onCompleted:{
             proxyModel.setModel(peopleModel); //Calls setSorting() on model
         }
+    }
+
+    ToolBar {
+        anchors.bottom: parent.bottom
     }
 }
 
