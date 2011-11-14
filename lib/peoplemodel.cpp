@@ -56,7 +56,10 @@ PeopleModel::PeopleModel(QObject *parent)
     priv->sortOrder.append(sort);
 
     qDebug() << Q_FUNC_INFO << QContactManager::availableManagers();
-    priv->manager = new QContactManager;
+    if (!qgetenv("NEMO_CONTACT_MANAGER").isNull())
+        priv->manager = new QContactManager(qgetenv("NEMO_CONTACT_MANAGER"));
+    else
+        priv->manager = new QContactManager;
 
     qDebug() << Q_FUNC_INFO << "Manager is " << priv->manager->managerName();
 
