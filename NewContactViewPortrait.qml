@@ -92,13 +92,7 @@ Flickable{
             console.log("[contactSave] Unable to create new contact due to missing info");
     }
 
-    Rectangle {
-        id: detailsRect
-        width: parent.width
-        height: parent.height
-        color: "white"
-
-    Column{
+    Column {
         id: detailsList
         spacing: 1
         width: parent.width
@@ -391,7 +385,7 @@ Flickable{
             }
         }
     }
-    }
+
     Binding{ target: newContactPage; property: "validInput"; value: true; when: {
             ((data_first.text != "")||(data_last.text != "")||(data_company.text != "")||(phones.validInput)||(emails.validInput)||(urls.validInput)||(addys.validInput)||(data_birthday.text != "")||(data_notes.text != ""))
         }

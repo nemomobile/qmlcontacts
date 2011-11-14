@@ -113,12 +113,6 @@ Flickable {
                                             "TODO date here", data_notes.text);
     }
 
-    Rectangle {
-        id: editDetailsRect
-        width: parent.width
-        height: parent.height
-        color: "white"
-
     Column{
         id: editList
         spacing: 1
@@ -386,7 +380,7 @@ Flickable {
             }
         }
     }
-    }
+
     Binding{ target: editViewPortrait; property: "validInput"; value: true; when: {
             ((data_first.text != "")||(data_last.text != "")||(data_company.text != "")||(phones.validInput)||(emails.validInput)||(urls.validInput)||(addys.validInput)||(data_birthday.text != "")||(data_notes.text != ""))
         }

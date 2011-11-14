@@ -10,12 +10,11 @@ import QtQuick 1.1
 import com.nokia.meego 1.0
 import MeeGo.App.Contacts 0.1
 
-Rectangle {
+Item {
     id: groupedViewPortrait
 
     width: parent.width
     height: parent.height
-    color: "white"
 
     signal addNewContact
     signal pressAndHold(int x, int y)
