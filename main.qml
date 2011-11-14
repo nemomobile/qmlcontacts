@@ -12,7 +12,7 @@ import MeeGo.App.Contacts 0.1
 
 PageStackWindow {
     id: window 
-//    showToolBarSearch: false;
+    showToolBar: true;
 //    automaticBookSwitching: false 
 
     property string currentContactId: ""
