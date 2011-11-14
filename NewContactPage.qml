@@ -35,6 +35,13 @@ Page {
         newContact.finishPageLoad();
     }
     */
+
+    tools: ToolBarLayout {
+        ToolItem {
+            iconId: "icon-m-toolbar-back"
+            onClicked: pageStack.pop()
+        }
+    }
 }
 
 
