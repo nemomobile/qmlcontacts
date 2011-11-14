@@ -170,6 +170,15 @@ PageStackWindow {
                 detailViewContact.indexOfPerson = proxyModel.getSourceRow(window.currentContactIndex);
             }
 */
+            ToolBar {
+                anchors.bottom: parent.bottom
+                tools: ToolBarLayout {
+                    ToolItem {
+                        iconId: "icon-m-toolbar-back"
+                        onClicked: pageStack.pop()
+                    }
+                }
+            }
         }
     }
 
