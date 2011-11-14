@@ -175,6 +175,13 @@ PageStackWindow {
                     iconId: "icon-m-toolbar-back"
                     onClicked: pageStack.pop()
                 }
+                ToolItem {
+                    iconId: "icon-m-toolbar-view-menu";
+                    onClicked: {
+                        console.log("TODO menu")
+                        pageStack.push(myAppEdit)
+                    }
+                }
             }
         }
     }
@@ -219,6 +226,13 @@ PageStackWindow {
                 editContact.finishPageLoad();
             }
 */
+
+            tools: ToolBarLayout {
+                ToolItem {
+                    iconId: "icon-m-toolbar-back"
+                    onClicked: pageStack.pop()
+                }
+            }
         }
     }
 
