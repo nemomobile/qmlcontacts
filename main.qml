@@ -145,12 +145,6 @@ PageStackWindow {
                 detailModel: peopleModel
                 indexOfPerson: proxyModel.getSourceRow(window.currentContactIndex)
             }
-            FooterBar { 
-                id: detailsFooter 
-                type: "details"
-                currentView: detailViewContact
-                pageToLoad: myAppEdit
-            }
 /*            actionMenuModel: [contextShare, contextEdit]
             actionMenuPayload: [0, 1]
 
@@ -200,12 +194,6 @@ PageStackWindow {
                 dataModel: peopleModel
                 index: proxyModel.getSourceRow(window.currentContactIndex, "editviewportrait")
                 anchors.fill: parent
-            }
-            FooterBar { 
-                id: editFooter 
-                type: "edit"
-                currentView: editContact
-                pageToLoad: myAppAllContacts
             }
 /*            actionMenuModel: (window.currentContactId == 2147483647 ? (editContact.validInput ? [contextSave, contextCancel] : [contextCancel]) : (editContact.validInput ? [contextSave, contextCancel, contextDelete] : [contextCancel, contextDelete]))
             actionMenuPayload: (window.currentContactId == 2147483647 ? (editContact.validInput ? [0, 1] : [0]) : (editContact.validInput ? [0, 1, 2] : [0, 1]))
