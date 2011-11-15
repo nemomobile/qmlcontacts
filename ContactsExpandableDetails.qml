@@ -17,7 +17,7 @@ Column {
 
     property int initialHeight: childrenRect.height
     property bool validInput: false
-    property int itemMargins: 10
+    property int itemMargins: 3
 
     property string headerLabel
     property string expandingBoxTitle
@@ -201,7 +201,7 @@ Column {
             parent: addBar
 
 // TODO            property alias expanded: detailsBox.expanded
-            property bool expanded: false
+            property bool expanded: true
 
             Rectangle {
                 id: detailsBox

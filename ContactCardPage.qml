@@ -43,9 +43,44 @@ Page {
             iconId: "icon-m-toolbar-view-menu";
             onClicked: {
                 console.log("TODO menu")
-                pageStack.push(Qt.resolvedUrl("EditContactSheet.qml"))
+                contactEditor.openSheet()
             }
         }
     }
+
+    Loader {
+        id: contactEditor
+
+        function openSheet() {
+            if (sheetUnloadTimer.running)
+                sheetUnloadTimer.stop()
+
+            var sourceUri = Qt.resolvedUrl("EditContactSheet.qml")
+            if (contactEditor.source != sourceUri)
+                contactEditor.source = sourceUri;
+            else
+                item.open(); // already connected, just reopen it
+        }
+
+        Timer {
+            id: sheetUnloadTimer
+            interval: 60000 // leave it a while in case they want it again
+            onTriggered: {
+                console.log("SHEET: freeing resources")
+                contactEditor.source = ""
+            }
+        }
+
+        function closeSheet() {
+            sheetUnloadTimer.start()
+        }
+
+        onLoaded: {
+            item.accepted.connect(closeSheet)
+            item.rejected.connect(closeSheet)
+            item.open()
+        }
+    }
+
 }
 

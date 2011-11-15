@@ -11,80 +11,35 @@ import com.nokia.meego 1.0
 import MeeGo.App.Contacts 0.1
 
 Flickable {
-    id: editViewPortrait
+    id: contactEditor
     contentWidth: parent.width
     contentHeight: editList.height
     flickableDirection: Flickable.VerticalFlick
-    anchors.horizontalCenter:  parent.horizontalCenter
-    height: parent.width
-    width: parent.width
-    clip: true
-    interactive: true
-    opacity: 1
-
-    property PeopleModel dataModel: contactModel
-    property int index: personRow
-    property bool validInput: false
-
-    property string contextHome: qsTr("Home")
-    property string contextWork: qsTr("Work")
-    property string contextOther: qsTr("Other")
-    property string contextMobile: qsTr("Mobile")
-    property string defaultFirstName: qsTr("First name")
-    property string defaultLastName: qsTr("Last name")
-    property string defaultPronounciation: qsTr("Pronounciation")
-    property string defaultCompany: qsTr("Company")
-    property string defaultNote: qsTr("Enter note")
-    property string defaultBirthday: qsTr("Enter birthday")
-    property string headerBirthday: qsTr("Birthday")
-    property string headerNote: qsTr("Note")
-
-    property string favoriteValue: "Favorite"
-    property string unfavoriteValue: "Unfavorite"
-
-    //: Add favorite flag / add contact to favorites list
-    property string favoriteTranslated: qsTr("Favorite", "Verb")
-
-    //: Remove favorite flag / remove contact from favorites list
-    property string unfavoriteTranslated: qsTr("Unfavorite")
-
-    property string phoneLabel: qsTr("Phone numbers")
-    property string addPhones: qsTr("Add number")
-
-    //: Instant Messaging Accounts for this contact
-    property string imLabel: qsTr("Instant messaging")
-    property string emailLabel: qsTr("Email")
-    property string addEmails: qsTr("Add email address")
-
-    //: The header for the section that shows the web sites for this contact
-    property string urlLabel: qsTr("Web")
-    property string addUrls: qsTr("Add web page")
-    property string addressLabel: qsTr("Address")
-    property string addAddress: qsTr("Add address")
+    anchors.fill: parent
 
     function finishPageLoad() {
-        var detailData = dataModel.data(index, PeopleModel.PhoneNumberRole);
-        var contextData = dataModel.data(index, PeopleModel.PhoneContextRole);
+        var detailData = peopleModel.data(index, PeopleModel.PhoneNumberRole);
+        var contextData = peopleModel.data(index, PeopleModel.PhoneContextRole);
         phones.loadExpandingBox(detailData, contextData);
 
-        detailData = dataModel.data(index, PeopleModel.OnlineAccountUriRole);
-        contextData = dataModel.data(index, PeopleModel.OnlineServiceProviderRole);
+        detailData = peopleModel.data(index, PeopleModel.OnlineAccountUriRole);
+        contextData = peopleModel.data(index, PeopleModel.OnlineServiceProviderRole);
 
-        detailData = dataModel.data(index, PeopleModel.EmailAddressRole);
-        contextData = dataModel.data(index, PeopleModel.EmailContextRole);
+        detailData = peopleModel.data(index, PeopleModel.EmailAddressRole);
+        contextData = peopleModel.data(index, PeopleModel.EmailContextRole);
         emails.loadExpandingBox(detailData, contextData);
 
-        detailData = dataModel.data(index, PeopleModel.WebUrlRole);
-        contextData = dataModel.data(index, PeopleModel.WebContextRole);
+        detailData = peopleModel.data(index, PeopleModel.WebUrlRole);
+        contextData = peopleModel.data(index, PeopleModel.WebContextRole);
         urls.loadExpandingBox(detailData, contextData);
 
-        detailData = dataModel.data(index, PeopleModel.AddressRole);
-        contextData = dataModel.data(index, PeopleModel.AddressContextRole);
+        detailData = peopleModel.data(index, PeopleModel.AddressRole);
+        contextData = peopleModel.data(index, PeopleModel.AddressContextRole);
         addys.loadExpandingBox(detailData, contextData);
     }
 
     function getFavoriteState() {
-        if (dataModel.data(index, PeopleModel.FavoriteRole))
+        if (peopleModel.data(index, PeopleModel.FavoriteRole))
             return favoriteValue;
         return unfavoriteValue;
     }
@@ -122,7 +77,7 @@ Flickable {
             width: parent.width
             height: (data_first_p.visible ? 175 : 150)
             source: "image://themedimage/widgets/common/header/header-inverted-small"
-            opacity:  (dataModel.data(index, PeopleModel.IsSelfRole) ? .5 : 1)
+            opacity:  (peopleModel.data(index, PeopleModel.IsSelfRole) ? .5 : 1)
             Item{
                 id: avatar
                 width: 150
@@ -132,7 +87,8 @@ Flickable {
                 LimitedImage{
                     id: avatar_img
                     //REVISIT: Instead of using the URI from AvatarRole, need to use thumbnail URI
-                    source: (dataModel.data(index, PeopleModel.AvatarRole) ? dataModel.data(index, PeopleModel.AvatarRole) : "image://themedimage/icons/internal/contacts-avatar-add")
+                    source: (peopleModel.data(index, PeopleModel.AvatarRole)
+                            ? peopleModel.data(index, PeopleModel.AvatarRole) : "image://themedimage/icons/internal/contacts-avatar-add")
                     anchors.centerIn: avatar
                     opacity: 1
                     signal clicked
@@ -168,7 +124,8 @@ Flickable {
                     height: (data_first_p.visible ? childrenRect.height : data_first.height)
                     TextField {
                         id: data_first
-                        text: (dataModel.data(index, PeopleModel.FirstNameRole) ? dataModel.data(index, PeopleModel.FirstNameRole) : "")
+                        text: (peopleModel.data(index,
+                                    PeopleModel.FirstNameRole) ? peopleModel.data(index, PeopleModel.FirstNameRole) : "")
                         placeholderText: defaultFirstName
                         width: (parent.width-avatar.width)
                         anchors {top: parent.top;
@@ -177,7 +134,8 @@ Flickable {
                     }
                     TextField {
                         id: data_first_p
-                        text: dataModel.data(index, PeopleModel.FirstNameProRole) ? dataModel.data(index, PeopleModel.FirstNameProRole) : ""
+                        text: peopleModel.data(index,
+                                PeopleModel.FirstNameProRole) ? peopleModel.data(index, PeopleModel.FirstNameProRole) : ""
                         placeholderText: defaultPronounciation
                         width: (parent.width - avatar.width)
                         anchors {top: data_first.bottom; topMargin: 10;
@@ -192,7 +150,8 @@ Flickable {
                     height: (data_last_p.visible ? childrenRect.height : data_last.height)
                     TextField {
                         id: data_last
-                        text: (dataModel.data(index, PeopleModel.LastNameRole) ? dataModel.data(index, PeopleModel.LastNameRole) : "")
+                        text: (peopleModel.data(index,
+                                    PeopleModel.LastNameRole) ? peopleModel.data(index, PeopleModel.LastNameRole) : "")
                         placeholderText: defaultLastName
                         width:(parent.width-avatar.width)
                         anchors {top: parent.top;
@@ -201,7 +160,8 @@ Flickable {
                     }
                     TextField {
                         id: data_last_p
-                        text: dataModel.data(index, PeopleModel.LastNameProRole) ? dataModel.data(index, PeopleModel.LastNameProRole) : ""
+                        text: peopleModel.data(index,
+                                PeopleModel.LastNameProRole) ? peopleModel.data(index, PeopleModel.LastNameProRole) : ""
                         placeholderText: defaultPronounciation
                         width: (parent.width-avatar.width)
                         anchors {top: data_last.bottom; topMargin: 10;
@@ -216,7 +176,9 @@ Flickable {
                     height: childrenRect.height
                     TextField {
                         id: data_company
-                        text: (dataModel.data(index, PeopleModel.CompanyNameRole) ? dataModel.data(index, PeopleModel.CompanyNameRole) : "")
+                        text: (peopleModel.data(index,
+                                    PeopleModel.CompanyNameRole) ?
+                                peopleModel.data(index, PeopleModel.CompanyNameRole) : "")
                         placeholderText: defaultCompany
                         width:(parent.width-avatar.width)
                         anchors{ top: parent.top; topMargin: 10; left: parent.left; leftMargin: 20; right: parent.right; rightMargin: 10;}
@@ -232,8 +194,8 @@ Flickable {
                         height: childrenRect.height
                         Image {
                             id: icn_faves
-                            source: (dataModel.data(index, PeopleModel.FavoriteRole) ? "image://themedimage/icons/actionbar/favorite-selected" : "image://themedimage/icons/actionbar/favorite" )
-                            opacity: (dataModel.data(index, PeopleModel.IsSelfRole) ? 0 : 1)
+                            source: (peopleModel.data(index, PeopleModel.FavoriteRole) ? "image://themedimage/icons/actionbar/favorite-selected" : "image://themedimage/icons/actionbar/favorite" )
+                            opacity: (peopleModel.data(index, PeopleModel.IsSelfRole) ? 0 : 1)
 
                             state: getFavoriteState()
                             property string favoriteText: unfavoriteTranslated
@@ -318,7 +280,8 @@ Flickable {
             source: "image://themedimage/widgets/common/header/header-inverted-small"
             TextField {
                 id: data_birthday
-                text: dataModel.data(index, PeopleModel.BirthdayRole) ? dataModel.data(index, PeopleModel.BirthdayRole) : ""
+                text: peopleModel.data(index, PeopleModel.BirthdayRole) ?
+                peopleModel.data(index, PeopleModel.BirthdayRole) : ""
                 placeholderText: defaultBirthday
                 anchors {verticalCenter: birthday.verticalCenter; left: parent.left; topMargin: 30; leftMargin: 30; right: delete_button.left; rightMargin: 30}
                 MouseArea{
@@ -373,7 +336,8 @@ Flickable {
             anchors.bottomMargin: 1
             TextField{
                 id: data_notes
-                text: (dataModel.data(index, PeopleModel.NotesRole) ? dataModel.data(index, PeopleModel.NotesRole) : "")
+                text: (peopleModel.data(index, PeopleModel.NotesRole) ?
+                        peopleModel.data(index, PeopleModel.NotesRole) : "")
                 placeholderText: defaultNote
                 height: 300
                 anchors {top: parent.top; left: parent.left; right: parent.right; rightMargin: 30; topMargin: 20; leftMargin: 30}
@@ -381,11 +345,11 @@ Flickable {
         }
     }
 
-    Binding{ target: editViewPortrait; property: "validInput"; value: true; when: {
+    Binding{ target: contactEditor; property: "validInput"; value: true; when: {
             ((data_first.text != "")||(data_last.text != "")||(data_company.text != "")||(phones.validInput)||(emails.validInput)||(urls.validInput)||(addys.validInput)||(data_birthday.text != "")||(data_notes.text != ""))
         }
     }
-    Binding{ target: editViewPortrait; property: "validInput"; value: false; when: {
+    Binding{ target: contactEditor; property: "validInput"; value: false; when: {
             ((data_first.text == "")&&(data_last.text == "")&&(data_company.text == "")&&(!phones.validInput)&&(!emails.validInput)&&(!urls.validInput)&&(!addys.validInput)&&(data_birthday.text == "")&&(data_notes.text == ""))
         }
     }

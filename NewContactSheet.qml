@@ -16,11 +16,8 @@ Sheet {
     }
 
     onAccepted: {
-        pageStack.pop();
         newContact.contactSave();
     }
-
-    onRejected: pageStack.pop()
 }
 
 
