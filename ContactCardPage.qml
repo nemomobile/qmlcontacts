@@ -9,7 +9,7 @@ Page {
         window.toolBarTitle = labelDetailView;
         detailViewPage.disableSearch = true;
     }
-    DetailViewPortrait{
+    ContactCardContentWidget {
         id: detailViewContact
         anchors.fill:  parent
         detailModel: peopleModel
