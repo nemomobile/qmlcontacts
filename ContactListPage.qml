@@ -20,7 +20,7 @@ Page {
         ToolItem {
             iconId: "icon-m-common-add"
             onClicked: {
-                newContactLoader.source = Qt.resolvedUrl("NewContactSheet.qml")
+                newContactLoader.openSheet()
             }
         }
         ToolItem { iconId: "icon-m-toolbar-view-menu" }
@@ -29,11 +29,20 @@ Page {
     Loader {
         id: newContactLoader
 
-        // I first tried to use stateChanged from item, but this doesn't seem to
-        // be emitted, so let's use a timer to destroy the resource...
+        function openSheet() {
+            if (sheetUnloadTimer.running)
+                sheetUnloadTimer.stop()
+
+            var sourceUri = Qt.resolvedUrl("NewContactSheet.qml")
+            if (newContactLoader.source != sourceUri)
+                newContactLoader.source = sourceUri;
+            else
+                item.open(); // already connected, just reopen it
+        }
+
         Timer {
             id: sheetUnloadTimer
-            interval: 3000 // plenty of time for the animation
+            interval: 60000 // leave it a while in case they want it again
             onTriggered: {
                 console.log("SHEET: freeing resources")
                 newContactLoader.source = ""
@@ -41,12 +50,10 @@ Page {
         }
 
         function closeSheet() {
-            console.log("SHEET: Closing sheet")
             sheetUnloadTimer.start()
         }
 
         onLoaded: {
-            console.log("SHEET: Opened sheet")
             item.accepted.connect(closeSheet)
             item.rejected.connect(closeSheet)
             item.open()
