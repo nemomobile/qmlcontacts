@@ -9,14 +9,11 @@ Page {
             peopleModel.searchContacts(needle);
     }*/
 
-    GroupedViewPortrait {
+    ContactListWidget {
         id: gvp
         anchors.fill: parent
         dataModel: peopleModel
         sortModel: proxyModel
-        onAddNewContact:{
-            window.addPage(myAppNewContact);
-        }
     }
 
     tools: ToolBarLayout {
