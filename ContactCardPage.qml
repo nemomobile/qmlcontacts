@@ -4,11 +4,7 @@ import MeeGo.App.Contacts 0.1
 
 Page {
     id: detailViewPage
-//            pageTitle: labelDetailView
-    Component.onCompleted : {
-        window.toolBarTitle = labelDetailView;
-        detailViewPage.disableSearch = true;
-    }
+
     ContactCardContentWidget {
         id: detailViewContact
         anchors.fill:  parent
