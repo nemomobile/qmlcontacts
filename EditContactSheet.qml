@@ -6,7 +6,6 @@ Sheet {
     acceptButtonText: "Save"
     rejectButtonText: "Cancel"
 
-    property int index: proxyModel.getSourceRow(window.currentContactIndex, "editviewportrait")
     property bool validInput: false
 
     property string contextHome: qsTr("Home")
@@ -46,6 +45,7 @@ Sheet {
     property string addAddress: qsTr("Add address")
 
     content: EditViewPortrait {
+        id: contactEditor
     }
 
 
@@ -69,7 +69,7 @@ Sheet {
     }
 */
 
-    onAccepted: contactEditor.contactSave();
+    onAccepted: contactEditor.contactSave(window.currentContactId);
 }
 
 

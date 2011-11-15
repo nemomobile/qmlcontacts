@@ -17,6 +17,8 @@ Flickable {
     flickableDirection: Flickable.VerticalFlick
     anchors.fill: parent
 
+    property int index: proxyModel.getSourceRow(window.currentContactIndex)
+
     function finishPageLoad() {
         var detailData = peopleModel.data(index, PeopleModel.PhoneNumberRole);
         var contextData = peopleModel.data(index, PeopleModel.PhoneContextRole);
