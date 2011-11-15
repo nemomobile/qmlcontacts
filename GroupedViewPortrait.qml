@@ -74,7 +74,7 @@ Item {
             //not the index of the contact in the ProxyModel
             var srcIndex = sortModel.getSourceRow(index);
             window.currentContactId = dataPeople.data(srcIndex, PeopleModel.UuidRole);
-            pageStack.push(myAppDetails);
+            pageStack.push(Qt.resolvedUrl("DetailPage.qml"));
         }
         onPressAndHold: {
             cardListView.currentIndex = index;
