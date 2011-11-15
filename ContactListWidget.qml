@@ -60,7 +60,7 @@ Item {
 
         property string cUuid: ""
 
-        delegate: ContactCardPortrait
+        delegate: ContactListDelegate
         {
         id: card
         dataPeople: dataModel
