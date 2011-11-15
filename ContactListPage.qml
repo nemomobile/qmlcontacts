@@ -84,23 +84,14 @@ Page {
         }
     }
 
-// FIXME
 /*
-//            actionMenuModel: [labelNewContactView]
-//            actionMenuPayload: [0]
+// FIXME
+            onActivating: {
+                setAllFilter(false, false);
 
-    onActionMenuTriggered: {
-        if (selectedItem == 0) {
-            if (window.pageStack.currentPage == groupedViewPage)
-                window.addPage(myAppNewContact);
-        }
-    }
-//            onActivating: {
-//                setAllFilter(false, false);
-//
-//                if (window.currentFilter == PeopleModel.FavoritesFilter)
-//                    setFavoritesFilter();
-//            }
+                if (window.currentFilter == PeopleModel.FavoritesFilter)
+                    setFavoritesFilter();
+            }
 */
 }
 
