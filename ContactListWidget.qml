@@ -93,6 +93,21 @@ Item {
 
     section.property: "firstcharacter"
     section.criteria: ViewSection.FirstCharacter
+    section.delegate: Item {
+        width: cardListView.width
+        height: 30
+        id: sectionBackground
+        Text {
+            //: If a contact isn't sorted under one of the values in a locale's alphabet, it is sorted under '#'
+            property string etcSymbol: qsTr("#")
+            text: (section ? section.toUpperCase() : etcSymbol)
+            anchors.verticalCenter: sectionBackground.verticalCenter
+            anchors.right: sectionBackground.right
+            anchors.rightMargin: 30
+            smooth: true
+        }
+    }
+
 }
 
 FastScroll {
