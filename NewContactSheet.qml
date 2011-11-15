@@ -7,9 +7,9 @@ Sheet {
     rejectButtonText: "Cancel"
 
     content: Flickable {
+        anchors.fill: parent
         NewContactViewPortrait {
             id: newContact
-            anchors.fill: parent
             dataModel: peopleModel
         }
     }
