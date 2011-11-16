@@ -478,7 +478,7 @@ QVariant PeopleModel::data(int row, int role) const
     case FirstCharacterRole:
     {
         if (isSelfContact(contact.id().localId()))
-            return QString(tr(""));
+            return QString(tr("#"));
 
         //REVISIT: Move this or parts of this to localeutils.cpp
         QContactName name = contact.detail<QContactName>();

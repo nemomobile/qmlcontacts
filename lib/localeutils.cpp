@@ -184,7 +184,9 @@ QString LocaleUtils::getBinForString(QString str)
     if (!checkForAlphaChar(str))
         return QString(tr("#"));
 
+    qDebug() << Q_FUNC_INFO << "FIXME: I return invalid results, HACK";
     QString temp(str.at(0).toUpper());
+    return temp;
     
     //The proper bin for these locales does not correspond
     //with a bin listed in the index bar
