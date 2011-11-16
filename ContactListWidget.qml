@@ -99,8 +99,7 @@ Item {
         id: sectionBackground
         Text {
             //: If a contact isn't sorted under one of the values in a locale's alphabet, it is sorted under '#'
-            property string etcSymbol: qsTr("#")
-            text: (section ? section.toUpperCase() : etcSymbol)
+            text: section.toUpperCase()
             anchors.verticalCenter: sectionBackground.verticalCenter
             anchors.right: sectionBackground.right
             anchors.rightMargin: 30
