@@ -17,13 +17,13 @@ Page {
     }
 
     tools: ToolBarLayout {
-        ToolItem {
+        ToolIcon {
             iconId: "icon-m-common-add"
             onClicked: {
                 newContactLoader.openSheet()
             }
         }
-        ToolItem { iconId: "icon-m-toolbar-view-menu" }
+//        ToolIcon { iconId: "icon-m-toolbar-view-menu" }
     }
 
     Loader {

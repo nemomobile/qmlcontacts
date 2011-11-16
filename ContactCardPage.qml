@@ -31,16 +31,20 @@ Page {
     }
 */
     tools: ToolBarLayout {
-        ToolItem {
+        ToolIcon {
             iconId: "icon-m-toolbar-back"
             onClicked: pageStack.pop()
         }
-        ToolItem {
+        ToolIcon {
             iconId: "icon-m-toolbar-view-menu";
-            onClicked: {
-                console.log("TODO menu")
-                contactEditor.openSheet()
-            }
+            onClicked: (myMenu.status == DialogStatus.Closed) ? myMenu.open() : myMenu.close()
+        }
+    }
+
+    Menu {
+        id: myMenu
+        MenuLayout {
+            MenuItem { text: "Edit"; onClicked: contactEditor.openSheet() }
         }
     }
 
