@@ -7,6 +7,7 @@
  */
 
 import QtQuick 1.1
+import com.nokia.meego 1.0
 import MeeGo.App.Contacts 0.1
 
 Image {
@@ -74,7 +75,7 @@ Image {
         }
     }
 
-    Text {
+    Label {
         id: nameFirst
         text: {
             if((dataFirst != "") || (dataLast != "")) {
@@ -103,7 +104,7 @@ Image {
         smooth: true
     }
 
-    //    REVISIT:Text {
+    //    REVISIT:Label {
     //        id: nameLast
     //        text: dataLast
     //        anchors { left: nameFirst.right; top: nameFirst.top; leftMargin: photo.height/8;}

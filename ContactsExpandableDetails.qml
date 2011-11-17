@@ -84,7 +84,7 @@ Column {
         height: 70
         opacity: 1
 
-        Text {
+        Label {
             id: label_details
             text: headerLabel
             smooth: true
@@ -226,7 +226,7 @@ Column {
                         fillMode: Image.PreserveAspectFit
                         source: "image://themedimage/icons/internal/contact-information-add"
                     }
-                    Text {
+                    Label {
                         id: text_box
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.left: add_button.right

@@ -267,7 +267,7 @@ Flickable {
             height: 70
             opacity:  1
 
-            Text{
+            Label {
                 id: label_birthday
                 text: defaultBirthday
                 smooth: true
@@ -322,7 +322,7 @@ Flickable {
             height: 70
             opacity: 1
 
-            Text{
+            Label {
                 id: label_notes
                 text: headerNote
                 smooth: true

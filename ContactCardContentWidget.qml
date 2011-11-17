@@ -7,6 +7,7 @@
  */
 
 import QtQuick 1.1
+import com.nokia.meego 1.0
 import MeeGo.App.Contacts 0.1
 
 Flickable {
@@ -168,21 +169,21 @@ Flickable {
                         anchors{verticalCenter: quad1.verticalCenter; left: quad1.left; leftMargin: 50}
                         width: parent.width
                         height: childrenRect.height
-                        Text{
+                        Label {
                             id: firstname
                             width: parent.width/2
                             text: (detailModel.data(indexOfPerson, PeopleModel.FirstNameRole)? detailModel.data(indexOfPerson, PeopleModel.FirstNameRole) : "")
                             elide: Text.ElideRight
                             smooth: true
                         }
-                        Text{
+                        Label {
                             id: firstname_p
                             text: (detailModel.data(indexOfPerson, PeopleModel.FirstNameProRole)? getTruncatedString(detailModel.data(indexOfPerson, PeopleModel.FirstNameProRole), 25) : "")
                             smooth: true
                             visible: localeUtils.needPronounciationFields()
                             anchors {top: firstname.bottom; topMargin: 10;}
                         }
-                        Text{
+                        Label {
                             id: lastname
                             width: parent.width/2
                             text: (detailModel.data(indexOfPerson, PeopleModel.LastNameRole) ? detailModel.data(indexOfPerson, PeopleModel.LastNameRole) : "")
@@ -196,7 +197,7 @@ Flickable {
                     id: quad3
                     width: headerGrid.width*(2/3)
                     height: headerGrid.height/2
-                    Text{
+                    Label {
                         id: company
                         width: parent.width
                         text: (detailModel.data(indexOfPerson, PeopleModel.CompanyNameRole) ? detailModel.data(indexOfPerson, PeopleModel.CompanyNameRole) : "")
@@ -232,7 +233,7 @@ Flickable {
             height: 70
             opacity: (detailModel.data(indexOfPerson, PeopleModel.PhoneNumberRole).length > 0 ? 1: 0)
 
-            Text{
+            Label {
                 id: label_phone
                 text: headerPhone
                 smooth: true
@@ -255,7 +256,7 @@ Flickable {
                     id: phoneBar
                     source: "image://themedimage/widgets/common/header/header-inverted-small"
                     anchors.fill:  parent
-                    Text{
+                    Label {
                         id: label
                         text: {
                             if(detailsPhone.phoneContexts[index] == mobileValue)
@@ -273,7 +274,7 @@ Flickable {
                         anchors {verticalCenter: phoneBar.verticalCenter; left: phoneBar.left; leftMargin: 20}
                         opacity: 1
                     }
-                    Text{
+                    Label {
                         id: data_phone
                         text: getTruncatedString(modelData, 25)
                         smooth: true
@@ -291,7 +292,7 @@ Flickable {
             height: 70
             opacity: (detailModel.data(indexOfPerson, PeopleModel.EmailAddressRole).length > 0 ? 1 : 0)
 
-            Text{
+            Label {
                 id: label_email
                 text: headerEmail
                 smooth: true
@@ -316,7 +317,7 @@ Flickable {
                     id: emailBar
                     source: "image://themedimage/widgets/common/header/header-inverted-small"
                     anchors.fill: parent
-                    Text{
+                    Label {
                         id: email_txt
                         text:  {
                             if(detailsEmail.emailContexts[index] == homeValue)
@@ -332,7 +333,7 @@ Flickable {
                         anchors {verticalCenter: emailBar.verticalCenter; left: emailBar.left; leftMargin: 20 }
                         opacity: 1
                     }
-                    Text{
+                    Label {
                         id: data_email
                         text: getTruncatedString(modelData, 25)
                         smooth: true
@@ -350,7 +351,7 @@ Flickable {
             height: 70
             opacity: (detailModel.data(indexOfPerson, PeopleModel.WebUrlRole).length > 0 ? 1 : 0)
 
-            Text{
+            Label {
                 id: label_web
                 text: headerWeb
                 smooth: true
@@ -374,7 +375,7 @@ Flickable {
                     source: "image://themedimage/widgets/common/list/list-single-selected"
                     anchors.fill: parent
 
-                    Text{
+                    Label {
                         id: button_web_txt
                         text:  {
                             if(detailsWeb.webContexts[index] == favoriteWeb)
@@ -388,7 +389,7 @@ Flickable {
                         anchors {verticalCenter: webBar.verticalCenter; left: webBar.left; leftMargin: 20 }
                         opacity: 1
                     }
-                    Text{
+                    Label {
                         id: data_web
                         text: getTruncatedString(modelData, 25)
                         smooth: true
@@ -416,7 +417,7 @@ Flickable {
             height: 70
             opacity: (detailModel.data(indexOfPerson, PeopleModel.AddressRole).length > 0 ? 1: 0)
 
-            Text{
+            Label {
                 id: label_address
                 text: headerAddress
                 smooth: true
@@ -439,7 +440,7 @@ Flickable {
                     source: "image://themedimage/widgets/common/header/header-inverted-small"
                     anchors.fill: parent
 
-                    Text{
+                    Label {
                         id: button_addy_txt
                         text: {
                             if(detailsAddress.addressContexts[index] == homeValue)
@@ -466,7 +467,7 @@ Flickable {
                             height: childrenRect.height
                             width: parent.width
 
-                            Text{
+                            Label {
                                 id: data_street
                                 anchors.verticalCenter: address_rect.verticalCenter
                                 text: getAddressDisplayVal(modelData);
@@ -487,7 +488,7 @@ Flickable {
             height: 70
             opacity: (detailModel.data(indexOfPerson, PeopleModel.BirthdayRole).length > 0 ? 1: 0)
 
-            Text{
+            Label {
                 id: label_birthday
                 text: headerBirthday
                 smooth: true
@@ -505,14 +506,14 @@ Flickable {
                 source: "image://themedimage/widgets/common/header/header-inverted-small"
                 anchors.fill: parent
 
-                Text{
+                Label {
                     id: button_birthday_txt
                     text: headerDate
                     smooth: true
                     anchors {verticalCenter: bdayBar.verticalCenter; left: bdayBar.left; leftMargin: 20 }
                     opacity: 1
                 }
-                Text{
+                Label {
                     id: data_birthday
                     text: detailModel.data(indexOfPerson, PeopleModel.BirthdayRole)
                     smooth: true
@@ -529,7 +530,7 @@ Flickable {
             height: 70
             opacity: (detailModel.data(indexOfPerson, PeopleModel.NotesRole).length > 0 ? 1: 0)
 
-            Text{
+            Label {
                 id: label_notes
                 text: headerNote
                 smooth: true
@@ -546,7 +547,7 @@ Flickable {
                 source: "image://themedimage/widgets/common/toolbar-item/toolbar-item-background-selected"
                 anchors.fill:  parent
 
-                Text{
+                Label {
                     id: data_notes
                     text: getTruncatedString(detailModel.data(indexOfPerson, PeopleModel.NotesRole), 50)
                     smooth: true

@@ -26,7 +26,7 @@ Item {
         opacity: 1
         anchors{ horizontalCenter: parent.horizontalCenter;  bottom: parent.bottom; bottomMargin: parent.height/2; }
     } 
-    Text {
+    Label {
         id: no_contacts
         text: subText
         smooth: true

@@ -259,7 +259,7 @@ Column {
         width: parent.width
         height: 70
 
-        Text{
+        Label {
             id: label_birthday
             text: headerBirthday
             smooth: true
@@ -274,7 +274,6 @@ Column {
         source: "image://themedimage/widgets/common/header/header-inverted-small"
         TextField {
             id: data_birthday
-            text: ""
             placeholderText: defaultBirthday
             anchors {verticalCenter: birthday.verticalCenter; left: parent.left; topMargin: 30; leftMargin: 30; right: delete_button.left; rightMargin: 30}
             MouseArea{
@@ -342,7 +341,7 @@ Column {
         width: parent.width
         height: 70
 
-        Text{
+        Label {
             id: label_notes
             text: headerNote
             smooth: true

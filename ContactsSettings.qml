@@ -102,7 +102,7 @@ AppPage {
             width: parent.width
             parent: settingsPage
 
-            Text {
+            Label {
                 id: settingsText
                 anchors.left: parent.left
                 anchors.leftMargin: itemMargins

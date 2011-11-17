@@ -97,7 +97,7 @@ Item {
         width: cardListView.width
         height: 30
         id: sectionBackground
-        Text {
+        Label {
             //: If a contact isn't sorted under one of the values in a locale's alphabet, it is sorted under '#'
             text: section.toUpperCase()
             anchors.verticalCenter: sectionBackground.verticalCenter
