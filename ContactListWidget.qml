@@ -115,8 +115,11 @@ Binding {
     property: "opacity";
     value: ((cardListView.count == 0) ? 1 : 0);
 }
-
-//Binding{target: cardListView; property: "opacity"; value: ((cardListView.count > 0) ? 1 : 0);}
+Binding {
+    target: cardListView;
+    property: "opacity";
+    value: ((cardListView.count > 0) ? 1 : 0);
+}
 
     onPressAndHold:{
         objectMenu.setPosition(x, y)
