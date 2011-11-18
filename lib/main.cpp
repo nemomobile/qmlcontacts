@@ -11,27 +11,21 @@
 #include <QApplication>
 #include <QDeclarativeContext>
 #include <QDeclarativeView>
-#include "peoplemodel.h"
-#include "proxymodel.h"
-#include "localeutils.h"
-#include "settingsdatastore.h"
+#include <seasidepeoplemodel.h>
+#include <seasideproxymodel.h>
 
 int main(int argc, char **argv)
 {
     QApplication a(argc, argv);
 
-    qmlRegisterType<PeopleModel>("MeeGo.App.Contacts", 0, 1, "PeopleModel");
-    qmlRegisterType<ProxyModel>("MeeGo.App.Contacts", 0, 1, "ProxyModel");
+    // TODO: this should probably be done in libseaside somehow
+    qmlRegisterType<SeasidePeopleModel>("MeeGo.App.Contacts", 0, 1, "PeopleModel");
+    qmlRegisterType<SeasideProxyModel>("MeeGo.App.Contacts", 0, 1, "ProxyModel");
 
     QDeclarativeView view;
 
     QDeclarativeContext *rootContext = view.engine()->rootContext();
     Q_ASSERT(rootContext);
-
-    rootContext->setContextProperty(QString::fromLatin1("settingsDataStore"),
-                                     SettingsDataStore::self());
-    rootContext->setContextProperty(QString::fromLatin1("localeUtils"),
-                                     LocaleUtils::self());
 
     view.setSource(QUrl::fromLocalFile("main.qml"));
 
