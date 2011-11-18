@@ -34,6 +34,7 @@ Image {
         return valueStr;
     }
 
+    property string dataDisplay: dataPeople.data(sourceIndex, PeopleModel.DisplayLabelRole)
     property string dataFirst: dataPeople.data(sourceIndex, PeopleModel.FirstNameRole)
     property string dataUuid: dataPeople.data(sourceIndex, PeopleModel.UuidRole);
     property string dataLast:  dataPeople.data(sourceIndex, PeopleModel.LastNameRole)
@@ -77,29 +78,7 @@ Image {
 
     Label {
         id: nameFirst
-        text: {
-            if((dataFirst != "") || (dataLast != "")) {
-                if (settingsDataStore.getDisplayOrder() == PeopleModel.LastNameRole) {
-                    //: %1 is last name, %2 is first name
-                    return qsTr("%1 %2", "LastFirstName").arg(getTruncatedString(dataLast, 25)).arg(getTruncatedString(dataFirst, 25));
-                } else {
-                    //: %1 is first name, %2 is last name
-                    return qsTr("%1 %2", "FirstLastName").arg(getTruncatedString(dataFirst, 25)).arg(getTruncatedString(dataLast, 25));
-                }
-            }
-            else if(dataPeople.data(sourceIndex, PeopleModel.CompanyNameRole) != "")
-                return getTruncatedString(dataPeople.data(sourceIndex, PeopleModel.CompanyNameRole), 25);
-            else if(dataPeople.data(sourceIndex, PeopleModel.PhoneNumberRole) != "")
-                return getTruncatedString(dataPeople.data(sourceIndex, PeopleModel.PhoneNumberRole), 25)[0];
-            else if(dataPeople.data(sourceIndex, PeopleModel.OnlineAccountUriRole)!= "")
-                return getTruncatedString(dataPeople.data(sourceIndex, PeopleModel.OnlineAccountUriRole), 25)[0];
-            else if (dataPeople.data(sourceIndex, PeopleModel.EmailAddressRole) != "")
-                return getTruncatedString(dataPeople.data(sourceIndex, PeopleModel.EmailAddressRole), 25)[0];
-            else if (dataPeople.data(sourceIndex, PeopleModel.WebUrlRole) != "")
-                return getTruncatedString(dataPeople.data(sourceIndex, PeopleModel.WebUrlRole), 25)[0];
-            else
-                return ellipse;
-        }
+        text: dataDisplay
         anchors { left: photo.right; top: photo.top; topMargin: photo.height/8-contactDivider.height; leftMargin: photo.height/8}
         smooth: true
     }
