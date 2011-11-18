@@ -82,140 +82,61 @@ Column {
             console.log("[contactSave] Unable to create new contact due to missing info");
     }
 
-    Image {
-        id: detailHeader
-        width: parent.width
-        height: (data_first_p.visible ? 175 : 150)
-        source: "image://themedimage/widgets/common/header/header-inverted-small"
+    Column {
+    TextField {
+        id: data_first
+        placeholderText: defaultFirstName
+    }
+    TextField {
+        id: data_first_p
+        placeholderText: defaultPronounciation
+        visible: localeUtils.needPronounciationFields()
+    }
+    TextField {
+        id: data_last
+        placeholderText: defaultLastName
+    }
+    TextField {
+        id: data_last_p
+        placeholderText: defaultPronounciation
+        visible: localeUtils.needPronounciationFields()
+    }
+    TextField {
+        id: data_company
+        placeholderText: defaultCompany
+    }
+    }
 
-        Item{
-            id: avatar
-            width: 150
-            height: 150
-            anchors {top: detailHeader.top; left: parent.left; }
+    Item{
+        anchors{ top: parent.top; topMargin: 10; left: parent.left; leftMargin: 10}
+        width: childrenRect.width
+        height: childrenRect.height
+        Image {
+            id: icn_faves
+            source: "image://themedimage/icons/actionbar/favorite-selected"
+            state: unfavoriteValue
 
-            LimitedImage{
-                id: avatar_img
-                source: "image://themedimage/icons/internal/contacts-avatar-add"
-                anchors.centerIn: avatar
-                signal clicked
-                width: 100
-                height: 100
-                smooth:  true
-                clip: true
-                state: "default"
-                fillMode: Image.PreserveAspectCrop
-
-                MouseArea{
-                    id: mouseArea_avatar_img
-                    anchors.fill: parent
-                    onClicked:{
-                        console.log("photo picker, TODO")
-                    }
-                    onPressed: {
-                        avatar.opacity = .5;
-                        avatar_img.source = (avatar_img.source == "image://themedimage/icons/internal/contacts-avatar-add" ? "image://themedimage/icons/internal/contacts-avatar-add-selected" : avatar_img.source)
-                    }
+            property string favoriteText: unfavoriteTranslated
+            states: [
+                State{ name: favoriteValue
+                    PropertyChanges{target: icn_faves; favoriteText: favoriteTranslated}
+                    PropertyChanges{target: icn_faves; source: "image://themedimage/icons/actionbar/favorite-selected"}
+                },
+                State{ name: unfavoriteValue
+                    PropertyChanges{target: icn_faves; favoriteText: unfavoriteTranslated}
+                    PropertyChanges{target: icn_faves; source: "image://themedimage/icons/actionbar/favorite"}
                 }
+            ]
+        }
+
+        MouseArea{
+            id: fav
+            anchors.fill: parent
+            onClicked: {
+                icn_faves.state = (icn_faves.source != "image://themedimage/icons/actionbar/favorite-selected" ? favoriteValue : unfavoriteValue)
             }
         }
-        Grid{
-            id: headerGrid
-            columns: 2
-            rows: 2
-            anchors{ left: avatar.right; right: detailHeader.right; verticalCenter: detailHeader.verticalCenter}
-            Item{
-                id: quad1
-                width: headerGrid.width/2
-                height: (data_first_p.visible ? childrenRect.height : data_first.height)
-                TextField {
-                    id: data_first
-                    placeholderText: defaultFirstName
-                    width: (parent.width-avatar.width)
-                    anchors {top: parent.top;
-                             left: parent.left; leftMargin: 20;
-                             right: parent.right; rightMargin: 10}
-                }
-                TextField {
-                    id: data_first_p
-                    text: ""
-                    placeholderText: defaultPronounciation
-                    width: (parent.width - avatar.width)
-                    anchors {top: data_first.bottom; topMargin: 10;
-                             left: parent.left; leftMargin: 20;
-                             right: parent.right; rightMargin: 10}
-                    visible: localeUtils.needPronounciationFields()
-                }
-            }
-            Item{
-                id: quad2
-                width: headerGrid.width/2
-                height: (data_last_p.visible ? childrenRect.height : data_last.height)
-                TextField {
-                    id: data_last
-                    placeholderText: defaultLastName
-                    width:(parent.width-avatar.width)
-                    anchors {top: parent.top;
-                             left: parent.left; leftMargin: 10;
-                             right: parent.right; rightMargin: 20}
-                }
-                TextField {
-                    id: data_last_p
-                    text: ""
-                    placeholderText: defaultPronounciation
-                    width: (parent.width - avatar.width)
-                    anchors {top: data_last.bottom; topMargin: 10;
-                             left: parent.left; leftMargin: 10;
-                             right: parent.right; rightMargin: 20}
-                    visible: localeUtils.needPronounciationFields()
-                }
-            }
-            Item{
-                id: quad3
-                width: headerGrid.width/2
-                height: childrenRect.height
-                TextField {
-                    id: data_company
-                    placeholderText: defaultCompany
-                    width:(parent.width-avatar.width)
-                    anchors{ top: parent.top; topMargin: 10; left: parent.left; leftMargin: 20; right: parent.right; rightMargin: 10;}
-                }
-            }
-            Item{
-                id: quad4
-                width: headerGrid.width/2
-                height: childrenRect.height
-                Item{
-                    anchors{ top: parent.top; topMargin: 10; left: parent.left; leftMargin: 10}
-                    width: childrenRect.width
-                    height: childrenRect.height
-                    Image {
-                        id: icn_faves
-                        source: "image://themedimage/icons/actionbar/favorite-selected"
-                        state: unfavoriteValue
 
-                        property string favoriteText: unfavoriteTranslated
-                        states: [
-                            State{ name: favoriteValue
-                                PropertyChanges{target: icn_faves; favoriteText: favoriteTranslated}
-                                PropertyChanges{target: icn_faves; source: "image://themedimage/icons/actionbar/favorite-selected"}
-                            },
-                            State{ name: unfavoriteValue
-                                PropertyChanges{target: icn_faves; favoriteText: unfavoriteTranslated}
-                                PropertyChanges{target: icn_faves; source: "image://themedimage/icons/actionbar/favorite"}
-                            }
-                        ]
-                    }
-                }
-                MouseArea{
-                    id: fav
-                    anchors.fill: parent
-                    onClicked: {
-                        icn_faves.state = (icn_faves.source != "image://themedimage/icons/actionbar/favorite-selected" ? favoriteValue : unfavoriteValue)
-                    }
-                }
-            }
-        }
     }
 
     ContactsExpandableDetails {
