@@ -36,8 +36,7 @@ Item {
 
     EmptyContacts{
         id: emptyListView
-        opacity: 1
-        anchors.top: cardListView.bottom
+        anchors.fill: parent
         onClicked: {
             groupedViewPortrait.addNewContact();
         }
@@ -83,8 +82,6 @@ Item {
             window.currentContactName = name;
             groupedViewPortrait.pressAndHold(mouseX, mouseY);
         }
-        Binding{target: cardListView; property: "height"; value: ((cardListView.count > 1) ?  groupedViewPortrait.height : cardListView.childrenRect.height)}
-        Binding{target: cardListView; property: "interactive"; value: ((cardListView.count > 1) ? true : false)}
 
         Component.onCompleted: {
             cardListView.cUuid = dataPeople.data(sortModel.getSourceRow(0), PeopleModel.UuidRole);
@@ -113,10 +110,13 @@ FastScroll {
     listView: cardListView
 }
 
-Binding{target: emptyListView;
-        property: "opacity";
-        value: (((cardListView.count == 1) && (peopleModel.isSelfContact(cardListView.cUuid))) ? 1 : 0);}
-Binding{target: cardListView; property: "opacity"; value: ((cardListView.count > 0) ? 1 : 0);}
+Binding {
+    target: emptyListView;
+    property: "opacity";
+    value: ((cardListView.count == 0) ? 1 : 0);
+}
+
+//Binding{target: cardListView; property: "opacity"; value: ((cardListView.count > 0) ? 1 : 0);}
 
     onPressAndHold:{
         objectMenu.setPosition(x, y)

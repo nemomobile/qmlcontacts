@@ -20,17 +20,11 @@ Item {
     anchors { top: parent.top; right: parent.right; }
     signal clicked()
 
-    Image {
-        id: avatar
-        source: "image://themedimage/icons/oobe/contacts-unavailable"
-        opacity: 1
-        anchors{ horizontalCenter: parent.horizontalCenter;  bottom: parent.bottom; bottomMargin: parent.height/2; }
-    } 
     Label {
         id: no_contacts
         text: subText
         smooth: true
-        anchors {top: avatar.bottom; topMargin: 40; horizontalCenter: parent.horizontalCenter;}
+        anchors {verticalCenter: parent.verticalCenter; topMargin: 40; horizontalCenter: parent.horizontalCenter;}
         opacity: 1
     }
 

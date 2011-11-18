@@ -14,6 +14,7 @@ Page {
         anchors.fill: parent
         dataModel: peopleModel
         sortModel: proxyModel
+        onAddNewContact: newContactLoader.openSheet()
     }
 
     tools: ToolBarLayout {
