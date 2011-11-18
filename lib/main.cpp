@@ -13,6 +13,7 @@
 #include <QDeclarativeView>
 #include <seasidepeoplemodel.h>
 #include <seasideproxymodel.h>
+#include <localeutils_p.h> // XXX: this needs to not be public private, fix it
 
 int main(int argc, char **argv)
 {
@@ -26,6 +27,10 @@ int main(int argc, char **argv)
 
     QDeclarativeContext *rootContext = view.engine()->rootContext();
     Q_ASSERT(rootContext);
+
+    rootContext->setContextProperty(QString::fromLatin1("localeUtils"),
+                                    LocaleUtils::self());
+
 
     view.setSource(QUrl::fromLocalFile("main.qml"));
 
