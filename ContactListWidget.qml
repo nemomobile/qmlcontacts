@@ -23,6 +23,7 @@ Item {
     property ProxyModel sortModel: proxyModel
     property alias cards: cardListView
 
+    /*
     function getActionMenuModel()
     {
         if (dataModel.data(sortModel.getSourceRow(window.currentContactIndex), PeopleModel.IsSelfRole))
@@ -33,6 +34,7 @@ Item {
 
        return [contextView, contextShare, contextEdit, contextFavorite, contextDelete];
     }
+    */
 
     EmptyContacts{
         id: emptyListView
@@ -67,17 +69,17 @@ Item {
         onClicked:
         {
             cardListView.currentIndex = index;
-            window.currentContactIndex = index;
 
             //When querying the DataModel, use the index of the contact in the
             //not the index of the contact in the ProxyModel
             var srcIndex = sortModel.getSourceRow(index);
             window.currentContactId = dataPeople.data(srcIndex, PeopleModel.UuidRole);
-            pageStack.push(Qt.resolvedUrl("ContactCardPage.qml"));
+            var card = pageStack.push(Qt.resolvedUrl("ContactCardPage.qml"));
+            card.setSourceIndex(index);
+
         }
         onPressAndHold: {
             cardListView.currentIndex = index;
-            window.currentContactIndex = index;
             window.currentContactId = uuid;
             window.currentContactName = name;
             groupedViewPortrait.pressAndHold(mouseX, mouseY);

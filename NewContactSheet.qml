@@ -9,15 +9,16 @@ Sheet {
     content: Flickable {
         anchors.fill: parent
         contentHeight: newContact.childrenRect.height
-        NewContactViewPortrait {
+        PortraitEditorView {
             id: newContact
             dataModel: peopleModel
+
+            Component.onCompleted: newContact.setSourceIndex(-1)
         }
     }
 
-    onAccepted: {
-        newContact.contactSave();
-    }
+    onAccepted: newContact.contactSave();
+    Component.onCompleted: newContact.finishPageLoad();
 }
 
 

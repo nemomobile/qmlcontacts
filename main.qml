@@ -16,7 +16,7 @@ PageStackWindow {
 //    automaticBookSwitching: false 
 
     property string currentContactId: ""
-    property int currentContactIndex: 0
+    property int currentContactIndex: undefined
     property string currentContactName: ""
     property bool telepathyReady: false
     property string currentFilter: PeopleModel.AllFilter

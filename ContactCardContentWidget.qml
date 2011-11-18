@@ -22,6 +22,7 @@ Flickable {
     opacity: 1
 
     property PeopleModel detailModel: contactModel
+    property int sourceIndex
     property int indexOfPerson: personRow
 
     property string contextHome: qsTr("Home")

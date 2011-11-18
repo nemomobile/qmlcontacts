@@ -4,12 +4,18 @@ import MeeGo.App.Contacts 0.1
 
 Page {
     id: detailViewPage
+    property int sourceIndex
+
+    function setSourceIndex(index) {
+        sourceIndex = index
+    }
 
     ContactCardContentWidget {
         id: detailViewContact
         anchors.fill:  parent
         detailModel: peopleModel
-        indexOfPerson: proxyModel.getSourceRow(window.currentContactIndex)
+        sourceIndex: detailViewPage.sourceIndex
+        indexOfPerson: proxyModel.getSourceRow(sourceIndex)
     }
 /*            actionMenuModel: [contextShare, contextEdit]
     actionMenuPayload: [0, 1]
@@ -76,6 +82,7 @@ Page {
         }
 
         onLoaded: {
+            item.setSourceIndex(sourceIndex)
             item.accepted.connect(closeSheet)
             item.rejected.connect(closeSheet)
             item.open()
