@@ -16,7 +16,7 @@ Page {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        onAddNewContact: PageManager.openContactEditor()
+        onAddNewContact: PageManager.openContactEditor(groupedViewPage)
     }
 
     tools: ToolBarLayout {
