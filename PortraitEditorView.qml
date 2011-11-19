@@ -29,7 +29,7 @@ Column {
         contact.lastName = data_last.text
         contact.phoneNumbers = phoneModel.dataList()
 
-        var ret = peopleModel.savePerson(contact)
+        var ret = PageManager.peopleModel.savePerson(contact)
 
         if (!ret) //REVISIT
             console.log("[contactSave] Unable to create new contact due to missing info");

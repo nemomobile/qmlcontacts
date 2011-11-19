@@ -11,10 +11,17 @@ Page {
         id: header
         text: contact.displayLabel
 
+        /*
+         * TODO: overlay favorite icon over avatar
         Image {
             id: icon_favorite
             anchors{right: parent.right;  rightMargin: 10}
             source: contact.favorite ? "image://themedimage/icons/actionbar/favorite-selected" : "image://themedimage/icons/actionbar/favorite"
+        }
+        */
+        content: Image {
+            id: avatar
+            source: contact.avatarPath
         }
     }
 

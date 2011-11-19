@@ -7,10 +7,19 @@ Rectangle {
     width: parent.width
     color: "#007FFF"
     property alias text: label.text
+    property alias content: othercontent.children
+
+    Item {
+        id: othercontent
+        width: childrenRect.width
+        anchors.left: parent.left
+        anchors.leftMargin: 10
+//        anchors.verticalCenter: parent.verticalCenter
+    }
 
     Label {
         id: label
-        anchors.left: parent.left
+        anchors.left: othercontent.right
         anchors.leftMargin: 20
         anchors.verticalCenter: parent.verticalCenter
         width: parent.width

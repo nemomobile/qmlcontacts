@@ -31,9 +31,6 @@ Image {
         return valueStr;
     }
 
-    //REVISIT: Instead of using the URI from AvatarRole, need to use thumbnail URI
-    property string dataAvatar: model.person.avatarPath
-
     //: Remove favorite flag / remove contact from favorites list
     property string unfavoriteTranslated: qsTr("Unfavorite")
 
@@ -48,6 +45,8 @@ Image {
 
     source: "image://themedimage/widgets/common/list/list"
 
+    // TODO: avatars should be centralised so we have error behaviour in both
+    // list and card
     LimitedImage {
         id: photo
         fillMode: Image.PreserveAspectCrop
@@ -55,7 +54,7 @@ Image {
         clip: true
         width: 64
         height: 64
-        source: (dataAvatar ? dataAvatar : "image://theme/meegotouch-avatar-placeholder-background")
+        source: model.person.avatarPath
         anchors {
             left: parent.left;
             leftMargin: 10
