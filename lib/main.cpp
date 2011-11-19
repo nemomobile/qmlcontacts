@@ -11,6 +11,7 @@
 #include <QApplication>
 #include <QDeclarativeContext>
 #include <QDeclarativeView>
+#include <QFile>
 #include <seasidepeoplemodel.h>
 #include <seasideproxymodel.h>
 #include <seasideperson.h>

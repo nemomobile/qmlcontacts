@@ -1,5 +1,5 @@
 include(../common.pri)
-TARGET = meegocontacts
+TARGET = qmlcontacts
 TEMPLATE = app
 
 QT += declarative \
