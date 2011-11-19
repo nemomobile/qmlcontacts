@@ -25,3 +25,7 @@ SOURCES += \
 
 target.path = $$INSTALL_ROOT/usr/bin
 INSTALLS += target
+
+desktop.files = $${TARGET}.desktop
+desktop.path = $$INSTALL_ROOT/usr/share/applications
+INSTALLS += desktop
