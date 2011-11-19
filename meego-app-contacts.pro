@@ -13,10 +13,7 @@ OTHER_FILES += $${QML_FILES}
 qmlfiles.files += $${QML_FILES}
 qmlfiles.path += $$INSTALL_ROOT/usr/share/$${PROJECT_NAME}
 
-desktop.files += contacts-settings.desktop
-desktop.path += $$INSTALL_ROOT/usr/share/meego-ux-settings/apps/
-
-INSTALLS += qmlfiles desktop
+INSTALLS += qmlfiles
 
 TRANSLATIONS += *.qml
 dist.commands += rm -fR $${PROJECT_NAME}-$${VERSION} &&
