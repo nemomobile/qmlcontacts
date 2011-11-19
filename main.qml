@@ -15,11 +15,6 @@ PageStackWindow {
     showToolBar: true;
 //    automaticBookSwitching: false 
 
-    property string currentContactId: ""
-    property int currentContactIndex: undefined
-    property string currentContactName: ""
-    property bool telepathyReady: false
-    property string currentFilter: PeopleModel.AllFilter
     property variant accountItem
 
     property string filterNew: qsTr("New contact")

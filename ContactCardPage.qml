@@ -4,38 +4,28 @@ import MeeGo.App.Contacts 0.1
 
 Page {
     id: detailViewPage
-    property int sourceIndex
+    property Person contact: Person { }
 
-    function setSourceIndex(index) {
-        sourceIndex = index
+    PageHeader {
+        id: header
+        text: contact.displayLabel
+
+        Image {
+            id: icon_favorite
+            anchors{right: parent.right;  rightMargin: 10}
+            source: contact.favorite ? "image://themedimage/icons/actionbar/favorite-selected" : "image://themedimage/icons/actionbar/favorite"
+        }
     }
 
     ContactCardContentWidget {
         id: detailViewContact
-        anchors.fill:  parent
-        detailModel: peopleModel
-        sourceIndex: detailViewPage.sourceIndex
-        indexOfPerson: proxyModel.getSourceRow(sourceIndex)
+        anchors.top: header.bottom
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        contact: detailViewPage.contact
     }
-/*            actionMenuModel: [contextShare, contextEdit]
-    actionMenuPayload: [0, 1]
 
-    onActionMenuTriggered: {
-        if (selectedItem == 0) {
-            console.log("TODO this needs fixing (contacts app, ask Robin)")
-//                    peopleModel.exportContact(window.currentContactId,  "/tmp/vcard.vcf");
-//                    var cmd = "/usr/bin/meego-qml-launcher --app meego-app-email --fullscreen --cmd openComposer --cdata \"file:///tmp/vcard.vcf\"";
-//                    appModel.launch(cmd);
-        }
-        else if (selectedItem == 1) {
-            if (window.pageStack.currentPage == detailViewPage)
-                window.addPage(myAppEdit);
-        }
-    }
-    onActivated: {
-        detailViewContact.indexOfPerson = proxyModel.getSourceRow(window.currentContactIndex);
-    }
-*/
     tools: ToolBarLayout {
         ToolIcon {
             iconId: "icon-m-toolbar-back"
@@ -82,7 +72,7 @@ Page {
         }
 
         onLoaded: {
-            item.setSourceIndex(sourceIndex)
+            item.contact = detailViewPage.contact
             item.accepted.connect(closeSheet)
             item.rejected.connect(closeSheet)
             item.open()

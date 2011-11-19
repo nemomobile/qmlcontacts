@@ -17,9 +17,6 @@ Image {
     width: parent.width
     anchors.right: parent.right
 
-    property PeopleModel dataPeople : theModel
-    property ProxyModel sortPeople : sortModel
-    property int sourceIndex: sortPeople.getSourceRow(index)
     property string stringTruncater: qsTr("...")
     property int itemMargins: 10
 
@@ -34,15 +31,8 @@ Image {
         return valueStr;
     }
 
-    property string dataDisplay: dataPeople.data(sourceIndex, PeopleModel.DisplayLabelRole)
-    property string dataFirst: dataPeople.data(sourceIndex, PeopleModel.FirstNameRole)
-    property string dataUuid: dataPeople.data(sourceIndex, PeopleModel.UuidRole);
-    property string dataLast:  dataPeople.data(sourceIndex, PeopleModel.LastNameRole)
-    property bool dataFavorite: dataPeople.data(sourceIndex, PeopleModel.FavoriteRole)
-    property int dataStatus: dataPeople.data(sourceIndex, PeopleModel.PresenceRole)
-    property bool dataMeCard: dataPeople.data(sourceIndex, PeopleModel.IsSelfRole)
     //REVISIT: Instead of using the URI from AvatarRole, need to use thumbnail URI
-    property string dataAvatar: dataPeople.data(sourceIndex, PeopleModel.AvatarRole)
+    property string dataAvatar: model.person.avatarPath
 
     //: Remove favorite flag / remove contact from favorites list
     property string unfavoriteTranslated: qsTr("Unfavorite")
@@ -57,51 +47,42 @@ Image {
     signal pressAndHold(int mouseX, int mouseY, string uuid, string name)
 
     source: "image://themedimage/widgets/common/list/list"
-    opacity: (dataPeople.data(sourceIndex, PeopleModel.IsSelfRole) ? .7 : 1)
 
-    LimitedImage{
+    LimitedImage {
         id: photo
         fillMode: Image.PreserveAspectCrop
         smooth: true
         clip: true
-        width: 100
-        height: 100
-        source: (dataAvatar ? dataAvatar :"image://themedimage/widgets/common/avatar/avatar-default")
-        anchors {left: contactCardPortrait.left;
-                 top: parent.top; topMargin: itemMargins}
+        width: 64
+        height: 64
+        source: (dataAvatar ? dataAvatar : "image://theme/meegotouch-avatar-placeholder-background")
+        anchors {
+            left: parent.left;
+            leftMargin: 10
+            verticalCenter: parent.verticalCenter
+        }
         onStatusChanged: {
             if(photo.status == Image.Error || photo.status == Image.Null){
-                photo.source = "image://themedimage/widgets/common/avatar/avatar-default";
+                photo.source = "image://theme/meegotouch-avatar-placeholder-background"
             }
         }
     }
 
     Label {
         id: nameFirst
-        text: dataDisplay
-        anchors { left: photo.right; top: photo.top; topMargin: photo.height/8-contactDivider.height; leftMargin: photo.height/8}
+        text: model.person.displayLabel
+        anchors {
+            left: photo.right;
+            verticalCenter: parent.verticalCenter;
+            leftMargin: photo.height/8
+        }
         smooth: true
     }
 
-    //    REVISIT:Label {
-    //        id: nameLast
-    //        text: dataLast
-    //        anchors { left: nameFirst.right; top: nameFirst.top; leftMargin: photo.height/8;}
-    //        font.pixelSize: theme_fontPixelSizeLargest
-    //        color: theme_fontColorNormal; smooth: true
-    //    }
-
     Image {
         id: favorite
-        source: (dataPeople.data(sourceIndex, PeopleModel.FavoriteRole) ? "image://themedimage/icons/actionbar/favorite-selected" : "image://themedimage/icons/actionbar/favorite" )
-        opacity: (dataMeCard ? 0 : 1)
+        source: model.person.favorite  ? "image://themedimage/icons/actionbar/favorite-selected" : "image://themedimage/icons/actionbar/favorite"
         anchors {right: contactCardPortrait.right; top: nameFirst.top; rightMargin: photo.height/8;}
-    }
-
-    Image{
-        id: contactDivider
-        source: "image://themedimage/widgets/common/dividers/divider-horizontal-double"
-        anchors {right: contactCardPortrait.right; bottom: contactCardPortrait.bottom; left: contactCardPortrait.left}
     }
 
     MouseArea {
@@ -109,21 +90,6 @@ Image {
         anchors.fill: contactCardPortrait
         onClicked: {
             contactCardPortrait.clicked();
-        }
-        onPressAndHold: {
-            var map = mapToItem(window, mouseX, mouseY);
-            if(dataFirst != "" && dataLast != ""){
-                if(settingsDataStore.getDisplayOrder() == PeopleModel.LastNameRole)
-                    contactCardPortrait.pressAndHold(map.x, map.y, dataUuid, getTruncatedString(dataLast +", " + dataFirst, 25));
-                else
-                    contactCardPortrait.pressAndHold(map.x, map.y, dataUuid, getTruncatedString(dataFirst +" " + dataLast, 25));
-            }else if(dataFirst == ""){
-                contactCardPortrait.pressAndHold(map.x, map.y, dataUuid, getTruncatedString(dataLast, 25));
-            }else if(dataLast == ""){
-                contactCardPortrait.pressAndHold(map.x, map.y, dataUuid, getTruncatedString(dataFirst, 25))
-            }else{
-                contactCardPortrait.pressAndHold(map.x, map.y, dataUuid, "");
-            }
         }
     }
 

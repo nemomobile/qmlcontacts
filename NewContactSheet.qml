@@ -11,14 +11,10 @@ Sheet {
         contentHeight: newContact.childrenRect.height
         PortraitEditorView {
             id: newContact
-            dataModel: peopleModel
-
-            Component.onCompleted: newContact.setSourceIndex(-1)
         }
     }
 
     onAccepted: newContact.contactSave();
-    Component.onCompleted: newContact.finishPageLoad();
 }
 
 

@@ -13,8 +13,7 @@ import MeeGo.App.Contacts 0.1
 Column {
     id: newContactPage
 
-    property PeopleModel dataModel: newContactModel
-
+    property Person contact: Person { }
     property string contextHome: qsTr("Home")
     property string contextWork: qsTr("Work")
     property string contextOther: qsTr("Other")
@@ -49,48 +48,6 @@ Column {
 
     property bool validInput: false
 
-    property int sourceIndex
-    property int index: sourceIndex >= 0 ? proxyModel.getSourceRow(sourceIndex) : -1
-
-    function setSourceIndex(index) {
-        sourceIndex = index
-    }
-
-    function finishPageLoad() {
-        console.log("Finishing load, index is " + index + " window index is " + sourceIndex)
-        if (index != -1) {
-            var detailData = peopleModel.data(index, PeopleModel.PhoneNumberRole);
-            var contextData = peopleModel.data(index, PeopleModel.PhoneContextRole);
-            phones.loadExpandingBox(detailData, contextData);
-
-            detailData = peopleModel.data(index, PeopleModel.OnlineAccountUriRole);
-            contextData = peopleModel.data(index, PeopleModel.OnlineServiceProviderRole);
-
-            detailData = peopleModel.data(index, PeopleModel.EmailAddressRole);
-            contextData = peopleModel.data(index, PeopleModel.EmailContextRole);
-            emails.loadExpandingBox(detailData, contextData);
-
-            detailData = peopleModel.data(index, PeopleModel.WebUrlRole);
-            contextData = peopleModel.data(index, PeopleModel.WebContextRole);
-            urls.loadExpandingBox(detailData, contextData);
-
-            detailData = peopleModel.data(index, PeopleModel.AddressRole);
-            contextData = peopleModel.data(index, PeopleModel.AddressContextRole);
-            addys.loadExpandingBox(detailData, contextData);
-
-            data_first.text = peopleModel.data(index, PeopleModel.FirstNameRole);
-            data_first_p.text = peopleModel.data(index, PeopleModel.FirstNameProRole);
-            data_last.text = peopleModel.data(index, PeopleModel.LastNameRole);
-            data_last_p.text = peopleModel.data(index, PeopleModel.LastNameProRole);
-            data_company.text = peopleModel.data(index, PeopleModel.CompanyNameRole);
-        } else {
-            phones.loadExpandingBox(null, null);
-            emails.loadExpandingBox(null, null);
-            urls.loadExpandingBox(null, null);
-            addys.loadExpandingBox(null, null);
-        }
-    }
-
     function contactSave(){
         var newPhones = phones.getNewDetails();
         var newEmails = emails.getNewDetails();
@@ -99,20 +56,10 @@ Column {
         var avatar = ""
         var thumburi = ""
 
-        console.log("Saving, index is " + index + " window index is " + sourceIndex)
-        var ret = peopleModel.savePerson(index, avatar, thumburi,
-                      data_first.text, data_first_p.text,
-                      data_last.text, data_last_p.text,
-                      data_company.text,
-                      newPhones["numbers"], newPhones["types"],
-                      (icn_faves.state == favoriteValue),
-                      [], [],
-                      newEmails["emails"], newEmails["types"],
-                      addresses["streets"], addresses["locales"],
-                      addresses["regions"], addresses["zips"],
-                      addresses["countries"], addresses["types"],
-                      newWebs["urls"], newWebs["types"],
-                      "birthdate", data_notes.text);
+        contact.firstName = data_first.text
+        contact.lastName = data_last.text
+
+        var ret = peopleModel.savePerson(contact)
 
         if (!ret) //REVISIT
             console.log("[contactSave] Unable to create new contact due to missing info");
@@ -122,24 +69,17 @@ Column {
     TextField {
         id: data_first
         placeholderText: defaultFirstName
-    }
-    TextField {
-        id: data_first_p
-        placeholderText: defaultPronounciation
-        visible: localeUtils.needPronounciationFields()
+        text: contact.firstName
     }
     TextField {
         id: data_last
         placeholderText: defaultLastName
-    }
-    TextField {
-        id: data_last_p
-        placeholderText: defaultPronounciation
-        visible: localeUtils.needPronounciationFields()
+        text: contact.lastName
     }
     TextField {
         id: data_company
         placeholderText: defaultCompany
+        text: contact.companyName
     }
     }
 

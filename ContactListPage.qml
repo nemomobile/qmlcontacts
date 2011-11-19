@@ -4,16 +4,17 @@ import com.nokia.meego 1.0
 Page {
     id: groupedViewPage
 
-/*            onSearch: {
-        if(needle != "")
-            peopleModel.searchContacts(needle);
-    }*/
+    PageHeader {
+        id: header
+        text: qsTr("Contacts")
+    }
 
     ContactListWidget {
         id: gvp
-        anchors.fill: parent
-        dataModel: peopleModel
-        sortModel: proxyModel
+        anchors.top: header.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
         onAddNewContact: newContactLoader.openSheet()
     }
 
@@ -24,7 +25,6 @@ Page {
                 newContactLoader.openSheet()
             }
         }
-//        ToolIcon { iconId: "icon-m-toolbar-view-menu" }
     }
 
     Loader {
@@ -60,15 +60,5 @@ Page {
             item.open()
         }
     }
-
-/*
-// FIXME
-            onActivating: {
-                setAllFilter(false, false);
-
-                if (window.currentFilter == PeopleModel.FavoritesFilter)
-                    setFavoritesFilter();
-            }
-*/
 }
 

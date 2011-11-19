@@ -19,22 +19,7 @@ Item {
     signal addNewContact
     signal pressAndHold(int x, int y)
 
-    property PeopleModel dataModel: contactModel
-    property ProxyModel sortModel: proxyModel
     property alias cards: cardListView
-
-    /*
-    function getActionMenuModel()
-    {
-        if (dataModel.data(sortModel.getSourceRow(window.currentContactIndex), PeopleModel.IsSelfRole))
-            return [contextView, contextShare, contextEdit];
-
-        if (dataModel.data(sortModel.getSourceRow(window.currentContactIndex), PeopleModel.FavoriteRole))
-            return [contextView, contextShare, contextEdit, contextUnFavorite, contextDelete];
-
-       return [contextView, contextShare, contextEdit, contextFavorite, contextDelete];
-    }
-    */
 
     EmptyContacts{
         id: emptyListView
@@ -56,39 +41,17 @@ Item {
         focus: true
         keyNavigationWraps: false
         clip: true
-        model: sortModel
+        model: proxyModel
         opacity: 0
 
-        property string cUuid: ""
-
-        delegate: ContactListDelegate
-        {
-        id: card
-        dataPeople: dataModel
-        sortPeople: proxyModel
-        onClicked:
-        {
-            cardListView.currentIndex = index;
-
-            //When querying the DataModel, use the index of the contact in the
-            //not the index of the contact in the ProxyModel
-            var srcIndex = sortModel.getSourceRow(index);
-            window.currentContactId = dataPeople.data(srcIndex, PeopleModel.UuidRole);
-            var card = pageStack.push(Qt.resolvedUrl("ContactCardPage.qml"));
-            card.setSourceIndex(index);
-
+        delegate: ContactListDelegate {
+            id: card
+            onClicked:
+            {
+                var card = pageStack.push(Qt.resolvedUrl("ContactCardPage.qml"));
+                card.contact = model.person
+            }
         }
-        onPressAndHold: {
-            cardListView.currentIndex = index;
-            window.currentContactId = uuid;
-            window.currentContactName = name;
-            groupedViewPortrait.pressAndHold(mouseX, mouseY);
-        }
-
-        Component.onCompleted: {
-            cardListView.cUuid = dataPeople.data(sortModel.getSourceRow(0), PeopleModel.UuidRole);
-        }
-    }
 
     section.property: "firstcharacter"
     section.criteria: ViewSection.FirstCharacter
