@@ -9,11 +9,12 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import MeeGo.App.Contacts 0.1
+import "PageManager.js" as PageManager
 
 Column {
     id: newContactPage
 
-    property Person contact: Person { }
+    property Person contact: PageManager.createNextPerson()
     property string defaultFirstName: qsTr("First name")
     property string defaultLastName: qsTr("Last name")
     property string defaultCompany: qsTr("Company")

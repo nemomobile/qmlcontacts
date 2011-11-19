@@ -1,10 +1,11 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import MeeGo.App.Contacts 0.1
+import "PageManager.js" as PageManager
 
 Page {
     id: detailViewPage
-    property Person contact: Person { }
+    property Person contact: PageManager.createNextPerson()
 
     PageHeader {
         id: header
@@ -40,45 +41,8 @@ Page {
     Menu {
         id: myMenu
         MenuLayout {
-            MenuItem { text: "Edit"; onClicked: contactEditor.openSheet() }
+            MenuItem { text: "Edit"; onClicked: PageManager.openContactEditor(detailViewPage, contact.id) }
         }
     }
-
-    Loader {
-        id: contactEditor
-
-        function freeSheet() {
-            console.log("SHEET: freeing resources")
-            contactEditor.source = ""
-        }
-
-        function openSheet() {
-            if (sheetUnloadTimer.running) {
-                sheetUnloadTimer.stop()
-                freeSheet()
-            }
-
-            var sourceUri = Qt.resolvedUrl("EditContactSheet.qml")
-            contactEditor.source = sourceUri;
-        }
-
-        Timer {
-            id: sheetUnloadTimer
-            interval: 3000 // long enough for the animation to run
-            onTriggered: freeSheet();
-        }
-
-        function closeSheet() {
-            sheetUnloadTimer.start()
-        }
-
-        onLoaded: {
-            item.contact = detailViewPage.contact
-            item.accepted.connect(closeSheet)
-            item.rejected.connect(closeSheet)
-            item.open()
-        }
-    }
-
 }
 

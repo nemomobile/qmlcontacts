@@ -9,6 +9,7 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import MeeGo.App.Contacts 0.1
+import "PageManager.js" as PageManager
 
 PageStackWindow {
     id: window 
@@ -139,5 +140,7 @@ PageStackWindow {
     ToolBar {
         anchors.bottom: parent.bottom
     }
+
+    Component.onCompleted: PageManager.initialize(peopleModel)
 }
 

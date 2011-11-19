@@ -8,7 +8,7 @@
 
 import QtQuick 1.1
 import com.nokia.meego 1.0
-import MeeGo.App.Contacts 0.1
+import "PageManager.js" as PageManager
 
 Item {
     id: groupedViewPortrait
@@ -42,10 +42,8 @@ Item {
 
         delegate: ContactListDelegate {
             id: card
-            onClicked:
-            {
-                var card = pageStack.push(Qt.resolvedUrl("ContactCardPage.qml"));
-                card.contact = model.person
+            onClicked: {
+                PageManager.openContactCard(pageStack, model.person.id)
             }
         }
 
