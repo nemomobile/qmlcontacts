@@ -35,6 +35,7 @@ int main(int argc, char **argv)
 
 
     view.setSource(QUrl::fromLocalFile("main.qml"));
+    view.setWindowTitle(QObject::tr("Contacts"));
 
     view.showFullScreen();
 
