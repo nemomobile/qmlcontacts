@@ -1,5 +1,5 @@
 include(common.pri)
-PROJECT_NAME = meego-app-contacts
+PROJECT_NAME = qmlcontacts
 TEMPLATE = subdirs
 CONFIG += ordered mobility
 SUBDIRS += lib
