@@ -1,0 +1,10 @@
+Building:
+You need libseaside from git, currently the 'no-mtf' branch, but this may change
+in the near future.
+
+Maintainer:
+Robin Burchell <robin+nemo@viroteck.net>
+
+Former contributors:
+Connie Berardi <connie.berardi@intel.com>
+Kaitlin Rupert <kaitlin.rupert@intel.com>
