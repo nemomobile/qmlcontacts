@@ -37,6 +37,11 @@ int main(int argc, char **argv)
     view.setSource(QUrl::fromLocalFile("main.qml"));
     view.setWindowTitle(QObject::tr("Contacts"));
 
+    if (QFile::exists("main.qml"))
+        view.setSource(QUrl::fromLocalFile("main.qml"));
+    else
+        view.setSource(QUrl::fromLocalFile("/usr/share/qmlcontacts/main.qml"));
+
     view.showFullScreen();
 
     return a.exec();
