@@ -36,7 +36,7 @@ int main(int argc, char **argv)
 
     view.setSource(QUrl::fromLocalFile("main.qml"));
 
-    view.show();
+    view.showFullScreen();
 
     return a.exec();
 }
