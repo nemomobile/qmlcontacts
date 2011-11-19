@@ -31,11 +31,7 @@ Item {
 
     ListView {
         id: cardListView
-        anchors.top: groupedViewPortrait.top
-        anchors.right: groupedViewPortrait.right
-        anchors.left: groupedViewPortrait.left
-        height: groupedViewPortrait.height
-        width: groupedViewPortrait.width
+        anchors.fill: parent
         snapMode: ListView.SnapToItem
         highlightFollowsCurrentItem: false
         focus: true
@@ -53,98 +49,35 @@ Item {
             }
         }
 
-    section.property: "firstcharacter"
-    section.criteria: ViewSection.FirstCharacter
-    section.delegate: Item {
-        width: cardListView.width
-        height: 30
-        id: sectionBackground
-        Label {
-            //: If a contact isn't sorted under one of the values in a locale's alphabet, it is sorted under '#'
-            text: section.toUpperCase()
-            anchors.verticalCenter: sectionBackground.verticalCenter
-            anchors.right: sectionBackground.right
-            anchors.rightMargin: 30
-            smooth: true
-        }
-    }
-
-}
-
-FastScroll {
-    listView: cardListView
-}
-
-Binding {
-    target: emptyListView;
-    property: "opacity";
-    value: ((cardListView.count == 0) ? 1 : 0);
-}
-Binding {
-    target: cardListView;
-    property: "opacity";
-    value: ((cardListView.count > 0) ? 1 : 0);
-}
-
-    onPressAndHold:{
-        objectMenu.setPosition(x, y)
-        objectMenu.menuX = x
-        objectMenu.menuY = y
-        objectMenu.show()
-
-        //Set actionMenu model on each click because we need
-        //to check to see if the contact has been favorited
-        objectMenu.actionMenu.model = getActionMenuModel()
-    }
-
-/*
-    ModalContextMenu {
-        id: objectMenu
-
-        property int menuX
-        property int menuY
-
-        property alias actionMenu: actionObjectMenu
-
-        content: ActionMenu {
-            id: actionObjectMenu
-
-            model: getActionMenuModel()
-
-            onTriggered: {
-                if(index == 0) { window.addPage(myAppDetails);}
-                if(index == 3) { peopleModel.toggleFavorite(window.currentContactId); }
-                if(index == 1) { shareMenu.setPosition(objectMenu.menuX, objectMenu.menuY + 30);
-                                 shareMenu.show();  }
-                if(index == 2) { window.addPage(myAppEdit);}
-                if(index == 4) { confirmDelete.show(); }
-                objectMenu.hide();
+        section.property: "firstcharacter"
+        section.criteria: ViewSection.FirstCharacter
+        section.delegate: Item {
+            width: cardListView.width
+            height: 30
+            id: sectionBackground
+            Label {
+                //: If a contact isn't sorted under one of the values in a locale's alphabet, it is sorted under '#'
+                text: section.toUpperCase()
+                anchors.verticalCenter: sectionBackground.verticalCenter
+                anchors.right: sectionBackground.right
+                anchors.rightMargin: 30
+                smooth: true
             }
         }
     }
 
-    ModalContextMenu {
-        id: shareMenu
-
-        content: ActionMenu {
-            id: actionShareMenu
-
-            model: [contextEmail]
-
-            onTriggered: {
-                if(index == 0) {
-                    var filename = currentContactName.replace(" ", "_");
-                    //REVISIT: Non-ASCII characters are corrupted when calling
-                    //meego-qml-launcher via the command-line.
-                    //peopleModel.exportContact(window.currentContactId,  "/tmp/vcard_"+filename+".vcf");
-                    peopleModel.exportContact(window.currentContactId,  "/tmp/vcard.vcf");
-                    shareMenu.visible = false;
-                    //var cmd = "/usr/bin/meego-qml-launcher --app meego-app-email --fullscreen --cmd openComposer --cdata \"file:///tmp/vcard_"+filename+".vcf\"";
-                    var cmd = "/usr/bin/meego-qml-launcher --app meego-app-email --fullscreen --cmd openComposer --cdata \"file:///tmp/vcard.vcf\"";
-                    appModel.launch(cmd);
-                }
-            }
-        }
+    FastScroll {
+        listView: cardListView
     }
-*/
+
+    Binding {
+        target: emptyListView;
+        property: "opacity";
+        value: ((cardListView.count == 0) ? 1 : 0);
+    }
+    Binding {
+        target: cardListView;
+        property: "opacity";
+        value: ((cardListView.count > 0) ? 1 : 0);
+    }
 }
