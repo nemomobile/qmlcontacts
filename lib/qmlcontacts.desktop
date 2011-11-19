@@ -2,5 +2,5 @@
 Type=Application
 Name=People
 Icon=icons-Applications-people
-Exec=/usr/bin/qmlcontacts
+Exec=/usr/bin/qmlcontacts -fullscreen
 Comment=Nemo People Application

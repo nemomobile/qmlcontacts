@@ -12,6 +12,8 @@
 #include <QDeclarativeContext>
 #include <QDeclarativeView>
 #include <QFile>
+#include <QDebug>
+
 #include <seasidepeoplemodel.h>
 #include <seasideproxymodel.h>
 #include <seasideperson.h>
@@ -43,7 +45,13 @@ int main(int argc, char **argv)
     else
         view.setSource(QUrl::fromLocalFile("/usr/share/qmlcontacts/main.qml"));
 
-    view.showFullScreen();
+    if (QCoreApplication::arguments().contains("-fullscreen")) {
+        qDebug() << Q_FUNC_INFO << "Starting in fullscreen mode";
+        view.showFullScreen();
+    } else {
+        qDebug() << Q_FUNC_INFO << "Starting in windowed mode";
+        view.show();
+    }
 
     return a.exec();
 }
