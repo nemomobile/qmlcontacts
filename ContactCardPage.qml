@@ -47,24 +47,25 @@ Page {
     Loader {
         id: contactEditor
 
+        function freeSheet() {
+            console.log("SHEET: freeing resources")
+            contactEditor.source = ""
+        }
+
         function openSheet() {
-            if (sheetUnloadTimer.running)
+            if (sheetUnloadTimer.running) {
                 sheetUnloadTimer.stop()
+                freeSheet()
+            }
 
             var sourceUri = Qt.resolvedUrl("EditContactSheet.qml")
-            if (contactEditor.source != sourceUri)
-                contactEditor.source = sourceUri;
-            else
-                item.open(); // already connected, just reopen it
+            contactEditor.source = sourceUri;
         }
 
         Timer {
             id: sheetUnloadTimer
-            interval: 60000 // leave it a while in case they want it again
-            onTriggered: {
-                console.log("SHEET: freeing resources")
-                contactEditor.source = ""
-            }
+            interval: 3000 // long enough for the animation to run
+            onTriggered: freeSheet();
         }
 
         function closeSheet() {

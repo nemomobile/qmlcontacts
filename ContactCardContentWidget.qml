@@ -59,6 +59,7 @@ Flickable {
 
         Column {
             id: phones
+//            visible: contact.phoneNumbers.count > 0
 
             Label {
                 text: headerPhone
