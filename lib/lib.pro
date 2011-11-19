@@ -11,8 +11,6 @@ CONFIG += qt \
         link_pkconfig
 
 MOBILITY += contacts versit
-
-
 PKGCONFIG += icu-uc icu-i18n mlite
 
 OBJECTS_DIR = .obj
@@ -25,11 +23,5 @@ MOBILITY = contacts versit
 SOURCES += \
     main.cpp
 
-system(sed 's/__library_version__/$${VERSION}/g' meegocontacts.pc.in > meegocontacts.pc)
-
-target.path = $$INSTALL_ROOT/usr/lib
+target.path = $$INSTALL_ROOT/usr/bin
 INSTALLS += target
-
-pkgconfig.files += meegocontacts.pc
-pkgconfig.path += $$INSTALL_ROOT/usr/lib/pkgconfig
-INSTALLS += pkgconfig
