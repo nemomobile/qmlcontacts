@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=People
+Icon=icons-Applications-people
+Exec=/usr/bin/qmlcontacts
+Comment=Nemo People Application
