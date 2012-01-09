@@ -36,8 +36,6 @@ int main(int argc, char **argv)
     rootContext->setContextProperty(QString::fromLatin1("localeUtils"),
                                     LocaleUtils::self());
 
-
-    view.setSource(QUrl::fromLocalFile("main.qml"));
     view.setWindowTitle(QObject::tr("Contacts"));
 
     if (QFile::exists("main.qml"))
