@@ -8,6 +8,7 @@ Sheet {
 
     content: Flickable {
         anchors.fill: parent
+        //contentHeight: newContact.childrenRect.height
         PortraitEditorView {
             id: newContact
         }

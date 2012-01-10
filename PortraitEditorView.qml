@@ -11,20 +11,12 @@ import com.nokia.meego 1.0
 import MeeGo.App.Contacts 0.1
 import "PageManager.js" as PageManager
 
-Column {
+Item {
     id: newContactPage
-
+    anchors { leftMargin: 20; rightMargin: 20; fill:parent }
     property Person contact: PageManager.createNextPerson()
-    property string defaultFirstName: qsTr("First name")
-    property string defaultLastName: qsTr("Last name")
-    property string defaultCompany: qsTr("Company")
-    property string defaultNote: qsTr("Enter note")
-    property string headerNote: qsTr("Note")
 
-    property string phoneLabel: qsTr("Phone numbers")
-    property string addPhones: qsTr("Add number")
-
-    function contactSave(){
+    function contactSave() {
         contact.firstName = data_first.text
         contact.lastName = data_last.text
         contact.phoneNumbers = phoneModel.dataList()
@@ -35,76 +27,58 @@ Column {
             console.log("[contactSave] Unable to create new contact due to missing info");
     }
 
-    Column {
-        anchors.left: parent.left
-        anchors.right: parent.right
-        TextField {
-            id: data_first
-            placeholderText: defaultFirstName
-            text: contact.firstName
-        }
-        TextField {
-            id: data_last
-            placeholderText: defaultLastName
-            text: contact.lastName
-        }
-        TextField {
-            id: data_company
-            placeholderText: defaultCompany
-            text: contact.companyName
+    Rectangle {
+        id: avatarRect
+        width: height
+        anchors { top: parent.top; topMargin: 20; left:parent.left; bottom: data_last.bottom }
+        Image {
+            id: data_avatar
+            source: (contact.avatarPath == "undefined") ? "image://theme/icon-m-telephony-contact-avatar" : contact.avatarPath
+            fillMode: Image.PreserveAspectCrop
+            anchors.fill: parent
         }
     }
 
+    TextField {
+        id: data_first
+        placeholderText: qsTr("First name")
+        text: contact.firstName
+        anchors { top: avatarRect.top; right: parent.right; left: avatarRect.right; leftMargin: 20 }
+    }
+    TextField {
+        id: data_last
+        placeholderText: qsTr("Last name")
+        text: contact.lastName
+        anchors { top: data_first.bottom; topMargin:10; right: parent.right; left: data_first.left }
+    }
+
     Column {
-        id: phones
-
-        Label {
-            text: phoneLabel
-            font.bold: true
-        }
-
+        anchors { top: data_last.bottom; topMargin: 20 }
+        width: parent.width
+        spacing: 10
         Repeater {
-            id: detailsPhone
+            id: repeaterPhoneNumbers
             model: EditableModel {
                 id: phoneModel
                 sourceList: contact.phoneNumbers
             }
-            delegate: Row {
-                TextField {
-                    id: data_phone
-                    text: model.data
-                }
-
-                Button {
-                    text: "save"
-                    onClicked: phoneModel.setValue(model.index, data_phone.text)
-                }
+            delegate: TextField {
+                id: data_phone
+                placeholderText: qsTr("Phone number")
+                width: parent.width
+                text: (contact.phoneNumbers.count > 0) ? contact.phoneNumbers.at(index) : model.data
+                onTextChanged: phoneModel.setValue(index, data_phone.text)
+                Component.onCompleted: console.log("Row at " + index)
             }
-        }
-
-        Button {
-            text: addPhones
-            onClicked: {
-                phoneModel.addNew()
-            }
+            Component.onCompleted: phoneModel.addNew()
         }
     }
 
-    Column {
-        id: notesHeader
-
-        Label {
-            id: label_notes
-            text: headerNote
-            font.bold: true
-        }
-
-
-        TextField{
-            id: data_notes
-            placeholderText: defaultNote
-            width:540
-            height: 300
+    Button {
+        text: qsTr("Add phone number")
+        anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom; bottomMargin: 20 }
+        onClicked: {
+            phoneModel.addNew()
         }
     }
 }
