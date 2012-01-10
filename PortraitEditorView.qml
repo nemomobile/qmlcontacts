@@ -61,16 +61,15 @@ Item {
             model: EditableModel {
                 id: phoneModel
                 sourceList: contact.phoneNumbers
+                Component.onCompleted: { if (contact.phoneNumbers.count) console.log("No need to add phone number"); else phoneModel.addNew(); } //FIXME - this does not seem to work
             }
             delegate: TextField {
                 id: data_phone
                 placeholderText: qsTr("Phone number")
                 width: parent.width
-                text: (contact.phoneNumbers.count > 0) ? contact.phoneNumbers.at(index) : model.data
+                text: model.data
                 onTextChanged: phoneModel.setValue(index, data_phone.text)
-                Component.onCompleted: console.log("Row at " + index)
             }
-            Component.onCompleted: phoneModel.addNew()
         }
     }
 
