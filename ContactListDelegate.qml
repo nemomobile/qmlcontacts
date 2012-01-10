@@ -38,7 +38,7 @@ Item {
         }
         onStatusChanged: {
             if(photo.status == Image.Error || photo.status == Image.Null){
-                photo.source = "image://theme/meegotouch-avatar-placeholder-background"
+                photo.source = "image://theme/icon-m-telephony-contact-avatar"
             }
         }
     }
