@@ -21,7 +21,7 @@ Page {
         */
         content: Image {
             id: avatar
-            source: contact.avatarPath
+            source: (contact.avatarPath == "undefined") ? "image://theme/icon-m-telephony-contact-avatar" : contact.avatarPath
         }
     }
 

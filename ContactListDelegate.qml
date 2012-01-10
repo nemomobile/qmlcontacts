@@ -30,7 +30,7 @@ Item {
         clip: true
         width: 64
         height: 64
-        source: model.person.avatarPath
+        source: (model.person.avatarPath == "undefined") ? "image://theme/icon-m-telephony-contact-avatar" : model.person.avatarPath
         anchors {
             left: parent.left;
             leftMargin: 10
