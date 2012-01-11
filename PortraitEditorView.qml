@@ -27,7 +27,7 @@ Item {
             console.log("[contactSave] Unable to create new contact due to missing info");
     }
 
-    Rectangle {
+    Item {
         id: avatarRect
         width: height
         anchors { top: parent.top; topMargin: 20; left:parent.left; bottom: data_last.bottom }

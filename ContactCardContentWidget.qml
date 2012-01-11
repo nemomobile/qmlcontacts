@@ -9,6 +9,7 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import MeeGo.App.Contacts 0.1
+import "UIConstants.js" as UI
 
 Flickable {
     id: detailViewPortrait
@@ -43,26 +44,79 @@ Flickable {
         return newStr;
     }
 
-    Column {
+    Item {
         id: detailsList
-        spacing: 1
-        anchors { fill: parent; leftMargin:20; rightMargin:20; }
+        anchors {
+            left: parent.left; leftMargin:UI.defaultMargin;
+            right: parent.right; rightMargin:UI.defaultMargin;
+            top: parent.top; topMargin: UI.defaultMargin
+        }
+        Item {
+            id: avatarRect
+            width: height
+            anchors { top: parent.top; topMargin: UI.defaultMargin; left:parent.left; bottom: labelLast.bottom }
+            Image {
+                id: imageAvatar
+                source: (contact.avatarPath == "undefined") ? "image://theme/icon-m-telephony-contact-avatar" : contact.avatarPath
+                fillMode: Image.PreserveAspectCrop
+                anchors.fill: parent
+            }
+        }
+
+        Label {
+            id: labelFirst
+            text: contact.firstName
+            font.bold: true
+            font.pixelSize: UI.fontSizeBig //FIXME - make it depend on lenght somehow
+            anchors { top: avatarRect.top; left: avatarRect.right; leftMargin: 20 }
+        }
+        Label {
+            id: labelLast
+            text: contact.lastName
+            font.bold: true
+            font.pixelSize: UI.fontSizeBig //FIXME - make it depend on lenght somehow
+            anchors { top: labelFirst.bottom; topMargin:10; left: labelFirst.left }
+        }
 
         Column {
             id: phones
             visible: contact.phoneNumbers.length > 0
+            spacing: UI.defaultMargin
+            anchors { left: parent.left; right: parent.right; top: avatarRect.bottom; topMargin: 40}
 
+            Label {
+                text: qsTr("Phone")
+                font.bold: true
+                font.pixelSize: UI.fontSizeBig
+            }
             Repeater{
                 id: detailsPhone
                 model: contact.phoneNumbers
 
-
-                Button {
-                    id: data_phone
-                    text: getTruncatedString(modelData, 25)
+                Rectangle {
+                    anchors { left: parent.left; right: parent.right }
+                    height: childrenRect.height
+                    color: "transparent"
+                    Label {
+                        text: modelData // getTruncatedString(modelData, 25) //FIXME - is this needed?
+                        font.pixelSize: UI.fontSizeMed
+                        anchors { left: parent.left; }
+                    }
+                    ButtonRow {
+                        width: 140
+                        anchors { right: parent.right }
+                        exclusive: false
+                        Button {
+                            iconSource: "image://theme/icon-m-toolbar-send-chat"; height: 70;
+                            onClicked: console.log("TODO: Make call to " + contact.firstName)
+                        }
+                        Button {
+                            iconSource: "image://theme/icon-m-toolbar-send-sms";  height: 70;
+                            onClicked: console.log("TODO: Send SMS to " + contact.firstName)
+                        }
+                    }
                 }
             }
-
         }
     }
 }

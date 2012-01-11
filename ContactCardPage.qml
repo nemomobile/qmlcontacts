@@ -9,7 +9,7 @@ Page {
 
     PageHeader {
         id: header
-        text: contact.displayLabel
+        text: qsTr("Contact details") // contact.displayLabel
 
         /*
          * TODO: overlay favorite icon over avatar
@@ -19,10 +19,13 @@ Page {
             source: contact.favorite ? "image://themedimage/icons/actionbar/favorite-selected" : "image://themedimage/icons/actionbar/favorite"
         }
         */
+
+        /*
         content: Image {
             id: avatar
             source: (contact.avatarPath == "undefined") ? "image://theme/icon-m-telephony-contact-avatar" : contact.avatarPath
         }
+        */
     }
 
     ContactCardContentWidget {
@@ -56,7 +59,7 @@ Page {
     Menu {
         id: myMenu
         MenuLayout {
-            MenuItem { text: "Edit"; onClicked: PageManager.openContactEditor(detailViewPage, contact.id) }
+            MenuItem { text: "Delete"; onClicked: console.log("TODO - delete contact action") }
         }
     }
 }
