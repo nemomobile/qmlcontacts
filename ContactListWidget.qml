@@ -61,6 +61,13 @@ Item {
                 anchors.rightMargin: 30
                 smooth: true
             }
+            Image {
+                anchors.right: sectionBackground.left
+                anchors.left: parent.left
+                anchors.verticalCenter: sectionBackground.verticalCenter
+                anchors.rightMargin: 24
+                source: "image://theme/meegotouch-groupheader" + (theme.inverted ? "-inverted" : "") + "-background"
+            }
         }
     }
 

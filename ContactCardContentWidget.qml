@@ -19,8 +19,6 @@ Flickable {
 
     property Person contact
 
-    property string headerPhone: qsTr("Phone numbers")
-
     //: Truncate string - used when a string is too long for the display area
     property string stringTruncater: qsTr("…")
 
@@ -48,27 +46,16 @@ Flickable {
     Column {
         id: detailsList
         spacing: 1
-        anchors { fill: parent; leftMargin:10; rightMargin:10;}
-
-        Label {
-            id: company
-            width: parent.width
-            text: contact.companyName
-            elide: Text.ElideRight
-        }
+        anchors { fill: parent; leftMargin:20; rightMargin:20; }
 
         Column {
             id: phones
             visible: contact.phoneNumbers.length > 0
 
-            Label {
-                text: headerPhone
-                font.bold: true
-            }
-
             Repeater{
                 id: detailsPhone
                 model: contact.phoneNumbers
+
 
                 Button {
                     id: data_phone

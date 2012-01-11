@@ -40,7 +40,15 @@ Page {
             onClicked: pageStack.pop()
         }
         ToolIcon {
-            iconId: "icon-m-toolbar-view-menu";
+            iconId: "icon-m-toolbar-edit"
+            onClicked: { PageManager.openContactEditor(detailViewPage, contact.id) }
+        }
+        ToolIcon {
+            iconId: (contact.favorite) ? "icon-m-toolbar-favorite-unmark" : "icon-m-toolbar-favorite-mark"
+            onClicked: console.log("TODO - mark/unmark as favorite") //TODO
+        }
+        ToolIcon {
+            iconId: "icon-m-toolbar-view-menu"
             onClicked: (myMenu.status == DialogStatus.Closed) ? myMenu.open() : myMenu.close()
         }
     }
