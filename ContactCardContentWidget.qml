@@ -107,11 +107,11 @@ Flickable {
                         anchors { right: parent.right }
                         exclusive: false
                         Button {
-                            iconSource: "image://theme/icon-m-toolbar-send-chat"; height: 70;
+                            iconSource: "image://theme/icon-m-telephony-incoming-call"; height: 64;
                             onClicked: console.log("TODO: Make call to " + contact.firstName)
                         }
                         Button {
-                            iconSource: "image://theme/icon-m-toolbar-send-sms";  height: 70;
+                            iconSource: "image://theme/icon-m-toolbar-send-sms";  height: 64;
                             onClicked: console.log("TODO: Send SMS to " + contact.firstName)
                         }
                     }

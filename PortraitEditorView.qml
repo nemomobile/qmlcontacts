@@ -10,10 +10,11 @@ import QtQuick 1.1
 import com.nokia.meego 1.0
 import MeeGo.App.Contacts 0.1
 import "PageManager.js" as PageManager
+import "UIConstants.js" as UI
 
 Item {
     id: newContactPage
-    anchors { leftMargin: 20; rightMargin: 20; fill:parent }
+    anchors { leftMargin: UI.defaultMargin; rightMargin: UI.defaultMargin; fill:parent }
     property Person contact: PageManager.createNextPerson()
 
     function contactSave() {
@@ -27,23 +28,25 @@ Item {
             console.log("[contactSave] Unable to create new contact due to missing info");
     }
 
-    Item {
+
+    Button {
         id: avatarRect
         width: height
-        anchors { top: parent.top; topMargin: 20; left:parent.left; bottom: data_last.bottom }
+        anchors { top: parent.top; topMargin: UI.defaultMargin; left:parent.left; bottom: data_last.bottom }
+        onClicked: { PageManager.openAvatarPicker(newContactPage, contact.id) }
         Image {
             id: data_avatar
             source: (contact.avatarPath == "undefined") ? "image://theme/icon-m-telephony-contact-avatar" : contact.avatarPath
+            width: parent.width - 10
             fillMode: Image.PreserveAspectCrop
-            anchors.fill: parent
+            anchors.centerIn: parent
         }
     }
-
     TextField {
         id: data_first
         placeholderText: qsTr("First name")
         text: contact.firstName
-        anchors { top: avatarRect.top; right: parent.right; left: avatarRect.right; leftMargin: 20 }
+        anchors { top: avatarRect.top; right: parent.right; left: avatarRect.right; leftMargin: UI.defaultMargin }
     }
     TextField {
         id: data_last
@@ -53,7 +56,7 @@ Item {
     }
 
     Column {
-        anchors { top: data_last.bottom; topMargin: 20 }
+        anchors { top: data_last.bottom; topMargin: UI.defaultMargin }
         width: parent.width
         spacing: 10
         Repeater {
@@ -75,7 +78,7 @@ Item {
 
     Button {
         text: qsTr("Add phone number")
-        anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom; bottomMargin: 20 }
+        anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom; bottomMargin: UI.defaultMargin }
         onClicked: {
             phoneModel.addNew()
         }
