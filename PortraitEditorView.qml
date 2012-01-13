@@ -36,8 +36,11 @@ Item {
         onClicked: { PageManager.openAvatarPicker(newContactPage, contact.id) }
         Image {
             id: data_avatar
-            source: (contact.avatarPath == "undefined") ? "image://theme/icon-m-telephony-contact-avatar" : contact.avatarPath
+            source: (contact.avatarPath == "undefined") ? "avatars/icon-contacts-default-avatar.svg" : contact.avatarPath
             width: parent.width - 10
+            height: parent.height - 10
+            sourceSize.width: width
+            sourceSize.height: height
             fillMode: Image.PreserveAspectCrop
             anchors.centerIn: parent
         }
