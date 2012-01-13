@@ -9,20 +9,17 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import MeeGo.App.Contacts 0.1
+import "UIConstants.js" as UI
 
 Item {
     id: contactCardPortrait
 
-    height: photo.height + itemMargins
+    height: photo.height + UI.listItemMargin
     width: parent.width
     anchors.right: parent.right
 
-    property int itemMargins: 10
-
     signal clicked
 
-    // TODO: avatars should be centralised so we have error behaviour in both
-    // list and card
     LimitedImage {
         id: photo
         fillMode: Image.PreserveAspectCrop
@@ -30,7 +27,7 @@ Item {
         clip: true
         width: 64
         height: 64
-        source: (model.person.avatarPath == "undefined") ? "image://theme/icon-m-telephony-contact-avatar" : model.person.avatarPath
+        source: (model.person.avatarPath == "undefined") ? "avatars/icon-contacts-default-avatar.svg" : model.person.avatarPath
         anchors {
             left: parent.left;
             leftMargin: 10
