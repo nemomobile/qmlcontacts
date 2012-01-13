@@ -17,8 +17,8 @@ Sheet {
         BorderImage {
             source: "image://theme/meegotouch-button-background-pressed"
             width: UI.avatarGridSize; height: UI.avatarGridSize
-            border.left:  20; border.top:    20
-            border.right: 20; border.bottom: 20
+            border.left:  UI.highlightButtonMargins; border.top:    UI.highlightButtonMargins
+            border.right: UI.highlightButtonMargins; border.bottom: UI.highlightButtonMargins
         }
     }
 
@@ -37,7 +37,6 @@ Sheet {
             id: bgRect
             width: UI.avatarGridSize
             height: UI.avatarGridSize
-            //color: "white"
             property alias avatarPath : delegateImage.source
             Image {
                 id: delegateImage
