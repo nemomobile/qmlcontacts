@@ -5,6 +5,7 @@ Sheet {
     id: newContactViewPage
     acceptButtonText: "Save"
     rejectButtonText: "Cancel"
+    property alias contact: newContact.contact
 
     content: Flickable {
         anchors.fill: parent

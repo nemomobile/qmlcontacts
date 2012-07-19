@@ -57,7 +57,7 @@ Flickable {
             anchors { top: parent.top; topMargin: UI.defaultMargin; left:parent.left; bottom: labelLast.bottom }
             Image {
                 id: imageAvatar
-                source: (model.contact.thumbnail == "undefined") ? "avatars/icon-contacts-default-avatar.svg" : model.contact.thumbnail
+                source: (contact.thumbnail == "undefined") ? "avatars/icon-contacts-default-avatar.svg" : contact.thumbnail
                 sourceSize.width:  paintedWidth
                 sourceSize.height: paintedHeight
                 fillMode: Image.PreserveAspectCrop

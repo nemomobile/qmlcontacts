@@ -1,6 +1,7 @@
 import QtQuick 1.1
 import QtMobility.contacts 1.1
 import com.nokia.meego 1.0
+import "constants.js" as Constants
 
 Page {
     id: detailViewPage
@@ -9,22 +10,6 @@ Page {
     PageHeader {
         id: header
         text: qsTr("Contact details") // contact.displayLabel
-
-        /*
-         * TODO: overlay favorite icon over avatar
-        Image {
-            id: icon_favorite
-            anchors{right: parent.right;  rightMargin: 10}
-            source: contact.favorite ? "image://themedimage/icons/actionbar/favorite-selected" : "image://themedimage/icons/actionbar/favorite"
-        }
-        */
-
-        /*
-        content: Image {
-            id: avatar
-            source: (contact.avatarPath == "undefined") ? "image://theme/icon-m-telephony-contact-avatar" : contact.avatarPath
-        }
-        */
     }
 
     ContactCardContentWidget {
@@ -43,10 +28,17 @@ Page {
         }
         ToolIcon {
             iconId: "icon-m-toolbar-edit"
-            onClicked: { PageManager.openContactEditor(detailViewPage, contact.id) }
+            onClicked: {
+                Constants.loadSingleton("ContactEditorSheet.qml", detailViewPage,
+                    function(editor) {
+                        editor.contact = contact
+                        editor.open();
+                    }
+                );
+            }
         }
         ToolIcon {
-            iconId: (contact.favorite) ? "icon-m-toolbar-favorite-unmark" : "icon-m-toolbar-favorite-mark"
+            iconId: (contact.favorite.favorite) ? "icon-m-toolbar-favorite-unmark" : "icon-m-toolbar-favorite-mark"
             onClicked: console.log("TODO - mark/unmark as favorite") //TODO
         }
         ToolIcon {
