@@ -38,8 +38,13 @@ Page {
             }
         }
         ToolIcon {
-            iconId: (contact.favorite.favorite) ? "icon-m-toolbar-favorite-unmark" : "icon-m-toolbar-favorite-mark"
-            onClicked: console.log("TODO - mark/unmark as favorite") //TODO
+            iconId: contact.favorite.favorite ? "icon-m-toolbar-favorite-mark" : "icon-m-toolbar-favorite-unmark"
+            onClicked: {
+                contact.favorite.favorite = !contact.favorite.favorite
+
+                // TODO: delay saving to save CPU on repeated toggling
+                app.contactListModel.saveContact(detailViewPage.contact)
+            }
         }
         ToolIcon {
             iconId: "icon-m-toolbar-view-menu"
