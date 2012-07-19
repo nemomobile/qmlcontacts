@@ -18,10 +18,10 @@ Page {
         anchors.bottom: parent.bottom
         onAddNewContact: {
             Constants.loadSingleton("ContactEditorSheet.qml", groupedViewPage,
-                function(editor) {
-                    editor.open();
-                }
-            );
+            function(editor) {
+                    editor.contact = Qt.createQmlObject("import QtMobility.contacts 1.1; Contact {}", editor);
+                    editor.open()
+            })
         }
 
         model: app.contactListModel
@@ -33,6 +33,7 @@ Page {
             onClicked: {
                 Constants.loadSingleton("ContactEditorSheet.qml", groupedViewPage,
                     function(editor) {
+                        editor.contact = Qt.createQmlObject("import QtMobility.contacts 1.1; Contact {}", editor);
                         editor.open();
                     }
                 );
