@@ -50,7 +50,17 @@ Page {
     Menu {
         id: myMenu
         MenuLayout {
-            MenuItem { text: "Delete"; onClicked: console.log("TODO - delete contact action") }
+            MenuItem {
+                text: "Delete";
+                onClicked: {
+                    Constants.loadSingleton("DeleteContactDialog.qml", detailViewPage,
+                        function(deleteDialog) {
+                            deleteDialog.contact = contact
+                            deleteDialog.open();
+                        }
+                    );
+                }
+            }
         }
     }
 }
