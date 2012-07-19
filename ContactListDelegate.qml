@@ -13,7 +13,7 @@ import "UIConstants.js" as UI
 Item {
     id: contactCardPortrait
 
-    height: photo.height + UI.listItemMargin
+    height: UiConstants.ListItemHeightDefault
     width: parent.width
     anchors.right: parent.right
 
@@ -24,12 +24,12 @@ Item {
         fillMode: Image.PreserveAspectCrop
         smooth: true
         clip: true
-        width: 64
-        height: 64
+        width: UiConstants.ListItemHeightSmall
+        height: UiConstants.ListItemHeightSmall
         source: (model.contact.thumbnail == "undefined") ? "avatars/icon-contacts-default-avatar.svg" : model.contact.thumbnail
         anchors {
             left: parent.left;
-            leftMargin: 10
+            leftMargin: UiConstants.DefaultMargin
             verticalCenter: parent.verticalCenter
         }
         onStatusChanged: {
@@ -45,7 +45,7 @@ Item {
         anchors {
             left: photo.right;
             verticalCenter: parent.verticalCenter;
-            leftMargin: photo.height/8
+            leftMargin: UiConstants.DefaultMargin
         }
         smooth: true
     }
