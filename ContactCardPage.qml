@@ -9,7 +9,7 @@ Page {
 
     PageHeader {
         id: header
-        text: qsTr("Contact details") // contact.displayLabel
+        text: contact.displayLabel
     }
 
     ContactCardContentWidget {
