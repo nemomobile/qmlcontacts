@@ -3,7 +3,9 @@ import com.nokia.meego 1.0
 
 Rectangle {
     id: detailHeader
-    height: 72;
+
+    // TODO: landscape
+    height: UiConstants.HeaderDefaultHeightPortrait;
     anchors.left: parent.left
     anchors.right: parent.right
     anchors.top: parent.top
@@ -16,19 +18,20 @@ Rectangle {
         width: childrenRect.width
         height: childrenRect.height
         anchors.left: parent.left
-        anchors.leftMargin: 10
+        anchors.leftMargin: children.count > 0 ? UiConstants.DefaultMargin : 0
         anchors.verticalCenter: parent.verticalCenter
     }
 
     Label {
         id: label
         anchors.left: othercontent.right
-        anchors.leftMargin: 10
+        anchors.leftMargin: UiConstants.DefaultMargin
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
         elide: Text.ElideRight
         smooth: true
         color: "white"
+        font: UiConstants.HeaderFont
     }
 }
 
