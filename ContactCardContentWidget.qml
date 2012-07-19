@@ -9,7 +9,6 @@
 import QtQuick 1.1
 import QtMobility.contacts 1.1
 import com.nokia.meego 1.0
-import "UIConstants.js" as UI
 
 Flickable {
     id: detailViewPortrait
@@ -47,14 +46,14 @@ Flickable {
     Item {
         id: detailsList
         anchors {
-            left: parent.left; leftMargin:UI.defaultMargin;
-            right: parent.right; rightMargin:UI.defaultMargin;
-            top: parent.top; topMargin: UI.defaultMargin
+            left: parent.left; leftMargin: UiConstants.DefaultMargin;
+            right: parent.right; rightMargin: UiConstants.DefaultMargin;
+            top: parent.top; topMargin:  UiConstants.DefaultMargin
         }
         Item {
             id: avatarRect
             width: height
-            anchors { top: parent.top; topMargin: UI.defaultMargin; left:parent.left; bottom: labelLast.bottom }
+            anchors { top: parent.top; topMargin: UiConstants.DefaultMargin; left:parent.left; bottom: labelLast.bottom }
             Image {
                 id: imageAvatar
                 source: (contact.thumbnail == "undefined") ? "avatars/icon-contacts-default-avatar.svg" : contact.thumbnail
@@ -69,27 +68,27 @@ Flickable {
             id: labelFirst
             text: contact.name.firstName
             font.bold: true
-            font.pixelSize: UI.fontSizeBig //FIXME - make it depend on lenght somehow
+            font.pixelSize: 44 //FIXME - make it depend on lenght somehow
             anchors { top: avatarRect.top; left: avatarRect.right; leftMargin: 20 }
         }
         Label {
             id: labelLast
             text: contact.name.lastName
             font.bold: true
-            font.pixelSize: UI.fontSizeBig //FIXME - make it depend on lenght somehow
+            font.pixelSize: 44 //FIXME - make it depend on lenght somehow
             anchors { top: labelFirst.bottom; topMargin:10; left: labelFirst.left }
         }
 
         Column {
             id: phones
             visible: contact.phoneNumbers.length > 0
-            spacing: UI.defaultMargin
+            spacing: UiConstants.DefaultMargin
             anchors { left: parent.left; right: parent.right; top: avatarRect.bottom; topMargin: 40}
 
             Label {
                 text: qsTr("Phone")
                 font.bold: true
-                font.pixelSize: UI.fontSizeBig
+                font.pixelSize: 44
             }
             Repeater{
                 id: detailsPhone
@@ -101,7 +100,7 @@ Flickable {
                     color: "transparent"
                     Label {
                         text: modelData // getTruncatedString(modelData, 25) //FIXME - is this needed?
-                        font.pixelSize: UI.fontSizeMed
+                        font.pixelSize: 36
                         anchors { left: parent.left; }
                     }
                     ButtonRow {

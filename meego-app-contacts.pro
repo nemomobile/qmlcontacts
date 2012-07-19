@@ -1,4 +1,4 @@
-include(common.pri)
+VERSION = 0.3.0
 PROJECT_NAME = qmlcontacts
 TEMPLATE = aux
 CONFIG += ordered mobility

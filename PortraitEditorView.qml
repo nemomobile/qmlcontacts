@@ -9,13 +9,12 @@
 import QtQuick 1.1
 import QtMobility.contacts 1.1
 import com.nokia.meego 1.0
-import "UIConstants.js" as UI
 import "constants.js" as Constants
 
 Item {
     id: newContactPage
     property Contact contact: Contact {}
-    anchors { leftMargin: UI.defaultMargin; rightMargin: UI.defaultMargin; fill:parent }
+    anchors { leftMargin: UiConstants.DefaultMargin; rightMargin: UiConstants.DefaultMargin; fill:parent }
 
     function contactSave() {
         newContactPage.contact.name.firstName = data_first.text
@@ -35,7 +34,7 @@ Item {
     Button {
         id: avatarRect
         width: height
-        anchors { top: parent.top; topMargin: UI.defaultMargin; left:parent.left; bottom: data_last.bottom }
+        anchors { top: parent.top; topMargin: UiConstants.DefaultMargin; left:parent.left; bottom: data_last.bottom }
         onClicked: { PageManager.openAvatarPicker(newContactPage, contact.id) }
         Image {
             id: data_avatar
@@ -52,7 +51,7 @@ Item {
         id: data_first
         placeholderText: qsTr("First name")
         text: contact.firstName
-        anchors { top: avatarRect.top; right: parent.right; left: avatarRect.right; leftMargin: UI.defaultMargin }
+        anchors { top: avatarRect.top; right: parent.right; left: avatarRect.right; leftMargin: UiConstants.DefaultMargin }
     }
     TextField {
         id: data_last
@@ -62,7 +61,7 @@ Item {
     }
 
     Column {
-        anchors { top: data_last.bottom; topMargin: UI.defaultMargin }
+        anchors { top: data_last.bottom; topMargin: UiConstants.DefaultMargin }
         width: parent.width
         spacing: 10
         Repeater {
@@ -84,7 +83,7 @@ Item {
 
     Button {
         text: qsTr("Add phone number")
-        anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom; bottomMargin: UI.defaultMargin }
+        anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom; bottomMargin: UiConstants.DefaultMargin }
         onClicked: {
             phoneModel.addNew()
         }
