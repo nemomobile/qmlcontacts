@@ -41,12 +41,23 @@ Item {
     Label {
         id: nameFirst
         text: model.contact.displayLabel
+        elide: Text.ElideRight
         anchors {
             left: photo.right;
+            right: favorite.visible ? favorite.left : parent.right
             verticalCenter: parent.verticalCenter;
             leftMargin: UiConstants.DefaultMargin
         }
         smooth: true
+    }
+
+    // TODO: only instantiate if required?
+    Image {
+        id: favorite
+        source: "image://theme/icon-m-toolbar-favorite-mark"
+        visible: contact.favorite.favorite
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
     }
 
     MouseArea {
