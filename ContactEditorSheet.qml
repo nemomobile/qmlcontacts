@@ -79,8 +79,13 @@ Sheet {
     onAccepted: saveContact();
 
     function saveContact() {
+        // work around a QML(?)/mobility bug: if we assign to contact.name.firstName,
+        // it seems to cause data.name.lastName to change, which resets the
+        // binding on lastName to data_last, which means we don't save the last
+        // name.
+        var last = data_last.text;
         contact.name.firstName = data_first.text
-        contact.name.lastName = data_last.text
+        contact.name.lastName = last
 
         // TODO: this isn't asynchronous
         app.contactListModel.saveContact(contact)
