@@ -7,12 +7,11 @@
  */
 
 import QtQuick 1.1
+import QtMobility.contacts 1.1
 import com.nokia.meego 1.0
-import MeeGo.App.Contacts 0.1
-import "PageManager.js" as PageManager
 
 PageStackWindow {
-    id: window 
+    id: app
     showToolBar: true;
 //    automaticBookSwitching: false 
 
@@ -48,72 +47,15 @@ PageStackWindow {
     property string labelEditView: qsTr("Edit contacts")
 
     //: If we are unable to get the contact name, use 'this contact' instead
-    property string contactname : (window.currentContactName ? window.currentContactName : qsTr("this contact"))
+    property string contactname : (app.currentContactName ? app.currentContactName : qsTr("this contact"))
     property string promptStr: qsTr("Are you sure you want to remove %1 from your contacts?").arg(contactname)
 
     property int animationDuration: 250
-
-//    bookMenuModel: [filterAll, filterFavorites];
-//    bookMenuPayload: [myAppAllContacts, myAppFavContacts];
-
-    /*
-    Dialog {
-        id:confirmDelete
-        title:  deleteConfirmation
-        content: Text {
-            id: text
-            wrapMode: Text.WordWrap
-            width: parent.width-60
-            text: promptStr
-            anchors {horizontalCenter: parent.horizontalCenter;
-                     verticalCenter: parent.verticalCenter}
-            smooth: true
-            opacity: 1
-        }
-
-
-       buttons: ButtonRow {
-         style: ButtonStyle { }
-           anchors.horizontalCenter: parent.horizontalCenter
-           Button {text: contextDelete; onClicked: myDialog.accept()}
-           Button {text: contextCancel; onClicked: myDialog.reject()}
-       }
-
-        onAccepted: {
-            peopleModel.deletePerson(window.currentContactId);
-//            window.switchBook(myAppAllContacts);
-        }
-    }
-    */
-
-    function setAllFilter(reload, setFilter) {
-//        window.pageStack.currentPage.pageTitle = labelGroupedView;
-        peopleModel.setFilter(PeopleModel.AllFilter, reload);
-
-        if (setFilter)
-            window.currentFilter = PeopleModel.AllFilter;
-    }
-
-    function setFavoritesFilter() {
-        peopleModel.setFilter(PeopleModel.FavoritesFilter);
-        window.currentFilter = PeopleModel.FavoritesFilter;
-//        window.pageStack.currentPage.pageTitle = filterFavorites;
-    }
 
     Loader{
         id: dialogLoader
         anchors.fill: parent
     }
-
-    /*
-    onBookMenuTriggered: {
-        if (bookMenuModel[index] == filterAll) {
-            setAllFilter(true, true);
-        } else if (bookMenuModel[index] == filterFavorites) {
-            setFavoritesFilter();
-        } 
-    }
-    */
 
     //Need empty page place holder for filtering
     Component {
@@ -126,21 +68,10 @@ PageStackWindow {
 
     initialPage: ContactListPage {}
 
-    PeopleModel{
-        id: peopleModel
-    }
-
-    ProxyModel{
-        id: proxyModel
-        Component.onCompleted:{
-            proxyModel.setModel(peopleModel); //Calls setSorting() on model
-        }
-    }
-
     ToolBar {
         anchors.bottom: parent.bottom
     }
 
-    Component.onCompleted: PageManager.initialize(peopleModel)
+    property ContactModel contactListModel: ContactModel {}
 }
 

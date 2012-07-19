@@ -1,11 +1,10 @@
 import QtQuick 1.1
+import QtMobility.contacts 1.1
 import com.nokia.meego 1.0
-import MeeGo.App.Contacts 0.1
-import "PageManager.js" as PageManager
 
 Page {
     id: detailViewPage
-    property Person contact: PageManager.createNextPerson()
+    property Contact contact
 
     PageHeader {
         id: header

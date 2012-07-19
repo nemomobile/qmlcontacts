@@ -1,8 +1,7 @@
 include(common.pri)
 PROJECT_NAME = qmlcontacts
-TEMPLATE = subdirs
+TEMPLATE = aux
 CONFIG += ordered mobility
-SUBDIRS += lib
 MOBILITY += contacts
 QT += declarative
 
@@ -13,8 +12,11 @@ OTHER_FILES += $${QML_FILES} $${JS_FILES}
 
 codefiles.files += $${QML_FILES} $${JS_FILES}
 codefiles.path += $$INSTALL_ROOT/usr/share/$${PROJECT_NAME}
-
 INSTALLS += codefiles
+
+desktop.files = $${PROJECT_NAME}.desktop
+desktop.path = $$INSTALL_ROOT/usr/share/applications
+INSTALLS += desktop
 
 TRANSLATIONS += *.qml
 dist.commands += rm -fR $${PROJECT_NAME}-$${VERSION} &&

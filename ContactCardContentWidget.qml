@@ -7,8 +7,8 @@
  */
 
 import QtQuick 1.1
+import QtMobility.contacts 1.1
 import com.nokia.meego 1.0
-import MeeGo.App.Contacts 0.1
 import "UIConstants.js" as UI
 
 Flickable {
@@ -18,7 +18,7 @@ Flickable {
     flickableDirection: Flickable.VerticalFlick
     clip: true
 
-    property Person contact
+    property Contact contact
 
     //: Truncate string - used when a string is too long for the display area
     property string stringTruncater: qsTr("…")
@@ -57,7 +57,7 @@ Flickable {
             anchors { top: parent.top; topMargin: UI.defaultMargin; left:parent.left; bottom: labelLast.bottom }
             Image {
                 id: imageAvatar
-                source: (contact.avatarPath == "undefined") ? "avatars/icon-contacts-default-avatar.svg" : contact.avatarPath
+                source: (model.contact.thumbnail == "undefined") ? "avatars/icon-contacts-default-avatar.svg" : model.contact.thumbnail
                 sourceSize.width:  paintedWidth
                 sourceSize.height: paintedHeight
                 fillMode: Image.PreserveAspectCrop
@@ -67,14 +67,14 @@ Flickable {
 
         Label {
             id: labelFirst
-            text: contact.firstName
+            text: contact.name.firstName
             font.bold: true
             font.pixelSize: UI.fontSizeBig //FIXME - make it depend on lenght somehow
             anchors { top: avatarRect.top; left: avatarRect.right; leftMargin: 20 }
         }
         Label {
             id: labelLast
-            text: contact.lastName
+            text: contact.name.lastName
             font.bold: true
             font.pixelSize: UI.fontSizeBig //FIXME - make it depend on lenght somehow
             anchors { top: labelFirst.bottom; topMargin:10; left: labelFirst.left }

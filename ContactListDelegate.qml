@@ -8,7 +8,6 @@
 
 import QtQuick 1.1
 import com.nokia.meego 1.0
-import MeeGo.App.Contacts 0.1
 import "UIConstants.js" as UI
 
 Item {
@@ -27,7 +26,7 @@ Item {
         clip: true
         width: 64
         height: 64
-        source: (model.person.avatarPath == "undefined") ? "avatars/icon-contacts-default-avatar.svg" : model.person.avatarPath
+        source: (model.contact.thumbnail == "undefined") ? "avatars/icon-contacts-default-avatar.svg" : model.contact.thumbnail
         anchors {
             left: parent.left;
             leftMargin: 10
@@ -42,7 +41,7 @@ Item {
 
     Label {
         id: nameFirst
-        text: model.person.displayLabel
+        text: model.contact.displayLabel
         anchors {
             left: photo.right;
             verticalCenter: parent.verticalCenter;

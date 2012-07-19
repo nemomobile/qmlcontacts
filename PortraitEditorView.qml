@@ -7,25 +7,28 @@
  */
 
 import QtQuick 1.1
+import QtMobility.contacts 1.1
 import com.nokia.meego 1.0
-import MeeGo.App.Contacts 0.1
-import "PageManager.js" as PageManager
 import "UIConstants.js" as UI
+import "constants.js" as Constants
 
 Item {
     id: newContactPage
+    property Contact contact: Contact {}
     anchors { leftMargin: UI.defaultMargin; rightMargin: UI.defaultMargin; fill:parent }
-    property Person contact: PageManager.createNextPerson()
 
     function contactSave() {
-        contact.firstName = data_first.text
-        contact.lastName = data_last.text
-        contact.phoneNumbers = phoneModel.dataList()
+        newContactPage.contact.name.firstName = data_first.text
+        newContactPage.contact.name.lastName = data_last.text
 
-        var ret = PageManager.peopleModel.savePerson(contact)
+        // TODO: this isn't asynchronous
+        app.contactListModel.saveContact(newContactPage.contact)
 
-        if (!ret) //REVISIT
+        // TODO: revisit
+        if (contact.dirty)
             console.log("[contactSave] Unable to create new contact due to missing info");
+        else
+            console.log("[contactSave] Saved contact")
     }
 
 

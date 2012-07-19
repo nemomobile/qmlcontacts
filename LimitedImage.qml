@@ -13,8 +13,8 @@ Image {
     asynchronous: true
 
     function limitSize() {
-        var screenLong = Math.max(window.width, window.height)
-        var screenShort = Math.min(window.width, window.height)
+        var screenLong = Math.max(app.width, app.height)
+        var screenShort = Math.min(app.width, app.height)
         var imageLong = Math.max(sourceSize.width, sourceSize.height)
         var imageShort = Math.min(sourceSize.width, sourceSize.height)
 

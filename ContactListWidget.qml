@@ -7,11 +7,13 @@
  */
 
 import QtQuick 1.1
+import QtMobility.contacts 1.1
 import com.nokia.meego 1.0
-import "PageManager.js" as PageManager
+import "constants.js" as Constants
 
 Item {
     id: groupedViewPortrait
+    property alias model: cardListView.model
 
     width: parent.width
     height: parent.height
@@ -37,13 +39,18 @@ Item {
         focus: true
         keyNavigationWraps: false
         clip: true
-        model: proxyModel
+        model: app.contactListModel
         opacity: 0
 
         delegate: ContactListDelegate {
             id: card
             onClicked: {
-                PageManager.openContactCard(pageStack, model.person.id)
+                Constants.loadSingleton("ContactCardPage.qml", groupedViewPortrait,
+                    function(card) {
+                        card.contact = model.contact
+                        pageStack.push(card)
+                    }
+                );
             }
         }
 
@@ -71,8 +78,12 @@ Item {
         }
     }
 
-    FastScroll {
+    SectionScroller {
         listView: cardListView
+    }
+
+    ScrollDecorator {
+        flickableItem: cardListView
     }
 
     Binding {

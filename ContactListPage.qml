@@ -1,6 +1,6 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
-import "PageManager.js" as PageManager
+import "constants.js" as Constants
 
 Page {
     id: groupedViewPage
@@ -16,14 +16,26 @@ Page {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        onAddNewContact: PageManager.openContactEditor(groupedViewPage)
+        onAddNewContact: {
+            Constants.loadSingleton("ContactEditorSheet.qml", groupedViewPage,
+                function(editor) {
+                    editor.open();
+                }
+            );
+        }
+
+        model: app.contactListModel
     }
 
     tools: ToolBarLayout {
         ToolIcon {
             iconId: "icon-m-common-add"
             onClicked: {
-                PageManager.openContactEditor(groupedViewPage)
+                Constants.loadSingleton("ContactEditorSheet.qml", groupedViewPage,
+                    function(editor) {
+                        editor.open();
+                    }
+                );
             }
         }
     }
