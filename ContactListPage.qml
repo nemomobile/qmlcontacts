@@ -1,4 +1,5 @@
 import QtQuick 1.1
+import QtMobility.contacts 1.1
 import com.nokia.meego 1.0
 import "constants.js" as Constants
 
@@ -10,6 +11,12 @@ Page {
         text: qsTr("Contacts")
     }
 
+    Component {
+        id: contactComponent
+        Contact {
+        }
+    }
+
     ContactListWidget {
         id: gvp
         anchors.top: header.bottom
@@ -19,7 +26,7 @@ Page {
         onAddNewContact: {
             Constants.loadSingleton("ContactEditorSheet.qml", groupedViewPage,
             function(editor) {
-                    editor.contact = Qt.createQmlObject("import QtMobility.contacts 1.1; Contact {}", editor);
+                    editor.contact = contactComponent.createObject(editor)
                     editor.open()
             })
         }
@@ -33,7 +40,7 @@ Page {
             onClicked: {
                 Constants.loadSingleton("ContactEditorSheet.qml", groupedViewPage,
                     function(editor) {
-                        editor.contact = Qt.createQmlObject("import QtMobility.contacts 1.1; Contact {}", editor);
+                        editor.contact = contactComponent.createObject(editor)
                         editor.open();
                     }
                 );

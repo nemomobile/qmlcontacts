@@ -10,11 +10,23 @@ Sheet {
 
     property Contact contact
 
+    onContactChanged: {
+        if (contact.phoneNumbers.length)
+            console.log("No need to add phone number");
+        else
+            phoneModel.addNew();
+
+        phoneModel.populateFrom(contact.phoneNumbers)
+
+    }
+
     content: Flickable {
         anchors.fill: parent
+        contentHeight: editorContent.childrenRect.height
 
         Item {
-            anchors { leftMargin: UiConstants.DefaultMargin; rightMargin: UiConstants.DefaultMargin; fill:parent }
+            id: editorContent
+            anchors { leftMargin: UiConstants.DefaultMargin; rightMargin: UiConstants.DefaultMargin; fill: parent }
 
             Button {
                 id: avatarRect
@@ -55,6 +67,7 @@ Sheet {
             }
 
             Column {
+                id: phoneColumn
                 anchors { top: data_last.bottom; topMargin: UiConstants.DefaultMargin }
                 width: parent.width
                 spacing: 10
@@ -62,8 +75,6 @@ Sheet {
                     id: repeaterPhoneNumbers
                     model: EditableModel {
                         id: phoneModel
-                        sourceList: contact.phoneNumbers
-                        Component.onCompleted: { if (contact.phoneNumbers.count) console.log("No need to add phone number"); else phoneModel.addNew(); } //FIXME - this does not seem to work
                     }
                     delegate: TextField {
                         id: data_phone
@@ -77,7 +88,7 @@ Sheet {
 
             Button {
                 text: qsTr("Add phone number")
-                anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom; bottomMargin: UiConstants.DefaultMargin }
+                anchors { horizontalCenter: parent.horizontalCenter; top: phoneColumn.bottom; topMargin: UiConstants.DefaultMargin }
                 onClicked: {
                     phoneModel.addNew()
                 }

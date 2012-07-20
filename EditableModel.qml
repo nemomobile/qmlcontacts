@@ -3,11 +3,9 @@ import QtQuick 1.1
 ListModel {
     id: detailList
 
-    property variant sourceList
-
-    Component.onCompleted: {
+    function populateFrom(sourceList) {
         for (var i = 0; i < sourceList.length; ++i) {
-            detailList.append({ "data": sourceList[i] })
+            detailList.append({ "data": sourceList[i].number })
         }
 
         sourceList = undefined
