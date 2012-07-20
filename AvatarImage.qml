@@ -25,9 +25,8 @@ Image {
     }
 
     function avatarPotentiallyChanged() {
-        if (contact.avatar.imageUrl)
-            source = contact.avatar.imageUrl
-        else
+        source = contact.avatar.imageUrl
+        if (source == "")
             source = "image://theme/icon-m-telephony-contact-avatar"
     }
 
