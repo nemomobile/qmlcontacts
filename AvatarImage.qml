@@ -16,49 +16,24 @@ Image {
     width: UiConstants.ListItemHeightSmall
     height: UiConstants.ListItemHeightSmall
     property Contact contact
-    source: (contact.thumbnail == "undefined") ? "avatars/icon-contacts-default-avatar.svg" : contact.thumbnail
+    sourceSize.width: width
+    sourceSize.height: height
 
-    function limitSize() {
-        var screenLong = Math.max(app.width, app.height)
-        var screenShort = Math.min(app.width, app.height)
-        var imageLong = Math.max(sourceSize.width, sourceSize.height)
-        var imageShort = Math.min(sourceSize.width, sourceSize.height)
+    onContactChanged: {
+        contact.avatar.fieldsChanged.connect(avatarPotentiallyChanged)
+        avatarPotentiallyChanged();
+    }
 
-        if (imageLong / imageShort > screenLong / screenShort) {
-            // limit the long side
-            if (imageLong == sourceSize.width) {
-                if (sourceSize.width > screenLong) {
-                    sourceSize.width = screenLong
-                    sourceSize.height = 0
-                }
-            }
-            else if (sourceSize.height > screenLong) {
-                sourceSize.height = screenLong
-                sourceSize.width = 0
-            }
-        }
-        else {
-            // limit the short side
-            if (imageShort == sourceSize.width) {
-                if (sourceSize.width > screenShort) {
-                    sourceSize.width = screenShort
-                    sourceSize.height = 0
-                }
-            }
-            else if (sourceSize.height > screenShort) {
-                sourceSize.height = screenShort
-                sourceSize.width = 0
-            }
-        }
+    function avatarPotentiallyChanged() {
+        if (contact.avatar.imageUrl)
+            source = contact.avatar.imageUrl
+        else
+            source = "image://theme/icon-m-telephony-contact-avatar"
     }
 
     onStatusChanged: {
-        if (status == Image.Ready) {
-            limitSize()
-        }
-
-        if (photo.status == Image.Error || photo.status == Image.Null){
-            photo.source = "image://theme/icon-m-telephony-contact-avatar"
+        if (status == Image.Error || status == Image.Null) {
+            source = "image://theme/icon-m-telephony-contact-avatar"
         }
     }
 }

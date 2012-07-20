@@ -1,4 +1,5 @@
 import QtQuick 1.1
+import QtMobility.contacts 1.1
 import com.nokia.meego 1.0
 import Qt.labs.folderlistmodel 1.0
 
@@ -7,23 +8,26 @@ Sheet {
     acceptButtonText: "Select"
     rejectButtonText: "Cancel"
 
-    property Person contact: PageManager.createNextPerson()
+    property Contact contact
+
+    signal avatarPicked(string pathToAvatar)
+
+    property int avatarGridSize: avatarPickerSheet.width / 6
 
     Component {
         id: gridHighlight
-        BorderImage {
-            source: "image://theme/meegotouch-button-background-pressed"
-            width: UI.avatarGridSize; height: UI.avatarGridSize
-            border.left:  UI.highlightButtonMargins; border.top:    UI.highlightButtonMargins
-            border.right: UI.highlightButtonMargins; border.bottom: UI.highlightButtonMargins
+        Rectangle {
+            color: "blue"
+            opacity: 0.5
+            width: avatarGridSize; height: avatarGridSize
         }
     }
 
     content: GridView {
         id: avatarGridView
         anchors.fill: parent
-        cellWidth: UI.avatarGridSize
-        cellHeight: UI.avatarGridSize
+        cellWidth: avatarGridSize
+        cellHeight: avatarGridSize
 
         model: FolderListModel {
             id: avatarModel
@@ -32,14 +36,14 @@ Sheet {
         }
         delegate: Item {
             id: bgRect
-            width: UI.avatarGridSize
-            height: UI.avatarGridSize
-            property alias avatarPath : delegateImage.source
+            width: avatarGridSize
+            height: avatarGridSize
+            property alias avatarPath: delegateImage.source
             Image {
                 id: delegateImage
+                width: avatarGridSize
+                height: avatarGridSize
                 source: filePath
-                width: UI.avatarSize
-                height: UI.avatarSize
                 anchors.centerIn: parent
             }
             MouseArea {
@@ -52,8 +56,7 @@ Sheet {
         focus: true
     }
     onAccepted: {
-        contact.avatarPath = avatarGridView.currentItem.avatarPath
-        PageManager.peopleModel.savePerson(contact)
+        avatarPicked(avatarGridView.currentItem.avatarPath)
     }
 }
 

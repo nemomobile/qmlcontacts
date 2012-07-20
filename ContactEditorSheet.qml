@@ -20,16 +20,25 @@ Sheet {
                 id: avatarRect
                 width: height
                 anchors { top: parent.top; topMargin: UiConstants.DefaultMargin; left:parent.left; bottom: data_last.bottom }
-                onClicked: { PageManager.openAvatarPicker(newContactPage, contact.id) }
-                Image {
+                onClicked: {
+                    Constants.loadSingleton("AvatarPickerSheet.qml", newContactViewPage,
+                        function(avatarPicker) {
+                            avatarPicker.contact = contact
+                            avatarPicker.avatarPicked.disconnect()
+                            avatarPicker.avatarPicked.connect(function(avatar) {
+                                newContactViewPage.contact.avatar.imageUrl = avatar
+                            });
+                            avatarPicker.open();
+                        }
+                    );
+                }
+                AvatarImage {
                     id: data_avatar
-                    source: (contact.avatarPath == "undefined") ? "avatars/icon-contacts-default-avatar.svg" : contact.avatarPath
-                    width: parent.width - 10
-                    height: parent.height - 10
-                    sourceSize.width: width
-                    sourceSize.height: height
+                    width: parent.width - UiConstants.DefaultMargin
+                    height: parent.height - UiConstants.DefaultMargin
                     fillMode: Image.PreserveAspectCrop
                     anchors.centerIn: parent
+                    contact: newContactViewPage.contact
                 }
             }
             TextField {
