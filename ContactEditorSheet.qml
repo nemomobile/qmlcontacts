@@ -10,6 +10,13 @@ Sheet {
 
     property Contact contact
 
+    onContactChanged: {
+        data_first.text = contact.name.firstName
+        data_last.text = contact.name.lastName
+        data_phone.text = contact.phoneNumber.number
+        data_avatar.contact = contact
+    }
+
     content: Flickable {
         anchors.fill: parent
         contentHeight: editorContent.childrenRect.height
@@ -28,7 +35,7 @@ Sheet {
                             avatarPicker.contact = contact
                             avatarPicker.avatarPicked.disconnect()
                             avatarPicker.avatarPicked.connect(function(avatar) {
-                                newContactViewPage.contact.avatar.imageUrl = avatar
+                                data_avatar.source = avatar
                             });
                             avatarPicker.open();
                         }
@@ -46,13 +53,11 @@ Sheet {
             TextField {
                 id: data_first
                 placeholderText: qsTr("First name")
-                text: contact.name.firstName
                 anchors { top: avatarRect.top; right: parent.right; left: avatarRect.right; leftMargin: UiConstants.DefaultMargin }
             }
             TextField {
                 id: data_last
                 placeholderText: qsTr("Last name")
-                text: contact.name.lastName
                 anchors { top: data_first.bottom;
                     topMargin: UiConstants.DefaultMargin;
                     right: parent.right; left: data_first.left
@@ -71,8 +76,6 @@ Sheet {
                     id: data_phone
                     placeholderText: qsTr("Phone number")
                     width: parent.width
-                    text: contact.phoneNumber.number
-                    onTextChanged: contact.phoneNumber.number = data_phone.text
                 }
             }
         }
@@ -81,13 +84,10 @@ Sheet {
     onAccepted: saveContact();
 
     function saveContact() {
-        // work around a QML(?)/mobility bug: if we assign to contact.name.firstName,
-        // it seems to cause data.name.lastName to change, which resets the
-        // binding on lastName to data_last, which means we don't save the last
-        // name.
-        var last = data_last.text;
         contact.name.firstName = data_first.text
-        contact.name.lastName = last
+        contact.name.lastName = data_last.text
+        contact.phoneNumber.number = data_phone.text
+        contact.avatar.imageUrl = data_avatar.source
 
         // TODO: this isn't asynchronous
         app.contactListModel.saveContact(contact)
