@@ -10,16 +10,6 @@ Sheet {
 
     property Contact contact
 
-    onContactChanged: {
-        if (contact.phoneNumbers.length)
-            console.log("No need to add phone number");
-        else
-            phoneModel.addNew();
-
-        phoneModel.populateFrom(contact.phoneNumbers)
-
-    }
-
     content: Flickable {
         anchors.fill: parent
         contentHeight: editorContent.childrenRect.height
@@ -63,34 +53,26 @@ Sheet {
                 id: data_last
                 placeholderText: qsTr("Last name")
                 text: contact.name.lastName
-                anchors { top: data_first.bottom; topMargin:10; right: parent.right; left: data_first.left }
+                anchors { top: data_first.bottom;
+                    topMargin: UiConstants.DefaultMargin;
+                    right: parent.right; left: data_first.left
+                }
             }
 
             Column {
                 id: phoneColumn
                 anchors { top: data_last.bottom; topMargin: UiConstants.DefaultMargin }
                 width: parent.width
-                spacing: 10
-                Repeater {
-                    id: repeaterPhoneNumbers
-                    model: EditableModel {
-                        id: phoneModel
-                    }
-                    delegate: TextField {
-                        id: data_phone
-                        placeholderText: qsTr("Phone number")
-                        width: parent.width
-                        text: model.data
-                        onTextChanged: phoneModel.setValue(index, data_phone.text)
-                    }
-                }
-            }
+                spacing: UiConstants.DefaultMargin
 
-            Button {
-                text: qsTr("Add phone number")
-                anchors { horizontalCenter: parent.horizontalCenter; top: phoneColumn.bottom; topMargin: UiConstants.DefaultMargin }
-                onClicked: {
-                    phoneModel.addNew()
+                // TODO: we should have a Repeater for all numbers on a contact,
+                // but lol, adding a single number seems quite hard.
+                TextField {
+                    id: data_phone
+                    placeholderText: qsTr("Phone number")
+                    width: parent.width
+                    text: contact.phoneNumber.number
+                    onTextChanged: contact.phoneNumber.number = data_phone.text
                 }
             }
         }
