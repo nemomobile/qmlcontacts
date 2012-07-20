@@ -10,6 +10,9 @@ Page {
     PageHeader {
         id: header
         text: contact.displayLabel
+        content: AvatarImage {
+            contact: detailViewPage.contact
+        }
     }
 
     ContactCardContentWidget {

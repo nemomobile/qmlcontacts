@@ -7,10 +7,16 @@
  */
 
 import QtQuick 1.1
+import QtMobility.contacts 1.1
 
 Image {
-    fillMode: Image.PreserveAspectFit
+    fillMode: Image.PreserveAspectCrop
     asynchronous: true
+    smooth: true
+    width: UiConstants.ListItemHeightSmall
+    height: UiConstants.ListItemHeightSmall
+    property Contact contact
+    source: (contact.thumbnail == "undefined") ? "avatars/icon-contacts-default-avatar.svg" : contact.thumbnail
 
     function limitSize() {
         var screenLong = Math.max(app.width, app.height)
@@ -49,6 +55,10 @@ Image {
     onStatusChanged: {
         if (status == Image.Ready) {
             limitSize()
+        }
+
+        if (photo.status == Image.Error || photo.status == Image.Null){
+            photo.source = "image://theme/icon-m-telephony-contact-avatar"
         }
     }
 }

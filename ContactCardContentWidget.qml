@@ -50,40 +50,12 @@ Flickable {
             right: parent.right; rightMargin: UiConstants.DefaultMargin;
             top: parent.top; topMargin:  UiConstants.DefaultMargin
         }
-        Item {
-            id: avatarRect
-            width: height
-            anchors { top: parent.top; topMargin: UiConstants.DefaultMargin; left:parent.left; bottom: labelLast.bottom }
-            Image {
-                id: imageAvatar
-                source: (contact.thumbnail == "undefined") ? "avatars/icon-contacts-default-avatar.svg" : contact.thumbnail
-                sourceSize.width:  paintedWidth
-                sourceSize.height: paintedHeight
-                fillMode: Image.PreserveAspectCrop
-                anchors.fill: parent
-            }
-        }
-
-        Label {
-            id: labelFirst
-            text: contact.name.firstName
-            font.bold: true
-            font.pixelSize: 44 //FIXME - make it depend on lenght somehow
-            anchors { top: avatarRect.top; left: avatarRect.right; leftMargin: 20 }
-        }
-        Label {
-            id: labelLast
-            text: contact.name.lastName
-            font.bold: true
-            font.pixelSize: 44 //FIXME - make it depend on lenght somehow
-            anchors { top: labelFirst.bottom; topMargin:10; left: labelFirst.left }
-        }
 
         Column {
             id: phones
             visible: contact.phoneNumbers.length > 0
             spacing: UiConstants.DefaultMargin
-            anchors { left: parent.left; right: parent.right; top: avatarRect.bottom; topMargin: 40}
+            anchors { left: parent.left; right: parent.right; top: parent.bottom; topMargin: 40}
 
             Label {
                 text: qsTr("Phone")

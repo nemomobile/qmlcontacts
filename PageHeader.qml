@@ -18,7 +18,7 @@ Rectangle {
         width: childrenRect.width
         height: childrenRect.height
         anchors.left: parent.left
-        anchors.leftMargin: children.count > 0 ? UiConstants.DefaultMargin : 0
+        anchors.leftMargin: children.length > 0 ? UiConstants.DefaultMargin : 0
         anchors.verticalCenter: parent.verticalCenter
     }
 

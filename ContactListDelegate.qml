@@ -18,23 +18,13 @@ Item {
 
     signal clicked
 
-    LimitedImage {
+    AvatarImage {
         id: photo
-        fillMode: Image.PreserveAspectCrop
-        smooth: true
-        clip: true
-        width: UiConstants.ListItemHeightSmall
-        height: UiConstants.ListItemHeightSmall
-        source: (model.contact.thumbnail == "undefined") ? "avatars/icon-contacts-default-avatar.svg" : model.contact.thumbnail
+        contact: model.contact
         anchors {
             left: parent.left;
             leftMargin: UiConstants.DefaultMargin
             verticalCenter: parent.verticalCenter
-        }
-        onStatusChanged: {
-            if(photo.status == Image.Error || photo.status == Image.Null){
-                photo.source = "image://theme/icon-m-telephony-contact-avatar"
-            }
         }
     }
 
