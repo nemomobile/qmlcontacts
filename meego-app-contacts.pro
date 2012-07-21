@@ -1,4 +1,4 @@
-VERSION = 0.3.3
+VERSION = 0.3.5
 PROJECT_NAME = qmlcontacts
 TEMPLATE = aux
 CONFIG += ordered mobility
