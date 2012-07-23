@@ -48,7 +48,6 @@ Sheet {
                 anchors.centerIn: parent
                 asynchronous: true
                 sourceSize.width: avatarGridSize
-                sourceSize.height: avatarGridSize
                 fillMode: Image.PreserveAspectCrop
             }
             MouseArea {
