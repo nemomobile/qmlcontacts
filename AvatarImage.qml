@@ -8,16 +8,16 @@
 
 import QtQuick 1.1
 import QtMobility.contacts 1.1
+import org.nemomobile.thumbnailer 1.0
 
 Image {
     fillMode: Image.PreserveAspectCrop
     asynchronous: true
-    smooth: true
     width: UiConstants.ListItemHeightSmall
     height: UiConstants.ListItemHeightSmall
     property Contact contact
     sourceSize.width: width
-    clip: true
+    sourceSize.height: width
 
     onContactChanged: {
         contact.avatar.fieldsChanged.connect(avatarPotentiallyChanged)
@@ -25,7 +25,7 @@ Image {
     }
 
     function avatarPotentiallyChanged() {
-        source = contact.avatar.imageUrl
+        source = "image://nemoThumbnail/" + contact.avatar.imageUrl
         if (source == "")
             source = "image://theme/icon-m-telephony-contact-avatar"
     }
