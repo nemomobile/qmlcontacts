@@ -1,4 +1,4 @@
-VERSION = 0.3.6
+VERSION = 0.3.7
 PROJECT_NAME = qmlcontacts
 TEMPLATE = app
 CONFIG += ordered mobility
