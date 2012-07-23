@@ -12,7 +12,7 @@ Sheet {
 
     signal avatarPicked(string pathToAvatar)
 
-    property int avatarGridSize: avatarPickerSheet.width / 6
+    property int avatarGridSize: avatarPickerSheet.width / 3
 
     Component {
         id: gridHighlight
@@ -32,7 +32,7 @@ Sheet {
         model: FolderListModel {
             id: avatarModel
             folder: AvatarDirectory
-            nameFilters: ["*.png", "*.jpg"]
+            nameFilters: ["*.png", "*.jpg", "*.jpeg"]
         }
         delegate: Item {
             id: bgRect
@@ -45,6 +45,9 @@ Sheet {
                 height: avatarGridSize
                 source: filePath
                 anchors.centerIn: parent
+                asynchronous: true
+                sourceSize.width: avatarGridSize
+                sourceSize.height: avatarGridSize
             }
             MouseArea {
                 anchors.fill: parent
