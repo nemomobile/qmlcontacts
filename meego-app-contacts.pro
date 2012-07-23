@@ -4,6 +4,8 @@ TEMPLATE = app
 CONFIG += ordered mobility
 MOBILITY += contacts
 QT += declarative
+TARGET = $$PROJECT_NAME
+CONFIG -= app_bundle # OS X
 
 SOURCES += main.cpp
 RESOURCES += res.qrc
@@ -12,6 +14,9 @@ QML_FILES = *.qml
 JS_FILES = *.js
 
 OTHER_FILES += $${QML_FILES} $${JS_FILES}
+
+target.path = $$INSTALL_ROOT/usr/bin/
+INSTALLS += target
 
 desktop.files = $${PROJECT_NAME}.desktop
 desktop.path = $$INSTALL_ROOT/usr/share/applications
