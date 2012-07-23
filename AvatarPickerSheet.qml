@@ -20,6 +20,7 @@ Sheet {
         anchors.fill: parent
         cellWidth: avatarGridSize
         cellHeight: avatarGridSize
+        cacheBuffer: cellHeight * 3
 
         model: FolderListModel {
             id: avatarModel
@@ -40,8 +41,7 @@ Sheet {
                 anchors.centerIn: parent
                 asynchronous: true
                 sourceSize.width: avatarGridSize
-                fillMode: Image.PreserveAspectCrop
-                clip: true
+                sourceSize.height: avatarGridSize
             }
             MouseArea {
                 anchors.fill: parent
