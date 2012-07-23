@@ -31,7 +31,7 @@ Sheet {
 
         model: FolderListModel {
             id: avatarModel
-            folder: "./avatars"
+            folder: AvatarDirectory
             nameFilters: ["*.png"]
         }
         delegate: Item {
