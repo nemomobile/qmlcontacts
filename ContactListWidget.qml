@@ -41,6 +41,41 @@ Item {
         clip: true
         model: app.contactListModel
         opacity: 0
+        section.property: "display"
+        section.criteria: ViewSection.FirstCharacter
+        section.delegate: Component {
+         Rectangle {
+             width: parent.width
+             height: childrenRect.height
+             color: "lightsteelblue"
+
+             Text {
+                 text: section
+                 font.bold: true
+             }
+         }
+        }
+
+        function customSectionScrollerDataHandler() {
+            var sections = []
+            var sectionsData = []
+            var curSection
+            var contacts = model.contacts
+            for (var i = 0; i < contacts.length; ++i) {
+                console.log(contacts[i])
+                if (contacts[i].displayLabel[0] != curSection) {
+                    sections.push(contacts[i].displayLabel[0])
+                    curSection = sections[sections.length - 1]
+                }
+            }
+            for (var i = 0; i < sections.length; ++i) {
+                sectionsData.push({ index: i })
+            }
+            return {
+                sectionData: sectionsData,
+                _sections: sections
+            }
+        }
 
         delegate: ContactListDelegate {
             id: card
@@ -51,29 +86,6 @@ Item {
                         pageStack.push(card)
                     }
                 );
-            }
-        }
-
-        section.property: "firstcharacter"
-        section.criteria: ViewSection.FirstCharacter
-        section.delegate: Item {
-            width: cardListView.width
-            height: 30
-            id: sectionBackground
-            Label {
-                //: If a contact isn't sorted under one of the values in a locale's alphabet, it is sorted under '#'
-                text: section.toUpperCase()
-                anchors.verticalCenter: sectionBackground.verticalCenter
-                anchors.right: sectionBackground.right
-                anchors.rightMargin: 30
-                smooth: true
-            }
-            Image {
-                anchors.right: sectionBackground.left
-                anchors.left: parent.left
-                anchors.verticalCenter: sectionBackground.verticalCenter
-                anchors.rightMargin: 24
-                source: "image://theme/meegotouch-groupheader" + (theme.inverted ? "-inverted" : "") + "-background"
             }
         }
     }

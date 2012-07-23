@@ -72,6 +72,8 @@ PageStackWindow {
         anchors.bottom: parent.bottom
     }
 
-    property ContactModel contactListModel: ContactModel {}
+    property ContactModel contactListModel: ContactModel {
+        property int count: contacts.length
+    }
 }
 
