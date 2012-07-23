@@ -17,7 +17,7 @@ Image {
     height: UiConstants.ListItemHeightSmall
     property Contact contact
     sourceSize.width: width
-    sourceSize.height: height
+    clip: true
 
     onContactChanged: {
         contact.avatar.fieldsChanged.connect(avatarPotentiallyChanged)
