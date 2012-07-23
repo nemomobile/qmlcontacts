@@ -7,6 +7,16 @@ QT += declarative
 TARGET = $$PROJECT_NAME
 CONFIG -= app_bundle # OS X
 
+CONFIG += link_pkgconfig
+
+packagesExist(qdeclarative-boostable) {
+    message("Building with qdeclarative-boostable support")
+    DEFINES += HAS_BOOSTER
+    PKGCONFIG += qdeclarative-boostable
+} else {
+    warning("qdeclarative-boostable not available; startup times will be slower")
+}
+
 SOURCES += main.cpp
 RESOURCES += res.qrc
 
