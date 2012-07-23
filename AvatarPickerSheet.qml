@@ -14,15 +14,6 @@ Sheet {
 
     property int avatarGridSize: avatarPickerSheet.width / 3
 
-    Component {
-        id: gridHighlight
-        Rectangle {
-            color: "blue"
-            opacity: 0.5
-            width: avatarGridSize; height: avatarGridSize
-        }
-    }
-
     content: GridView {
         id: avatarGridView
         anchors.fill: parent
@@ -36,7 +27,7 @@ Sheet {
             showDirs: false
         }
         delegate: Item {
-            id: bgRect
+            id: delegateInstance
             width: avatarGridSize
             height: avatarGridSize
             property alias avatarPath: delegateImage.source
@@ -55,9 +46,13 @@ Sheet {
                 anchors.fill: parent
                 onClicked: avatarGridView.currentIndex = index
             }
+            Rectangle {
+                color: "blue"
+                opacity: 0.3
+                visible: delegateInstance.GridView.isCurrentItem
+                anchors.fill: parent
+            }
         }
-        highlight: gridHighlight
-        highlightFollowsCurrentItem: true
         focus: true
     }
     onAccepted: {
