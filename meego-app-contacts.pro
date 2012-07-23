@@ -1,18 +1,17 @@
 VERSION = 0.3.5
 PROJECT_NAME = qmlcontacts
-TEMPLATE = aux
+TEMPLATE = app
 CONFIG += ordered mobility
 MOBILITY += contacts
 QT += declarative
+
+SOURCES += main.cpp
+RESOURCES += res.qrc
 
 QML_FILES = *.qml
 JS_FILES = *.js
 
 OTHER_FILES += $${QML_FILES} $${JS_FILES}
-
-codefiles.files += $${QML_FILES} $${JS_FILES}
-codefiles.path += $$INSTALL_ROOT/usr/share/$${PROJECT_NAME}
-INSTALLS += codefiles
 
 desktop.files = $${PROJECT_NAME}.desktop
 desktop.path = $$INSTALL_ROOT/usr/share/applications
