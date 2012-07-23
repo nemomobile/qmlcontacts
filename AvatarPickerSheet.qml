@@ -2,6 +2,7 @@ import QtQuick 1.1
 import QtMobility.contacts 1.1
 import com.nokia.meego 1.0
 import Qt.labs.folderlistmodel 1.0
+import org.nemomobile.thumbnailer 1.0
 
 Sheet {
     id: avatarPickerSheet
@@ -35,7 +36,7 @@ Sheet {
                 id: delegateImage
                 width: avatarGridSize
                 height: avatarGridSize
-                source: filePath
+                source: "image://nemoThumbnail/" + filePath
                 anchors.centerIn: parent
                 asynchronous: true
                 sourceSize.width: avatarGridSize
