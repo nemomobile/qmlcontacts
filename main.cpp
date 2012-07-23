@@ -82,7 +82,7 @@ int main(int argc, char **argv)
     view->setAttribute(Qt::WA_NoSystemBackground);
     view->viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
     view->viewport()->setAttribute(Qt::WA_NoSystemBackground);
-    view->rootContext()->setContextProperty("AvatarDirectory", QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    view->rootContext()->setContextProperty("systemAvatarDirectory", QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
 
     if (isFullscreen)
         view->showFullScreen();
