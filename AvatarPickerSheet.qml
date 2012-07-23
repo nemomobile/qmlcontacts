@@ -33,6 +33,7 @@ Sheet {
             id: avatarModel
             folder: "file://" + systemAvatarDirectory
             nameFilters: ["*.png", "*.jpg", "*.jpeg"]
+            showDirs: false
         }
         delegate: Item {
             id: bgRect
