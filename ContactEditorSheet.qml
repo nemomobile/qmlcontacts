@@ -45,7 +45,6 @@ Sheet {
                     id: data_avatar
                     width: parent.width - UiConstants.DefaultMargin
                     height: parent.height - UiConstants.DefaultMargin
-                    fillMode: Image.PreserveAspectCrop
                     anchors.centerIn: parent
                     contact: newContactViewPage.contact
                 }
