@@ -12,8 +12,6 @@
         <file>EmptyContacts.qml</file>
         <file>PageHeader.qml</file>
         <file>main.qml</file>
-    </qresource>
-    <qresource prefix="/js">
         <file>constants.js</file>
     </qresource>
 </RCC>
