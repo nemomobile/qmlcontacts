@@ -21,6 +21,7 @@ Sheet {
         cellWidth: avatarGridSize
         cellHeight: avatarGridSize
         cacheBuffer: cellHeight * 3
+        property string filePath
 
         model: FolderListModel {
             id: avatarModel
@@ -32,7 +33,6 @@ Sheet {
             id: delegateInstance
             width: avatarGridSize
             height: avatarGridSize
-            property alias avatarPath: delegateImage.source
             Image {
                 id: delegateImage
                 width: avatarGridSize
@@ -45,7 +45,10 @@ Sheet {
             }
             MouseArea {
                 anchors.fill: parent
-                onClicked: avatarGridView.currentIndex = index
+                onClicked: {
+                    avatarGridView.currentIndex = index
+                    avatarGridView.filePath = filePath
+                }
             }
             Rectangle {
                 color: "blue"
@@ -57,7 +60,7 @@ Sheet {
         focus: true
     }
     onAccepted: {
-        avatarPicked(avatarGridView.currentItem.avatarPath)
+        avatarPicked(avatarGridView.filePath)
     }
 }
 
