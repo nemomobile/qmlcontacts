@@ -9,7 +9,6 @@
         <file>ContactListPage.qml</file>
         <file>ContactListWidget.qml</file>
         <file>DeleteContactDialog.qml</file>
-        <file>EditableModel.qml</file>
         <file>EmptyContacts.qml</file>
         <file>PageHeader.qml</file>
         <file>main.qml</file>
