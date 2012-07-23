@@ -47,6 +47,7 @@ Item {
         source: "image://theme/icon-m-toolbar-favorite-mark"
         visible: contact.favorite.favorite
         anchors.right: parent.right
+        anchors.rightMargin: UiConstants.DefaultMargin
         anchors.verticalCenter: parent.verticalCenter
     }
 
