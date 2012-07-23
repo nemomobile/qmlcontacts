@@ -32,7 +32,7 @@ Sheet {
         model: FolderListModel {
             id: avatarModel
             folder: AvatarDirectory
-            nameFilters: ["*.png"]
+            nameFilters: ["*.png", "*.jpg"]
         }
         delegate: Item {
             id: bgRect
