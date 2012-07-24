@@ -3,6 +3,7 @@ import QtMobility.contacts 1.1
 import com.nokia.meego 1.0
 import Qt.labs.folderlistmodel 1.0
 import org.nemomobile.thumbnailer 1.0
+import org.nemomobile.qmlgallery 1.0
 
 Sheet {
     id: avatarPickerSheet
@@ -10,44 +11,24 @@ Sheet {
     rejectButtonText: "Cancel"
 
     property Contact contact
-
     signal avatarPicked(string pathToAvatar)
 
-    property int avatarGridSize: avatarPickerSheet.width / 3
-
-    content: GridView {
-        id: avatarGridView
+    content: Rectangle {
+        // TODO: see if we can get theme asset for inverted background
+        // cannot use theme.inverted, because that will change whole app's theme.
+        color: "black"
         anchors.fill: parent
-        cellWidth: avatarGridSize
-        cellHeight: avatarGridSize
-        cacheBuffer: cellHeight * 3
+        GalleryView {
+        id: avatarGridView
         property string filePath
-
-        model: FolderListModel {
-            id: avatarModel
-            folder: "file://" + systemAvatarDirectory
-            nameFilters: ["*.png", "*.jpg", "*.jpeg"]
-            showDirs: false
-        }
-        delegate: Item {
+        model: GalleryModel { }
+        delegate: GalleryDelegate {
             id: delegateInstance
-            width: avatarGridSize
-            height: avatarGridSize
-            Image {
-                id: delegateImage
-                width: avatarGridSize
-                height: avatarGridSize
-                source: "image://nemoThumbnail/" + filePath
-                anchors.centerIn: parent
-                asynchronous: true
-                sourceSize.width: avatarGridSize
-                sourceSize.height: avatarGridSize
-            }
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
                     avatarGridView.currentIndex = index
-                    avatarGridView.filePath = filePath
+                    avatarGridView.filePath = url
                 }
             }
             Rectangle {
@@ -57,8 +38,9 @@ Sheet {
                 anchors.fill: parent
             }
         }
-        focus: true
     }
+}
+
     onAccepted: {
         avatarPicked(avatarGridView.filePath)
     }
