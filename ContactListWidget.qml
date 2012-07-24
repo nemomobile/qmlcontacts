@@ -34,10 +34,7 @@ Item {
     ListView {
         id: cardListView
         anchors.fill: parent
-        snapMode: ListView.SnapToItem
-        highlightFollowsCurrentItem: false
-        focus: true
-        keyNavigationWraps: false
+        cacheBuffer: cardListView.height
         clip: true
         model: app.contactListModel
         opacity: 0
