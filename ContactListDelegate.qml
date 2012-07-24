@@ -13,8 +13,8 @@ Item {
     id: contactCardPortrait
 
     height: UiConstants.ListItemHeightDefault
-    width: parent.width
     anchors.right: parent.right
+    anchors.left: parent.left
 
     signal clicked
 
@@ -38,7 +38,6 @@ Item {
             verticalCenter: parent.verticalCenter;
             leftMargin: UiConstants.DefaultMargin
         }
-        smooth: true
     }
 
     // TODO: only instantiate if required?
