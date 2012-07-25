@@ -47,6 +47,8 @@ Item {
              color: "lightsteelblue"
 
              Text {
+                 anchors.right: parent.right
+                 anchors.rightMargin: UiConstants.DefaultMargin
                  text: section
                  font.bold: true
              }
