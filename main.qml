@@ -74,6 +74,23 @@ PageStackWindow {
 
     property ContactModel contactListModel: ContactModel {
         property int count: contacts.length
+        sortOrders: [
+            SortOrder {
+                detail: ContactDetail.Name
+                field: Name.FirstName
+                caseSensitivity: Qt.CaseInsensitive
+            },
+            SortOrder {
+                detail: ContactDetail.Name
+                field: Name.LastName
+                caseSensitivity: Qt.CaseInsensitive
+            }
+        ]
+
+// for testing purposes
+//        Component.onCompleted: {
+//            importContacts("test/example.vcf")
+//        }
     }
 }
 
