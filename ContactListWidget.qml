@@ -38,7 +38,7 @@ Item {
         clip: true
         model: app.contactListModel
         opacity: 0
-        section.property: "display"
+        section.property: "firstName"
         section.criteria: ViewSection.FirstCharacter
         section.delegate: Component {
          Rectangle {
@@ -62,8 +62,8 @@ Item {
             var contacts = model.contacts
             for (var i = 0; i < contacts.length; ++i) {
                 console.log(contacts[i])
-                if (contacts[i].displayLabel[0] != curSection) {
-                    sections.push(contacts[i].displayLabel[0])
+                if (contacts[i].name.firstName[0] != curSection) {
+                    sections.push(contacts[i].name.firstName[0])
                     curSection = sections[sections.length - 1]
                 }
             }
