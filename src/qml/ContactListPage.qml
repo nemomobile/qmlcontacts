@@ -2,6 +2,7 @@ import QtQuick 1.1
 import QtMobility.contacts 1.1
 import com.nokia.meego 1.0
 import "constants.js" as Constants
+import org.nemomobile.qmlcontacts 1.0
 
 Page {
     id: groupedViewPage
@@ -32,6 +33,18 @@ Page {
         }
 
         model: app.contactListModel
+        delegate: ContactListDelegate {
+            id: card
+            onClicked: {
+                Constants.loadSingleton("ContactCardPage.qml", groupedViewPortrait,
+                    function(card) {
+                        card.contact = model.contact
+                        pageStack.push(card)
+                    }
+                );
+            }
+        }
+
     }
 
     tools: ToolBarLayout {

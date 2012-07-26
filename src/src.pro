@@ -32,6 +32,11 @@ desktop.files = $${PROJECT_NAME}.desktop
 desktop.path = $$INSTALL_ROOT/usr/share/applications
 INSTALLS += desktop
 
+# qml API we provide
+qml_api.files = qml/api/*
+qml_api.path = $$[QT_INSTALL_IMPORTS]/org/nemomobile/$$PROJECT_NAME
+INSTALLS += qml_api
+
 TRANSLATIONS += *.qml
 dist.commands += rm -fR $${PROJECT_NAME}-$${VERSION} &&
 dist.commands += git clone . $${PROJECT_NAME}-$${VERSION} &&

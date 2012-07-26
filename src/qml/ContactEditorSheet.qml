@@ -2,6 +2,7 @@ import QtQuick 1.1
 import QtMobility.contacts 1.1
 import com.nokia.meego 1.0
 import "constants.js" as Constants
+import org.nemomobile.qmlcontacts 1.0
 
 Sheet {
     id: newContactViewPage
@@ -41,7 +42,7 @@ Sheet {
                         }
                     );
                 }
-                AvatarImage {
+                ContactAvatarImage {
                     id: data_avatar
                     width: parent.width - UiConstants.DefaultMargin
                     height: parent.height - UiConstants.DefaultMargin

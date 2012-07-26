@@ -18,7 +18,7 @@ Item {
 
     signal clicked
 
-    AvatarImage {
+    ContactAvatarImage {
         id: photo
         contact: model.contact
         anchors {

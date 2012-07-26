@@ -9,11 +9,11 @@
 import QtQuick 1.1
 import QtMobility.contacts 1.1
 import com.nokia.meego 1.0
-import "constants.js" as Constants
 
 Item {
     id: groupedViewPortrait
     property alias model: cardListView.model
+    property alias delegate: cardListView.delegate
 
     width: parent.width
     height: parent.height
@@ -23,11 +23,30 @@ Item {
 
     property alias cards: cardListView
 
-    EmptyContacts{
+    Item {
+        // TODO: it would be nice if this was only instantiated
+        // when needed, and destroyed after
         id: emptyListView
         anchors.fill: parent
-        onClicked: {
-            groupedViewPortrait.addNewContact();
+
+        Label {
+            id: no_contacts
+            text: qsTr("You haven't added any contacts yet.")
+            anchors.centerIn: parent
+        }
+
+        Button {
+            id: button
+            text: qsTr("Add a contact")
+
+            anchors {
+                top: no_contacts.bottom;
+                topMargin: UiConstants.DefaultMargin;
+                horizontalCenter: no_contacts.horizontalCenter;
+            }
+            onClicked: {
+                groupedViewPortrait.addNewContact();
+            }
         }
     }
 
@@ -73,18 +92,6 @@ Item {
             return {
                 sectionData: sectionsData,
                 _sections: sections
-            }
-        }
-
-        delegate: ContactListDelegate {
-            id: card
-            onClicked: {
-                Constants.loadSingleton("ContactCardPage.qml", groupedViewPortrait,
-                    function(card) {
-                        card.contact = model.contact
-                        pageStack.push(card)
-                    }
-                );
             }
         }
     }

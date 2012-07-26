@@ -1,15 +1,11 @@
 <RCC>
     <qresource>
-        <file>qml/AvatarImage.qml</file>
         <file>qml/AvatarPickerSheet.qml</file>
         <file>qml/ContactCardContentWidget.qml</file>
         <file>qml/ContactCardPage.qml</file>
         <file>qml/ContactEditorSheet.qml</file>
-        <file>qml/ContactListDelegate.qml</file>
         <file>qml/ContactListPage.qml</file>
-        <file>qml/ContactListWidget.qml</file>
         <file>qml/DeleteContactDialog.qml</file>
-        <file>qml/EmptyContacts.qml</file>
         <file>qml/PageHeader.qml</file>
         <file>qml/main.qml</file>
         <file>qml/constants.js</file>
