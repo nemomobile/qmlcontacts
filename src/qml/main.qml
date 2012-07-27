@@ -89,7 +89,7 @@ PageStackWindow {
 
 // for testing purposes
 //        Component.onCompleted: {
-//            importContacts("test/example.vcf")
+//            importContacts("../test/example.vcf")
 //        }
     }
 }
