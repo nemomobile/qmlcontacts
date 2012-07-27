@@ -9,7 +9,7 @@ Sheet {
     acceptButtonText: "Select"
     rejectButtonText: "Cancel"
 
-    property Contact contact
+    property Person contact
     signal avatarPicked(string pathToAvatar)
 
     content: Rectangle {
