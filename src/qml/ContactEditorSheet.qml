@@ -26,7 +26,7 @@ Sheet {
 
         var tmpList = []
         for (var i = 0; i < contact.phoneNumbers.length; ++i) {
-            tmpList.push(contact.phoneNumbers[i].number)
+            tmpList.push(contact.phoneNumbers[i])
         }
         phoneRepeater.setModelData(tmpList)
     }
