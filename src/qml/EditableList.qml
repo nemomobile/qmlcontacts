@@ -33,7 +33,7 @@ Repeater {
     }
 
     delegate: TextField {
-        text: model.modelData
+        text: model.data
         placeholderText: root.placeholderText
         width: root.width
 
