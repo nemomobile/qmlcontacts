@@ -78,11 +78,10 @@ Item {
             var sections = []
             var sectionsData = []
             var curSection
-            var contacts = model.contacts
-            for (var i = 0; i < contacts.length; ++i) {
-                console.log(contacts[i])
-                if (contacts[i].name.firstName[0] != curSection) {
-                    sections.push(contacts[i].name.firstName[0])
+            for (var i = 0; i < model.length; ++i) {
+                var person = model.personByRow(i)
+                if (person.firstName[0] != curSection) {
+                    sections.push(person.firstName[0])
                     curSection = sections[sections.length - 1]
                 }
             }

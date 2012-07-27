@@ -1,8 +1,8 @@
 import QtQuick 1.1
-import QtMobility.contacts 1.1
 import com.nokia.meego 1.0
 import org.nemomobile.thumbnailer 1.0
 import org.nemomobile.qmlgallery 1.0
+import org.nemomobile.contacts 1.0
 
 Sheet {
     id: avatarPickerSheet

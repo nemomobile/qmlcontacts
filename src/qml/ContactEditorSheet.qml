@@ -1,21 +1,34 @@
 import QtQuick 1.1
-import QtMobility.contacts 1.1
 import com.nokia.meego 1.0
 import "constants.js" as Constants
 import org.nemomobile.qmlcontacts 1.0
+import org.nemomobile.contacts 1.0
 
 Sheet {
     id: newContactViewPage
     acceptButtonText: "Save"
     rejectButtonText: "Cancel"
 
-    property Contact contact
+    property Person contact
+
+    Connections {
+        target: contact
+        onContactRemoved: {
+            reject()
+        }
+    }
+
 
     onContactChanged: {
-        data_first.text = contact.name.firstName
-        data_last.text = contact.name.lastName
-        data_phone.text = contact.phoneNumber.number
+        data_first.text = contact.firstName
+        data_last.text = contact.lastName
         data_avatar.contact = contact
+
+        var tmpList = []
+        for (var i = 0; i < contact.phoneNumbers.length; ++i) {
+            tmpList.push(contact.phoneNumbers[i].number)
+        }
+        phoneRepeater.setModelData(tmpList)
     }
 
     content: Flickable {
@@ -65,17 +78,17 @@ Sheet {
             }
 
             Column {
-                id: phoneColumn
-                anchors { top: data_last.bottom; topMargin: UiConstants.DefaultMargin }
-                width: parent.width
+                anchors.top: data_last.bottom
+                anchors.topMargin: UiConstants.DefaultMargin
+                anchors.left: parent.left
+                anchors.right: parent.right
                 spacing: UiConstants.DefaultMargin
 
-                // TODO: we should have a Repeater for all numbers on a contact,
-                // but lol, adding a single number seems quite hard.
-                TextField {
-                    id: data_phone
+                EditableList {
+                    id: phoneRepeater
                     placeholderText: qsTr("Phone number")
-                    width: parent.width
+                    anchors.left: parent.left
+                    anchors.right: parent.right
                 }
             }
         }
@@ -84,13 +97,13 @@ Sheet {
     onAccepted: saveContact();
 
     function saveContact() {
-        contact.name.firstName = data_first.text
-        contact.name.lastName = data_last.text
-        contact.phoneNumber.number = data_phone.text
-        contact.avatar.imageUrl = data_avatar.source
+        contact.firstName = data_first.text
+        contact.lastName = data_last.text
+        contact.avatarPath = data_avatar.source
+        contact.phoneNumbers = phoneRepeater.modelData()
 
         // TODO: this isn't asynchronous
-        app.contactListModel.saveContact(contact)
+        app.contactListModel.savePerson(contact)
 
         // TODO: revisit
         if (contact.dirty)

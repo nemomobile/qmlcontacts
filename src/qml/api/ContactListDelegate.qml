@@ -20,7 +20,7 @@ Item {
 
     ContactAvatarImage {
         id: photo
-        contact: model.contact
+        contact: model.person
         anchors {
             left: parent.left;
             leftMargin: UiConstants.DefaultMargin
@@ -30,7 +30,7 @@ Item {
 
     Label {
         id: nameFirst
-        text: model.contact.displayLabel
+        text: model.person.displayLabel
         elide: Text.ElideRight
         anchors {
             left: photo.right;
@@ -44,7 +44,7 @@ Item {
     Image {
         id: favorite
         source: "image://theme/icon-m-toolbar-favorite-mark"
-        visible: contact.favorite.favorite
+        visible: model.person.favorite
         anchors.right: parent.right
         anchors.rightMargin: UiConstants.DefaultMargin
         anchors.verticalCenter: parent.verticalCenter

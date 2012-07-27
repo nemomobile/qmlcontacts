@@ -7,28 +7,28 @@
  */
 
 import QtQuick 1.1
-import QtMobility.contacts 1.1
 import org.nemomobile.thumbnailer 1.0
+import org.nemomobile.contacts 1.0
 
 Image {
     fillMode: Image.PreserveAspectCrop
     asynchronous: true
     width: UiConstants.ListItemHeightSmall
     height: UiConstants.ListItemHeightSmall
-    property Contact contact
+    property Person contact
     sourceSize.width: width
     sourceSize.height: width
 
     onContactChanged: {
-        contact.avatar.fieldsChanged.connect(avatarPotentiallyChanged)
+        contact.avatarPathChanged.connect(avatarPotentiallyChanged)
         avatarPotentiallyChanged();
     }
 
     function avatarPotentiallyChanged() {
-        if (contact.avatar.imageUrl == "")
+        if (contact.avatarPath == "")
             source = "image://theme/icon-m-telephony-contact-avatar"
         else
-            source = "image://nemoThumbnail/" + contact.avatar.imageUrl
+            source = "image://nemoThumbnail/" + contact.avatarPath
         if (source == "")
             source = "image://theme/icon-m-telephony-contact-avatar"
     }

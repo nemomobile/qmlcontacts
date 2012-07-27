@@ -7,8 +7,8 @@
  */
 
 import QtQuick 1.1
-import QtMobility.contacts 1.1
 import com.nokia.meego 1.0
+import org.nemomobile.contacts 1.0
 
 PageStackWindow {
     id: app
@@ -72,20 +72,7 @@ PageStackWindow {
         anchors.bottom: parent.bottom
     }
 
-    property ContactModel contactListModel: ContactModel {
-        property int count: contacts.length
-        sortOrders: [
-            SortOrder {
-                detail: ContactDetail.Name
-                field: Name.FirstName
-                caseSensitivity: Qt.CaseInsensitive
-            },
-            SortOrder {
-                detail: ContactDetail.Name
-                field: Name.LastName
-                caseSensitivity: Qt.CaseInsensitive
-            }
-        ]
+    property PeopleModel contactListModel: PeopleModel {
 
 // for testing purposes
 //        Component.onCompleted: {

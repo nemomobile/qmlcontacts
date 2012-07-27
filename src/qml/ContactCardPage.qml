@@ -1,12 +1,19 @@
 import QtQuick 1.1
-import QtMobility.contacts 1.1
 import com.nokia.meego 1.0
 import "constants.js" as Constants
 import org.nemomobile.qmlcontacts 1.0
+import org.nemomobile.contacts 1.0
 
 Page {
     id: detailViewPage
-    property Contact contact
+    property Person contact
+
+    Connections {
+        target: contact
+        onContactRemoved: {
+            pageStack.pop()
+        }
+    }
 
     PageHeader {
         id: header
@@ -42,12 +49,12 @@ Page {
             }
         }
         ToolIcon {
-            iconId: contact.favorite.favorite ? "icon-m-toolbar-favorite-mark" : "icon-m-toolbar-favorite-unmark"
+            iconId: contact.favorite ? "icon-m-toolbar-favorite-mark" : "icon-m-toolbar-favorite-unmark"
             onClicked: {
-                contact.favorite.favorite = !contact.favorite.favorite
+                contact.favorite = !contact.favorite
 
                 // TODO: delay saving to save CPU on repeated toggling
-                app.contactListModel.saveContact(detailViewPage.contact)
+                app.contactListModel.savePerson(detailViewPage.contact)
             }
         }
         ToolIcon {

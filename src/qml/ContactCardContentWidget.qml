@@ -1,6 +1,6 @@
 import QtQuick 1.1
-import QtMobility.contacts 1.1
 import com.nokia.meego 1.0
+import org.nemomobile.contacts 1.0
 
 Flickable {
     id: detailViewPortrait
@@ -9,7 +9,7 @@ Flickable {
     flickableDirection: Flickable.VerticalFlick
     clip: true
 
-    property Contact contact
+    property Person contact
 
     Item {
         id: detailsList
@@ -30,7 +30,7 @@ Flickable {
                     height: 90
 
                     Label {
-                        text: model.modelData.number
+                        text: model.modelData
                         anchors.left: parent.left
                         anchors.verticalCenter: parent.verticalCenter
                     }
