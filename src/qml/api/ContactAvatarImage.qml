@@ -25,7 +25,10 @@ Image {
     }
 
     function avatarPotentiallyChanged() {
-        source = "image://nemoThumbnail/" + contact.avatar.imageUrl
+        if (contact.avatar.imageUrl == "")
+            source = "image://theme/icon-m-telephony-contact-avatar"
+        else
+            source = "image://nemoThumbnail/" + contact.avatar.imageUrl
         if (source == "")
             source = "image://theme/icon-m-telephony-contact-avatar"
     }
