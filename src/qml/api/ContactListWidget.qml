@@ -57,7 +57,7 @@ Item {
         clip: true
         model: app.contactListModel
         opacity: 0
-        section.property: "firstName"
+        section.property: "sectionBucket"
         section.criteria: ViewSection.FirstCharacter
         section.delegate: Component {
          Rectangle {
@@ -74,14 +74,15 @@ Item {
          }
         }
 
+/*
         function customSectionScrollerDataHandler() {
             var sections = []
             var sectionsData = []
             var curSection
             for (var i = 0; i < model.length; ++i) {
                 var person = model.personByRow(i)
-                if (person.firstName[0] != curSection) {
-                    sections.push(person.firstName[0])
+                if (person.sectionCharacter != curSection) {
+                    sections.push(person.sectionCharacter)
                     curSection = sections[sections.length - 1]
                 }
             }
@@ -93,6 +94,7 @@ Item {
                 _sections: sections
             }
         }
+        */
     }
 
     SectionScroller {
