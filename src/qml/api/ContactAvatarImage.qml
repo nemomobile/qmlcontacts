@@ -25,12 +25,10 @@ Image {
     }
 
     function avatarPotentiallyChanged() {
-        if (contact.avatarPath == "")
+        if (contact.avatarPath == "image://theme/icon-m-telephony-contact-avatar")
             source = "image://theme/icon-m-telephony-contact-avatar"
         else
             source = "image://nemoThumbnail/" + contact.avatarPath
-        if (source == "")
-            source = "image://theme/icon-m-telephony-contact-avatar"
     }
 
     onStatusChanged: {
