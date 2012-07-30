@@ -1,15 +1,9 @@
 Building:
-You need libseaside from git, currently the 'no-mtf' branch, but this may change
-in the near future.
+You need nemo-qml-plugins from git, and qmlgallery built and installed if you
+want to use the avatar picker in the editor.
 
 Maintainer:
 Robin Burchell <robin+nemo@viroteck.net>
 
 Contributors:
 Jakub Pavelek <jpavelek@live.com>
-
-Avatars by Deleket <deleket@gmail.com>, provided under Creative Commons (Attribution-Noncommercial-Share Alike 3.0 Unported) license, taken from http://www.iconfinder.com/search/?q=iconset%3Afaceavatars
-
-Former contributors:
-Connie Berardi <connie.berardi@intel.com>
-Kaitlin Rupert <kaitlin.rupert@intel.com>
