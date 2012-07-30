@@ -57,6 +57,37 @@ Flickable {
                 }
             }
         }
+
+        ListView {
+            id: emails
+            anchors { left: parent.left; right: parent.right; top: phones.bottom; }
+            model: contact.emailAddresses
+            interactive: false
+            height: childrenRect.height
+            delegate: Item {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: UiConstants.ListItemHeightDefault
+
+                Label {
+                    text: model.modelData
+                    anchors.left: parent.left
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                Button {
+                    width: 110
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.topMargin: UiConstants.DefaultMargin / 2
+                    anchors.bottomMargin: UiConstants.DefaultMargin / 2
+                    anchors.rightMargin: UiConstants.DefaultMargin
+                    iconSource: "image://theme/icon-l-email";
+                    onClicked: console.log("TODO: Send SMS to " + contact.firstName)
+                }
+            }
+        }
+
     }
 }
 

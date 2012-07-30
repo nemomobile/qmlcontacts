@@ -24,11 +24,8 @@ Sheet {
         data_last.text = contact.lastName
         data_avatar.contact = contact
 
-        var tmpList = []
-        for (var i = 0; i < contact.phoneNumbers.length; ++i) {
-            tmpList.push(contact.phoneNumbers[i])
-        }
-        phoneRepeater.setModelData(tmpList)
+        phoneRepeater.setModelData(contact.phoneNumbers)
+        emailRepeater.setModelData(contact.emailAddresses)
     }
 
     content: Flickable {
@@ -81,6 +78,7 @@ Sheet {
             }
 
             Column {
+                id: phones
                 anchors.top: data_last.bottom
                 anchors.topMargin: UiConstants.DefaultMargin
                 anchors.left: parent.left
@@ -94,6 +92,22 @@ Sheet {
                     anchors.right: parent.right
                 }
             }
+
+            Column {
+                anchors.top: phones.bottom
+                anchors.topMargin: UiConstants.DefaultMargin
+                anchors.left: parent.left
+                anchors.right: parent.right
+                spacing: UiConstants.DefaultMargin
+
+                EditableList {
+                    id: emailRepeater
+                    placeholderText: qsTr("Email address")
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                }
+            }
+
         }
     }
 
@@ -104,6 +118,7 @@ Sheet {
         contact.lastName = data_last.text
         contact.avatarPath = data_avatar.source
         contact.phoneNumbers = phoneRepeater.modelData()
+        contact.emailAddresses = emailRepeater.modelData()
 
         // TODO: this isn't asynchronous
         app.contactListModel.savePerson(contact)
