@@ -33,11 +33,14 @@ Sheet {
 
     content: Flickable {
         anchors.fill: parent
-        contentHeight: editorContent.childrenRect.height
+        contentHeight: editorContent.childrenRect.height +
+        UiConstants.DefaultMargin
 
         Item {
             id: editorContent
-            anchors { leftMargin: UiConstants.DefaultMargin; rightMargin: UiConstants.DefaultMargin; fill: parent }
+            anchors.leftMargin: UiConstants.DefaultMargin
+            anchors.rightMargin: UiConstants.DefaultMargin
+            anchors.fill: parent
 
             Button {
                 id: avatarRect
