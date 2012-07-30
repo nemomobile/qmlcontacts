@@ -5,7 +5,7 @@ import org.nemomobile.contacts 1.0
 Flickable {
     id: detailViewPortrait
     contentWidth: parent.width
-    contentHeight: detailsList.height
+    contentHeight: detailsList.height + (UiConstants.DefaultMargin * 2)
     flickableDirection: Flickable.VerticalFlick
     clip: true
 
@@ -17,38 +17,40 @@ Flickable {
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.margins: UiConstants.DefaultMargin
+        height: phones.childrenRect.height
 
-        Column {
+        ListView {
             id: phones
-            spacing: UiConstants.DefaultMargin / 2
             anchors { left: parent.left; right: parent.right; top: parent.top; }
-            Repeater {
-                model: contact.phoneNumbers
-                delegate: Item {
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    height: 90
+            model: contact.phoneNumbers
+            interactive: false
+            height: childrenRect.height
+            delegate: Item {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: UiConstants.ListItemHeightDefault
 
-                    Label {
-                        text: model.modelData
-                        anchors.left: parent.left
-                        anchors.verticalCenter: parent.verticalCenter
+                Label {
+                    text: model.modelData
+                    anchors.left: parent.left
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                ButtonRow {
+                    width: 220
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.margins: UiConstants.DefaultMargin
+                    exclusive: false
+                    Button {
+                        height: parent.height
+                        iconSource: "image://theme/icon-m-telephony-incoming-call";
+                        onClicked: console.log("TODO: Make call to " + contact.firstName)
                     }
-                    ButtonRow {
-                        width: 240
-                        anchors.right: parent.right
-                        anchors.verticalCenter: parent.verticalCenter
-                        exclusive: false
-                        Button {
-                            iconSource: "image://theme/icon-m-telephony-incoming-call";
-                            height: 80;
-                            onClicked: console.log("TODO: Make call to " + contact.firstName)
-                        }
-                        Button {
-                            iconSource: "image://theme/icon-m-toolbar-send-sms";
-                            height: 80;
-                            onClicked: console.log("TODO: Send SMS to " + contact.firstName)
-                        }
+                    Button {
+                        height: parent.height
+                        iconSource: "image://theme/icon-m-toolbar-send-sms";
+                        onClicked: console.log("TODO: Send SMS to " + contact.firstName)
                     }
                 }
             }
