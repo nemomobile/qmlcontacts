@@ -30,8 +30,7 @@ Sheet {
 
     content: Flickable {
         anchors.fill: parent
-        contentHeight: editorContent.childrenRect.height +
-        UiConstants.DefaultMargin
+        contentHeight: editorContent.childrenRect.height + UiConstants.DefaultMargin * 2
 
         Item {
             id: editorContent
