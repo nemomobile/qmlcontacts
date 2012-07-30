@@ -40,7 +40,9 @@ Flickable {
                     anchors.right: parent.right
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
-                    anchors.margins: UiConstants.DefaultMargin
+                    anchors.topMargin: UiConstants.DefaultMargin / 2
+                    anchors.bottomMargin: UiConstants.DefaultMargin / 2
+                    anchors.rightMargin: UiConstants.DefaultMargin
                     exclusive: false
                     Button {
                         height: parent.height
