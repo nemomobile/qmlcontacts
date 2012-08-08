@@ -1,6 +1,7 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import org.nemomobile.contacts 1.0
+import stage.rubyx.voicecall 1.0
 
 Flickable {
     id: detailViewPortrait
@@ -10,6 +11,7 @@ Flickable {
     clip: true
 
     property Person contact
+    property VoiceCallManager callManager
 
     Item {
         id: detailsList
@@ -47,7 +49,7 @@ Flickable {
                     Button {
                         height: parent.height
                         iconSource: "image://theme/icon-m-telephony-incoming-call";
-                        onClicked: console.log("TODO: Make call to " + contact.firstName)
+                        onClicked: callManager.dial(callManager.defaultProviderId, model.modelData);
                     }
                     Button {
                         height: parent.height

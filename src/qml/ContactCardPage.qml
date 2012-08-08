@@ -3,10 +3,13 @@ import com.nokia.meego 1.0
 import "constants.js" as Constants
 import org.nemomobile.qmlcontacts 1.0
 import org.nemomobile.contacts 1.0
+import stage.rubyx.voicecall 1.0
 
 Page {
     id: detailViewPage
     property Person contact
+
+    VoiceCallManager {id:callManager}
 
     Connections {
         target: contact
@@ -30,6 +33,7 @@ Page {
         anchors.left: parent.left
         anchors.right: parent.right
         contact: detailViewPage.contact
+        callManager:callManager
     }
 
     tools: ToolBarLayout {
