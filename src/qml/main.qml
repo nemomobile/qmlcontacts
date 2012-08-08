@@ -13,7 +13,6 @@ import org.nemomobile.contacts 1.0
 PageStackWindow {
     id: app
     showToolBar: true;
-//    automaticBookSwitching: false 
 
     property variant accountItem
 
@@ -51,20 +50,6 @@ PageStackWindow {
     property string promptStr: qsTr("Are you sure you want to remove %1 from your contacts?").arg(contactname)
 
     property int animationDuration: 250
-
-    Loader{
-        id: dialogLoader
-        anchors.fill: parent
-    }
-
-    //Need empty page place holder for filtering
-    Component {
-        id: myAppFavContacts
-        Page {
-            id: favContactsPage
-//            pageTitle: filterFavorites 
-        }
-    }
 
     initialPage: ContactListPage {}
 
