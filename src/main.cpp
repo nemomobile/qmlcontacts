@@ -82,7 +82,10 @@ int main(int argc, char **argv)
     view->setAttribute(Qt::WA_NoSystemBackground);
     view->viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
     view->viewport()->setAttribute(Qt::WA_NoSystemBackground);
+
+    // TODO: we could do with a plugin to access QDesktopServices paths
     view->rootContext()->setContextProperty("systemAvatarDirectory", QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
+    view->rootContext()->setContextProperty("DocumentsLocation", QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
 
     if (isFullscreen)
         view->showFullScreen();

@@ -59,6 +59,30 @@ Page {
                 );
             }
         }
+
+        ToolIcon {
+            iconId: "icon-m-toolbar-view-menu"
+            onClicked: (pageMenu.status == DialogStatus.Closed) ? pageMenu.open() : pageMenu.close()
+        }
+    }
+
+    Menu {
+        id: pageMenu
+        MenuLayout {
+            MenuItem {
+                text: "Import contacts"
+                onClicked: {
+                    Constants.loadSingleton("ContactImportSheet.qml", groupedViewPage,
+                    function(editor) {
+                        editor.open()
+                    })
+                }
+            }
+
+            MenuItem {
+                text: "Export contacts"
+            }
+        }
     }
 }
 
