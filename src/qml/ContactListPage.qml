@@ -81,7 +81,29 @@ Page {
 
             MenuItem {
                 text: "Export contacts"
+                onClicked: {
+                    var path = app.contactListModel.exportContacts()
+                    exportCompleteDialog.path = path
+                    exportCompleteDialog.open()
+                }
             }
+        }
+    }
+
+    Dialog {
+        id: exportCompleteDialog
+        property string path
+
+        title: Label {
+            color: "white"
+            text: "Export completed"
+        }
+
+        content: Label {
+            color: "white"
+            text: "Export completed to " + exportCompleteDialog.path
+            width: parent.width
+            height: paintedHeight
         }
     }
 }
