@@ -42,11 +42,9 @@ Sheet {
     function doImport() {
         // TODO: would be nice if folderlistmodel had a role for the full
         // resolved path
-        var count = app.contactListModel.count
         console.log("Importing " + sheetContent.fileName)
-        app.contactListModel.importContacts(folderListModel.path + "/" + sheetContent.fileName)
-        var newCount = app.contactListModel.count
-        importCompletedDialog.contactCount = newCount - count
+        var count = app.contactListModel.importContacts(folderListModel.path + "/" + sheetContent.fileName)
+        importCompletedDialog.contactCount = count
         importCompletedDialog.open()
     }
 
