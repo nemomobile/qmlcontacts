@@ -5,6 +5,8 @@ import org.nemomobile.contacts 1.0
 Repeater {
     id: root
     property string placeholderText
+    property bool edited : false
+    property variant originalData
     model: ListModel {
     }
     property bool isSetup: false
@@ -18,6 +20,7 @@ Repeater {
         }
 
         model.append({ data: "" })
+        originalData = modelData
         isSetup = true
     }
 
@@ -46,6 +49,14 @@ Repeater {
                 root.model.append({ data: "" })
             } else if (text == "" && index != (root.model.count - 1)) {
                 root.model.remove(index)
+            }
+            if (!root.originalData[index] && text != "") {
+                edited = true
+            } else if(root.originalData[index] && root.originalData[index] != text) {
+                edited = true
+            }
+            else {
+                edited = false
             }
         }
     }

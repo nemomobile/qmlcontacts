@@ -6,10 +6,34 @@ import org.nemomobile.contacts 1.0
 
 Sheet {
     id: newContactViewPage
-    acceptButtonText: "Save"
-    rejectButtonText: "Cancel"
+
+    buttons:
+    SheetButton {
+        id: rejectButton
+        anchors.top: parent.top
+        anchors.topMargin: UiConstants.DefaultMargin
+        anchors.left: parent.left
+        anchors.leftMargin: UiConstants.DefaultMargin
+        text: qsTr("Cancel")
+        onClicked: newContactViewPage.reject()
+    }
+
+    SheetButton {
+        id: acceptButton
+        anchors.top: parent.top
+        anchors.topMargin: UiConstants.DefaultMargin
+        anchors.right: parent.right
+        anchors.rightMargin: UiConstants.DefaultMargin
+        platformStyle: SheetButtonAccentStyle {}
+        enabled: contactEdited
+        text: qsTr("Save")
+        onClicked: newContactViewPage.accept()
+    }
 
     property Person contact
+    property bool contactEdited: data_first.edited || data_last.edited ||
+                                 data_avatar.edited || phoneRepeater.edited ||
+                                 emailRepeater.edited
 
     Connections {
         target: contact
@@ -23,6 +47,10 @@ Sheet {
         data_first.text = contact.firstName
         data_last.text = contact.lastName
         data_avatar.contact = contact
+        if (contact.avatarPath != "image://theme/icon-m-telephony-contact-avatar" )
+            data_avatar.originalSource = "image://nemothumbnail/" + contact.avatarPath
+        else
+            data_avatar.originalSource = contact.avatarPath
 
         phoneRepeater.setModelData(contact.phoneNumbers)
         emailRepeater.setModelData(contact.emailAddresses)
@@ -56,6 +84,8 @@ Sheet {
                 }
                 ContactAvatarImage {
                     id: data_avatar
+                    property string originalSource
+                    property bool edited: source != originalSource
                     width: parent.width - UiConstants.DefaultMargin
                     height: parent.height - UiConstants.DefaultMargin
                     anchors.centerIn: parent
@@ -65,11 +95,13 @@ Sheet {
             TextField {
                 id: data_first
                 placeholderText: qsTr("First name")
+                property bool edited: text != contact.firstName
                 anchors { top: avatarRect.top; right: parent.right; left: avatarRect.right; leftMargin: UiConstants.DefaultMargin }
             }
             TextField {
                 id: data_last
                 placeholderText: qsTr("Last name")
+                property bool edited: text != contact.lastName
                 anchors { top: data_first.bottom;
                     topMargin: UiConstants.DefaultMargin;
                     right: parent.right; left: data_first.left
