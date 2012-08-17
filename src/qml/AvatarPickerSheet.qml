@@ -7,34 +7,10 @@ import org.nemomobile.contacts 1.0
 Sheet {
     id: avatarPickerSheet
 
-    buttons:
-    SheetButton {
-        id: rejectButton
-        anchors.top: parent.top
-        anchors.topMargin: UiConstants.DefaultMargin
-        anchors.left: parent.left
-        anchors.leftMargin: UiConstants.DefaultMargin
-        text: qsTr("Cancel")
-        onClicked: {
-            avatarGridView.itemSelected = false
-            avatarPickerSheet.reject()
-        }
-    }
+    acceptButtonText: qsTr("Select")
+    rejectButtonText: qsTr("Cancel")
 
-    SheetButton {
-        id: acceptButton
-        anchors.top: parent.top
-        anchors.topMargin: UiConstants.DefaultMargin
-        anchors.right: parent.right
-        anchors.rightMargin: UiConstants.DefaultMargin
-        platformStyle: SheetButtonAccentStyle {}
-        enabled: avatarGridView.itemSelected
-        text: qsTr("Select")
-        onClicked: {
-            avatarPickerSheet.accept()
-            avatarGridView.itemSelected = false
-        }
-    }
+    acceptButtonEnabled: avatarGridView.itemSelected
 
     property Person contact
     signal avatarPicked(string pathToAvatar)
@@ -48,7 +24,7 @@ Sheet {
         id: avatarGridView
         property string filePath
         property bool itemSelected: false
-        model: GalleryModel {}
+        model: GalleryModel { }
         delegate: GalleryDelegate {
             id: delegateInstance
             MouseArea {
@@ -71,6 +47,11 @@ Sheet {
 
     onAccepted: {
         avatarPicked(avatarGridView.filePath)
+        avatarGridView.itemSelected = false
+    }
+
+    onRejected: {
+        avatarGridView.itemSelected = false
     }
 }
 
