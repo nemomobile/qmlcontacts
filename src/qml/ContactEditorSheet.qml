@@ -7,33 +7,14 @@ import org.nemomobile.contacts 1.0
 Sheet {
     id: newContactViewPage
 
-    buttons:
-    SheetButton {
-        id: rejectButton
-        anchors.top: parent.top
-        anchors.topMargin: UiConstants.DefaultMargin
-        anchors.left: parent.left
-        anchors.leftMargin: UiConstants.DefaultMargin
-        text: qsTr("Cancel")
-        onClicked: newContactViewPage.reject()
-    }
+    acceptButtonText: qsTr("Save")
+    rejectButtonText: qsTr("Cancel")
 
-    SheetButton {
-        id: acceptButton
-        anchors.top: parent.top
-        anchors.topMargin: UiConstants.DefaultMargin
-        anchors.right: parent.right
-        anchors.rightMargin: UiConstants.DefaultMargin
-        platformStyle: SheetButtonAccentStyle {}
-        enabled: contactEdited
-        text: qsTr("Save")
-        onClicked: newContactViewPage.accept()
-    }
-
-    property Person contact
-    property bool contactEdited: data_first.edited || data_last.edited ||
+    acceptButtonEnabled: data_first.edited || data_last.edited ||
                                  data_avatar.edited || phoneRepeater.edited ||
                                  emailRepeater.edited
+
+    property Person contact
 
     Connections {
         target: contact
