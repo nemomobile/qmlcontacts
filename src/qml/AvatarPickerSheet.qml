@@ -6,8 +6,35 @@ import org.nemomobile.contacts 1.0
 
 Sheet {
     id: avatarPickerSheet
-    acceptButtonText: "Select"
-    rejectButtonText: "Cancel"
+
+    buttons:
+    SheetButton {
+        id: rejectButton
+        anchors.top: parent.top
+        anchors.topMargin: UiConstants.DefaultMargin
+        anchors.left: parent.left
+        anchors.leftMargin: UiConstants.DefaultMargin
+        text: qsTr("Cancel")
+        onClicked: {
+            avatarGridView.itemSelected = false
+            avatarPickerSheet.reject()
+        }
+    }
+
+    SheetButton {
+        id: acceptButton
+        anchors.top: parent.top
+        anchors.topMargin: UiConstants.DefaultMargin
+        anchors.right: parent.right
+        anchors.rightMargin: UiConstants.DefaultMargin
+        platformStyle: SheetButtonAccentStyle {}
+        enabled: avatarGridView.itemSelected
+        text: qsTr("Select")
+        onClicked: {
+            avatarPickerSheet.accept()
+            avatarGridView.itemSelected = false
+        }
+    }
 
     property Person contact
     signal avatarPicked(string pathToAvatar)
@@ -20,12 +47,14 @@ Sheet {
         GalleryView {
         id: avatarGridView
         property string filePath
-        model: GalleryModel { }
+        property bool itemSelected: false
+        model: GalleryModel {}
         delegate: GalleryDelegate {
             id: delegateInstance
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
+                    avatarGridView.itemSelected = true
                     avatarGridView.currentIndex = index
                     avatarGridView.filePath = url
                 }
@@ -33,7 +62,7 @@ Sheet {
             Rectangle {
                 color: "blue"
                 opacity: 0.3
-                visible: delegateInstance.GridView.isCurrentItem
+                visible: delegateInstance.GridView.isCurrentItem && avatarGridView.itemSelected
                 anchors.fill: parent
             }
         }
