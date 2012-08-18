@@ -1,7 +1,6 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import org.nemomobile.contacts 1.0
-import stage.rubyx.voicecall 1.0
 
 Flickable {
     id: detailViewPortrait
@@ -11,7 +10,6 @@ Flickable {
     clip: true
 
     property Person contact
-    property VoiceCallManager callManager
 
     Item {
         id: detailsList
