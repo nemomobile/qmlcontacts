@@ -9,14 +9,12 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 
-Item {
-    id: contactCardPortrait
+MouseArea {
+    id: listDelegate
 
     height: UiConstants.ListItemHeightDefault
     anchors.right: parent.right
     anchors.left: parent.left
-
-    signal clicked
 
     ContactAvatarImage {
         id: photo
@@ -50,17 +48,9 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
     }
 
-    MouseArea {
-        id: mouseArea
-        anchors.fill: contactCardPortrait
-        onClicked: {
-            contactCardPortrait.clicked();
-        }
-    }
-
     states: State {
-        name: "pressed"; when: mouseArea.pressed == true
-        PropertyChanges { target: contactCardPortrait; opacity: .7}
+        name: "pressed"; when: pressed == true
+        PropertyChanges { target: listDelegate; opacity: .7}
     }
 
 }
