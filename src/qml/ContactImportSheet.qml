@@ -10,6 +10,13 @@ Sheet {
     acceptButtonText: "Import"
     rejectButtonText: "Cancel"
 
+    onStatusChanged: {
+        if (status == DialogStatus.Opening) {
+            sheetContent.fileName = ""
+            folderListModel.refresh()
+        }
+    }
+
     content: ListView {
         id: sheetContent
         anchors.fill: parent
