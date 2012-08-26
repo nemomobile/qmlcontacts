@@ -22,26 +22,21 @@ Item {
 
     property alias cards: cardListView
 
-    Item {
+    Label {
         // TODO: it would be nice if this was only instantiated
         // when needed, and destroyed after
         id: emptyListView
-        anchors.fill: parent
-
-        Label {
-            id: no_contacts
-            text: qsTr("You haven't added any contacts yet.")
-            anchors.centerIn: parent
-        }
+        anchors.centerIn: parent
+        text: qsTr("You haven't added any contacts yet.")
 
         Button {
             id: button
             text: qsTr("Add a contact")
 
             anchors {
-                top: no_contacts.bottom;
+                top: parent.bottom;
                 topMargin: UiConstants.DefaultMargin;
-                horizontalCenter: no_contacts.horizontalCenter;
+                horizontalCenter: parent.horizontalCenter;
             }
             onClicked: {
                 groupedViewPortrait.addNewContact();
