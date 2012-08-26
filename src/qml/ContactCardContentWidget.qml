@@ -25,16 +25,13 @@ Flickable {
             model: contact.phoneNumbers
             interactive: false
             height: childrenRect.height
-            delegate: Item {
+            delegate: Label {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 height: UiConstants.ListItemHeightDefault
+                text: model.modelData
+                verticalAlignment: Text.AlignVCenter
 
-                Label {
-                    text: model.modelData
-                    anchors.left: parent.left
-                    anchors.verticalCenter: parent.verticalCenter
-                }
                 ButtonRow {
                     width: 220
                     anchors.right: parent.right
@@ -64,16 +61,13 @@ Flickable {
             model: contact.emailAddresses
             interactive: false
             height: childrenRect.height
-            delegate: Item {
+            delegate: Label {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 height: UiConstants.ListItemHeightDefault
+                text: model.modelData
+                verticalAlignment: Text.AlignVCenter
 
-                Label {
-                    text: model.modelData
-                    anchors.left: parent.left
-                    anchors.verticalCenter: parent.verticalCenter
-                }
                 Button {
                     width: 110
                     anchors.right: parent.right
