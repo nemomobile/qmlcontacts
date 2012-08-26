@@ -10,29 +10,23 @@ Sheet {
     acceptButtonText: "Import"
     rejectButtonText: "Cancel"
 
-    content: Item {
+    content: ListView {
         id: sheetContent
-        anchors.leftMargin: UiConstants.DefaultMargin
-        anchors.rightMargin: UiConstants.DefaultMargin
         anchors.fill: parent
         property string fileName
 
-        ListView {
-            anchors.fill: parent
+        model: FolderListModel {
+            id: folderListModel
+            path: DocumentsLocation
+            showDirectories: false
+            nameFilters: [ "*.vcf" ]
+        }
 
-            model: FolderListModel {
-                id: folderListModel
-                path: DocumentsLocation
-                showDirectories: false
-                nameFilters: [ "*.vcf" ]
-            }
-
-            delegate: FileListDelegate {
-                selected: sheetContent.fileName == model.fileName
-                onClicked: {
-                    sheetContent.fileName = model.fileName
-                    console.log(model.fileName)
-                }
+        delegate: FileListDelegate {
+            selected: sheetContent.fileName == model.fileName
+            onClicked: {
+                sheetContent.fileName = model.fileName
+                console.log(model.fileName)
             }
         }
     }
