@@ -24,6 +24,7 @@ Page {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
+        clip: true
         onAddNewContact: {
             Constants.loadSingleton("ContactEditorSheet.qml", groupedViewPage,
             function(editor) {
