@@ -10,7 +10,29 @@ Page {
     PageHeader {
         id: header
         text: qsTr("Contacts")
+        MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        header.focus = true;
+
+                    }
+                }
     }
+
+
+    SearchBox {
+         id: searchbox
+         placeHolderText: "Search"
+         anchors.top: header.bottom
+         anchors.left: parent.left
+         anchors.right: parent.right
+         onSearchTextChanged: {
+
+             app.contactListModel.search(searchbox.searchText);
+
+         }
+
+     }
 
     Component {
         id: contactComponent
@@ -20,7 +42,7 @@ Page {
 
     ContactListWidget {
         id: gvp
-        anchors.top: header.bottom
+        anchors.top: searchbox.bottom
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
@@ -33,6 +55,7 @@ Page {
             })
         }
 
+        searching: (searchbox.searchText.length > 0)
         model: app.contactListModel
         delegate: ContactListDelegate {
             id: card
