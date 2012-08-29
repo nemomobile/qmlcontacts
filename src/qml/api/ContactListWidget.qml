@@ -37,6 +37,8 @@ ListView {
 
     signal addNewContact
 
+    property bool searching: false
+
     cacheBuffer: height
     section.property: "sectionBucket"
     section.criteria: ViewSection.FirstCharacter
@@ -61,7 +63,8 @@ ListView {
         id: emptyListView
         visible: parent.count == 0
         anchors.centerIn: parent
-        text: qsTr("You haven't added any contacts yet.")
+        text: ((searching) ? qsTr("Contact not found.") : qsTr("You haven't added any contacts yet."));
+        //qsTr("You haven't added any contacts yet.")
 
         Button {
             id: button
