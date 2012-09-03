@@ -37,7 +37,7 @@ Page {
         delegate: ContactListDelegate {
             id: card
             onClicked: {
-                Constants.loadSingleton("ContactCardPage.qml", groupedViewPortrait,
+                Constants.loadSingleton("ContactCardPage.qml", groupedViewPage,
                     function(card) {
                         card.contact = model.person
                         pageStack.push(card)
