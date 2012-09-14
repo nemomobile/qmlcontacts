@@ -20,8 +20,8 @@ packagesExist(qdeclarative-boostable) {
 SOURCES += main.cpp
 RESOURCES += res.qrc
 
-QML_FILES = *.qml
-JS_FILES = *.js
+QML_FILES = qml/*.qml
+JS_FILES = *qml/.js
 
 OTHER_FILES += $${QML_FILES} $${JS_FILES}
 
