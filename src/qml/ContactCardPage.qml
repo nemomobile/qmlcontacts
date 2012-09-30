@@ -35,12 +35,14 @@ import "constants.js" as Constants
 import org.nemomobile.qmlcontacts 1.0
 import org.nemomobile.contacts 1.0
 import stage.rubyx.voicecall 1.0
+import org.nemomobile.messages 1.0
 
 Page {
     id: detailViewPage
     property Person contact
 
     VoiceCallManager {id:callManager}
+    MessagesManager { id: messagesManager }
 
     Connections {
         target: contact
@@ -49,22 +51,12 @@ Page {
         }
     }
 
-    PageHeader {
-        id: header
-        text: contact.displayLabel
-        content: ContactAvatarImage {
-            contact: detailViewPage.contact
-        }
-    }
-
     ContactCardContentWidget {
         id: detailViewContact
-        anchors.top: header.bottom
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
+        anchors.fill: parent
         contact: detailViewPage.contact
-        callManager:callManager
+        callManager: callManager
+        messagesManager: messagesManager
     }
 
     tools: ToolBarLayout {
