@@ -47,16 +47,25 @@ Image {
         avatarPotentiallyChanged();
     }
 
+    Component.onCompleted: {
+        if (contact == null)
+            avatarPotentiallyChanged();
+    }
+
     function avatarPotentiallyChanged() {
-        if (contact.avatarPath == "image://theme/icon-m-telephony-contact-avatar")
+        if (contact == null || contact.avatarPath == "image://theme/icon-m-telephony-contact-avatar")
             source = "image://theme/icon-m-telephony-contact-avatar"
         else
             source = "image://nemoThumbnail/" + contact.avatarPath
     }
 
     onStatusChanged: {
+        var fallback = "image://theme/icon-m-telephony-contact-avatar"
         if (status == Image.Error || status == Image.Null) {
-            source = "image://theme/icon-m-telephony-contact-avatar"
+            if (source == fallback)
+                console.log("ContactAvatarImage failed to load fallback image!");
+            else
+                source = fallback
         }
     }
 }
