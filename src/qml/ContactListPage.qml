@@ -41,13 +41,6 @@ Page {
     PageHeader {
         id: header
         text: qsTr("Contacts")
-        MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        header.focus = true;
-
-                    }
-                }
     }
 
     SearchBox {

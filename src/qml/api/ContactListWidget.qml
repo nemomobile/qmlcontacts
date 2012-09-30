@@ -64,7 +64,6 @@ ListView {
         visible: parent.count == 0
         anchors.centerIn: parent
         text: ((searching) ? qsTr("Contact not found.") : qsTr("You haven't added any contacts yet."));
-        //qsTr("You haven't added any contacts yet.")
 
         Button {
             id: button
