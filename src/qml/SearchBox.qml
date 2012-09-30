@@ -67,95 +67,70 @@ Item {
         source: platformStyle.background
     }
 
-    FocusScope {
-        id: textPanel
+    TextField {
+        id: searchTextInput
 
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.margins: 20
-        height: parent.height
+        // Helper function ripped from QQC platform sources. Used for
+        // getting the correct URI for the platform toolbar images.
+        function __handleIconSource(iconId) {
+            var prefix = "icon-m-"
+            // check if id starts with prefix and use it as is
+            // otherwise append prefix and use the inverted version if required
+            if (iconId.indexOf(prefix) !== 0)
+                iconId =  prefix.concat(iconId).concat(theme.inverted ? "-white" : "");
+            return "image://theme/" + iconId;
+        }
 
-        TextField {
-            id: searchTextInput
+        inputMethodHints: Qt.ImhNoPredictiveText
 
-            // Helper function ripped from QQC platform sources. Used for
-            // getting the correct URI for the platform toolbar images.
-            function __handleIconSource(iconId) {
-                var prefix = "icon-m-"
-                // check if id starts with prefix and use it as is
-                // otherwise append prefix and use the inverted version if required
-                if (iconId.indexOf(prefix) !== 0)
-                    iconId =  prefix.concat(iconId).concat(theme.inverted ? "-white" : "");
-                return "image://theme/" + iconId;
-            }
+        anchors {
+            left: parent.left
+            right: parent.right
+            verticalCenter: parent.verticalCenter
+            margins: UiConstants.DefaultMargin
+        }
 
-            clip: true
-            inputMethodHints: Qt.ImhNoPredictiveText
+        // Save some empty space for the text on the left & right,
+        // for the icon graphics.
+        platformStyle: TextFieldStyle {
+            paddingLeft: searchIcon.width + UiConstants.DefaultMargin * 1.5 // 2 is mathematically correct, but looks too big.
+            paddingRight: clearTextIcon.width
+        }
+
+        // Search icon, just for styling the SearchBox a bit.
+        Image {
+            id: searchIcon
 
             anchors {
                 left: parent.left
+                verticalCenter: parent.verticalCenter
+                margins: UiConstants.DefaultMargin
+            }
+
+            fillMode: Image.PreserveAspectFit
+            source: searchTextInput.__handleIconSource("toolbar-search")
+        }
+
+        // A trash can image, clicking it allows the user to quickly
+        // remove the typed text.
+        Image {
+            id: clearTextIcon
+
+            anchors {
                 right: parent.right
-                verticalCenter: textPanel.verticalCenter
-                margins: 10
+                rightMargin: UiConstants.DefaultMargin
+                verticalCenter: parent.verticalCenter
             }
 
-            // Save some empty space for the text on the left & right,
-            // for the icon graphics.
-            platformStyle: TextFieldStyle {
-                paddingLeft: searchIcon.width + 10 * 2
-                paddingRight: clearTextIcon.width
-            }
+            fillMode: Image.PreserveAspectFit
+            source: searchTextInput.__handleIconSource("toolbar-delete")
+            visible: searchTextInput.text.length > 0
 
-            onActiveFocusChanged: {
-                if (!searchTextInput.activeFocus) {
-                    searchTextInput.platformCloseSoftwareInputPanel()
-                }
-            }
-
-            // Search icon, just for styling the SearchBox a bit.
-            Image {
-                id: searchIcon
-
-                property string __searchIconId: "toolbar-search"
-
-                anchors {
-                    left: parent.left
-                    verticalCenter: parent.verticalCenter
-                    margins: 10 * 2
-                }
-
-                smooth: true
-                fillMode: Image.PreserveAspectFit
-                source: searchTextInput.__handleIconSource(__searchIconId)
-                height: parent.height - 10 * 2
-                width: parent.height - 10 * 2
-            }
-
-            // A trash can image, clicking it allows the user to quickly
-            // remove the typed text.
-            Image {
-                id: clearTextIcon
-
-                property string __clearTextIconId: "toolbar-delete"
-
-                anchors {
-                    right: parent.right
-                    rightMargin: 10
-                    verticalCenter: parent.verticalCenter
-                }
-
-                smooth: true;
-                fillMode: Image.PreserveAspectFit
-                source: searchTextInput.__handleIconSource(__clearTextIconId)
-                visible: searchTextInput.text.length > 0
-
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        searchTextInput.text = ""
-                        searchTextInput.forceActiveFocus()
-                    }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    searchTextInput.text = ""
+                    searchTextInput.forceActiveFocus()
                 }
             }
         }

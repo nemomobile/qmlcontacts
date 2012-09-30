@@ -50,7 +50,6 @@ Page {
                 }
     }
 
-
     SearchBox {
          id: searchbox
          placeHolderText: "Search"
@@ -58,11 +57,8 @@ Page {
          anchors.left: parent.left
          anchors.right: parent.right
          onSearchTextChanged: {
-
              app.contactListModel.search(searchbox.searchText);
-
          }
-
      }
 
     Component {
