@@ -8,7 +8,6 @@
         <file>qml/EditableList.qml</file>
         <file>qml/ContactListPage.qml</file>
         <file>qml/DeleteContactDialog.qml</file>
-        <file>qml/PageHeader.qml</file>
         <file>qml/main.qml</file>
         <file>qml/constants.js</file>
         <file>qml/SearchBox.qml</file>

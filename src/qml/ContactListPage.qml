@@ -30,7 +30,7 @@
  */
 
 import QtQuick 1.1
-import com.nokia.meego 1.0
+import com.nokia.meego 1.2
 import "constants.js" as Constants
 import org.nemomobile.qmlcontacts 1.0
 import org.nemomobile.contacts 1.0
@@ -41,6 +41,7 @@ Page {
     PageHeader {
         id: header
         text: qsTr("Contacts")
+        color: "#007FFF"
     }
 
     SearchBox {
