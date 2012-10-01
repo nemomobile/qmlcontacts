@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2012 Jolla Ltd.
  * Copyright (C) 2011-2012 Robin Burchell <robin+mer@viroteck.net>
  *
  * You may use this file under the terms of the BSD license as follows:
