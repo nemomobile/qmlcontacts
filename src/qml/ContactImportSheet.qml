@@ -32,7 +32,6 @@
 
 import QtQuick 1.1
 import com.nokia.meego 1.0
-import "constants.js" as Constants
 import org.nemomobile.contacts 1.0
 import org.nemomobile.folderlistmodel 1.0
 import org.nemomobile.qmlfilemuncher 1.0

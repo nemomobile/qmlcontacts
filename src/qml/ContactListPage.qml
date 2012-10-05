@@ -31,7 +31,6 @@
 
 import QtQuick 1.1
 import com.nokia.meego 1.2
-import "constants.js" as Constants
 import org.nemomobile.qmlcontacts 1.0
 import org.nemomobile.contacts 1.0
 
@@ -69,25 +68,15 @@ Page {
         anchors.bottom: parent.bottom
         clip: true
         onAddNewContact: {
-            Constants.loadSingleton("ContactEditorSheet.qml", groupedViewPage,
-            function(editor) {
-                    editor.contact = contactComponent.createObject(editor)
-                    editor.open()
-            })
+            var editor = pageStack.openSheet(Qt.resolvedUrl("ContactEditorSheet.qml"))
+            editor.contact = contactComponent.createObject(editor)
         }
 
         searching: (searchbox.searchText.length > 0)
         model: app.contactListModel
         delegate: ContactListDelegate {
             id: card
-            onClicked: {
-                Constants.loadSingleton("ContactCardPage.qml", groupedViewPage,
-                    function(card) {
-                        card.contact = model.person
-                        pageStack.push(card)
-                    }
-                );
-            }
+            onClicked: pageStack.push(Qt.resolvedUrl("ContactCardPage.qml"), { contact: model.person })
         }
 
     }
@@ -96,12 +85,8 @@ Page {
         ToolIcon {
             iconId: "icon-m-common-add"
             onClicked: {
-                Constants.loadSingleton("ContactEditorSheet.qml", groupedViewPage,
-                    function(editor) {
-                        editor.contact = contactComponent.createObject(editor)
-                        editor.open();
-                    }
-                );
+                var editor = pageStack.openSheet(Qt.resolvedUrl("ContactEditorSheet.qml"));
+                editor.contact = contactComponent.createObject(editor)
             }
         }
 
@@ -116,12 +101,7 @@ Page {
         MenuLayout {
             MenuItem {
                 text: "Import contacts"
-                onClicked: {
-                    Constants.loadSingleton("ContactImportSheet.qml", groupedViewPage,
-                    function(editor) {
-                        editor.open()
-                    })
-                }
+                onClicked: pageStack.openSheet(Qt.resolvedUrl("ContactImportSheet.qml"))
             }
 
             MenuItem {

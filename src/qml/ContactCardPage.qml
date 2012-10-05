@@ -31,7 +31,6 @@
 
 import QtQuick 1.1
 import com.nokia.meego 1.0
-import "constants.js" as Constants
 import org.nemomobile.qmlcontacts 1.0
 import org.nemomobile.contacts 1.0
 import stage.rubyx.voicecall 1.0
@@ -66,14 +65,7 @@ Page {
         }
         ToolIcon {
             iconId: "icon-m-toolbar-edit"
-            onClicked: {
-                Constants.loadSingleton("ContactEditorSheet.qml", detailViewPage,
-                    function(editor) {
-                        editor.contact = contact
-                        editor.open();
-                    }
-                );
-            }
+            onClicked: pageStack.openSheet(Qt.resolvedUrl("ContactEditorSheet.qml"), { contact: contact })
         }
         ToolIcon {
             iconId: contact.favorite ? "icon-m-toolbar-favorite-mark" : "icon-m-toolbar-favorite-unmark"
@@ -95,14 +87,7 @@ Page {
         MenuLayout {
             MenuItem {
                 text: "Delete";
-                onClicked: {
-                    Constants.loadSingleton("DeleteContactDialog.qml", detailViewPage,
-                        function(deleteDialog) {
-                            deleteDialog.contact = contact
-                            deleteDialog.open();
-                        }
-                    );
-                }
+                onClicked: pageStack.openDialog(Qt.resolvedUrl("DeleteContactDialog.qml"), { contact: contact })
             }
         }
     }

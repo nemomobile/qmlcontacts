@@ -32,7 +32,6 @@
 
 import QtQuick 1.1
 import com.nokia.meego 1.0
-import "constants.js" as Constants
 import org.nemomobile.qmlcontacts 1.0
 import org.nemomobile.contacts 1.0
 
@@ -84,16 +83,11 @@ Sheet {
                 width: height
                 anchors { top: parent.top; topMargin: UiConstants.DefaultMargin; left:parent.left; bottom: data_last.bottom }
                 onClicked: {
-                    Constants.loadSingleton("AvatarPickerSheet.qml", newContactViewPage,
-                        function(avatarPicker) {
-                            avatarPicker.contact = contact
-                            avatarPicker.avatarPicked.disconnect()
-                            avatarPicker.avatarPicked.connect(function(avatar) {
-                                data_avatar.source = avatar
-                            });
-                            avatarPicker.open();
-                        }
-                    );
+                    var avatarPicker = pageStack.openSheet(Qt.resolvedUrl("AvatarPickerSheet.qml"), { contact: contact })
+                    avatarPicker.avatarPicked.disconnect()
+                    avatarPicker.avatarPicked.connect(function(avatar) {
+                        data_avatar.source = avatar
+                    });
                 }
                 ContactAvatarImage {
                     id: data_avatar
