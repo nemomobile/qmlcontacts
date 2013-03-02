@@ -1,0 +1,55 @@
+Name:  qmlcontacts
+Summary: Contacts application for nemo
+Version: 0.4.1
+Release: 1
+Group: Applications/System
+License: GPLv2
+URL: https://github.com/nemomobile/qmlcontacts
+Sources:
+    - "%{name}-%{version}.tar.bz2"
+Provides:
+    - meego-handset-people > 0.2.32
+    - meego-handset-people-branding-upstream > 0.2.32
+Obsoletes:
+    - meego-handset-people <= 0.2.32
+    - meego-handset-people-branding-upstream <= 0.2.32
+Description: Contacts application using Qt Quick for Nemo Mobile.
+Configure: none
+Builder: qmake
+PkgConfigBR:
+    - QtCore >= 4.7.0
+    - QtDeclarative
+    - QtContacts
+    - qdeclarative-boostable
+
+Requires:
+    - qt-components
+    - nemo-qml-plugins-thumbnailer
+    - nemo-qml-plugins-contacts
+    - nemo-qml-plugins-folderlistmodel
+    # qmlgallery code is used for avatar picker
+    - qmlgallery
+    # importing contacts is using code from qmlfilemuncher
+    - qmlfilemuncher
+    # contactsd is required to show IM contacts in the applications
+    - contactsd
+    # required for SMS/IM integration
+    - nemo-qml-plugins-messages
+    # prevent installation of old qmlmessages, which conflicts with nemo-qml-plugins-messages
+    - qmlmessages >= 0.1.0
+ 
+Files:
+    - "%{_bindir}/qmlcontacts"
+    - "%{_datadir}/applications/qmlcontacts.desktop"
+    - "%{_libdir}/qt4/imports/org/nemomobile/qmlcontacts/*"
+
+SubPackages:
+    - Name: tools
+      Summary: Development tools for qmlcontacts
+      Description: Tools to help development of contacts application/framework/etc.
+      Group: Applications/System
+      License: BSD
+      AutoDepend: false
+      Files:
+          - "%{_bindir}/vcardconverter"
+
