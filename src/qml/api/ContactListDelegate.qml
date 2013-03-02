@@ -36,17 +36,13 @@ MouseArea {
     id: listDelegate
 
     height: UiConstants.ListItemHeightDefault
-    anchors.right: parent.right
-    anchors.left: parent.left
+    width: parent.width
 
     ContactAvatarImage {
         id: photo
         contact: model.person
-        anchors {
-            left: parent.left;
-            leftMargin: UiConstants.DefaultMargin
-            verticalCenter: parent.verticalCenter
-        }
+        x: UiConstants.DefaultMargin
+        anchors.verticalCenter: parent.verticalCenter
     }
 
     Label {

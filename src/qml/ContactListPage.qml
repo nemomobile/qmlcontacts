@@ -47,8 +47,7 @@ Page {
          id: searchbox
          placeHolderText: "Search"
          anchors.top: header.bottom
-         anchors.left: parent.left
-         anchors.right: parent.right
+         width: parent.width
          onSearchTextChanged: {
              app.contactListModel.search(searchbox.searchText);
          }
@@ -63,8 +62,7 @@ Page {
     ContactListWidget {
         id: gvp
         anchors.top: searchbox.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
+        width: parent.width
         anchors.bottom: parent.bottom
         clip: true
         onAddNewContact: {

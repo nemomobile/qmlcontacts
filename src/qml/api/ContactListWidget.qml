@@ -30,7 +30,7 @@
  */
 
 import QtQuick 1.1
-import com.nokia.meego 1.0
+import com.nokia.meego 1.2
 
 ListView {
     id: groupedViewPortrait
@@ -42,27 +42,21 @@ ListView {
     cacheBuffer: height
     section.property: "sectionBucket"
     section.criteria: ViewSection.FirstCharacter
-    section.delegate: Component {
-        Rectangle {
-            width: parent.width
-            height: childrenRect.height
-            color: "lightsteelblue"
+    section.delegate: Rectangle {
+        width: parent.width
+        height: childrenRect.height
+        color: "lightsteelblue"
 
-            Text {
-                anchors.right: parent.right
-                anchors.rightMargin: UiConstants.DefaultMargin
-                text: section
-                font.bold: true
-            }
+        Text {
+            anchors.right: parent.right
+            anchors.rightMargin: UiConstants.DefaultMargin
+            text: section
+            font.bold: true
         }
     }
 
-    Label {
-        // TODO: it would be nice if this was only instantiated
-        // when needed, and destroyed after
-        id: emptyListView
-        visible: parent.count == 0
-        anchors.centerIn: parent
+    ViewPlaceholder {
+        enabled: parent.count == 0
         text: ((searching) ? qsTr("Contact not found.") : qsTr("You haven't added any contacts yet."));
 
         Button {

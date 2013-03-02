@@ -51,11 +51,7 @@ PageStackWindow {
 
     property int animationDuration: 250
 
-    initialPage: ContactListPage {}
-
-    ToolBar {
-        anchors.bottom: parent.bottom
-    }
+    initialPage: Component { ContactListPage {} }
 
     property PeopleModel contactListModel: PeopleModel {
 
