@@ -58,20 +58,6 @@ ListView {
     ViewPlaceholder {
         enabled: parent.count == 0
         text: ((searching) ? qsTr("Contact not found.") : qsTr("You haven't added any contacts yet."));
-
-        Button {
-            id: button
-            text: qsTr("Add a contact")
-
-            anchors {
-                top: parent.bottom;
-                topMargin: UiConstants.DefaultMargin;
-                horizontalCenter: parent.horizontalCenter;
-            }
-            onClicked: {
-                groupedViewPortrait.addNewContact();
-            }
-        }
     }
 
     SectionScroller {
