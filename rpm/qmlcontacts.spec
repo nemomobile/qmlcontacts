@@ -9,14 +9,14 @@ Name:       qmlcontacts
 # << macros
 
 Summary:    Contacts application for nemo
-Version:    0.4.1
+Version:    0.4.2
 Release:    1
 Group:      Applications/System
 License:    GPLv2
 URL:        https://github.com/nemomobile/qmlcontacts
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  qmlcontacts.yaml
-Requires:   qt-components
+Requires:   qt-components >= 1.4.8
 Requires:   nemo-qml-plugins-thumbnailer
 Requires:   nemo-qml-plugins-contacts
 Requires:   nemo-qml-plugins-folderlistmodel

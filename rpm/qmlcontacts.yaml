@@ -1,6 +1,6 @@
 Name:  qmlcontacts
 Summary: Contacts application for nemo
-Version: 0.4.1
+Version: 0.4.2
 Release: 1
 Group: Applications/System
 License: GPLv2
@@ -23,7 +23,7 @@ PkgConfigBR:
     - qdeclarative-boostable
 
 Requires:
-    - qt-components
+    - qt-components >= 1.4.8
     - nemo-qml-plugins-thumbnailer
     - nemo-qml-plugins-contacts
     - nemo-qml-plugins-folderlistmodel
@@ -52,4 +52,3 @@ SubPackages:
       AutoDepend: false
       Files:
           - "%{_bindir}/vcardconverter"
-
