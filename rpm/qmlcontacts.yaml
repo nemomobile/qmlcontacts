@@ -26,7 +26,7 @@ Requires:
     - qt-components >= 1.4.8
     - nemo-qml-plugins-thumbnailer
     - nemo-qml-plugins-contacts
-    - nemo-qml-plugins-folderlistmodel
+    - nemo-qml-plugin-folderlistmodel
     # qmlgallery code is used for avatar picker
     - qmlgallery
     # importing contacts is using code from qmlfilemuncher

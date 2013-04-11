@@ -19,7 +19,7 @@ Source100:  qmlcontacts.yaml
 Requires:   qt-components >= 1.4.8
 Requires:   nemo-qml-plugins-thumbnailer
 Requires:   nemo-qml-plugins-contacts
-Requires:   nemo-qml-plugins-folderlistmodel
+Requires:   nemo-qml-plugin-folderlistmodel
 Requires:   qmlgallery
 Requires:   qmlfilemuncher
 Requires:   contactsd
