@@ -24,6 +24,7 @@ PkgConfigBR:
 
 Requires:
     - qt-components >= 1.4.8
+    - mapplauncherd-booster-qtcomponents
     - nemo-qml-plugins-thumbnailer
     - nemo-qml-plugins-contacts
     - nemo-qml-plugin-folderlistmodel
