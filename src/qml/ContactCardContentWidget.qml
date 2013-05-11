@@ -34,7 +34,6 @@ import com.nokia.meego 1.0
 import org.nemomobile.contacts 1.0
 import org.nemomobile.qmlcontacts 1.0
 import stage.rubyx.voicecall 1.0
-import org.nemomobile.messages 1.0
 
 Flickable {
     id: detailViewPortrait
@@ -45,7 +44,6 @@ Flickable {
 
     property Person contact
     property VoiceCallManager callManager
-    property MessagesManager messagesManager
 
     Item {
         id: header
@@ -77,9 +75,9 @@ Flickable {
             if (mode == 0)
                 callManager.dial(callManager.defaultProviderId, contact.phoneNumbers[selectedIndex]);
             else if (mode == 1)
-                onClicked: messagesManager.startSMS(contact.phoneNumbers[selectedIndex])
+                onClicked: messagesInterface.startSMS(contact.phoneNumbers[selectedIndex])
             else if (mode == 2)
-                messagesManager.startConversation(contact.accountPaths[selectedIndex], contact.accountUris[selectedIndex])
+                messagesInterface.startConversation(contact.accountPaths[selectedIndex], contact.accountUris[selectedIndex])
                 
             accept()
         }
@@ -122,7 +120,7 @@ Flickable {
         text: "SMS"
         onClicked: {
             if (contact.phoneNumbers.length == 1) {
-                messagesManager.startSMS(contact.phoneNumbers[0])
+                messagesInterface.startSMS(contact.phoneNumbers[0])
                 return
             }
 
@@ -146,7 +144,7 @@ Flickable {
         text: "Message"
         onClicked: {
             if (contact.accountUris.length == 1) {
-                messagesManager.startConversation(contact.accountPaths[0], contact.accountUris[0])
+                messagesInterface.startConversation(contact.accountPaths[0], contact.accountUris[0])
                 return
             }
 

@@ -34,9 +34,7 @@ Requires:
     # contactsd is required to show IM contacts in the applications
     - contactsd
     # required for SMS/IM integration
-    - nemo-qml-plugins-messages
-    # prevent installation of old qmlmessages, which conflicts with nemo-qml-plugins-messages
-    - qmlmessages >= 0.1.0
+    - nemo-qml-plugin-dbus
  
 Files:
     - "%{_bindir}/qmlcontacts"

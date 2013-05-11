@@ -34,14 +34,13 @@ import com.nokia.meego 1.0
 import org.nemomobile.qmlcontacts 1.0
 import org.nemomobile.contacts 1.0
 import stage.rubyx.voicecall 1.0
-import org.nemomobile.messages 1.0
 
 Page {
     id: detailViewPage
     property Person contact
 
     VoiceCallManager {id:callManager}
-    MessagesManager { id: messagesManager }
+    MessagesInterface { id: messagesInterface }
 
     Connections {
         target: contact
@@ -55,7 +54,6 @@ Page {
         anchors.fill: parent
         contact: detailViewPage.contact
         callManager: callManager
-        messagesManager: messagesManager
     }
 
     tools: ToolBarLayout {

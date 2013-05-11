@@ -23,8 +23,7 @@ Requires:   nemo-qml-plugin-folderlistmodel
 Requires:   qmlgallery
 Requires:   qmlfilemuncher
 Requires:   contactsd
-Requires:   nemo-qml-plugins-messages
-Requires:   qmlmessages >= 0.1.0
+Requires:   nemo-qml-plugin-dbus
 BuildRequires:  pkgconfig(QtCore) >= 4.7.0
 BuildRequires:  pkgconfig(QtDeclarative)
 BuildRequires:  pkgconfig(QtContacts)
