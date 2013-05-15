@@ -25,8 +25,8 @@ PkgConfigBR:
 Requires:
     - qt-components >= 1.4.8
     - mapplauncherd-booster-qtcomponents
-    - nemo-qml-plugins-thumbnailer
-    - nemo-qml-plugins-contacts
+    - nemo-qml-plugin-thumbnailer
+    - nemo-qml-plugin-contacts
     - nemo-qml-plugin-folderlistmodel
     # qmlgallery code is used for avatar picker
     - qmlgallery

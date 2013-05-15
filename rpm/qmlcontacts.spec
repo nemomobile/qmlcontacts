@@ -18,8 +18,8 @@ Source0:    %{name}-%{version}.tar.bz2
 Source100:  qmlcontacts.yaml
 Requires:   qt-components >= 1.4.8
 Requires:   mapplauncherd-booster-qtcomponents
-Requires:   nemo-qml-plugins-thumbnailer
-Requires:   nemo-qml-plugins-contacts
+Requires:   nemo-qml-plugin-thumbnailer
+Requires:   nemo-qml-plugin-contacts
 Requires:   nemo-qml-plugin-folderlistmodel
 Requires:   qmlgallery
 Requires:   qmlfilemuncher
