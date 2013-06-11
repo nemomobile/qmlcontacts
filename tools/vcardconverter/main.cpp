@@ -41,6 +41,9 @@
 #include <QVersitReader>
 #include <QVersitContactImporter>
 
+// Custom Photo Handler
+#include "photohandler.h"
+
 QTM_USE_NAMESPACE
 
 class RequestHandler : public QObject
@@ -84,7 +87,9 @@ int main(int argc, char **argv)
     QCoreApplication qca(argc, argv);
     QContactSaveRequest req;
 
+    PhotoHandler photoHandler;
     QVersitContactImporter importer;
+    importer.setPropertyHandler(&photoHandler);
 
     for (int i = 1; i < argc; ++i) {
         QFile vcf(argv[i]);
