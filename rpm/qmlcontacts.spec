@@ -38,14 +38,6 @@ Obsoletes:   meego-handset-people-branding-upstream <= 0.2.32
 %description
 Contacts application using Qt Quick for Nemo Mobile.
 
-%package tools
-Summary:    Development tools for qmlcontacts
-License:    BSD
-Group:      Applications/System
-
-%description tools
-Tools to help development of contacts application/framework/etc.
-
 %prep
 %setup -q -n %{name}-%{version}
 
@@ -83,9 +75,3 @@ desktop-file-install --delete-original       \
 %{_libdir}/qt4/imports/org/nemomobile/qmlcontacts/*
 # >> files
 # << files
-
-%files tools
-%defattr(-,root,root,-)
-%{_bindir}/vcardconverter
-# >> files tools
-# << files tools
