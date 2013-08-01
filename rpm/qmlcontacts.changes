@@ -1,0 +1,63 @@
+* Sun Mar 03 2013 Robin Burchell <robin+mer@viroteck.net> - 0.4.2
+- Remove constants.js fork from qmantle2, now that components can cache sheets
+  (from Robin)
+- Simplify anchoring to improve performance (from Robin)
+- Use unified empty state component (from Robin)
+- Import packaging to repository (from Robin)
+
+* Thu Nov 8 2012 Robin Burchell <robin+mer@viroteck.net> - 0.4.1
+- Remove unneeded dependency from tools package on main package
+
+* Tue Oct 23 2012 John Brooks <john.brooks@jollamobile.com> - 0.4.1
+- Change dependency from qmlmessages to nemo-qml-plugins-messages
+
+* Fri Oct 5 2012 Robin Burchell <robin+mer@viroteck.net> - 0.4.1
+- Remove duplicated PageHeader now that components contains it
+
+* Mon Oct 1 2012 Robin Burchell <robin+mer@viroteck.net> - 0.4.0
+- Fix QML/JS files not showing in Qt Creator (from Johan Paul)
+- Fixes NEMO#250: Integrate messaging into contacts (from Robin/John Brooks)
+- Fixes NEMO#384: SMS button does nothing (from Robin/John Brooks)
+- New contact card design (from Robin)
+- Fixes NEMO#390: Unable to scroll contact card to the end (from Robin)
+- Fixes NEMO#268: [FEA] Search contacts (from Nicola De Filippo/Robin)
+
+* Mon Sep 3 2012 Robin Burchell <robin+mer@viroteck.net> - 0.3.15
+- Add 0001-fix-card-page-loading.patch, fixing a paper bag
+
+* Mon Sep 3 2012 Robin Burchell <robin+mer@viroteck.net> - 0.3.15
+- Fixes NEMO#394: Import contacts dialog shows always "Imported 0 contacts" (by Robin)
+- Fixes NEMO#392: reset sheet state when reopening it (by Robin)
+- Fixes NEMO#267: On edit page "save" button is enabled even when nothing has changed (by Tero Siironen)
+- Fixes NEMO#253: Avatar picker should not default-select an image unless the contact already has one (by Tero Siironen)
+- Various performance enhancements/decreasing memory usage (by Robin)
+
+* Sun Sep 02 2012 Marko Saukko <marko.saukko@jollamobile.com> - 0.3.14
+- Fixes NEMO#431: Require contactsd so that IM contacts are showed in the list.
+
+* Sun Aug 12 2012 Robin Burchell <robin+mer@viroteck.net> - 0.3.14
+- Implemented support for voice calling in contact card (Tom Swindell)
+- Remove some unused junk (Robin)
+- Basic UI for contact import (Robin)
+- Simple implementation for contact export (Robin)
+- Remove a stale, broken dependency, obsoletes 0001-remove-old-dependency-on-mobility-contacts.patch (Robin)
+
+* Fri Aug 03 2012 Robin Burchell <robin+mer@viroteck.net> - 0.3.12
+- Introduce use of org.nemomobile.contacts, fixes a number of bugs with
+  filtering, sort ordering, etc.
+- Fixes editing of phone number lists
+- Automatically close contact editor (and card) if a contact is deleted
+- List (and edit) email addresses of contacts
+
+* Fri Jul 20 2012 Robin Burchell <robin+mer@viroteck.net> - 0.3.9
+- Fixes NEMO#251: Use the thumbnail provider for much faster avatar thumbnails
+- Fixes NEMO#241: When creating a new contact, default avatar is empty
+- Fixes NEMO#244: Fast scroll bar in contacts does not work
+- Fixes NEMO#245: Share the gallery UI for setting thumbnails
+- Fixes NEMO#249: Avatar quality is crap
+- Avoid stretching avatar thumbnails in some circumstances
+- Optimise list panning performance a bit
+
+* Fri Jul 20 2012 Robin Burchell <robin+mer@viroteck.net> - 0.3.7
+- Fixes NEMO#133: People should be replaced with QML Contacts App
+- Initial packaging

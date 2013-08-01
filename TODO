@@ -1,0 +1,102 @@
+CONTACTS TODO LIST
+1.Flow
+2.Opens
+3.Blocked
+4.Pending Bugs
+5.Filed Bugs
+6.Fixed 
+7.Released
+8.Future plans
+9.FAQ
+*verified bugs are deleted from this document
+
+1.==Flow==
+Opens (need more info)
+Pending Bugs (can't make a bug for whatever reason)
+Bugs (filed in bugs.meego.com)
+Fixed (Code sr'd into obs, note tag in git)
+Released (Code released in image)
+Verified (Code verified by QA on valid image)
+
+2.==Opens==
+Contact Picker needs index bar/search bar
+Ringtones flow? - Done need branch to merge
+Need smaller graphic for smaller devices for landscape view landing screen
+Geolocation
+Map - yes static for handset and movable for tablet
+
+3.==Blocked==
+All blocked on folks:
+Recent Communications
+Link
+Merge
+Social networking supported
+
+4.==Bugs to be filed== 26
+Shift graphics under me card to display right on landing screen
+Remove Truncates add ellides
+Change hideous function signature
+Drag on indexbar left and right is wrong
+email/im in context meny
+format checking
+Add map -not for beta
+Sharing framework:
+	Launch email attach vcard & subject
+	Launch IM attach vcard
+	Launch MMS attach vcard
+Adding subject param to email
+Email Call Contacts application to import contacts files on reception of vCard
+MMS Call Contacts application to import contacts files on reception of vCard
+Contact Contacts should support integration to a Dialer 
+addressbook support linking contacts
+addressbook support merge of contacts
+Add two addresses lines for street
+Have a way to export contacts to SIM card (Tshah, In progress, May 13th)
+Fix Call button in Libseaside views
+Email in context menu
+SMS in context menu, launch
+SMS in share 
+Call from details view 
+SMS/Call from details view
+Unable to find SMS, Call options in contextual menu of contact
+Allow user random input to add email in contact edit page
+Allow user input non number to add phone number
+
+5.==Filed Bugs== 
+Bug 	Owner	Type	Priority	Description                                      				DueDate
+Dbus call to import vCard 
+15434	Connie	TBUG	MED	 Thumbnail for the avatar needs to be used instead of full size image	        1.2.2      
+18184  enh  Med  IA  daewon.park@windriver.com  ASSIGNED  ---  Adding multiple contacts in one instance from email address field  
+15434  nor  Med  IA  geoff@linux.intel.com  ASSIGNED  ---  Thumbnail needs to be used instead of avatar to reduce memory footprint  
+ [SEC]  nor  Med  IA  nicholas.e.richards@intel.com  NEW  ---  Platform : Contacts: Email ids with improper format are accepted by “Email Field”  
+ [SEC]  nor  Med  IA  nicholas.e.richards@intel.com  NEW  ---  Platform : Alphabetic and special characters are accepted by the “mobile number field”  
+ [SEC]  maj  Med  IA  kaitlin.rupert@linux.intel.com  ASSIGNED  ---  Platform : Contacts: Unable to view the online contacts alone using "online view" mode in contacts  
+
+
+6.==Fixed== 
+
+7.==Released== 	
+
+8.==Future Plans==
+Video RingTones
+Add custom context labels for phone and address fields
+Merge local, synced and social contacts
+Wireless sync with MeeGo devices
+support linking contacts
+Emergency Numbers
+Add/Edit/Delete groups of contacts and attach to email
+Fields in contacts for prefix/suffix/non-alpha languang transcription
+Enable vCard export of all contacts
+Add email to context menu
+Add Call to context meny
+Add SMS to context menu 
+Add 2 address fields
+Share a contact via SMS, Email, or IM
+
+9.==FAQ==
+Why is IM not in Context Menu? -IM will not be launched from context menu as it violates UI guidelines, IM can be launched from details view.
+Which landing screen of the 3 wireframes should we use? - Tablet stay as is, smaller assets not till 1.4
+When do we show the landing screen vs the MCard default? - always show mecard shift graphics down
+Why do wireframes only show one possible vCard on an SD Card? - new wireframes coming show dialog to select vcf files from sdcard. If there are multiple vCards on the SDCard need to show all .vcf files and let the user select which to import from or import all. - new wf coming
+What is the flow for importing multiple vCards on one SD card? - show dialog to select which vCards user cares about
+Voicemail is it in Dialer Settings or is it in Contacts? - Dialer settings
