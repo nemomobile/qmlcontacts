@@ -60,10 +60,19 @@ Flickable {
         }
 
         Label {
+            id: personNameLabel
             anchors.verticalCenter: avatar.verticalCenter
             anchors.left: avatar.right
             anchors.leftMargin: UiConstants.DefaultMargin
             text: contact.displayLabel
+        }
+        
+        Label {
+            anchors.top: personNameLabel.bottom;
+            anchors.verticalCenter: avatar.verticalCenter
+            anchors.left: avatar.right
+            anchors.leftMargin: UiConstants.DefaultMargin
+            text: contact.companyName
         }
     }
 

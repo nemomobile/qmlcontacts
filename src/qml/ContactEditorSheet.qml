@@ -41,7 +41,7 @@ Sheet {
     acceptButtonText: qsTr("Save")
     rejectButtonText: qsTr("Cancel")
 
-    acceptButtonEnabled: data_first.edited || data_last.edited ||
+    acceptButtonEnabled: data_first.edited || data_last.edited || data_company.edited ||
                                  data_avatar.edited || phoneRepeater.edited ||
                                  emailRepeater.edited
 
@@ -58,6 +58,7 @@ Sheet {
     onContactChanged: {
         data_first.text = contact.firstName
         data_last.text = contact.lastName
+        data_company.text = contact.companyName
         data_avatar.contact = contact
         if (contact.avatarPath != "image://theme/icon-m-telephony-contact-avatar" )
             data_avatar.originalSource = "image://nemothumbnail/" + contact.avatarPath
@@ -114,10 +115,19 @@ Sheet {
                     right: parent.right; left: data_first.left
                 }
             }
+            TextField {
+                id: data_company
+                placeholderText: qsTr("Company")
+                property bool edited: text != contact.companyName
+                anchors { top: data_last.bottom;
+                    topMargin: UiConstants.DefaultMargin;
+                    right: parent.right; left: data_last.left
+                }
+            }
 
             Column {
                 id: phones
-                anchors.top: data_last.bottom
+                anchors.top: data_company.bottom
                 anchors.topMargin: UiConstants.DefaultMargin
                 anchors.left: parent.left
                 anchors.right: parent.right
@@ -154,6 +164,7 @@ Sheet {
     function saveContact() {
         contact.firstName = data_first.text
         contact.lastName = data_last.text
+        contact.companyName = data_company.text
         contact.avatarPath = data_avatar.source
         contact.phoneNumbers = phoneRepeater.modelData()
         contact.emailAddresses = emailRepeater.modelData()
