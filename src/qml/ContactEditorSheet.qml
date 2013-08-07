@@ -41,9 +41,10 @@ Sheet {
     acceptButtonText: qsTr("Save")
     rejectButtonText: qsTr("Cancel")
 
-    acceptButtonEnabled: data_first.edited || data_last.edited || data_company.edited ||
-                                 data_avatar.edited || phoneRepeater.edited ||
-                                 emailRepeater.edited
+    acceptButtonEnabled: data_first.edited || data_last.edited || 
+                         data_company.edited ||
+                         data_avatar.edited || phoneRepeater.edited ||
+                         emailRepeater.edited || addressRepeater.edited
 
     property Person contact
 
@@ -67,6 +68,19 @@ Sheet {
 
         phoneRepeater.setModelData(contact.phoneNumbers)
         emailRepeater.setModelData(contact.emailAddresses)
+        addressRepeater.setModelData(contact.addressesTypeList, contact.addresses)
+    }
+    
+    SelectionDialog {
+        id: selectionDialog
+        titleText: qsTr("Select work, home or other address")
+
+        onSelectedIndexChanged: {
+            if (selectedIndex != -1)
+            {
+                addressRepeater.addNewData(selectionDialog.model.get(selectedIndex).name);
+            }
+        }
     }
 
     content: Flickable {
@@ -103,7 +117,7 @@ Sheet {
             TextField {
                 id: data_first
                 placeholderText: qsTr("First name")
-                property bool edited: text != contact.firstName
+                property bool edited: data_first.text != contact.firstName
                 anchors { top: avatarRect.top; right: parent.right; left: avatarRect.right; leftMargin: UiConstants.DefaultMargin }
             }
             TextField {
@@ -142,6 +156,7 @@ Sheet {
             }
 
             Column {
+                id: emails
                 anchors.top: phones.bottom
                 anchors.topMargin: UiConstants.DefaultMargin
                 anchors.left: parent.left
@@ -151,6 +166,58 @@ Sheet {
                 EditableList {
                     id: emailRepeater
                     placeholderText: qsTr("Email address")
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                }
+            }
+            
+            Button {
+                id: buttonAddAddress
+                anchors.top: emails.bottom
+                anchors.topMargin: UiConstants.DefaultMargin
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: 40
+                width: 200
+                visible: true
+                text: "Add address"
+                onClicked: {
+                     selectionDialog.model.clear();
+                     var iCount = 0;
+
+                     if (!addressRepeater.isAddressTypeExists("Work"))
+                     {
+                         selectionDialog.model.append( { name: "Work" } );
+                         iCount = 1;
+                     }
+                     if (!addressRepeater.isAddressTypeExists("Home"))
+                     {
+                         selectionDialog.model.append( { name: "Home" } );
+                         iCount = 1;
+                     }
+                     if (!addressRepeater.isAddressTypeExists("Other"))
+                     {
+                         selectionDialog.model.append( { name: "Other" } );
+                         iCount = 1;
+                     }
+
+                     if (iCount != 0)
+                     {
+                         selectionDialog.selectedIndex = -1;
+                         selectionDialog.open()
+                     }
+                }
+            }
+            
+            Column {
+                anchors.top: buttonAddAddress.bottom
+                anchors.topMargin: UiConstants.DefaultMargin
+                anchors.left: parent.left
+                anchors.right: parent.right
+                spacing: UiConstants.DefaultMargin
+
+                EditAddress {
+                    id: addressRepeater
                     anchors.left: parent.left
                     anchors.right: parent.right
                 }
@@ -168,6 +235,8 @@ Sheet {
         contact.avatarPath = data_avatar.source
         contact.phoneNumbers = phoneRepeater.modelData()
         contact.emailAddresses = emailRepeater.modelData()
+        contact.addresses = addressRepeater.modelData()
+        contact.addressesTypeList = addressRepeater.modelDataTypes()
 
         // TODO: this isn't asynchronous
         app.contactListModel.savePerson(contact)
@@ -176,7 +245,10 @@ Sheet {
         if (contact.dirty)
             console.log("[saveContact] Unable to create new contact due to missing info");
         else
+        {
             console.log("[saveContact] Saved contact")
+            pageStack.currentPage.contactChange();      
+        }
     }
 }
 

@@ -44,6 +44,11 @@ Flickable {
 
     property Person contact
     property VoiceCallManager callManager
+    
+    function newContact()
+    {
+        addressRepeater.setModelData(contact.addressesTypeList, contact.addresses)    
+    }
 
     Item {
         id: header
@@ -186,5 +191,20 @@ Flickable {
             selectionDialog.open()
         }
     }
+    
+    Column {
+        anchors.top: mailButton.bottom
+        anchors.topMargin: UiConstants.DefaultMargin
+        anchors.left: parent.left
+        anchors.right: parent.right
+        spacing: UiConstants.DefaultMargin
+        anchors.leftMargin: 20
+
+        ViewAddress {
+            id: addressRepeater
+            anchors.left: parent.left
+            anchors.right: parent.right
+        }
+    }    
 }
 

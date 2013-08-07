@@ -5,6 +5,8 @@
         <file>qml/ContactCardPage.qml</file>
         <file>qml/ContactEditorSheet.qml</file>
         <file>qml/ContactImportSheet.qml</file>
+        <file>qml/EditAddress.qml</file>
+        <file>qml/ViewAddress.qml</file>
         <file>qml/EditableList.qml</file>
         <file>qml/ContactListPage.qml</file>
         <file>qml/DeleteContactDialog.qml</file>

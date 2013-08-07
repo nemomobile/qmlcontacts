@@ -52,6 +52,10 @@ Page {
              app.contactListModel.search(searchbox.searchText);
          }
      }
+     
+    function contactChange()
+    {
+    }     
 
     Component {
         id: contactComponent

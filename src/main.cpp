@@ -43,7 +43,7 @@
 #ifdef HAS_BOOSTER
 Q_DECL_EXPORT
 #endif
-int main(int argc, char **argv)
+Q_DECL_EXPORT int main(int argc, char **argv)
 {
     QApplication *application;
     QQuickView *view;

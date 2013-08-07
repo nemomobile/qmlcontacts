@@ -48,7 +48,19 @@ Page {
             pageStack.pop()
         }
     }
-
+    
+    onContactChanged: {
+        detailViewContact.newContact()
+    }
+    
+    function contactChange()
+    {
+        if (detailViewPage.visible)
+        {
+            detailViewContact.newContact()
+        } 
+    }
+    
     ContactCardContentWidget {
         id: detailViewContact
         anchors.fill: parent
