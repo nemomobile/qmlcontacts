@@ -59,6 +59,7 @@ PageStackWindow {
         Component.onCompleted: {
 //            importContacts("../test/example.vcf")
               setDisplayLabelOrder(false);
+              setFilterType(1);
         }
     }
 

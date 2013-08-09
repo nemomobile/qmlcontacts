@@ -97,7 +97,10 @@ Page {
         MenuLayout {
             MenuItem {
                 text: "Delete";
-                onClicked: pageStack.openDialog(Qt.resolvedUrl("DeleteContactDialog.qml"), { contact: contact })
+                onClicked: { 
+                    pageStack.openDialog(Qt.resolvedUrl("DeleteContactDialog.qml"), { contact: contact })
+                    pageStack.pop()
+                }
             }
         }
     }
