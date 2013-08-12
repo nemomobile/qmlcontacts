@@ -43,5 +43,6 @@ QueryDialog {
 
     onAccepted: {
         app.contactListModel.removePerson(contact)
+        pageStack.pop()
     }
 }

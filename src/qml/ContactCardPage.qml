@@ -99,7 +99,6 @@ Page {
                 text: "Delete";
                 onClicked: { 
                     pageStack.openDialog(Qt.resolvedUrl("DeleteContactDialog.qml"), { contact: contact })
-                    pageStack.pop()
                 }
             }
         }
