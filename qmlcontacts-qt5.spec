@@ -9,7 +9,7 @@ Name:       qmlcontacts
 # << macros
 
 Summary:    Contacts application for nemo
-Version:    0.4.2
+Version:    0.4.2.skytree1
 Release:    1
 Group:      Applications/System
 License:    GPLv2
