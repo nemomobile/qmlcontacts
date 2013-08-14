@@ -28,9 +28,9 @@ Requires:   nemo-qml-plugin-dbus-qt5
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Contacts)
 BuildRequires:  pkgconfig(qdeclarative5-boostable)
-Requires: qt5-qtgui-devel
-Requires: qt5-qtwidgets-devel
-Requires: qt5-qtquick-devel
+BuildRequires: qt5-qtgui-devel
+BuildRequires: qt5-qtwidgets-devel
+BuildRequires: qt5-qtquick-devel
 # BuildRequires:  desktop-file-utils
 Provides:   meego-handset-people > 0.2.32
 Provides:   meego-handset-people-branding-upstream > 0.2.32
