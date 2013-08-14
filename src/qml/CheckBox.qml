@@ -3,7 +3,7 @@ import QtQuick 2.0
 FocusScope {
     id: checkbox
 
-    Accessible.role: Accessible.CheckBox
+    Accessible.role: Accessible.RadioButton
 
     property string text: "CheckBox"
     property bool checked: false

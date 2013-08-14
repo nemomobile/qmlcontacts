@@ -37,20 +37,21 @@
 #include <QDebug>
 #include <QDir>
 #ifdef HAS_BOOSTER
-#include <applauncherd/MDeclarativeCache>
+#include <mdeclarativecache5/MDeclarativeCache>
 #endif
 
 #ifdef HAS_BOOSTER
 Q_DECL_EXPORT
 #endif
-Q_DECL_EXPORT int main(int argc, char **argv)
+int main(int argc, char **argv)
 {
-    QApplication *application;
     QQuickView *view;
 #ifdef HAS_BOOSTER
+    QGuiApplication *application;
     application = MDeclarativeCache::qApplication(argc, argv);
-    view = MDeclarativeCache::qDeclarativeView();
+    view = MDeclarativeCache::populate();
 #else
+    QApplication *application;
     qWarning() << Q_FUNC_INFO << "Warning! Running without booster. This may be a bit slower.";
     QApplication stackApp(argc, argv);
     QQuickView stackView;
