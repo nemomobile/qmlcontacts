@@ -31,7 +31,7 @@ BuildRequires:  pkgconfig(qdeclarative5-boostable)
 BuildRequires:  pkgconfig(Qt5Gui)
 BuildRequires:  pkgconfig(Qt5Widgets)
 BuildRequires:  pkgconfig(Qt5Quick)
-# BuildRequires:  desktop-file-utils
+BuildRequires:  desktop-file-utils
 Provides:   meego-handset-people > 0.2.32
 Provides:   meego-handset-people-branding-upstream > 0.2.32
 Obsoletes:   meego-handset-people <= 0.2.32
