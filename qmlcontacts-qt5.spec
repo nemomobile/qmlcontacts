@@ -15,7 +15,7 @@ Group:      Applications/System
 License:    GPLv2
 URL:        https://github.com/nemomobile/qmlcontacts
 Source0:    %{name}-%{version}.tar.gz
-Source100:  qmlcontacts-qt5.yaml
+#Source100:  qmlcontacts-qt5.yaml
 Requires:   qt-components-qt5 >= 1.4.8
 Requires:   mapplauncherd-booster-qtcomponents-qt5
 Requires:   nemo-qml-plugin-thumbnailer-qt5
