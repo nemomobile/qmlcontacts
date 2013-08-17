@@ -47,7 +47,7 @@ Flickable {
     
     function newContact()
     {
-        addressRepeater.setModelData(contact.addressesTypeList, contact.addresses)    
+        addressRepeater.setModelData(contact.addressTypes, contact.addresses)    
     }
 
     Item {

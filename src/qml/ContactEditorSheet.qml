@@ -68,7 +68,7 @@ Sheet {
 
         phoneRepeater.setModelData(contact.phoneNumbers)
         emailRepeater.setModelData(contact.emailAddresses)
-        addressRepeater.setModelData(contact.addressesTypeList, contact.addresses)
+        addressRepeater.setModelData(contact.addressTypes, contact.addresses)
     }
     
     SelectionDialog {
@@ -236,7 +236,7 @@ Sheet {
         contact.phoneNumbers = phoneRepeater.modelData()
         contact.emailAddresses = emailRepeater.modelData()
         contact.addresses = addressRepeater.modelData()
-        contact.addressesTypeList = addressRepeater.modelDataTypes()
+        contact.addressTypes = addressRepeater.modelDataTypes()
 
         // TODO: this isn't asynchronous
         app.contactListModel.savePerson(contact)

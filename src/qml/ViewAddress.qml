@@ -44,7 +44,28 @@ Repeater {
 
         for (var i = 0; i < modelData.length; ++i) {
             var words = modelData[i].split("\n")   
-            model.append({ data: modelDataType[i], data_street: words[0], data_city: words[1], data_state: words[2], data_postalcode: words[3], data_country: words[4], data_postofficebox: words[5] })
+            switch (modelDataType[i])
+            {
+                case 14:
+                    model.append({ data: "Home", data_street: words[0], 
+                        data_city: words[1], data_state: words[2], 
+                        data_postalcode: words[3], data_country: words[4], 
+                        data_postofficebox: words[5] })
+                    break
+                case 15:
+                    model.append({ data: "Work", data_street: words[0], 
+                        data_city: words[1], data_state: words[2], 
+                        data_postalcode: words[3], data_country: words[4], 
+                        data_postofficebox: words[5] })
+                    break
+                case 16:
+                default:
+                    model.append({ data: "Other", data_street: words[0], 
+                        data_city: words[1], data_state: words[2], 
+                        data_postalcode: words[3], data_country: words[4], 
+                        data_postofficebox: words[5] })
+                    break
+            }
         }
     }
         
