@@ -1,0 +1,9 @@
+Building:
+You need nemo-qml-plugins from git, and qmlgallery built and installed if you
+want to use the avatar picker in the editor.
+
+Maintainer:
+Robin Burchell <robin+nemo@viroteck.net>
+
+Contributors:
+Jakub Pavelek <jpavelek@live.com>
