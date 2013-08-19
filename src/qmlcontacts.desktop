@@ -1,6 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=People
-Icon=icons-Applications-people
-Exec=invoker -s --type=qtcomponents-qt5 /usr/bin/qmlcontacts -fullscreen
-Comment=Nemo People Application
