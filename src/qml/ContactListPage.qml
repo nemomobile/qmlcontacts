@@ -29,8 +29,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
  */
 
-import QtQuick 1.1
-import com.nokia.meego 1.2
+import QtQuick 2.0
+import com.nokia.meego 2.0
 import org.nemomobile.qmlcontacts 1.0
 import org.nemomobile.contacts 1.0
 
@@ -52,6 +52,10 @@ Page {
              app.contactListModel.search(searchbox.searchText);
          }
      }
+     
+    function contactChange()
+    {
+    }     
 
     Component {
         id: contactComponent
@@ -76,7 +80,6 @@ Page {
             id: card
             onClicked: pageStack.push(Qt.resolvedUrl("ContactCardPage.qml"), { contact: model.person })
         }
-
     }
 
     tools: ToolBarLayout {
@@ -110,6 +113,13 @@ Page {
                     exportCompleteDialog.open()
                 }
             }
+            
+            MenuItem {
+                text: "Settings"
+                onClicked: {
+                    pageStack.push(Qt.resolvedUrl("SettingsPage.qml"));
+                }
+            }            
         }
     }
 

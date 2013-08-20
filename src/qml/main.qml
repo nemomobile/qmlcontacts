@@ -6,8 +6,8 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
+import QtQuick 2.0
+import com.nokia.meego 2.0
 import org.nemomobile.contacts 1.0
 
 PageStackWindow {
@@ -55,10 +55,12 @@ PageStackWindow {
 
     property PeopleModel contactListModel: PeopleModel {
 
-// for testing purposes
-//        Component.onCompleted: {
+    Component.onCompleted: {
 //            importContacts("../test/example.vcf")
-//        }
+
+              setDisplayLabelOrder(1);
+              setFilterType(1);
+        }
     }
 }
 

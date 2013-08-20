@@ -30,8 +30,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
  */
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
+import QtQuick 2.0
+import com.nokia.meego 2.0
 import org.nemomobile.qmlcontacts 1.0
 import org.nemomobile.contacts 1.0
 
@@ -66,6 +66,19 @@ Sheet {
 
         phoneRepeater.setModelData(contact.phoneNumbers)
         emailRepeater.setModelData(contact.emailAddresses)
+        addressRepeater.setModelData(contact.addressTypes, contact.addresses)
+    }
+    
+    SelectionDialog {
+        id: selectionDialog
+        titleText: qsTr("Select work, home or other address")
+
+        onSelectedIndexChanged: {
+            if (selectedIndex != -1)
+            {
+                addressRepeater.addNewData(selectionDialog.model.get(selectedIndex).name);
+            }
+        }
     }
 
     content: Flickable {
@@ -157,6 +170,8 @@ Sheet {
         contact.avatarPath = data_avatar.source
         contact.phoneNumbers = phoneRepeater.modelData()
         contact.emailAddresses = emailRepeater.modelData()
+        contact.addresses = addressRepeater.modelData()
+        contact.addressTypes = addressRepeater.modelDataTypes()
 
         // TODO: this isn't asynchronous
         app.contactListModel.savePerson(contact)

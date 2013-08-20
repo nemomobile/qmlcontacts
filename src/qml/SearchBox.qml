@@ -35,8 +35,8 @@
  **
  ****************************************************************************/
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
+import QtQuick 2.0
+import com.nokia.meego 2.0
 
 Item {
     id: root
@@ -45,7 +45,7 @@ Item {
     property alias searchText: searchTextInput.text
     property alias placeHolderText: searchTextInput.placeholderText
     property alias maximumLength: searchTextInput.maximumLength
-    property alias activeFocus: searchTextInput.activeFocus
+    property alias activeFocus2: searchTextInput.activeFocus
     // Styling for the SearchBox
     property Style platformStyle: ToolBarStyle {}
 

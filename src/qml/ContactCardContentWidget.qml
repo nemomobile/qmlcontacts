@@ -29,11 +29,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
  */
 
-import QtQuick 1.1
-import com.nokia.meego 1.0
+import QtQuick 2.0
+import com.nokia.meego 2.0
 import org.nemomobile.contacts 1.0
 import org.nemomobile.qmlcontacts 1.0
-import stage.rubyx.voicecall 1.0
 
 Flickable {
     id: detailViewPortrait
@@ -44,6 +43,11 @@ Flickable {
 
     property Person contact
     property VoiceCallManager callManager
+    
+    function newContact()
+    {
+        addressRepeater.setModelData(contact.addressTypes, contact.addresses)    
+    }
 
     Item {
         id: header
