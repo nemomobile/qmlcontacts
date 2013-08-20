@@ -29,7 +29,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
  */
 
-import QtQuick 1.1
+import QtQuick 2.0
 import org.nemomobile.thumbnailer 1.0
 import org.nemomobile.contacts 1.0
 
