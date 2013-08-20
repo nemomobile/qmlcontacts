@@ -52,6 +52,10 @@ Page {
              app.contactListModel.search(searchbox.searchText);
          }
      }
+     
+    function contactChange()
+    {
+    }     
 
     Component {
         id: contactComponent
@@ -76,7 +80,6 @@ Page {
             id: card
             onClicked: pageStack.push(Qt.resolvedUrl("ContactCardPage.qml"), { contact: model.person })
         }
-
     }
 
     tools: ToolBarLayout {
@@ -110,6 +113,13 @@ Page {
                     exportCompleteDialog.open()
                 }
             }
+            
+            MenuItem {
+                text: "Settings"
+                onClicked: {
+                    pageStack.push(Qt.resolvedUrl("SettingsPage.qml"));
+                }
+            }            
         }
     }
 
