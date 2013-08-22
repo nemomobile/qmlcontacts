@@ -3,16 +3,16 @@ PROJECT_NAME = qmlcontacts
 TEMPLATE = app
 CONFIG += ordered mobility hide_symbols
 MOBILITY += contacts
-QT += declarative
+QT += quick
 TARGET = $$PROJECT_NAME
 CONFIG -= app_bundle # OS X
 
 CONFIG += link_pkgconfig
 
-packagesExist(qdeclarative-boostable) {
+packagesExist(qdeclarative5-boostable) {
     message("Building with qdeclarative-boostable support")
     DEFINES += HAS_BOOSTER
-    PKGCONFIG += qdeclarative-boostable
+    PKGCONFIG += qdeclarative5-boostable
 } else {
     warning("qdeclarative-boostable not available; startup times will be slower")
 }
@@ -34,7 +34,7 @@ INSTALLS += desktop
 
 # qml API we provide
 qml_api.files = qml/api/*
-qml_api.path = $$[QT_INSTALL_IMPORTS]/org/nemomobile/$$PROJECT_NAME
+qml_api.path = $$[QT_INSTALL_QML]/org/nemomobile/$$PROJECT_NAME
 INSTALLS += qml_api
 
 TRANSLATIONS += *.qml

@@ -15,18 +15,18 @@ Obsoletes:
     - meego-handset-people-branding-upstream <= 0.2.32
 Description: Contacts application using Qt Quick for Nemo Mobile.
 Configure: none
-Builder: qmake
+Builder: %qmake5
 PkgConfigBR:
-    - QtCore >= 4.7.0
-    - QtDeclarative
-    - QtContacts
-    - qdeclarative-boostable
+    - Qt5Core
+    - Qt5Contacts
+    - Qt5Qml
+    - qdeclarative5-boostable
 
 Requires:
-    - qt-components >= 1.4.8
-    - mapplauncherd-booster-qtcomponents
-    - nemo-qml-plugin-thumbnailer
-    - nemo-qml-plugin-contacts
+    - qt-components-qt5
+    - mapplauncherd-booster-qtcomponents-qt5
+    - nemo-qml-plugin-thumbnailer-qt5
+    - nemo-qml-plugin-contacts-qt5
     - nemo-qml-plugin-folderlistmodel
     # qmlgallery code is used for avatar picker
     - qmlgallery
@@ -35,9 +35,9 @@ Requires:
     # contactsd is required to show IM contacts in the applications
     - contactsd
     # required for SMS/IM integration
-    - nemo-qml-plugin-dbus
+    - nemo-qml-plugin-dbus-qt5
  
 Files:
     - "%{_bindir}/qmlcontacts"
     - "%{_datadir}/applications/qmlcontacts.desktop"
-    - "%{_libdir}/qt4/imports/org/nemomobile/qmlcontacts/*"
+    - "%{_libdir}/qt5/qml/org/nemomobile/qmlcontacts/*"
