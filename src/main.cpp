@@ -29,15 +29,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
  */
 
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QApplication>
-#include <QDeclarativeView>
-#include <QDeclarativeEngine>
-#include <QDeclarativeContext>
+#include <QQuickView>
+#include <QQmlEngine>
+#include <QQmlContext>
 #include <QDebug>
 #include <QDir>
 #ifdef HAS_BOOSTER
-#include <applauncherd/MDeclarativeCache>
+#include <MDeclarativeCache>
 #endif
 
 #ifdef HAS_BOOSTER
@@ -45,15 +45,16 @@ Q_DECL_EXPORT
 #endif
 int main(int argc, char **argv)
 {
-    QApplication *application;
-    QDeclarativeView *view;
+    QQuickView *view;
 #ifdef HAS_BOOSTER
+    QGuiApplication *application;
     application = MDeclarativeCache::qApplication(argc, argv);
-    view = MDeclarativeCache::qDeclarativeView();
+    view = MDeclarativeCache::populate();
 #else
+    QApplication *application;
     qWarning() << Q_FUNC_INFO << "Warning! Running without booster. This may be a bit slower.";
     QApplication stackApp(argc, argv);
-    QDeclarativeView stackView;
+    QQuickView stackView;
     application = &stackApp;
     view = &stackView;
 #endif
@@ -77,15 +78,9 @@ int main(int argc, char **argv)
         view->setSource(QUrl::fromLocalFile("main.qml"));
     else
         view->setSource(QUrl("qrc:/qml/main.qml"));
-
-    view->setAttribute(Qt::WA_OpaquePaintEvent);
-    view->setAttribute(Qt::WA_NoSystemBackground);
-    view->viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
-    view->viewport()->setAttribute(Qt::WA_NoSystemBackground);
-
     // TODO: we could do with a plugin to access QDesktopServices paths
-    view->rootContext()->setContextProperty("systemAvatarDirectory", QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
-    view->rootContext()->setContextProperty("DocumentsLocation", QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
+    view->rootContext()->setContextProperty("systemAvatarDirectory", QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
+    view->rootContext()->setContextProperty("DocumentsLocation", QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
 
     if (isFullscreen)
         view->showFullScreen();

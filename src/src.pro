@@ -3,16 +3,16 @@ PROJECT_NAME = qmlcontacts
 TEMPLATE = app
 CONFIG += ordered mobility hide_symbols
 MOBILITY += contacts
-QT += declarative
+QT += quick widgets
 TARGET = $$PROJECT_NAME
 CONFIG -= app_bundle # OS X
 
 CONFIG += link_pkgconfig
 
-packagesExist(qdeclarative-boostable) {
+packagesExist(qdeclarative5-boostable) {
     message("Building with qdeclarative-boostable support")
     DEFINES += HAS_BOOSTER
-    PKGCONFIG += qdeclarative-boostable
+    PKGCONFIG += qdeclarative5-boostable
 } else {
     warning("qdeclarative-boostable not available; startup times will be slower")
 }
