@@ -30,7 +30,7 @@
  */
 
 #include <QStandardPaths>
-#include <QApplication>
+#include <QGuiApplication>
 #include <QQuickView>
 #include <QQmlEngine>
 #include <QQmlContext>
@@ -51,9 +51,9 @@ int main(int argc, char **argv)
     application = MDeclarativeCache::qApplication(argc, argv);
     view = MDeclarativeCache::populate();
 #else
-    QApplication *application;
+    QGuiApplication *application;
     qWarning() << Q_FUNC_INFO << "Warning! Running without booster. This may be a bit slower.";
-    QApplication stackApp(argc, argv);
+    QGuiApplication stackApp(argc, argv);
     QQuickView stackView;
     application = &stackApp;
     view = &stackView;

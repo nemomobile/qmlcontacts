@@ -3,7 +3,7 @@ PROJECT_NAME = qmlcontacts
 TEMPLATE = app
 CONFIG += ordered mobility hide_symbols
 MOBILITY += contacts
-QT += quick widgets
+QT += quick
 TARGET = $$PROJECT_NAME
 CONFIG -= app_bundle # OS X
 

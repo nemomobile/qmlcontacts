@@ -45,7 +45,6 @@ Item {
     property alias searchText: searchTextInput.text
     property alias placeHolderText: searchTextInput.placeholderText
     property alias maximumLength: searchTextInput.maximumLength
-    property alias activeFocus2: searchTextInput.activeFocus
     // Styling for the SearchBox
     property Style platformStyle: ToolBarStyle {}
 
