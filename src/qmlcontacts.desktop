@@ -2,5 +2,5 @@
 Type=Application
 Name=People
 Icon=icons-Applications-people
-Exec=invoker -s --type=qtcomponents /usr/bin/qmlcontacts -fullscreen
+Exec=invoker --single-instance -r 5 --type=qt-components-qt5 /usr/bin/qmlcontacts -fullscreen
 Comment=Nemo People Application

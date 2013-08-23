@@ -16,19 +16,20 @@ License:    GPLv2
 URL:        https://github.com/nemomobile/qmlcontacts
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  qmlcontacts.yaml
-Requires:   qt-components >= 1.4.8
-Requires:   mapplauncherd-booster-qtcomponents
-Requires:   nemo-qml-plugin-thumbnailer
-Requires:   nemo-qml-plugin-contacts
+Requires:   qt-components-qt5 >= 1.4.8
+Requires:   mapplauncherd-booster-qtcomponents-qt5
+Requires:   nemo-qml-plugin-thumbnailer-qt5
+Requires:   nemo-qml-plugin-contacts-qt5
 Requires:   nemo-qml-plugin-folderlistmodel
 Requires:   qmlgallery
 Requires:   qmlfilemuncher
 Requires:   contactsd
-Requires:   nemo-qml-plugin-dbus
-BuildRequires:  pkgconfig(QtCore) >= 4.7.0
-BuildRequires:  pkgconfig(QtDeclarative)
-BuildRequires:  pkgconfig(QtContacts)
-BuildRequires:  pkgconfig(qdeclarative-boostable)
+Requires:   nemo-qml-plugin-dbus-qt5
+BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  pkgconfig(Qt5Contacts)
+BuildRequires:  pkgconfig(qdeclarative5-boostable)
+BuildRequires:  pkgconfig(Qt5Quick)
+BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  desktop-file-utils
 Provides:   meego-handset-people > 0.2.32
 Provides:   meego-handset-people-branding-upstream > 0.2.32
@@ -48,7 +49,7 @@ Contacts application using Qt Quick for Nemo Mobile.
 # >> build pre
 # << build pre
 
-%qmake 
+qmake -qt=5 -recursive
 
 make %{?jobs:-j%jobs}
 
@@ -72,6 +73,6 @@ desktop-file-install --delete-original       \
 %defattr(-,root,root,-)
 %{_bindir}/qmlcontacts
 %{_datadir}/applications/qmlcontacts.desktop
-%{_libdir}/qt4/imports/org/nemomobile/qmlcontacts/*
+%{_libdir}/qt5/qml/org/nemomobile/qmlcontacts/*
 # >> files
 # << files
