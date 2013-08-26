@@ -45,13 +45,12 @@ Q_DECL_EXPORT
 #endif
 int main(int argc, char **argv)
 {
+    QGuiApplication *application;
     QQuickView *view;
 #ifdef HAS_BOOSTER
-    QGuiApplication *application;
     application = MDeclarativeCache::qApplication(argc, argv);
     view = MDeclarativeCache::qQuickView();
 #else
-    QGuiApplication *application;
     qWarning() << Q_FUNC_INFO << "Warning! Running without booster. This may be a bit slower.";
     QGuiApplication stackApp(argc, argv);
     QQuickView stackView;
