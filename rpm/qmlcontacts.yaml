@@ -15,12 +15,13 @@ Obsoletes:
     - meego-handset-people-branding-upstream <= 0.2.32
 Description: Contacts application using Qt Quick for Nemo Mobile.
 Configure: none
-Builder: %qmake5
+Builder: qmake5
 PkgConfigBR:
     - Qt5Core
     - Qt5Contacts
-    - Qt5Qml
     - qdeclarative5-boostable
+    - Qt5Quick
+    - Qt5Qml
 
 Requires:
     - qt-components-qt5
